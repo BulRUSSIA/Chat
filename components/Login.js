@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import React from "react";
 import request_READ_PHONE_STATE from '../actions/request_phone_state'
-import Rooms_list from '../Room_List'
-import Rooms_banned from '../Room_list_banned'
+import Rooms_list from './const/Room_List'
+import Rooms_banned from './const/Room_list_banned'
 import request_IMEI from '../actions/request_IMEI'
 import request_login from '../actions/fetch_login'
 import request_banned from '../actions/fetch_banned'
@@ -149,7 +149,7 @@ export default class Login extends React.Component {
 
                     <Image
                         style={{width: 200, height: 200}}
-                        source={require('./logo.png')}
+                        source={require('./Image/logo.png')}
                     />
                 </View>
 

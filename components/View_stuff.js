@@ -92,7 +92,7 @@ export default class View_stuff extends React.Component {
             >
 
 
-                <ImageBackground source={require('./mochat.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/mochat.jpg')} style={{width: '100%', height: '100%'}}>
 
 
                     <ToolbarAndroid style={styles.containerToolbarProfile}
@@ -137,7 +137,7 @@ export default class View_stuff extends React.Component {
 
 
                     <TouchableOpacity onPress={this.delete_gift}>
-                        <Image source={require('./delete.png')} style={styles.imageViewAvatars_stuff}/>
+                        <Image source={require('./Image/delete.png')} style={styles.imageViewAvatars_stuff}/>
                     </TouchableOpacity>
 
 

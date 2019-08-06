@@ -7,8 +7,8 @@ import {
     Alert, Animated, FlatList, TouchableWithoutFeedback, ImageBackground
 } from "react-native";
 import React from "react";
-import colors from "./colors";
-import menusmiles from './testcolor'
+import colors from "./const/colors";
+import menusmiles from './const/colors_id'
 
 export default class Registration extends React.Component {
     constructor(props) {

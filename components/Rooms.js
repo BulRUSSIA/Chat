@@ -3,8 +3,8 @@ import React from "react";
 import Chatting from '../components/Chatting'
 import request_ENTRY_USER_ROOM from '../actions/fetch_entry_user'
 import request_MY_NICKNAME from '../actions/fetch_my_nickname'
-import Rooms_list from '../Room_List'
-import Rooms_banned from '../Room_list_banned'
+import Rooms_list from './const/Room_List'
+import Rooms_banned from './const/Room_list_banned'
 
 export default class Rooms extends React.Component {
     constructor(props) {
@@ -165,7 +165,7 @@ export default class Rooms extends React.Component {
                             <TouchableOpacity   onPress={(event)=>this.Get_room(item)} >
                             <View style={{flex: 1, flexDirection: 'row'}}>
 
-                                <Image source={require('./room1.jpeg')} style={styles.imageView}/>
+                                <Image source={require('./Image/room1.jpeg')} style={styles.imageView}/>
 
 
                                 <Text style={styles.rooms}>

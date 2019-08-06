@@ -16,15 +16,15 @@ import Chatting from '../components/Chatting'
 import styles from '../styles'
 const list = [{
     action: 'Написать личное сообщение',
-    icon: require('./messageProfile.png')
-}, {action: 'Добавить в друзья', icon: require('./addfriendProfile.png')}, {
+    icon: require('./Image/messageProfile.png')
+}, {action: 'Добавить в друзья', icon: require('./Image/addfriendProfile.png')}, {
     action: 'Сделать подарок',
-    icon: require('./GiftProfile.png')
-}, {action: 'Подарить аватар', icon: require('./avatarProfile.png')}, {
+    icon: require('./Image/GiftProfile.png')
+}, {action: 'Подарить аватар', icon: require('./Image/avatarProfile.png')}, {
     action: 'Подарить авторитет',
-    icon: require('./avtoritetProfile.png')
+    icon: require('./Image/avtoritetProfile.png')
 
-}, {action: 'Вступить в брак', icon: require('./weddingProfile.png')}];
+}, {action: 'Вступить в брак', icon: require('./Image/weddingProfile.png')}];
 //<Image source={{uri: item}} style={styles.imageViewAvatars}
 
 export default class Profile extends React.Component {
@@ -122,7 +122,7 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('./mochat.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/mochat.jpg')} style={{width: '100%', height: '100%'}}>
 
                     <ToolbarAndroid style={styles.containerToolbarProfile}
 

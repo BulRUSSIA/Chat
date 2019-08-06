@@ -16,11 +16,11 @@ import request_GET_MESSAGES from '../actions/fetch_get_messages'
 import request_ENTRY_USER_ROOM from '../actions/fetch_entry_user'
 import request_GET_PROFILE from '../actions/fetch_profile_info'
 import request_GET_GIFTS from '../actions/fetch_user_gifts'
-import menusmiles from '../smiles'
-import menuitem from '../menu'
+import menusmiles from './const/smiles'
+import menuitem from './const/menu'
 import styles from '../styles'
-import Rooms_list from '../Room_List'
-import Rooms_banned from '../Room_list_banned'
+import Rooms_list from './const/Room_List'
+import Rooms_banned from './const/Room_list_banned'
 
 const list = ['Профиль', 'Написать Личное', 'Ответить'];
 export default class Chatting extends React.Component {
@@ -618,7 +618,7 @@ export default class Chatting extends React.Component {
             <View style={styles.container}
 
             >
-                <ImageBackground source={require('./e1.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/e1.jpg')} style={{width: '100%', height: '100%'}}>
 
 
 
@@ -848,7 +848,7 @@ export default class Chatting extends React.Component {
                         >
                             <Image
                                 style={{width: 35, height: 35, marginTop: 7,}}
-                                source={require('./Smile.png')}
+                                source={require('./Image/Smile.png')}
                             />
 
 
