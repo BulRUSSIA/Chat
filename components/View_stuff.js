@@ -44,7 +44,7 @@ export default class View_stuff extends React.Component {
 
         console.log(this.state.gifts_id);
         const delete_gift = await request_DELETE_GIFT(this.state.gifts_id);
-        Alert.alert('Подарок успешно удален!');
+        Alert.alert('Подарок успешно удален!!!');
         this.pushing()
 
 
