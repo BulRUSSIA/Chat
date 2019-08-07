@@ -193,6 +193,20 @@ const styles = StyleSheet.create({
 
 
     },
+    imageViewPrivateList: {
+
+        width: 25,
+        height: 25,
+        paddingBottom: 12,
+        marginBottom: 5,
+        borderRadius: 7,
+        marginLeft: 0,
+        resizeMode: 'contain',
+
+
+
+
+    },
 
     imageView3: {
 

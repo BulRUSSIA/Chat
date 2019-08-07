@@ -42,7 +42,7 @@ export default class Private_List extends React.Component {
 
 
     Get_Chat  = async(event) => {
-        console.log(event)
+        console.log(event);
         alert('service')
     };
 
@@ -104,14 +104,27 @@ export default class Private_List extends React.Component {
 
 
 
-                            <TouchableOpacity   onPress={(event)=>this.Get_room(item.Chat_id)} >
+                            <TouchableOpacity   onPress={(event)=>this.Get_Chat(item.Chat_id)} >
                                 <View style={{flex: 1, flexDirection: 'row'}}>
 
                                     <Image source={require('./Image/email.png')} style={styles.imageView}/>
 
+                                    <Text style={styles.time_msg}>
+
+                                        { item.last_data}
+
+
+                                    </Text>
 
                                     <Text style={styles.rooms}>
                                        {item.Private_Chatters}
+
+
+                                    </Text>
+
+                                    <Text style={styles.time}>
+
+                                        {  item.last_msg}
 
 
                                     </Text>
@@ -125,6 +138,7 @@ export default class Private_List extends React.Component {
 
 
                     keyExtractor={(item, index) => index.toString()}
+                          contentContainerStyle={{paddingTop: 40}}
 
 
 
@@ -150,11 +164,35 @@ const styles = StyleSheet.create({
 
     },
     rooms: {
-        fontSize: 20,
+        fontSize: 18,
+        flex:1,
+        color: 'rgba(0,0,0,0.98)',
+        marginLeft: 10,
+
+
+
+    },
+
+    time: {
+        fontSize: 15,
         flex: 1,
-        color: '#05077a',
-        marginLeft: 1,
-        padding: 9
+        color: 'rgba(87,87,87,0.98)',
+        marginRight: 5,
+        marginTop:2
+
+
+
+    },
+    time_msg: {
+        fontSize: 15,
+        flex:1,
+        color: 'rgba(25,53,87,0.98)',
+
+        marginTop:40,
+        textAlign: 'left',
+      //  paddingTop: 5,
+
+
 
 
     },
@@ -173,10 +211,11 @@ const styles = StyleSheet.create({
     },
     imageView: {
 
-        width: 25,
-        height: 25,
+        width: 45,
+        height: 45,
         paddingBottom: 1,
-        marginTop: 12,
+        marginBottom: 12,
+        marginTop:5,
         borderRadius: 7,
 
 
