@@ -1,26 +1,31 @@
-import {BackHandler, FlatList, Image, StyleSheet, Text, ToolbarAndroid, TouchableOpacity, View} from "react-native";
+import {
+    BackHandler,
+    FlatList,
+    Image,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    ToolbarAndroid,
+    TouchableOpacity,
+    View
+} from "react-native";
 import React from "react";
 import Chatting from '../components/Chatting'
-import request_ENTRY_USER_ROOM from '../actions/fetch_entry_user'
-import request_MY_NICKNAME from '../actions/fetch_my_nickname'
-import Rooms_list from './const/Room_List'
-import Rooms_banned from './const/Room_list_banned'
+import {SwipeListView} from 'react-native-swipe-list-view';
 
+const menuitem = [{title: 'Удалить все чаты', show: 'never', eventkey: 1},
+
+
+];
 export default class Private_List extends React.Component {
     constructor(props) {
         super(props);
 
 
-
-
-
-
         this.state = {
 
-            DataSource: this.props.private_user_list
-
-
-
+            DataSource: this.props.private_user_list,
+            item_menu: menuitem
 
 
         };
@@ -28,11 +33,25 @@ export default class Private_List extends React.Component {
         console.log('userslist' + this.state.DataSource)
     }
 
+
+    onActionSelected = async (position) => {
+
+
+        if (position === 0) {
+            console.log("lol");
+
+
+        }
+
+
+    };
+
     componentWillUnmount() {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(Chatting.interval);
     }
+
     handleBackButton = () => {
 
 
@@ -41,13 +60,10 @@ export default class Private_List extends React.Component {
     };
 
 
-    Get_Chat  = async(event) => {
+    Get_Chat = async (event) => {
         console.log(event);
         alert('service')
     };
-
-
-
 
 
     renderSeparator_1 = () => (
@@ -61,89 +77,93 @@ export default class Private_List extends React.Component {
     );
 
 
-
-
-
     render() {
-
-
 
 
         return (
 
 
             <View style={styles.container1}>
+                <ImageBackground source={require('./Image/e1.jpg')} style={{width: '100%', height: '100%'}}>
+
+                    <ToolbarAndroid style={styles.containerToolbar}
+                                    onActionSelected={this.onActionSelected.bind(this)}
 
 
-                <ToolbarAndroid style={styles.containerToolbar}
-                >
+                                    actions={this.state.item_menu}>
 
 
-                    <View>
-                        <Text style={styles.instructions}>Чаты           </Text>
-                    </View>
+                        <View>
+                            <Text style={styles.instructions}>Чаты </Text>
+                        </View>
 
 
-                </ToolbarAndroid>
+                    </ToolbarAndroid>
 
 
-                <FlatList inverted
+                    <SwipeListView inverted
 
 
-                    data={this.state.DataSource}
-                    extraData={this.state}
+                        data={this.state.DataSource}
+                        extraData={this.state}
 
 
-                    ItemSeparatorComponent={this.renderSeparator_1}
+                        ItemSeparatorComponent={this.renderSeparator_1}
+                                   renderHiddenItem={ (item, rowMap) => (
+
+                                       <View style={{position: 'relative',top:0,bottom:0}}>
+                                           <Image source={require('./Image/rabbish.png')} style={styles.imageViewDelete}/>
+                                       </View>
+
+                                   )}
+
+                                   rightOpenValue={-70}
+
+                        renderItem={(({item}) =>
 
 
-                    renderItem={(({item}) =>
+                                <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id)}>
+                                    <View style={{ flexDirection: 'row',flex:1}}>
+
+                                        <Image source={require('./Image/email.png')} style={styles.imageView}/>
+
+
+                                        <Text style={styles.rooms}>
+                                            {item.Private_Chatters}
+
+
+                                        </Text>
+                                        <Text style={styles.time_msg}>
+
+                                            {item.last_data}
+
+
+                                        </Text>
+
+
+                                        <Text style={styles.time}>
+
+                                            {item.last_msg}
+
+
+                                        </Text>
+
+
+                                    </View>
+                                </TouchableOpacity>
+                        )
+                        }
 
 
 
 
+                        keyExtractor={(item, index) => index.toString()}
+                        // contentContainerStyle={{paddingTop: 10}}
 
 
-                            <TouchableOpacity   onPress={(event)=>this.Get_Chat(item.Chat_id)} >
-                                <View style={{flex: 1, flexDirection: 'row'}}>
+                    />
 
-                                    <Image source={require('./Image/email.png')} style={styles.imageView}/>
-
-                                    <Text style={styles.time_msg}>
-
-                                        { item.last_data}
-
-
-                                    </Text>
-
-                                    <Text style={styles.rooms}>
-                                       {item.Private_Chatters}
-
-
-                                    </Text>
-
-                                    <Text style={styles.time}>
-
-                                        {  item.last_msg}
-
-
-                                    </Text>
-
-
-
-                                </View>
-                            </TouchableOpacity>
-                    )
-                    }
-
-
-                    keyExtractor={(item, index) => index.toString()}
-                          contentContainerStyle={{paddingTop: 40}}
-
-
-
-
-                />
+                </ImageBackground>
 
             </View>
 
@@ -160,15 +180,15 @@ const styles = StyleSheet.create({
     container1: {
 
         backgroundColor: '#E8F6FF',
-        width:'100%'
+        width: '100%',
+
 
     },
     rooms: {
         fontSize: 18,
-        flex:1,
+        flex: 1,
         color: 'rgba(0,0,0,0.98)',
-        marginLeft: 10,
-
+        marginTop: 14,
 
 
     },
@@ -178,21 +198,18 @@ const styles = StyleSheet.create({
         flex: 1,
         color: 'rgba(87,87,87,0.98)',
         marginRight: 5,
-        marginTop:2
-
+        marginTop: 2
 
 
     },
     time_msg: {
         fontSize: 15,
-        flex:1,
+        flex: 1,
         color: 'rgba(25,53,87,0.98)',
 
-        marginTop:40,
+        marginTop: 48,
         textAlign: 'left',
-      //  paddingTop: 5,
-
-
+        //  paddingTop: 5,
 
 
     },
@@ -215,20 +232,35 @@ const styles = StyleSheet.create({
         height: 45,
         paddingBottom: 1,
         marginBottom: 12,
-        marginTop:5,
+        marginTop: 5,
         borderRadius: 7,
+
+
+
+    },
+    imageViewDelete: {
+
+        width: 25,
+        height: 25,
+        paddingBottom: 1,
+        marginBottom: 12,
+        marginTop: 16,
+        paddingLeft:10,
+        marginLeft:290,
+        resizeMode:"contain"
+
 
 
     },
 
     instructions: {
 
-        textAlign: 'center',
+        textAlign: 'left',
 
-        color: '#FFF',
+        color: '#e5e5e5',
         fontSize: 30,
         flex: 1,
-        paddingLeft: 91,
+        paddingLeft: 120,
         alignSelf: 'center',
 
 

@@ -15,7 +15,8 @@
     "react-native-easy-router": "latest",
     "react-native-emoji-input": "git+https://github.com/camlahoud/react-native-emoji-input.git",
     "react-native-emoticons": "^1.0.13",
-    "react-native-imei": "^0.2.0"
+    "react-native-imei": "^0.2.0",
+    "react-native-swipe-list-view": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
