@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         padding: 1,
         backgroundColor: '#ffffff',
+        borderRadius:8,
 
 
     },
@@ -119,6 +120,19 @@ const styles = StyleSheet.create({
 
 
         backgroundColor: '#E8F6FF',
+
+
+    },
+
+    Private_Toolbar: {
+        fontSize: 20,
+
+        color: '#efefef',
+
+        marginLeft:40,
+
+
+
 
 
     },

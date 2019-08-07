@@ -51,6 +51,23 @@ export default class View_stuff extends React.Component {
     };
 
 
+  //  gift_validation = () =>
+
+
+
+
+ //   {
+  //      if
+
+
+
+
+
+
+
+     //     }
+
+
     componentWillUnmount() {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);

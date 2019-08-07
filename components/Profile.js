@@ -45,7 +45,18 @@ export default class Profile extends React.Component {
 
         };
 
+      const test = this.test()
+
+
     }
+
+    test =() => {
+        console.log('ITS MY PROFILE');
+        console.log(this.props.nic)
+
+
+
+};
 
     backs =() => {
         const {router} = this.props;

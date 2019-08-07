@@ -16,15 +16,13 @@ import request_GET_MESSAGES from '../actions/fetch_get_messages'
 import request_ENTRY_USER_ROOM from '../actions/fetch_entry_user'
 import request_GET_PROFILE from '../actions/fetch_profile_info'
 import request_GET_GIFTS from '../actions/fetch_user_gifts'
-import request_GET_PRIVATE_LIST from '../actions/fetch_private_list'
 import menusmiles from './const/smiles'
-import menuitem from './const/menu'
+import private_menu from './const/private_menu'
 import styles from '../styles'
 import Rooms_list from './const/Room_List'
 import Rooms_banned from './const/Room_list_banned'
 
-const list = ['Профиль', 'Написать Личное', 'Ответить'];
-export default class Chatting extends React.Component {
+export default class Private extends React.Component {
 
 
     constructor(props) {
@@ -35,7 +33,7 @@ export default class Chatting extends React.Component {
             color: [],
             DataSource: [],
             users: [],
-            item_menu: menuitem,
+            item_menu: private_menu,
             item_smiles: menusmiles,
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
@@ -43,92 +41,15 @@ export default class Chatting extends React.Component {
             smiles: '',
             count: '',
             ban: '',
-            action_nick: list,
+
             user_now: '',
             msg: '',
             pr_inf: '',
 
 
         };
-        this.animatedValue = new Animated.Value(-350);
+
         this.animatedVal = new Animated.Value(-350);
-        this.animatedProfile = new Animated.Value(-350);
-    }
-
-
-    Action_Nick = (user) => {
-
-        Animated.timing(                  // Animate over time
-            this.animatedProfile,            // The animated value to drive
-            {
-                toValue: 100,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-                useNativeDriver: true,
-
-            }
-        ).start();
-
-
-        this.setState({user_now: user})
-
-    };
-
-
-    Action_nick_selected = async (position) => {
-
-        Animated.timing(                  // Animate over time
-            this.animatedProfile,            // The animated value to drive
-            {
-                toValue: -350,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-                useNativeDriver: true,// Make it take a while
-            }
-        ).start();
-
-
-        if (position === 'Ответить') {
-            console.log("otvet");
-
-            this.setState({text: this.state.user_now + ', '})
-
-        }
-        if (position === 'Написать Личное') {
-
-
-            const {router} = this.props;
-            router.push.Private({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-
-
-            });
-
-
-        }
-
-        if (position === 'Профиль') {
-
-
-            const profile_info = await request_GET_PROFILE(this.state.user_now);
-            const gifts = await request_GET_GIFTS(this.state.user_now);
-
-
-            const {router} = this.props;
-            router.push.Profile({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                user_data: profile_info,
-                chat_name: this.props.chat_name,
-                gift: gifts,
-
-
-            });
-
-        }
-
 
     }
 
@@ -156,20 +77,6 @@ export default class Chatting extends React.Component {
     };
 
 
-    callToast = () => {
-
-        Animated.timing(                  // Animate over time
-            this.animatedValue,            // The animated value to drive
-            {
-                toValue: 0,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-                useNativeDriver: true,// Make it take a while
-            }
-        ).start();
-
-    };
-
-
     renderSeparator = () => (
         <View
             style={{
@@ -179,61 +86,6 @@ export default class Chatting extends React.Component {
             }}
         />
     );
-
-
-    ban_msg = () => {
-
-        const ban = `http://185.231.154.198:5000/banned/room/${this.props.nic}`;
-
-        return fetch(ban)
-            .then((response) => response.json())
-            .then(async (responseJson) => {
-
-
-                this.setState({ban: responseJson['user']});
-
-                if (this.state.ban === 'banned') {
-
-
-                    let check = this.props.room;
-                    console.log(this.props.room);
-
-
-                    if (check === 'Тюрьма') {
-
-                        console.log('ok');
-                    } else {
-
-                        const {router} = this.props;
-
-
-                        Alert.alert('Вы были забанены на неопределенный срок');
-                        router.push.Rooms({name: this.props.nic, room: 'Тюрьма', roomlist: this.state.rooms_Banned});
-
-                        await request_ENTRY_USER_ROOM(this.props.nic, this.props.room);
-                        console.log('prison' + this.props.room)
-
-                    }
-
-                } else if ((this.state.ban === 'unbanned' && this.props.room === 'Тюрьма')) {
-
-                    Alert.alert('Cрок закончился!');
-                    const {router} = this.props;
-                    router.pop({name: this.props.nic, room: 'Тюрьма', roomlist: this.state.rooms_Unbanned});
-
-                    console.log('go')
-
-                } else {
-
-                    console.log('go')
-
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-    };
 
 
     update_msg = async () => {
@@ -279,76 +131,31 @@ export default class Chatting extends React.Component {
 
     onActionSelected = async (position) => {
 
+
         if (position === 0) {
-
-            const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
-
-         const {router} = this.props;
-            await  router.push.Private_List({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                private_user_list:get_list,
+            console.log("I am in 0");
 
 
-            });
+
+        }
+        if (position === 1) {
+            console.log("I am in 1");
 
 
         }
 
         if (position === 2) {
-            console.log("I am in 0");
 
-
-            this.callToast();
-            const usr_list_vw = await fetch_users_in_room(this.props.room);
-
-
-            this.setState({
-                users: usr_list_vw,
-            });
-
-
-        }
-        if (position === 1) {
-
-            this.callsmile();
-
-
-        }
-
-        if (position === 5) {
-
-
-            await this.ban_msg();
-            this.Del_user_change();
-            this.componentWillUnmount()
-
-
+            console.log("I am in 2");
         }
 
     };
 
 
-    Del_user_change = () => {
 
 
-        request_DELETE_USER_ROOM(this.props.room, this.props.nic);
-        let nw = this.props.room;
-        if (nw === 'Тюрьма') {
-            const {router} = this.props;
-
-            router.push.Rooms({name: this.props.nic, roomlist: this.state.rooms_Banned,});
-
-        } else {
-            const {router} = this.props;
-            router.push.Rooms({name: this.props.nic, roomlist: this.state.rooms_Unbanned});
-
-        }
 
 
-    };
     send_msg = async (messages) => {
 
         await this.ban_msg();
@@ -387,14 +194,6 @@ export default class Chatting extends React.Component {
 
         Animated.timing(                  // Animate over time
             this.animatedVal,            // The animated value to drive
-            {
-                toValue: -350,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-                useNativeDriver: true,// Make it take a while
-            }
-        ).start();
-        Animated.timing(                  // Animate over time
-            this.animatedValue,            // The animated value to drive
             {
                 toValue: -350,                   // Animate to opacity: 1 (opaque)
                 duration: 350,
@@ -655,7 +454,7 @@ export default class Chatting extends React.Component {
 
 
                         <View>
-                            <Text style={styles.instructions}>{this.props.room} </Text>
+                            <Text style={styles.Private_Toolbar}>           Личные сообщения </Text>
 
                         </View>
 
@@ -679,57 +478,42 @@ export default class Chatting extends React.Component {
                     />
 
 
-                    <Animated.View style={{
-                        transform: [{translateY: this.animatedValue}],
-                        height: 270,
-                        width: 94,
-                        backgroundColor: 'white',
-                        position: 'absolute',
-                        left: 128,
-                        top: 80,
-                        right: 0,
-                        justifyContent: 'center'
-                    }}>
+                    <FlatList inverted
 
 
-                        <FlatList inverted
+                              data={this.state.users}
+                              extraData={this.state}
 
 
-                                  data={this.state.users}
-                                  extraData={this.state}
+                              ItemSeparatorComponent={this.renderSeparator}
 
 
-                                  ItemSeparatorComponent={this.renderSeparator}
+                              renderItem={(({item}) =>
 
 
-                                  renderItem={(({item}) =>
+                                      //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
+                                      <TouchableOpacity onPress={() => this.check_nick(item.user, ',')}>
+                                          <View style={{flex: 1, flexDirection: 'row'}}>
+                                              <Text style={styles.prices}>
+
+                                                  {item.user}
+                                                  <Text style={styles.all_users}>
+                                                      {item.sumuser}
 
 
-                                          //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-                                          <TouchableOpacity onPress={() => this.check_nick(item.user, ',')}>
-                                              <View style={{flex: 1, flexDirection: 'row'}}>
-                                                  <Text style={styles.prices}>
-
-                                                      {item.user}
-                                                      <Text style={styles.all_users}>
-                                                          {item.sumuser}
-
-
-                                                      </Text>
                                                   </Text>
+                                              </Text>
 
 
-                                              </View>
-                                          </TouchableOpacity>
-                                  )
-                                  }
+                                          </View>
+                                      </TouchableOpacity>
+                              )
+                              }
 
 
-                                  keyExtractor={(item, index) => index.toString()}
+                              keyExtractor={(item, index) => index.toString()}
 
-                        />
-
-                    </Animated.View>
+                    />
 
 
                     <Animated.View style={{
@@ -786,65 +570,52 @@ export default class Chatting extends React.Component {
 
                     </Animated.View>
 
-                    <Animated.View style={{
-                        transform: [{translateY: this.animatedProfile}],
-                        height: 115,
-                        width: 125,
-                        backgroundColor: '#e8f6ff',
-                        position: 'absolute',
-                        left: 120,
-                        top: 100,
-                        bottom: 0,
-                        right: 0,
-                        justifyContent: 'center',
 
-                    }}>
-                        <Text style={styles.nick}>
-                            {this.state.user_now}
+                    <Text style={styles.nick}>
+                        {this.state.user_now}
 
-                        </Text>
-                        <FlatList inverted
+                    </Text>
+                    <FlatList inverted
 
 
-                                  data={this.state.action_nick}
-                                  extraData={this.state}
+                              data={this.state.action_nick}
+                              extraData={this.state}
 
 
-                                  ItemSeparatorComponent={this.renderSeparator}
-                                  renderItem={(({item}) =>
+                              ItemSeparatorComponent={this.renderSeparator}
+                              renderItem={(({item}) =>
 
-                                          <TouchableOpacity onPress={() => this.Action_nick_selected(item)}>
-                                              <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
-
-
-                                                  <View style={{
-                                                      flex: 1, flexDirection: 'row', flexWrap: 'wrap'
-                                                  }}>
+                                      <TouchableOpacity onPress={() => this.Action_nick_selected(item)}>
+                                          <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
 
 
-                                                      <Text style={styles.action_profile}
-                                                      >
-                                                          {item}
+                                              <View style={{
+                                                  flex: 1, flexDirection: 'row', flexWrap: 'wrap'
+                                              }}>
 
 
-                                                      </Text>
+                                                  <Text style={styles.action_profile}
+                                                  >
+                                                      {item}
 
 
-                                                  </View>
+                                                  </Text>
 
 
                                               </View>
-                                          </TouchableOpacity>
-                                  )
-                                  }
 
 
-                                  keyExtractor={(item, index) => index.toString()}
+                                          </View>
+                                      </TouchableOpacity>
+                              )
+                              }
 
 
-                        />
+                              keyExtractor={(item, index) => index.toString()}
 
-                    </Animated.View>
+
+                    />
+
 
                     <View style={styles.inputBar}>
 
