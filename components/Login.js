@@ -5,7 +5,7 @@ import {
     StyleSheet,
     Text, TextInput, TouchableOpacity,
     View,
-    Alert
+    Alert, ImageBackground
 } from "react-native";
 import React from "react";
 import request_READ_PHONE_STATE from '../actions/request_phone_state'
@@ -139,7 +139,7 @@ export default class Login extends React.Component {
 
         return <SafeAreaView style={styles.container}>
 
-
+            <ImageBackground source={require('./Image/login_background.jpg')} style={{width: '100%', height: '100%'}}>
             <View style={styles.logoContainer}>
                 <Text style={styles.labelText}>ДОБРО ПОЖАЛОВАТЬ!</Text>
 
@@ -148,12 +148,17 @@ export default class Login extends React.Component {
 
 
                     <Image
-                        style={{width: 200, height: 200}}
-                        source={require('./Image/logo.png')}
+                        style={{width: 200, height: 200,borderRadius:400/2}}
+                        source={require('./Image/logo.jpg')}
                     />
                 </View>
+                <Text style={{marginRight:175,fontWeight: 'bold',bottom:15}}>
+                    {'\t'}Логин/Login
+                </Text>
+                <View style={styles.logoContainer1}>
 
-                <View style={styles.logoContainer}>
+                    <View style={styles.inputView}>
+
                     <TextInput style={styles.input}
                                placeholder="Логин"
                                placeholderTextColor='rgba(255,255,255,0.8)'
@@ -161,6 +166,18 @@ export default class Login extends React.Component {
                                value={this.state.username}
                                maxLength={16}
                     />
+
+                        <View>
+
+
+                            <Text style={{marginRight:4,fontWeight: 'bold'}}>
+                                {'\t'}  Пароль/Password
+                            </Text>
+                        </View>
+
+                    </View>
+
+                    <View style={styles.inputView}>
                     <TextInput style={styles.input}
                                placeholder="Пароль"
                                placeholderTextColor='rgba(255,255,255,0.8)'
@@ -172,17 +189,20 @@ export default class Login extends React.Component {
                                maxLength={16}
 
                     />
+                    </View>
+
+
                     <TouchableOpacity onPress={this.login}>
 
                         <Text
 
-                            style={styles.buttonText}>Войти</Text>
+                            style={styles.buttonTextlogin}>Войти</Text>
 
 
                     </TouchableOpacity>
                     <View>
                         <TouchableOpacity onPress={() => router.push.Registration({router})} style={styles.buttonText1}>
-                            <Text style={styles.buttonContainer1}>
+                            <Text style={styles.buttonText}>
 
                                 Регистрация</Text>
 
@@ -190,7 +210,7 @@ export default class Login extends React.Component {
                     </View>
                 </View>
             </View>
-
+            </ImageBackground>
         </SafeAreaView>
 
     }
@@ -204,7 +224,15 @@ const styles = StyleSheet.create({
     logoContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1
+        flex: 1,
+
+    },
+    logoContainer1: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        color:'#5375bf',
+        borderRadius: 20,
     },
     logo: {
         width: 200,
@@ -229,11 +257,21 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        width: 200,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        color: '#FFF',
+        width: 270,
+        backgroundColor: '#80b4bb',
+        color: '#3b3771',
         marginBottom: 20,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+
+
+        borderRadius: 400/2,
+    },
+    inputView: {
+
+        bottom:30,
+        borderRadius:20,
+
+
     },
     buttonContainer: {
         backgroundColor: '#15a4f7',
@@ -243,11 +281,31 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
-        color: '#FFF',
+        color: '#393939',
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginBottom: 20,
+        paddingHorizontal: 10,
+        backgroundColor:'#57966f',
+        paddingLeft:30,
+        paddingRight:30,
+        paddingTop:10,
+        paddingBottom:10,
+        borderRadius:20,
+    },
+    buttonTextlogin: {
+        textAlign: 'center',
+        color: '#393939',
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 0,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        backgroundColor:'#57966f',
+        paddingLeft:60,
+        paddingRight:60,
+        paddingTop:10,
+        paddingBottom:10,
+        borderRadius:20,
     },
 
     buttonText1: {
@@ -265,16 +323,21 @@ const styles = StyleSheet.create({
     },
     labelText: {
         textAlign: 'center',
-        color: '#FFF',
+        color: '#393939',
         fontWeight: 'bold',
         fontSize: 20,
-        top: 10
+
+        backgroundColor:'#67a8be',
+        paddingLeft:71,
+        paddingRight:71,
+        paddingBottom:10,
+        paddingTop:10,
     },
 
 
     container1: {
 
-        backgroundColor: '#b4f5ff',
+        backgroundColor: '#80b4bb',
 
     },
     touchableButton: {
