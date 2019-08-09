@@ -36,7 +36,7 @@ export default class Profile extends React.Component {
 
         this.state = {
             color: [],
-            toolbar_text: 'Анкета пользователя',
+            toolbar_text: 'Профиль',
             profile_info: list,
             user_info: this.props.user_data.data,
             gifts_list: this.props.gift,
@@ -133,7 +133,7 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('./Image/mochat.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
 
                     <ToolbarAndroid style={styles.containerToolbarProfile}
 
@@ -164,20 +164,21 @@ export default class Profile extends React.Component {
 
                                       <View style={{
 
-                                          marginLeft: 30,
-                                          marginRight: 30,
+                                          marginLeft: 20,
+                                          marginRight: 20,
+                                          marginBottom:5,
 
 
                                       }}>
 
-                                          <View>
+                                          <View style={{marginLeft:15,}}>
                                               <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}/>
 
                                           </View>
 
 
                                           <Text style={styles.Profile_List_text_info}>
-                                              {'Пользователь:' + item.nic +'\n'}
+                                              {'\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + item.nic +'\n\n'}
                                               {item.sex + '\n'}
                                               {item.bday+ '\n'}
                                               {item.email+ '\n'}
@@ -195,10 +196,11 @@ export default class Profile extends React.Component {
 
                               keyExtractor={(item, index) => index}
                     />
-                    <View>
+                    <View >
                     <FlatList style={{
                         marginLeft: 30,
                         marginRight: 30,
+                        marginTop:13,
                     }}
                         horizontal
                         data={this.state.gifts_list}
@@ -211,7 +213,8 @@ export default class Profile extends React.Component {
                                     marginTop: 1,
                                     marginBottom: 14,
                                     marginLeft: 5,
-                                    marginRight: 5
+                                    marginRight: 5,
+
                                 }}>
                                     <TouchableOpacity onPress={() => this.delete_gift(item.id,item.url,item.description)}>
 
@@ -227,14 +230,14 @@ export default class Profile extends React.Component {
 
                     />
 
-                        <FlatList style={{marginBottom: 10, marginTop: 12}}
+                        <FlatList style={{marginBottom: 5, marginTop: 6}}
 
 
                                   data={this.state.profile_info}
                                   extraData={this.state}
 
 
-                                  ItemSeparatorComponent={this.renderSeparator_1}
+
 
 
                                   renderItem={(({item}) =>
@@ -242,9 +245,10 @@ export default class Profile extends React.Component {
 
                                           //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
 
-                                          <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#ffffff'}}>
+                                          <View style={{flex: 1, flexDirection: 'row',marginRight:20,marginLeft:20,paddingTop:6,
+                                              borderRadius:20}}>
 
-                                              <Image source={item.icon} style={styles.imageView}/>
+                                              <Image source={item.icon} style={styles.imageViewProfile_icon}/>
                                               <Text style={styles.Profile_List_text}
                                               >
 

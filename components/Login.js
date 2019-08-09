@@ -1,11 +1,12 @@
 import {
     AsyncStorage,
     Image,
-    SafeAreaView,
+
     StyleSheet,
     Text, TextInput, TouchableOpacity,
     View,
     Alert, ImageBackground
+    , ActivityIndicator, BackHandler
 } from "react-native";
 import React from "react";
 import request_READ_PHONE_STATE from '../actions/request_phone_state'
@@ -20,21 +21,26 @@ export default class Login extends React.Component {
         super(props);
         this.state = {
 
-            username: '',
-            password: '',
+            username: this.props.passwd,
+            password: this.props.name,
             nick: '',
             validator: '',
             ban: '',
             Imei: '',
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
+            isLoading:false,
 
 
         };
 
-        this._retrieveData();
+        this._retrieveData()
 
     }
+
+
+
+
 
     _storeData = async () => {
         try {
@@ -58,7 +64,8 @@ export default class Login extends React.Component {
                 // We have data!!
                 this.setState({
                     username: value,
-                    password: passwd
+                    password: passwd,
+                    isLoading:false,
                 })
             }
             ;
@@ -66,6 +73,8 @@ export default class Login extends React.Component {
             // Error retrieving data
         }
     };
+
+
 
     login = async () => {
 
@@ -78,19 +87,21 @@ export default class Login extends React.Component {
         if (LoginLength > 3 || PasswordLength > 3) {
 
 
-            this._storeData();
+           this._storeData();
             request_READ_PHONE_STATE();
-            const {router} = this.props;
-            router.push.Login();
+
+
             const login = await request_login(this.state.username, this.state.password, this.state.Imei);
-            console.log(login['nic']['$oid']);
+         //   console.log(login['nic']['$oid']);
 
 
-            this.setState({validator: login['auth']});
+            this.setState({validator: login['auth'],isLoading:true});
 
             if (this.state.validator === 'NO OK') {
 
-                Alert.alert('Данные введены неверно!')
+                Alert.alert('Данные введены неверно!');
+                this.setState({isLoading:false});
+
 
 
             } else {
@@ -132,29 +143,50 @@ export default class Login extends React.Component {
     };
 
 
+    reg =() => {
+const {router} = this.props;
+       router.push.Registration({router});
+
+
+
+
+
+    };
+
+
+
+
     render() {
 
-        const {router} = this.props;
 
 
-        return <SafeAreaView style={styles.container}>
 
-            <ImageBackground source={require('./Image/login_background.jpg')} style={{width: '100%', height: '100%'}}>
+
+
+        return <View style={styles.container}>
+
+
+
+            <ImageBackground source={require('./Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
             <View style={styles.logoContainer}>
-                <Text style={styles.labelText}>ДОБРО ПОЖАЛОВАТЬ!</Text>
 
 
                 <View style={styles.logoContainer}>
 
 
+
                     <Image
-                        style={{width: 200, height: 200,borderRadius:400/2}}
+                        style={{width: 200, height: 200,borderRadius:400/2,bottom:8,borderWidth: 1}}
                         source={require('./Image/logo.jpg')}
                     />
+                    <ActivityIndicator size="large" color="#6aaabb"
+                                       animating={this.state.isLoading}/>
+                    <Text style={styles.labelText}>AirChat</Text>
+
+
+
                 </View>
-                <Text style={{marginRight:175,fontWeight: 'bold',bottom:15}}>
-                    {'\t'}Логин/Login
-                </Text>
+
                 <View style={styles.logoContainer1}>
 
                     <View style={styles.inputView}>
@@ -170,9 +202,6 @@ export default class Login extends React.Component {
                         <View>
 
 
-                            <Text style={{marginRight:4,fontWeight: 'bold'}}>
-                                {'\t'}  Пароль/Password
-                            </Text>
                         </View>
 
                     </View>
@@ -201,7 +230,7 @@ export default class Login extends React.Component {
 
                     </TouchableOpacity>
                     <View>
-                        <TouchableOpacity onPress={() => router.push.Registration({router})} style={styles.buttonText1}>
+                        <TouchableOpacity onPress={this.reg} style={styles.buttonText1}>
                             <Text style={styles.buttonText}>
 
                                 Регистрация</Text>
@@ -211,7 +240,7 @@ export default class Login extends React.Component {
                 </View>
             </View>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
 
     }
 }
@@ -225,6 +254,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
+        elevation: 2
 
     },
     logoContainer1: {
@@ -232,7 +262,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
         color:'#5375bf',
-        borderRadius: 20,
+        borderRadius: 14,
     },
     logo: {
         width: 200,
@@ -253,14 +283,15 @@ const styles = StyleSheet.create({
         bottom: 0,
         height: 200,
         padding: 20,
+
         // backgroundColor: 'red'
     },
     input: {
         height: 40,
         width: 270,
-        backgroundColor: '#80b4bb',
+        backgroundColor: '#6aaabb',
         color: '#3b3771',
-        marginBottom: 20,
+        marginBottom: 10,
         paddingHorizontal: 10,
 
 
@@ -281,31 +312,31 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
-        color: '#393939',
+        color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 20,
         paddingHorizontal: 10,
-        backgroundColor:'#57966f',
+        backgroundColor:'#3e9496',
         paddingLeft:30,
         paddingRight:30,
         paddingTop:10,
         paddingBottom:10,
-        borderRadius:20,
+        borderRadius:14,
     },
     buttonTextlogin: {
         textAlign: 'center',
-        color: '#393939',
+        color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 0,
         paddingHorizontal: 10,
-        backgroundColor:'#57966f',
+        backgroundColor:'#548695',
         paddingLeft:60,
         paddingRight:60,
         paddingTop:10,
         paddingBottom:10,
-        borderRadius:20,
+        borderRadius:14,
     },
 
     buttonText1: {
@@ -323,15 +354,15 @@ const styles = StyleSheet.create({
     },
     labelText: {
         textAlign: 'center',
-        color: '#393939',
+        color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 20,
 
-        backgroundColor:'#67a8be',
+     //   backgroundColor:'#67a8be',
         paddingLeft:71,
         paddingRight:71,
-        paddingBottom:10,
-        paddingTop:10,
+        paddingBottom:15,
+
     },
 
 

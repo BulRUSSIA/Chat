@@ -19,9 +19,10 @@ export default class Registration extends React.Component {
             password: '',
             nick: '',
             validator: '',
-            color:'',
+            color:'-16777216',
             item_smiles: colors,
             sm:menusmiles,
+            clr:'#010101'
 
 
         };
@@ -54,11 +55,12 @@ export default class Registration extends React.Component {
 
                     if (this.state.validator === 'No') {
 
-                        alert('Данный ник уже существует!')
+                        Alert.alert('Данный ник или логин уже существует!')
                     } else {
 
                         const {router} = this.props;
-                        router.push.Login({name: this.state.username, passwd:this.state.password, router});
+
+                        router.pop({name: this.state.username, passwd:this.state.password, router});
                         Alert.alert('Вы успешно зарегистрировались!');
                     }
                 })
@@ -83,7 +85,9 @@ export default class Registration extends React.Component {
 
     };
 
-    close_color = (evt) => {
+    close_color = (evt,clr) => {
+
+
 
         Animated.timing(                  // Animate over time
             this.animatedVal,            // The animated value to drive
@@ -94,8 +98,9 @@ export default class Registration extends React.Component {
             }
         ).start();
 
-        this.setState({color:evt})
+        this.setState({color:evt,clr:clr});
         Alert.alert('Цвет успешно выбран!')
+
 
     };
 
@@ -105,9 +110,11 @@ export default class Registration extends React.Component {
 
         return <SafeAreaView style={styles.container}>
 
+            <ImageBackground source={require('./Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
+
 
             <View style={styles.logoContainer}>
-                <Text style={styles.labelText}>РЕГИСТРАЦИЯ АККАУНТА</Text>
+                <Text style={styles.labelText}>Регистрация</Text>
 
 
                 <View style={styles.logoContainer}>
@@ -141,7 +148,19 @@ export default class Registration extends React.Component {
                                maxLength={16}
 
                     />
-                    <TouchableOpacity style={styles.color} onPress={this.Change_color}
+                    <TouchableOpacity style={{backgroundColor:this.state.clr,
+
+                        height: 40,
+                        width: 40,
+
+
+                        marginBottom: 20,
+                        paddingHorizontal: 10,
+                        borderRadius :14,
+
+                    }}
+
+                     onPress={this.Change_color}
 
 
                     />
@@ -193,7 +212,7 @@ export default class Registration extends React.Component {
                                       <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
 
 
-                                          <TouchableOpacity onPress={(event)=>this.close_color(item.clr)}>
+                                          <TouchableOpacity onPress={(event)=>this.close_color(item.clr,item.rclr)}>
 
                                                   <Text style={[styles.prices1 ,{backgroundColor:colors[index % colors.length]}]}
                                                         onChangeText={(color) => this.setState({color})}
@@ -222,7 +241,7 @@ export default class Registration extends React.Component {
 
                 </Animated.View>
             </View>
-
+            </ImageBackground>
 
         </SafeAreaView>
 
@@ -266,26 +285,30 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.2)',
         color: '#FFF',
         marginBottom: 20,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        borderRadius :14,
     },
 
     color: {
         height: 40,
-        width: 50,
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        width: 70,
+        backgroundColor: '#010101',
         color: '#FFF',
         marginBottom: 20,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        borderRadius:20,
+
     },
     buttonContainer: {
-        backgroundColor: '#00BCD4',
+        backgroundColor: '#114c4d',
         paddingVertical: 8,
         height: 40,
         width: 200,
         color: '#FFF',
         textAlign: 'center',
         fontSize: 18,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        borderRadius:14
     },
     buttonText: {
         textAlign: 'center',
@@ -318,15 +341,21 @@ const styles = StyleSheet.create({
     buttonContainer1: {
         fontSize: 18,
         color: '#FFF',
+        borderRadius:400/2,
     },
     labelText: {
         textAlign: 'center',
-        color: '#FFF',
+        color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 20,
-        top: 50,
-        bottom:15,
+
+        backgroundColor:'#67a8be',
+        paddingLeft:109,
+        paddingRight:109,
+        paddingBottom:10,
+        paddingTop:10,
     },
+
 
 
     container1: {

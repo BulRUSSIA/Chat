@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
         color: '#efefef',
         marginLeft: 0,
         padding: 1,
-        paddingLeft: 70
+        paddingLeft: 130,
+        fontWeight: 'bold',
 
 
     },
@@ -73,7 +74,8 @@ const styles = StyleSheet.create({
         color: '#efefef',
         marginLeft: 0,
         padding: 1,
-        paddingLeft: 130
+        paddingLeft: 130,
+        fontWeight: 'bold'
 
 
     },
@@ -103,23 +105,30 @@ const styles = StyleSheet.create({
 
     Profile_List_text: {
         fontSize: 20,
-        flex: 1,
-        color: '#2045b4',
+        flex:1,
+        color: '#3e3f56',
         marginLeft: 0,
         padding: 1,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#76a3ab',
         borderRadius:8,
+        paddingBottom:5,
+        paddingRight: 10,
+        paddingLeft:10,
+        paddingTop:5,
+
+
 
 
     },
 
     Profile_List_text_info: {
-        fontSize: 20,
+        fontSize: 14,
 
-        color: '#2045b4',
+        color: '#3e3f56',
 
 
-        backgroundColor: '#E8F6FF',
+        backgroundColor: '#8ac5c6',
+        borderRadius:20,
 
 
     },
@@ -190,6 +199,19 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         marginLeft: 0,
         resizeMode: 'contain',
+
+
+    },
+    imageViewProfile_icon: {
+
+        width: 25,
+        height: 25,
+        paddingBottom: 12,
+        marginBottom: 5,
+        borderRadius: 7,
+        marginLeft: 0,
+        resizeMode: 'contain',
+        marginTop:6,
 
 
     },
@@ -346,7 +368,10 @@ const styles = StyleSheet.create({
         width: "100%",
 
 
-        backgroundColor: '#06b3e9',
+
+
+        backgroundColor: '#8bb2c4',
+
     },
     containerToolbarProfile_down: {
 

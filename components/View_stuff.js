@@ -32,7 +32,7 @@ export default class View_stuff extends React.Component {
             gifts_view: this.props.gift_view,
             gifts_id: this.props.gift_id,
             DataSource: [],
-            gifts_description:this.props.gift_description
+            gifts_description: this.props.gift_description
 
 
         };
@@ -51,21 +51,14 @@ export default class View_stuff extends React.Component {
     };
 
 
-  //  gift_validation = () =>
+    //  gift_validation = () =>
 
 
+    //   {
+    //      if
 
 
- //   {
-  //      if
-
-
-
-
-
-
-
-     //     }
+    //     }
 
 
     componentWillUnmount() {
@@ -109,7 +102,7 @@ export default class View_stuff extends React.Component {
             >
 
 
-                <ImageBackground source={require('./Image/mochat.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
 
 
                     <ToolbarAndroid style={styles.containerToolbarProfile}
@@ -125,11 +118,7 @@ export default class View_stuff extends React.Component {
                     </ToolbarAndroid>
 
 
-
                     <Image source={{uri: this.state.gifts_view}} style={styles.imageViewAvatars_stuff}/>
-
-
-
 
 
                     <View>
@@ -139,34 +128,9 @@ export default class View_stuff extends React.Component {
                     </View>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <TouchableOpacity onPress={this.delete_gift}>
                         <Image source={require('./Image/delete.png')} style={styles.imageViewAvatars_stuff}/>
                     </TouchableOpacity>
-
-
-
-
-
-
-
-
-
-
-
 
 
                     <ToolbarAndroid style={styles.containerToolbarProfile_down}

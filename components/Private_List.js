@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import React from "react";
 import Chatting from '../components/Chatting'
-import {SwipeListView} from 'react-native-swipe-list-view';
 
 const menuitem = [{title: 'Удалить все чаты', show: 'never', eventkey: 1},
 
@@ -64,17 +63,9 @@ export default class Private_List extends React.Component {
         console.log(event);
         alert('service')
     };
+//#96d5d6 love color cards
 
 
-    renderSeparator_1 = () => (
-        <View
-            style={{
-                backgroundColor: '#129af9',
-                height: 1
-
-            }}
-        />
-    );
 
 
     render() {
@@ -84,7 +75,7 @@ export default class Private_List extends React.Component {
 
 
             <View style={styles.container1}>
-                <ImageBackground source={require('./Image/e1.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/fon_private.jpg')} style={{width: '100%', height: '100%'}}>
 
                     <ToolbarAndroid style={styles.containerToolbar}
                                     onActionSelected={this.onActionSelected.bind(this)}
@@ -101,31 +92,22 @@ export default class Private_List extends React.Component {
                     </ToolbarAndroid>
 
 
-                    <SwipeListView inverted
+                    <FlatList inverted
 
 
                         data={this.state.DataSource}
                         extraData={this.state}
 
 
-                        ItemSeparatorComponent={this.renderSeparator_1}
-                                   renderHiddenItem={ (item, rowMap) => (
 
-                                       <View style={{position: 'relative',top:0,bottom:0}}>
-                                           <Image source={require('./Image/rabbish.png')} style={styles.imageViewDelete}/>
-                                       </View>
-
-                                   )}
-
-                                   rightOpenValue={-70}
 
                         renderItem={(({item}) =>
 
 
                                 <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id)}>
-                                    <View style={{ flexDirection: 'row',flex:1}}>
+                                    <View style={{ flexDirection: 'row',flex:1,backgroundColor:'#92b4bb',marginTop:5,borderRadius:14}}>
 
-                                        <Image source={require('./Image/email.png')} style={styles.imageView}/>
+                                        <Image source={require('./Image/people_private.png')} style={styles.imageView}/>
 
 
                                         <Text style={styles.rooms}>
@@ -147,6 +129,7 @@ export default class Private_List extends React.Component {
 
 
                                         </Text>
+                                        <Image source={require('./Image/private_msg.png')} style={styles.imageViewmsg}/>
 
 
                                     </View>
@@ -162,6 +145,19 @@ export default class Private_List extends React.Component {
 
 
                     />
+                    <ToolbarAndroid style={styles.containerToolbardown}>
+
+
+
+
+
+
+                        <View>
+                            <Text style={styles.instructions1}> назад</Text>
+                        </View>
+
+
+                    </ToolbarAndroid>
 
                 </ImageBackground>
 
@@ -185,29 +181,30 @@ const styles = StyleSheet.create({
 
     },
     rooms: {
-        fontSize: 18,
+        fontSize: 14,
         flex: 1,
         color: 'rgba(0,0,0,0.98)',
-        marginTop: 14,
+        marginTop: 2,
+        fontWeight:'bold'
 
 
     },
 
     time: {
-        fontSize: 15,
+        fontSize: 10,
         flex: 1,
-        color: 'rgba(87,87,87,0.98)',
-        marginRight: 5,
+        color: 'rgba(255,255,255,0.98)',
+        marginRight: 2,
         marginTop: 2
 
 
     },
     time_msg: {
-        fontSize: 15,
+        fontSize: 14,
         flex: 1,
-        color: 'rgba(25,53,87,0.98)',
+        color: 'rgba(2,4,6,0.98)',
 
-        marginTop: 48,
+        marginTop: 25,
         textAlign: 'left',
         //  paddingTop: 5,
 
@@ -228,26 +225,25 @@ const styles = StyleSheet.create({
     },
     imageView: {
 
-        width: 45,
-        height: 45,
+        width: 25,
+        height: 25,
         paddingBottom: 1,
         marginBottom: 12,
-        marginTop: 5,
+        marginTop: 25,
         borderRadius: 7,
 
 
 
     },
-    imageViewDelete: {
+    imageViewmsg: {
 
-        width: 25,
-        height: 25,
+        width: 20,
+        height: 20,
         paddingBottom: 1,
         marginBottom: 12,
-        marginTop: 16,
-        paddingLeft:10,
-        marginLeft:290,
-        resizeMode:"contain"
+        marginTop: 30,
+        marginRight: 20,
+
 
 
 
@@ -262,6 +258,23 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 120,
         alignSelf: 'center',
+        fontWeight: 'bold'
+
+
+    },
+
+    instructions1: {
+
+
+
+        color: '#e5e5e5',
+        fontSize: 25,
+
+        paddingLeft: 265,
+        marginTop:10,
+
+
+        fontWeight: 'bold'
 
 
     },
@@ -273,7 +286,19 @@ const styles = StyleSheet.create({
         width: "100%",
 
 
-        backgroundColor: '#06b3e9',
+        backgroundColor: '#25566e',
+    },
+
+    containerToolbardown: {
+
+
+        marginTop:5,
+        flexDirection: 'column',
+        height: 30,
+        width: "100%",
+
+
+        backgroundColor: '#25566e',
     },
 
 
