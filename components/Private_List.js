@@ -63,12 +63,14 @@ export default class Private_List extends React.Component {
         console.log(event);
         alert('service')
     };
+
 //#96d5d6 love color cards
 
 
-
-
     render() {
+
+
+        const {router} = this.props;
 
 
         return (
@@ -95,52 +97,56 @@ export default class Private_List extends React.Component {
                     <FlatList inverted
 
 
-                        data={this.state.DataSource}
-                        extraData={this.state}
+                              data={this.state.DataSource}
+                              extraData={this.state}
 
 
+                              renderItem={(({item}) =>
 
 
-                        renderItem={(({item}) =>
+                                      <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id)}>
+                                          <View style={{
+                                              flexDirection: 'row',
+                                              flex: 1,
+                                              backgroundColor: '#92b4bb',
+                                              marginTop: 5,
+                                              borderRadius: 14
+                                          }}>
+
+                                              <Image source={require('./Image/people_private.png')}
+                                                     style={styles.imageView}/>
 
 
-                                <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id)}>
-                                    <View style={{ flexDirection: 'row',flex:1,backgroundColor:'#92b4bb',marginTop:5,borderRadius:14}}>
-
-                                        <Image source={require('./Image/people_private.png')} style={styles.imageView}/>
+                                              <Text style={styles.rooms}>
+                                                  {item.Private_Chatters}
 
 
-                                        <Text style={styles.rooms}>
-                                            {item.Private_Chatters}
+                                              </Text>
+                                              <Text style={styles.time_msg}>
+
+                                                  {item.last_data}
 
 
-                                        </Text>
-                                        <Text style={styles.time_msg}>
-
-                                            {item.last_data}
+                                              </Text>
 
 
-                                        </Text>
+                                              <Text style={styles.time}>
+
+                                                  {item.last_msg}
 
 
-                                        <Text style={styles.time}>
-
-                                            {item.last_msg}
-
-
-                                        </Text>
-                                        <Image source={require('./Image/private_msg.png')} style={styles.imageViewmsg}/>
+                                              </Text>
+                                              <Image source={require('./Image/private_msg.png')}
+                                                     style={styles.imageViewmsg}/>
 
 
-                                    </View>
-                                </TouchableOpacity>
-                        )
-                        }
+                                          </View>
+                                      </TouchableOpacity>
+                              )
+                              }
 
 
-
-
-                        keyExtractor={(item, index) => index.toString()}
+                              keyExtractor={(item, index) => index.toString()}
                         // contentContainerStyle={{paddingTop: 10}}
 
 
@@ -148,13 +154,25 @@ export default class Private_List extends React.Component {
                     <ToolbarAndroid style={styles.containerToolbardown}>
 
 
+                        <TouchableOpacity
 
 
+                            onPress={() => router.pop({
+                            room: this.props.room,
+                            nic: this.props.nic,
+                            chat_name: this.props.chat_name,
+                        })}>
+                        <View style={{marginBottom:5,position:'absolute',flex:1}}>
+                            <Image source={require('./Image/private_msg.png')}
+                                   style={styles.imageViewmsg1}/>
 
-
-                        <View>
-                            <Text style={styles.instructions1}> назад</Text>
                         </View>
+
+
+
+
+
+                        </TouchableOpacity>
 
 
                     </ToolbarAndroid>
@@ -185,7 +203,7 @@ const styles = StyleSheet.create({
         flex: 1,
         color: 'rgba(0,0,0,0.98)',
         marginTop: 2,
-        fontWeight:'bold'
+        fontWeight: 'bold'
 
 
     },
@@ -233,7 +251,6 @@ const styles = StyleSheet.create({
         borderRadius: 7,
 
 
-
     },
     imageViewmsg: {
 
@@ -245,6 +262,16 @@ const styles = StyleSheet.create({
         marginRight: 20,
 
 
+    },
+    imageViewmsg1: {
+
+        width: 20,
+        height: 20,
+        paddingBottom: 1,
+        marginBottom: 8,
+        marginTop:10,
+
+        marginRight: 20,
 
 
     },
@@ -258,7 +285,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 120,
         alignSelf: 'center',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
 
 
     },
@@ -266,14 +293,14 @@ const styles = StyleSheet.create({
     instructions1: {
 
 
-
         color: '#e5e5e5',
         fontSize: 25,
 
-        paddingLeft: 265,
-        marginTop:10,
+        paddingLeft: 262,
+        marginTop: 10,
 
-
+        paddingBottom: 30,
+        marginBottom: 20,
         fontWeight: 'bold'
 
 
@@ -292,7 +319,7 @@ const styles = StyleSheet.create({
     containerToolbardown: {
 
 
-        marginTop:5,
+        marginTop: 5,
         flexDirection: 'column',
         height: 30,
         width: "100%",

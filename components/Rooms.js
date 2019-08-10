@@ -249,18 +249,20 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 91,
         alignSelf: 'center',
+        marginTop: 10,
 
 
     },
 
     containerToolbar: {
 
+
         flexDirection: 'column',
-        height: 50,
+        height: 45,
         width: "100%",
 
 
-        backgroundColor: '#06b3e9',
+        backgroundColor: '#25566e',
     },
 
 

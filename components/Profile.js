@@ -164,21 +164,21 @@ export default class Profile extends React.Component {
 
                                       <View style={{
 
-                                          marginLeft: 20,
-                                          marginRight: 20,
+                                          marginLeft: 1,
+                                          marginRight: 1,
                                           marginBottom:5,
 
 
                                       }}>
 
-                                          <View style={{marginLeft:15,}}>
+                                          <View style={{marginLeft:34,}}>
                                               <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}/>
 
                                           </View>
 
 
                                           <Text style={styles.Profile_List_text_info}>
-                                              {'\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + item.nic +'\n\n'}
+                                              {'\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + item.nic +'\n\n'}
                                               {item.sex + '\n'}
                                               {item.bday+ '\n'}
                                               {item.email+ '\n'}
@@ -245,7 +245,7 @@ export default class Profile extends React.Component {
 
                                           //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
 
-                                          <View style={{flex: 1, flexDirection: 'row',marginRight:20,marginLeft:20,paddingTop:6,
+                                          <View style={{flex: 1, flexDirection: 'row',paddingTop:6,
                                               borderRadius:20}}>
 
                                               <Image source={item.icon} style={styles.imageViewProfile_icon}/>
@@ -271,7 +271,7 @@ export default class Profile extends React.Component {
                     </View>
 
 
-                    <ToolbarAndroid style={styles.containerToolbarProfile}
+                    <ToolbarAndroid style={styles.containerToolbarProfile1}
 
 
                     >
@@ -280,7 +280,7 @@ export default class Profile extends React.Component {
                                   onPress={this.backs}
 
 
-                            >назад</Text>
+                            >Назад</Text>
                         </View>
 
                     </ToolbarAndroid>

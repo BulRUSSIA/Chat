@@ -51,12 +51,28 @@ const styles = StyleSheet.create({
     prices: {
         fontSize: 18,
         flex: 1,
-        color: '#221fb7',
+        color: '#598d68',
         marginLeft: 0,
-        padding: 1
+        padding: 1,
+
 
     },
+    chatter_list: {
+        fontSize: 22,
+        flex: 1,
+        color: '#e8e8e8',
+        marginLeft: 0,
+        padding: 1,
+        borderRadius:4,
 
+        backgroundColor:'#59a39e',
+
+
+
+
+
+
+    },
     Profile_Toolbar_text: {
         fontSize: 18,
         flex: 1,
@@ -94,11 +110,12 @@ const styles = StyleSheet.create({
     Profile_Toolbar_text_down: {
         fontSize: 20,
         flex: 1,
+        fontWeight:'bold',
         color: '#efefef',
         marginLeft: 0,
 
-        paddingLeft: 285,
-        marginBottom: 5
+        paddingLeft: 283,
+        paddingBottom: 2
 
 
     },
@@ -251,6 +268,7 @@ const styles = StyleSheet.create({
 
 
         resizeMode: 'contain',
+        marginLeft:5,
 
 
     },
@@ -274,9 +292,9 @@ const styles = StyleSheet.create({
 
     imageAvatarProfile: {
 
-        width: 90,
-        height: 90,
-        marginLeft: 100,
+        width: 48,
+        height: 48,
+        marginLeft: 120,
         marginTop: 20,
         resizeMode: 'contain',
         borderRadius: 400 / 2,
@@ -353,24 +371,41 @@ const styles = StyleSheet.create({
     },
     containerToolbar: {
 
+
+
+
         flexDirection: 'column',
         height: 50,
         width: "100%",
 
 
-        backgroundColor: '#06b3e9',
+        backgroundColor: '#25566e',
+
     },
 
     containerToolbarProfile: {
+
+
+
+        flexDirection: 'column',
+        height: 50,
+        width: "100%",
+
+
+        backgroundColor: '#25566e',
+
+    },
+
+    containerToolbarProfile1: {
+
+
 
         flexDirection: 'column',
         height: 25,
         width: "100%",
 
 
-
-
-        backgroundColor: '#8bb2c4',
+        backgroundColor: '#25566e',
 
     },
     containerToolbarProfile_down: {
@@ -433,8 +468,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        color: '#129af9',
+        color: '#ffffff',
         padding: 10,
+        fontWeight:'bold'
     },
 
     nick: {

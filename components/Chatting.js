@@ -179,7 +179,17 @@ export default class Chatting extends React.Component {
             }}
         />
     );
+    renderSeparator2 = () => (
+        <View
+            style={{
+                backgroundColor: '#143e6a',
+                height: 1,
+                paddingTop:4,
+                borderRadius: 4,
 
+            }}
+        />
+    );
 
     ban_msg = () => {
 
@@ -643,7 +653,7 @@ export default class Chatting extends React.Component {
             <View style={styles.container}
 
             >
-                <ImageBackground source={require('./Image/e1.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('./Image/lime_background.jpg')} style={{width: '100%', height: '100%'}}>
 
 
                     <ToolbarAndroid style={styles.containerToolbar}
@@ -681,25 +691,28 @@ export default class Chatting extends React.Component {
 
                     <Animated.View style={{
                         transform: [{translateY: this.animatedValue}],
-                        height: 270,
-                        width: 94,
-                        backgroundColor: 'white',
+                        height: 280,
+                        width: 120,
+                       // backgroundColor: 'white',
                         position: 'absolute',
-                        left: 128,
-                        top: 80,
+                        left: 120,
+                        top: 70,
                         right: 0,
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        backgroundColor:'transparent',
+
                     }}>
 
 
                         <FlatList inverted
+                                  style={{borderRadius:14}}
 
-
+                                  ItemSeparatorComponent={this.renderSeparator2}
                                   data={this.state.users}
                                   extraData={this.state}
 
 
-                                  ItemSeparatorComponent={this.renderSeparator}
+                              //    ItemSeparatorComponent={this.renderSeparator}
 
 
                                   renderItem={(({item}) =>
@@ -707,8 +720,9 @@ export default class Chatting extends React.Component {
 
                                           //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
                                           <TouchableOpacity onPress={() => this.check_nick(item.user, ',')}>
-                                              <View style={{flex: 1, flexDirection: 'row'}}>
-                                                  <Text style={styles.prices}>
+                                              <View style={{flex: 1, flexDirection: 'row',
+}}>
+                                                  <Text style={styles.chatter_list}>
 
                                                       {item.user}
                                                       <Text style={styles.all_users}>
