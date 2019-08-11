@@ -349,11 +349,11 @@ export default class Chatting extends React.Component {
         if (nw === 'Тюрьма') {
             const {router} = this.props;
 
-            router.pop({name: this.props.nic, roomlist: this.state.rooms_Banned,});
+            router.pop({name: this.props.nic, item_menu: this.state.rooms_Banned,});
 
         } else {
             const {router} = this.props;
-            router.pop({name: this.props.nic, roomlist: this.state.rooms_Unbanned,item_menu:this.props.item_menu});
+            router.pop({name: this.props.nic, roomlist: this.props.item_menu,item_menu:this.props.roomlist});
 
         }
 
