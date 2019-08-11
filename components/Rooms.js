@@ -5,30 +5,25 @@ import request_ENTRY_USER_ROOM from '../actions/fetch_entry_user'
 import request_MY_NICKNAME from '../actions/fetch_my_nickname'
 import Rooms_list from './const/Room_List'
 import Rooms_banned from './const/Room_list_banned'
+import request_GET_ROOMS from "../actions/fetch_get_rooms";
 
 export default class Rooms extends React.Component {
     constructor(props) {
         super(props);
 
 
-
-
-
-
         this.state = {
 
             DataSource: [],
             item_menu: this.props.roomlist,
-            room:'',
-            name:this.props.name,
+            room: '',
+            name: this.props.name,
             rooms_Unbanned: Rooms_list,
-            rooms_Banned:Rooms_banned,
-
-
+            rooms_Banned: Rooms_banned,
 
 
         };
-       
+
 
     }
 
@@ -37,6 +32,7 @@ export default class Rooms extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(Chatting.interval);
     }
+
     handleBackButton = () => {
 
 
@@ -56,75 +52,96 @@ export default class Rooms extends React.Component {
 
     checking = () => {
 
-       let prison = this.props.prison;
-        if (prison === true)
+        let prison = this.props.prison;
+        if (prison === true) {
 
 
-
-        {
-
-
-            this.setState({item_menu:this.state.rooms_Banned})
+            this.setState({item_menu: this.state.rooms_Banned})
 
 
-       }
-
-        else
-
-            {
+        } else {
 
 
-
-                this.setState({item_menu:this.state.rooms_Unbanned})
+            this.setState({item_menu: this.state.item_menu})
 
         }
-
-
-
 
 
     };
 
 
-    Get_room  = async(event) => {
-        let prison = this.props.prison;
+    Get_room = async (event, category, parent) => {
 
 
-        console.log('CHECKING' + prison);
-        if (prison === true)
+        if ((parent === '-1') || (parent === '5c9a61080a975a14c67bcdab') ||
+            (parent === '5c9a62560a975a168bff8a8f')
+            || (parent === '5c9a60fd0a975a14c67bcd7c')
+            || (parent === '5d12088c0a975a06b5c3483b')
+            || (parent === '5d0694370a975a1fec7eaba0')
+            || (parent === '5ca287980a975a5cf7ca1f4d')
+            || (event === '\u041c\u0427\u0421')
+            || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
+            || (event === '\u0410\u0440\u0433\u0443\u043d')
+            || (event === '\u0421\u0438\u043d\u043a\u044a\u0435\u0440\u0430\u043c')
+            || (parent==='5d0342090a975a0b991e6b0d')
 
-        {
+        ) {
+            let prison = this.props.prison;
 
-            const a = this.props.name;
+
+            console.log('CHECKING' + prison);
+            if (prison === true) {
+
+                const a = this.props.name;
+                const Nick_chats = await request_MY_NICKNAME(this.props.name);
+                await request_ENTRY_USER_ROOM(event, a);
+
+
+                const {router} = this.props;
+                router.push.Chatting({
+                    nic: this.props.name,
+                    room: event,
+                    chat_name: Nick_chats,
+                    item_menu: this.state.item_menu
+                });
+
+            } else {
+                const Nick_chats = await request_MY_NICKNAME(this.props.name);
+
+                console.log(Nick_chats);
+
+                const a = this.props.name;
+                await request_ENTRY_USER_ROOM(event, a);
+
+
+                const {router} = this.props;
+                router.push.Chatting({
+                    nic: this.props.name,
+                    room: event,
+                    chat_name: Nick_chats,
+                    item_menu: this.state.item_menu
+                });
+            }
+        } else {
             const Nick_chats = await request_MY_NICKNAME(this.props.name);
-           await request_ENTRY_USER_ROOM(event,a);
+            console.log('category' + category);
 
-
-
-
+            const rooms = await request_GET_ROOMS(category);
             const {router} = this.props;
-            router.push.Chatting({nic: this.props.name, room: event,chat_name:Nick_chats});
+            router.push.Rooms({
+                name: this.props.name,
+
+                chat_name: Nick_chats,
+                roomlist: rooms
+            });
 
         }
 
-        else {
-            const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
-            console.log(Nick_chats);
-
-            const a = this.props.name;
-            await request_ENTRY_USER_ROOM(event,a);
-
-
-            const {router} = this.props;
-            router.push.Chatting({nic: this.props.name, room: event, chat_name:Nick_chats});
-        }
     };
 
 
     render() {
-
-
 
 
         return (
@@ -158,33 +175,28 @@ export default class Rooms extends React.Component {
                     renderItem={(({item}) =>
 
 
+                            <TouchableOpacity
+                                onPress={(event) => this.Get_room(item.room, item.category, item.parent_category)}>
+                                <View style={{flex: 1, flexDirection: 'row'}}>
+
+                                    <Image source={require('./Image/room1.jpeg')} style={styles.imageView}/>
 
 
+                                    <Text style={styles.rooms}>
+                                        {item.room}
 
 
-                            <TouchableOpacity   onPress={(event)=>this.Get_room(item)} >
-                            <View style={{flex: 1, flexDirection: 'row'}}>
-
-                                <Image source={require('./Image/room1.jpeg')} style={styles.imageView}/>
+                                    </Text>
 
 
-                                <Text style={styles.rooms}>
-                                    {item}
-
-
-                                </Text>
-
-
-
-                            </View>
-                         </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
                     )
                     }
 
 
                     keyExtractor={(item, index) => index.toString()}
                     contentContainerStyle={{paddingBottom: 36}}
-
 
 
                 />
@@ -194,7 +206,7 @@ export default class Rooms extends React.Component {
 
         );
 
-        }
+    }
 }
 
 
@@ -204,7 +216,7 @@ const styles = StyleSheet.create({
     container1: {
 
         backgroundColor: '#E8F6FF',
-        width:'100%'
+        width: '100%'
 
     },
     rooms: {

@@ -229,7 +229,7 @@ export default class Chatting extends React.Component {
 
                     Alert.alert('Cрок закончился!');
                     const {router} = this.props;
-                    router.pop({name: this.props.nic, room: 'Тюрьма', roomlist: this.state.rooms_Unbanned});
+                    router.pop({name: this.props.nic, room: 'Тюрьма', item_menu: this.props.item_menu});
 
                     console.log('go')
 
@@ -349,11 +349,11 @@ export default class Chatting extends React.Component {
         if (nw === 'Тюрьма') {
             const {router} = this.props;
 
-            router.push.Rooms({name: this.props.nic, roomlist: this.state.rooms_Banned,});
+            router.pop({name: this.props.nic, roomlist: this.state.rooms_Banned,});
 
         } else {
             const {router} = this.props;
-            router.push.Rooms({name: this.props.nic, roomlist: this.state.rooms_Unbanned});
+            router.pop({name: this.props.nic, roomlist: this.state.rooms_Unbanned,item_menu:this.props.item_menu});
 
         }
 

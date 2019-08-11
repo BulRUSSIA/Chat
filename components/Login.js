@@ -15,6 +15,7 @@ import Rooms_banned from './const/Room_list_banned'
 import request_IMEI from '../actions/request_IMEI'
 import request_login from '../actions/fetch_login'
 import request_banned from '../actions/fetch_banned'
+import request_GET_ROOMS from '../actions/fetch_get_rooms'
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -92,7 +93,7 @@ export default class Login extends React.Component {
 
 
             const login = await request_login(this.state.username, this.state.password, this.state.Imei);
-         //   console.log(login['nic']['$oid']);
+
 
 
             this.setState({validator: login['auth'],isLoading:true});
@@ -125,9 +126,10 @@ export default class Login extends React.Component {
 
 
                     const {router} = this.props;
+                    const rooms = await request_GET_ROOMS('-1');
 
 
-                    router.push.Rooms({name: nic, router, roomlist: this.state.rooms_Unbanned});
+                    router.push.Rooms({name: nic, router, roomlist: rooms}); //this.state.rooms_Unbanned
 
                 }
 
