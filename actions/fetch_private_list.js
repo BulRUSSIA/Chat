@@ -1,6 +1,8 @@
+import {address} from "../config_connect";
+
 async function request_GET_PRIVATE_LIST(nic) {
 
-    const url = `http://185.231.154.198:5000/personalrooms/${nic}`;
+    const url = address + `/personalrooms/${nic}`;
     console.log(url);
 
     try {

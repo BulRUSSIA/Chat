@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import React from "react";
 import Chatting from '../components/Chatting'
+import request_GET_MESSAGES_PRIVATE from "../actions/fetch_private_message";
 
 const menuitem = [{title: 'Удалить все чаты', show: 'never', eventkey: 1},
 
@@ -59,9 +60,22 @@ export default class Private_List extends React.Component {
     };
 
 
-    Get_Chat = async (event) => {
-        console.log(event);
-        alert('service')
+    Get_Chat = async (event,chatter) => {
+        const get_private = await request_GET_MESSAGES_PRIVATE(event);
+
+        const {router} = this.props;
+
+        router.push.Private({
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+            private_room: event,
+            private_chatter: chatter,
+            private_data:get_private,
+
+
+        });
+
     };
 
 //#96d5d6 love color cards
@@ -104,7 +118,7 @@ export default class Private_List extends React.Component {
                               renderItem={(({item}) =>
 
 
-                                      <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id)}>
+                                      <TouchableOpacity onPress={(event) => this.Get_Chat(item.Chat_id,item.Private_Chatters)}>
                                           <View style={{
                                               flexDirection: 'row',
                                               flex: 1,

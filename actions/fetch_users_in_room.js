@@ -1,6 +1,8 @@
+import {address} from "../config_connect";
+
 async function fetch_users_in_room(room)  {
 
-    const url = `http://185.231.154.198:5000/usersinroom/${room}`;
+    const url = address +`/usersinroom/${room}`;
     console.log(room);
 
     try {

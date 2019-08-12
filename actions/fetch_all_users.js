@@ -1,15 +1,14 @@
 import {address} from "../config_connect";
 
-async  function request_banned(nic) {
+async  function request_all_users() {
 
     try {
 
 
 
-
-        const response =  await fetch(address + `/banned/room/${nic}`);
+        const url = address + `/all/users/`;
+        const response =  await fetch(url);
         let responseJsonData = await response.json();
-
 
 
         return responseJsonData;
@@ -19,4 +18,4 @@ async  function request_banned(nic) {
         console.warn(err)
     }
 }
-export default request_banned
+export default request_all_users

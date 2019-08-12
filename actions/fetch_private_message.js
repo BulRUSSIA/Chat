@@ -1,8 +1,8 @@
 import {address} from "../config_connect";
 
-async function request_GET_MESSAGES(room) {
+async function request_GET_MESSAGES_PRIVATE(chat_id) {
 
-    const url = address + `/${room}/message`;
+    const url = address + `/${chat_id}/message/private`;
 
 
     try {
@@ -20,4 +20,4 @@ async function request_GET_MESSAGES(room) {
 
 }
 
-export default request_GET_MESSAGES
+export default request_GET_MESSAGES_PRIVATE

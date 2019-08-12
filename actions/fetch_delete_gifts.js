@@ -1,7 +1,9 @@
+import {address} from "../config_connect";
+
 function request_DELETE_GIFT(gift)  {
 
 
-    const url = `http://185.231.154.198:5000/delete/avatar/${gift}`;
+    const url = address + `/delete/avatar/${gift}`;
 
 
 

@@ -1,7 +1,9 @@
- function request_DELETE_USER_ROOM(room,nic)  {
+import {address} from "../config_connect";
+
+function request_DELETE_USER_ROOM(room,nic)  {
 
 
-    const url = `http://185.231.154.198:5000/delroom/${room}/${nic}`;
+    const url = address + `/delroom/${room}/${nic}`;
 
 
 

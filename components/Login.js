@@ -6,7 +6,7 @@ import {
     Text, TextInput, TouchableOpacity,
     View,
     Alert, ImageBackground
-    , ActivityIndicator, BackHandler
+    , ActivityIndicator,
 } from "react-native";
 import React from "react";
 import request_READ_PHONE_STATE from '../actions/request_phone_state'
@@ -16,6 +16,7 @@ import request_IMEI from '../actions/request_IMEI'
 import request_login from '../actions/fetch_login'
 import request_banned from '../actions/fetch_banned'
 import request_GET_ROOMS from '../actions/fetch_get_rooms'
+import request_all_users from "../actions/fetch_all_users";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -69,7 +70,7 @@ export default class Login extends React.Component {
                     isLoading:false,
                 })
             }
-            ;
+
         } catch (error) {
             // Error retrieving data
         }
@@ -126,10 +127,12 @@ export default class Login extends React.Component {
 
 
                     const {router} = this.props;
+                    const count_all_users = await request_all_users();
                     const rooms = await request_GET_ROOMS('-1');
+                    const all = count_all_users['all'];
+                    console.log(all);
 
-
-                    router.push.Rooms({name: nic, router, roomlist: rooms}); //this.state.rooms_Unbanned
+                    router.push.Rooms({name: nic, router, roomlist: rooms,count:all}); //this.state.rooms_Unbanned
 
                 }
 

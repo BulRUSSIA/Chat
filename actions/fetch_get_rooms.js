@@ -1,6 +1,8 @@
+import {address} from "../config_connect";
+
 async function request_GET_ROOMS(categories)  {
 
-    const url = `http://185.231.154.198:5000/rooms/list/${categories}`;
+    const url = address + `/rooms/list/${categories}`;
 
 
     try {

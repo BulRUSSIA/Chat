@@ -22,6 +22,7 @@ import menuitem from './const/menu'
 import styles from '../styles'
 import Rooms_list from './const/Room_List'
 import Rooms_banned from './const/Room_list_banned'
+import {address} from "../config_connect";
 
 const list = ['Профиль', 'Написать Личное', 'Ответить'];
 export default class Chatting extends React.Component {
@@ -193,7 +194,7 @@ export default class Chatting extends React.Component {
 
     ban_msg = () => {
 
-        const ban = `http://185.231.154.198:5000/banned/room/${this.props.nic}`;
+        const ban = address +`/banned/room/${this.props.nic}`;
 
         return fetch(ban)
             .then((response) => response.json())

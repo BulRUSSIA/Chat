@@ -1,7 +1,9 @@
+import {address} from "../config_connect";
+
 async function request_ENTRY_USER_ROOM(nic,room)  {
 
 
-    const url = `http://185.231.154.198:5000/entry/${nic}/${room}`;
+    const url = address + `/entry/${nic}/${room}`;
 
 
 

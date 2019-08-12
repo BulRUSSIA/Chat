@@ -357,9 +357,43 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         paddingLeft: 50,
-        color: '#8330ff',
+        color: '#77ff86',
 
         flex: 1
+
+    },
+
+    private1: {
+        fontSize: 18,
+        textAlign: 'right',
+        marginLeft: 150,
+        color: '#fefcfe',
+        marginRight:5,
+        paddingRight:14,
+        backgroundColor:'rgba(53,169,211,0.82)',
+        borderRadius:15,
+        marginBottom:15,
+        paddingTop: 20,
+        paddingBottom:15,
+        flex: 1
+
+    },
+
+    private2: {
+        fontSize: 18,
+        marginLeft:5,
+        marginRight: 150,
+        color: '#3794b5',
+        backgroundColor:'rgba(193,225,255,0.8)',
+        borderRadius:15,
+        paddingTop: 15,
+        paddingBottom:15,
+        paddingLeft:14,
+
+        marginBottom:15,
+        flex:1,
+
+
 
     },
 

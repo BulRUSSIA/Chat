@@ -44,9 +44,10 @@ export default class Rooms extends React.Component {
     renderSeparator_1 = () => (
         <View
             style={{
-                backgroundColor: '#25566E',
+                backgroundColor: '#2c5577',
                 height: 1,
                 borderWidth: 1,
+                borderColor:'#2c5577'
 
             }}
         />
@@ -91,7 +92,7 @@ export default class Rooms extends React.Component {
 
 
                 <TouchableOpacity
-                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category,item.count)}>
+                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
                     <View style={{flex: 1, flexDirection: 'row'}}>
                         <Image source={require('./Image/go_folder.png')} style={styles.imageView}/>
 
@@ -114,18 +115,23 @@ export default class Rooms extends React.Component {
 
 
                 <TouchableOpacity
-                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category,item.count)}>
+                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
                     <View style={{flex: 1, flexDirection: 'row'}}>
 
-                        <Image source={require('./Image/room1.jpeg')} style={styles.imageView}/>
+                        <Image source={require('./Image/go_room.png')} style={styles.imageView}/>
 
 
                         <Text style={styles.rooms}>
-                            {item.room}      {item.count}
+                            {item.room}
 
 
                         </Text>
-
+<View style={{flex:1,flexDirection:'row',marginTop:5,marginLeft:320,position:'absolute'}}>
+    <Image source={require('./Image/circle.png')} style={styles.imageView1}/>
+                        <Text style={styles.count_radius}>
+                            {item.count}
+                        </Text>
+</View >
 
                     </View>
                 </TouchableOpacity>
@@ -139,12 +145,12 @@ export default class Rooms extends React.Component {
     };
 
 
-    Get_room = async (event, category, parent,count) => {
+    Get_room = async (event, category, parent, count) => {
 
 
         if ((parent === '-1')
             || (parent === '5c9a61080a975a14c67bcdab')
-            || (parent === '5c9a62560a975a168bff8a8f')
+            // (parent === '5c9a62560a975a168bff8a8f')
             || (parent === '5c9a60fd0a975a14c67bcd7c')
             || (parent === '5d12088c0a975a06b5c3483b')
             || (parent === '5d0694370a975a1fec7eaba0')
@@ -153,6 +159,7 @@ export default class Rooms extends React.Component {
             || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
             || (event === '\u0410\u0440\u0433\u0443\u043d')
             || (event === '\u0421\u0438\u043d\u043a\u044a\u0435\u0440\u0430\u043c')
+            || (event==='Sex.\u041e\u0431\u0449\u0430\u044f')
             || (parent === '5d5061490a975a4d4467fa52')
 
         ) {
@@ -202,7 +209,8 @@ export default class Rooms extends React.Component {
                 name: this.props.name,
 
                 chat_name: Nick_chats,
-                roomlist: rooms
+                roomlist: rooms,
+                count:this.props.count
             });
 
         }
@@ -217,7 +225,7 @@ export default class Rooms extends React.Component {
         router.pop({
             name: this.props.name,
 
-            chat_name:this.props.chat_name,
+            chat_name: this.props.chat_name,
             roomlist: this.state.item_menu
         });
 
@@ -237,6 +245,8 @@ export default class Rooms extends React.Component {
 
                 <ToolbarAndroid style={styles.containerToolbar}
                 >
+
+
                     <TouchableOpacity onPress={this.back_room}>
                         <View style={styles.container2}>
 
@@ -246,6 +256,10 @@ export default class Rooms extends React.Component {
 
 
                             <Text style={styles.instructions}>Комнаты</Text>
+                            <Text style={styles.all_user_chat}>онлайн:{this.props.count}</Text>
+
+                            <Image source={require('./Image/dot_green.png')}
+                                   style={styles.imageViewToolbarDot}/>
 
 
                         </View>
@@ -295,7 +309,7 @@ const styles = StyleSheet.create({
 
     container1: {
 
-        backgroundColor: '#a7cedd',
+        backgroundColor: '#88a8b6',
         width: '100%',
         height: '100%'
 
@@ -303,17 +317,45 @@ const styles = StyleSheet.create({
 
     container2: {
 
-        backgroundColor: 'transparent',
+        backgroundColor:'transparent',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        borderRadius: 10,
+        paddingTop:10,
+
+
+    },
+
+    count_radius: {
+
+
+
+
+
+        marginTop:12,
+        marginBottom:6,
+        fontSize:15,
+        color:'#fefcfe',
+        position:'relative',
+        marginLeft: 9,
+
+
+
+
+
 
     },
     rooms: {
-        fontSize: 26,
-        flex: 1,
-        color: '#05077a',
-        marginLeft: 1,
-        padding: 9
+        fontSize: 22,
+
+        color: '#f7f7f7',
+        paddingRight: 5,
+        padding: 9,
+
+        marginTop:5,
+        paddingBottom: 10,
+
+
 
 
     },
@@ -335,8 +377,24 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         paddingBottom: 1,
-        marginTop: 12,
+        marginTop: 14,
         marginLeft: 5,
+        backgroundColor:'transparent',
+
+
+
+    },
+
+    imageView1: {
+
+        width: 34,
+        height: 34,
+        paddingBottom: 1,
+        marginTop: 6,
+        marginRight: 10,
+        backgroundColor:'transparent',
+        position:'absolute'
+
 
 
     },
@@ -354,6 +412,19 @@ const styles = StyleSheet.create({
 
     },
 
+    imageViewToolbarDot: {
+
+        width: 15,
+        height: 15,
+        marginTop: 11,
+        position: 'absolute',
+
+        flex: 1,
+        marginLeft: 320,
+
+
+    },
+
     instructions: {
 
 
@@ -363,6 +434,22 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginLeft: 93,
         marginTop: 2,
+
+
+        textAlign: 'center'
+
+
+    },
+    all_user_chat: {
+
+
+        color: '#c0bec0',
+        fontSize: 16,
+        flex: 1,
+        position: 'absolute',
+
+        marginLeft: 240,
+        marginTop: 14,
 
 
         textAlign: 'center'

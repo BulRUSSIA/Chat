@@ -1,8 +1,9 @@
 import {Alert} from "react-native";
+import {address} from "../config_connect";
 
 async function request_MY_NICKNAME(nick)  {
 
-    const url = `http://185.231.154.198:5000/check/login/${nick}`;
+    const url = address + `/check/login/${nick}`;
     return await fetch(url)
 
         .then((response) => response.json())

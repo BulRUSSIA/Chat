@@ -1,6 +1,8 @@
- function request_SEND_MESSAGES(nic,msg,place)  {
+import {address} from "../config_connect";
 
-    const url = `http://185.231.154.198:5000/sending`;
+function request_SEND_MESSAGES(nic,msg,place)  {
+
+    const url = address + `/sending`;
 
     try {
    fetch(url, {

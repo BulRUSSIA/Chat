@@ -1,6 +1,8 @@
+import {address} from "../config_connect";
+
 async function request_GET_GIFTS(nick)  {
 
-    const url = `http://185.231.154.198:5000/users/gift/${nick}`;
+    const url = address +`/users/gift/${nick}`;
 
 
     try {

@@ -1,3 +1,5 @@
+import {address} from "../config_connect";
+
 async  function request_login(login,password,imei) {
 
     try {
@@ -5,7 +7,7 @@ async  function request_login(login,password,imei) {
 
 
 
-       const response =  await fetch(`http://185.231.154.198:5000/auth/${login}/${password}/${imei}`);
+       const response =  await fetch(address + `/auth/${login}/${password}/${imei}`);
        let responseJsonData = await response.json();
 
 

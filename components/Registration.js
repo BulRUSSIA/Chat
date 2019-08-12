@@ -4,11 +4,12 @@ import {
     StyleSheet,
     Text, TextInput, TouchableOpacity,
     View,
-    Alert, Animated, FlatList, TouchableWithoutFeedback, ImageBackground
+    Alert, Animated, FlatList,  ImageBackground
 } from "react-native";
 import React from "react";
 import colors from "./const/colors";
 import menusmiles from './const/colors_id'
+import {address} from "../config_connect";
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -45,7 +46,7 @@ export default class Registration extends React.Component {
 
         } else {
 
-            return fetch(`http://185.231.154.198:5000/registration/${this.state.username}/${this.state.password}/${this.state.nick}/${this.state.color}`)
+            return fetch(address + `/registration/${this.state.username}/${this.state.password}/${this.state.nick}/${this.state.color}`)
                 .then((response) => response.json())
                 .then((responseJson) => {
 
