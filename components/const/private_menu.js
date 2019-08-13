@@ -3,6 +3,7 @@ const private_menu = [{title: 'Прикрепить изображение', sho
     {title: 'Удалить чат', show: 'never'},
 
     {title: 'Черный список', show: 'never'},
+    {title: 'Exit', show: 'never'},
 
 
 

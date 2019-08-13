@@ -72,6 +72,7 @@ export default class Private_List extends React.Component {
             private_room: event,
             private_chatter: chatter,
             private_data:get_private,
+            list_data:this.state.DataSource
 
 
         });

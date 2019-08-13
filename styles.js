@@ -378,6 +378,18 @@ const styles = StyleSheet.create({
         flex: 1
 
     },
+    imageViewToolbarArrow: {
+
+        width: 25,
+        height: 25,
+        marginTop: 11,
+
+
+        flex: 1,
+        paddingLeft: 20,
+
+
+    },
 
     private2: {
         fontSize: 18,

@@ -1,11 +1,11 @@
 import {address} from "../config_connect";
 
-function request_SEND_MESSAGES(nic,msg,place)  {
+async function request_SEND_MESSAGES(nic,msg,place)  {
 
     const url = address + `/sending`;
 
     try {
-   fetch(url, {
+  await fetch(url, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

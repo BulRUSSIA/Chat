@@ -6,13 +6,15 @@ import {
     View,
     BackHandler,
 
-    ImageBackground, ToolbarAndroid, TextInput, Alert
+    ImageBackground, ToolbarAndroid, TextInput, Alert, Image
 } from 'react-native';
 
 import request_SEND_MESSAGES from '../actions/fetch_send_message'
 import request_GET_MESSAGES from '../actions/fetch_get_messages'
 import private_menu from './const/private_menu'
 import styles from '../styles'
+import request_GET_MESSAGES_PRIVATE from "../actions/fetch_private_message";
+import request_SEND_MESSAGES_PRIVATE from "../actions/fetch_send_private";
 
 
 export default class Private extends React.Component {
@@ -24,7 +26,8 @@ export default class Private extends React.Component {
 
         this.state = {
             color: [],
-            DataSource: [],
+
+            room:this.props.private_room,
             private:this.props.private_data,
             users: [],
             item_menu: private_menu,
@@ -54,14 +57,12 @@ export default class Private extends React.Component {
 
     update_msg = async () => {
 
-        this.setState(prevState => ({
-            DataSource: prevState.DataSource + 1
-        }));
 
 
-        const message = await request_GET_MESSAGES(this.props.room);
+
+        const message = await request_GET_MESSAGES_PRIVATE(this.state.room);
         this.setState({
-                dataSource: message,
+            private: message,
 
 
             }
@@ -111,13 +112,28 @@ export default class Private extends React.Component {
 
             console.log("I am in 2");
         }
+        if (position === 3) {
 
+            const {router} = this.props;
+
+            router.pop({
+                room: this.props.room,
+                nic: this.props.nic,
+                chat_name: this.props.chat_name,
+                DataSource: this.props.list_data
+
+
+
+            });
+
+
+        }
     };
 
 
     send_msg = async (messages) => {
 
-        await this.ban_msg();
+        console.log(messages);
         if (this.state.text !== '' || this.state.smiles !== '') {
             this.setState({
                 isLoading: false,
@@ -126,7 +142,7 @@ export default class Private extends React.Component {
 
             });
 
-            request_SEND_MESSAGES(this.props.nic, messages, this.props.room);
+           await request_SEND_MESSAGES_PRIVATE(this.props.nic, messages, this.state.room);
             console.log('my nicK' + this.props.nic);
 
 
@@ -141,7 +157,7 @@ export default class Private extends React.Component {
 
             Alert.alert('Сообщение не может быть пустым!');
 
-            return this.componentDidMount()
+
         }
 
 
@@ -239,7 +255,12 @@ export default class Private extends React.Component {
 
 
                         <View>
+
+                            <Image source={require('./Image/android-back-icon-20.jpg')}
+                                   style={styles.imageViewToolbarArrow}/>
+
                             <Text style={styles.Private_Toolbar}> {this.props.private_chatter} </Text>
+
 
                         </View>
 
@@ -262,7 +283,6 @@ export default class Private extends React.Component {
 
                     />
 
-
                     <View style={styles.inputBar}>
 
 
@@ -272,7 +292,7 @@ export default class Private extends React.Component {
                             }
 
                             placeholder='Введите сообщение...             '
-                            keyboardType='default'
+                            keyboardType='facebook'
 
                             ref='                          Сообщение...'
                             onChangeText={(text) => this.setState({text})}

@@ -95,7 +95,7 @@ export default class Chatting extends React.Component {
         }
         if (position === 'Написать Личное') {
 
-
+            this.componentWillUnmount();
             const {router} = this.props;
             router.push.Private({
                 profile_user: this.state.user_now,
@@ -291,7 +291,7 @@ export default class Chatting extends React.Component {
     onActionSelected = async (position) => {
 
         if (position === 0) {
-
+            this.componentWillUnmount();
             const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
 
          const {router} = this.props;
@@ -371,7 +371,7 @@ export default class Chatting extends React.Component {
 
             });
 
-            request_SEND_MESSAGES(this.props.nic, messages, this.props.room);
+           await request_SEND_MESSAGES(this.props.nic, messages, this.props.room);
             console.log('my nicK' + this.props.nic);
 
 
