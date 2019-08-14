@@ -95,7 +95,7 @@ export default class Chatting extends React.Component {
         }
         if (position === 'Написать Личное') {
 
-            this.componentWillUnmount();
+
             const {router} = this.props;
             router.push.Private({
                 profile_user: this.state.user_now,
@@ -275,7 +275,7 @@ export default class Chatting extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
         console.log(this.state.DataSource);
-        this.interval = setInterval(() => this.update_msg(), 2500);
+        this.interval = setInterval(() => this.update_msg(), 2000);
 
 
     };
@@ -291,7 +291,7 @@ export default class Chatting extends React.Component {
     onActionSelected = async (position) => {
 
         if (position === 0) {
-            this.componentWillUnmount();
+
             const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
 
          const {router} = this.props;

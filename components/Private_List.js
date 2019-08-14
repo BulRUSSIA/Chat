@@ -109,7 +109,7 @@ export default class Private_List extends React.Component {
                     </ToolbarAndroid>
 
 
-                    <FlatList inverted
+                    <FlatList
 
 
                               data={this.state.DataSource}

@@ -8,13 +8,11 @@ import {
 
     ImageBackground, ToolbarAndroid, TextInput, Alert, Image
 } from 'react-native';
-
-import request_SEND_MESSAGES from '../actions/fetch_send_message'
-import request_GET_MESSAGES from '../actions/fetch_get_messages'
 import private_menu from './const/private_menu'
 import styles from '../styles'
 import request_GET_MESSAGES_PRIVATE from "../actions/fetch_private_message";
 import request_SEND_MESSAGES_PRIVATE from "../actions/fetch_send_private";
+
 
 
 export default class Private extends React.Component {
@@ -115,12 +113,15 @@ export default class Private extends React.Component {
         if (position === 3) {
 
             const {router} = this.props;
-
+            this.componentWillUnmount();
             router.pop({
                 room: this.props.room,
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
-                DataSource: this.props.list_data
+                DataSource: this.props.list_data,
+                selectedEmoji: '',
+                modalVisible: false,
+                showEmojiPicker: false,
 
 
 
@@ -178,13 +179,13 @@ export default class Private extends React.Component {
 
 
 
-                        <Text style={styles.private2}
+                    <Text style={styles.private2}
 
-                        >{item.createdAt+'\t\t\t'}
-                            {item.message}
+                    >{item.createdAt+'\t\t\t'}
+                        {item.message}
 
 
-                        </Text>
+                    </Text>
 
 
 
@@ -231,6 +232,9 @@ export default class Private extends React.Component {
 
         }
 
+    };
+    showPickerTrigger = (visible) => {
+        this.setState({modalVisible: visible})
     };
 
 
@@ -303,7 +307,10 @@ export default class Private extends React.Component {
 
                         />
 
+
+
                     </View>
+
 
                 </ImageBackground>
 
