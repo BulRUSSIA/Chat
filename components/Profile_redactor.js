@@ -5,13 +5,15 @@ import {
     TextInput, ToolbarAndroid,
 
     Picker,
-    View, Button, TouchableOpacity
+    View, Button, TouchableOpacity, Animated, FlatList, Alert
 } from "react-native";
 
 import React from "react";
 import styles from "../styles";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import Modal from "react-native-modal";
+import colors from "./const/colors";
+import menusmiles from './const/colors_id'
 
 export class Profile_redactor extends React.Component {
 
@@ -19,14 +21,57 @@ export class Profile_redactor extends React.Component {
         super(props);
         this.state = {
             isDateTimePickerVisible: false,
-            date: 'Дата Рождения',
+            bday: 'Дата Рождения',
             enabled: false,
-            isVisible:false,
+            isVisible: false,
+            nic: " ",
+            firstName: " ",
+            lastName: " ",
+            city: " ",
+            email: " ",
+            sex: 3,
+            about: " ",
+            color: -100,
+            sm: menusmiles,
+            clr: '#010101',
+            item_smiles: colors,
 
 
         };
+        this.animatedVal = new Animated.Value(-350);
+
     }
 
+    Change_color = () => {
+
+        Animated.timing(                  // Animate over time
+            this.animatedVal,            // The animated value to drive
+            {
+                toValue: 50,                   // Animate to opacity: 1 (opaque)
+                duration: 350,
+
+            }
+        ).start();
+
+    };
+
+    close_color = (evt, clr) => {
+
+
+        Animated.timing(                  // Animate over time
+            this.animatedVal,            // The animated value to drive
+            {
+                toValue: -350,                   // Animate to opacity: 1 (opaque)
+                duration: 350,
+
+            }
+        ).start();
+        console.log(this.state.color);
+        this.setState({color: evt, clr: clr});
+        Alert.alert('Цвет успешно выбран!')
+
+
+    };
 
     showDateTimePicker = () => {
         this.setState({isDateTimePickerVisible: true});
@@ -37,7 +82,7 @@ export class Profile_redactor extends React.Component {
     };
 
     handleDatePicked = date => {
-        this.setState({date: date});
+        this.setState({bday: date});
         console.log(date);
         this.hideDateTimePicker();
     };
@@ -54,16 +99,15 @@ export class Profile_redactor extends React.Component {
     };
 
 
-    Get_pop =() => {
+    Get_pop = () => {
 
         const {router} = this.props;
-         router.pop({
+        router.pop({
 
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
         });
-
 
 
     };
@@ -90,30 +134,49 @@ export class Profile_redactor extends React.Component {
 
                 </ToolbarAndroid>
                 <TouchableOpacity onPress={this.hideModalNick}>
-                <View style={{
-                    backgroundColor: 'rgba(194,191,215,0.78)',
-                }}>
-                    <Image source={require('./Image/pen_edit.png')}
-                           style={styles.imageAvatar_redactor}/>
-                    <Text style={{
-
-                        marginTop: 5,
-                        color: 'white',
-                        fontWeight: 'bold',
-                        marginLeft: 20,
-                        fontSize: 20,
-                        borderRadius: 8,
-
+                    <View style={{
+                        backgroundColor: 'rgba(194,191,215,0.78)',
                     }}>
-                         Cменить ник
-                    </Text>
+                        <Image source={require('./Image/pen_edit.png')}
+                               style={styles.imageAvatar_redactor}/>
+                        <Text style={{
 
-                </View>
+                            marginTop: 5,
+                            color: 'white',
+                            fontWeight: 'bold',
+                            marginLeft: 20,
+                            fontSize: 20,
+                            borderRadius: 8,
+
+                        }}>
+                            Cменить ник
+                        </Text>
+
+                    </View>
                 </TouchableOpacity>
+
                 <View style={{marginLeft: 34,}}>
                     <Image source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}}
                            style={styles.imageAvatarProfile}/>
+                    <TouchableOpacity style={{
+                        backgroundColor: this.state.clr,
 
+                        height: 40,
+                        width: 40,
+
+                        position: 'absolute',
+                        marginLeft: 240,
+                        marginBottom: 20,
+                        paddingHorizontal: 10,
+                        borderRadius: 14,
+                        marginTop: 25,
+
+                    }}
+
+                                      onPress={this.Change_color}
+
+
+                    />
                 </View>
                 <Modal
                     useNativeDriver={true}
@@ -141,7 +204,7 @@ export class Profile_redactor extends React.Component {
                             selectedValue={this.state.language}
                             style={{height: 50, width: 100}}
                             onValueChange={(itemValue, itemIndex) =>
-                                this.setState({language: itemValue})
+                                this.setState({language: itemValue, sex: itemIndex})
                             }>
                             <Picker.Item label="Мужской" value='Мужской'/>
                             <Picker.Item label="Женский" value='Женский'/>
@@ -178,7 +241,7 @@ export class Profile_redactor extends React.Component {
                     borderWidth: 0.5,
                     borderRadius: 4,
                 }}>
-                    {JSON.stringify(this.state.date).replace(/['"]+/g, '').replace(/T.*Z/g, '')}
+                    {JSON.stringify(this.state.bday).replace(/['"]+/g, '').replace(/T.*Z/g, '')}
                 </Text>
                 <Button color="#25566e" title="Выбрать дату" onPress={this.showDateTimePicker}/>
                 <DateTimePicker
@@ -196,11 +259,11 @@ export class Profile_redactor extends React.Component {
                     keyboardType='default'
 
                     ref='                          Сообщение...'
-                    onChangeText={(text) => this.props.add_text(text)}
+                    onChangeText={(firstName) => this.setState({firstName})}
                     value={this.props.text}
-                    onSubmitEditing={(event) => this.props.send_msg(event.nativeEvent.text)}
 
-                    maxLength={119}
+
+                    maxLength={16}
 
                 />
 
@@ -213,11 +276,10 @@ export class Profile_redactor extends React.Component {
                     keyboardType='default'
 
                     ref='                          Сообщение...'
-                    onChangeText={(text) => this.props.add_text(text)}
+                    onChangeText={(lastName) => this.setState({lastName})}
                     value={this.props.text}
-                    onSubmitEditing={(event) => this.props.send_msg(event.nativeEvent.text)}
 
-                    maxLength={119}
+                    maxLength={16}
 
                 />
                 <TextInput
@@ -229,11 +291,11 @@ export class Profile_redactor extends React.Component {
                     keyboardType='default'
 
                     ref='                          Сообщение...'
-                    onChangeText={(text) => this.props.add_text(text)}
+                    onChangeText={(about) => this.setState({about})}
                     value={this.props.text}
-                    onSubmitEditing={(event) => this.props.send_msg(event.nativeEvent.text)}
 
-                    maxLength={119}
+
+                    maxLength={78}
 
                 />
 
@@ -246,11 +308,11 @@ export class Profile_redactor extends React.Component {
                     keyboardType='default'
 
                     ref='                          Сообщение...'
-                    onChangeText={(text) => this.props.add_text(text)}
+                    onChangeText={(city) => this.setState({city})}
                     value={this.props.text}
-                    onSubmitEditing={(event) => this.props.send_msg(event.nativeEvent.text)}
 
-                    maxLength={119}
+
+                    maxLength={19}
 
                 />
                 <ToolbarAndroid style={styles.containerToolbarRedactor1}
@@ -298,13 +360,14 @@ export class Profile_redactor extends React.Component {
                     isVisible={this.state.isVisible}
                 >
 
-                    <Text style={{fontWeight:'bold',color:'#010101',fontSize:24,marginBottom:32,}}>   Cмена ника</Text>
+                    <Text style={{fontWeight: 'bold', color: '#010101', fontSize: 24, marginBottom: 32,}}> Cмена
+                        ника</Text>
                     <TextInput
 
-                        underlineColorAndroid = "#00bfff"
+                        underlineColorAndroid="#00bfff"
                         placeholder='Ник             '
                         keyboardType='email'
-
+                        onChangeText={(nic) => this.setState({nic})}
 
 
                         maxLength={16}
@@ -312,12 +375,70 @@ export class Profile_redactor extends React.Component {
                     />
 
 
-
-                    <Button title='Ок' color="#25566e"  />
+                    <Button title='Ок' color="#25566e"/>
 
 
                 </Modal>
             </ImageBackground>
+
+            <Animated.View style={{
+                transform: [{translateY: this.animatedVal}],
+                height: 220,
+                width: 100,
+                backgroundColor: '#e8f6ff',
+                position: 'absolute',
+                left: 140,
+                top: 0,
+                bottom: 30,
+                right: 0,
+                justifyContent: 'center'
+            }}>
+
+
+                <FlatList inverted
+
+
+                          data={this.state.sm}
+                          extraData={this.state}
+
+
+                          renderItem={(({item, index}) =>
+
+
+                                  //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
+
+                                  <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+
+
+                                      <TouchableOpacity onPress={(event) => this.close_color(item.clr, item.rclr)}>
+
+                                          <Text
+                                              style={[styles.prices1, {backgroundColor: colors[index % colors.length]}]}
+                                              onChangeText={(color) => this.setState({color})}
+                                              value={item.clr}
+
+                                          >
+
+
+                                          </Text>
+
+
+                                      </TouchableOpacity>
+
+                                  </View>
+                              //
+                          )
+                          }
+
+                          numColumns={1}
+                          keyExtractor={(item, index) => index.toString()}
+
+
+                />
+
+
+            </Animated.View>
+
 
         </View>
 
