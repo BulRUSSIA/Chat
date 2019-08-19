@@ -28,20 +28,23 @@ export class Profile_redactor extends React.Component {
             isVisible: false,
             nic: this.props.chat_name,
             user_info: this.props.user_data.data,
-            firstName: "-",
-            lastName: "-",
-            city: "-",
-            email: "-",
-            sex: 3,
-            about: "-",
-            color: -100,
+            firstName:this.props.firstName,
+            lastName:this.props.lastName,
+            city:this.props.city,
+            about:this.props.about,
+            color:this.props.color,
+            photo:this.props.photo,
+            sex:this.props.sex,
             sm: menusmiles,
             clr: '#010101',
             item_smiles: colors,
 
 
+
         };
         this.animatedVal = new Animated.Value(-350);
+
+
 
 
     }
@@ -209,9 +212,11 @@ export class Profile_redactor extends React.Component {
                     </View>
                 </TouchableOpacity>
 
-                <View style={{marginLeft: 34,}}>
-                    <Image source={{uri: 'https://facebook.github.io/react-native/img/tiny_logo.png'}}
-                           style={styles.imageAvatarProfile}/>
+                <View style={{marginLeft: 20,}}>
+                    <Image source={{uri: this.state.photo}}
+                           style={styles.imageAvatarProfileEdit}/>
+
+                    <Text style={{marginTop:30,marginLeft:70,position:'absolute',fontSize:25,}}>{this.props.chat_name}</Text>
                     <TouchableOpacity style={{
                         backgroundColor: this.state.clr,
 
@@ -219,7 +224,7 @@ export class Profile_redactor extends React.Component {
                         width: 40,
 
                         position: 'absolute',
-                        marginLeft: 240,
+                        marginLeft: 280,
                         marginBottom: 20,
                         paddingHorizontal: 10,
                         borderRadius: 14,
@@ -279,6 +284,7 @@ export class Profile_redactor extends React.Component {
                     value={this.state.language}
                     ref='                          Сообщение...'
                     onChangeText={() => this.setState({enabled: true})}
+                    value={this.state.sex}
 
 
                 />
@@ -314,7 +320,7 @@ export class Profile_redactor extends React.Component {
 
                     ref='                          Сообщение...'
                     onChangeText={(firstName) => this.setState({firstName})}
-                    value={this.props.text}
+                    value={this.state.firstName}
 
 
                     maxLength={16}
@@ -331,7 +337,7 @@ export class Profile_redactor extends React.Component {
 
                     ref='                          Сообщение...'
                     onChangeText={(lastName) => this.setState({lastName})}
-                    value={this.props.text}
+                    value={this.state.lastName}
 
                     maxLength={16}
 
@@ -346,7 +352,7 @@ export class Profile_redactor extends React.Component {
 
                     ref='                          Сообщение...'
                     onChangeText={(about) => this.setState({about})}
-                    value={this.props.text}
+                    value={this.state.about}
 
 
                     maxLength={78}
@@ -363,7 +369,7 @@ export class Profile_redactor extends React.Component {
 
                     ref='                          Сообщение...'
                     onChangeText={(city) => this.setState({city})}
-                    value={this.props.text}
+                    value={this.state.city}
 
 
                     maxLength={19}

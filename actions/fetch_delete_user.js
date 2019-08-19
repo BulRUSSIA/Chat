@@ -7,7 +7,7 @@ function request_DELETE_USER_ROOM(room, nic) {
 
 
     try {
-        fetch(url);
+       fetch(url);
     } catch (e) {
         console.log(e)
     }

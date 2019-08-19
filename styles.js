@@ -326,7 +326,19 @@ const styles = StyleSheet.create({
 
 
     },
+    imageAvatarProfileEdit: {
 
+        width: 48,
+        height: 48,
+        marginLeft: 1,
+        marginRight:20,
+        marginTop: 20,
+        resizeMode: 'contain',
+        borderRadius: 400 / 2,
+        marginBottom:5,
+
+
+    },
     imageAvatar_redactor: {
 
         width: 17,

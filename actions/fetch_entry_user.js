@@ -8,7 +8,7 @@ async function request_ENTRY_USER_ROOM(nic,room)  {
 
 
     try {
-        fetch(url);
+     await   fetch(url);
     } catch (e) {
         console.log(e)
     }

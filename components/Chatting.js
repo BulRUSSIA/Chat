@@ -289,14 +289,41 @@ export default class Chatting extends React.Component {
 
         if (position === 3) {
 
+
             const profile_info = await request_GET_PROFILE(this.props.chat_name);
+            const a = profile_info.data;
             const {router} = this.props;
+                for(let i = 0; i < a.length; i++) {
+                    let obj = a[i];
+
+                    this.setState({firstName:obj.firstName,
+                        lastName:obj.lastName,
+                        city:obj.city,
+                        about:obj.about,
+                        color:obj.color,
+                        photo:obj.photo,
+                        sex:obj.sex,
+
+                    });
+
+                }
+
+
+
+
             await router.push.Profile_redactor({
 
                 room: this.props.room,
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
-                user_data: profile_info
+                user_data: profile_info,
+                firstName:this.state.firstName,
+                lastName:this.state.lastName,
+                city:this.state.city,
+                about:this.state.about,
+                color:this.state.color,
+                photo:this.state.photo,
+                sex:this.state.sex,
             });
 
 
