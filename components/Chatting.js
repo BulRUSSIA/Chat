@@ -290,7 +290,19 @@ export default class Chatting extends React.Component {
         if (position === 3) {
 
 
-            Alert.alert('Данный раздел в разработке')
+            const {router} = this.props;
+            await router.push.Profile_redactor({
+
+                room: this.props.room,
+                nic: this.props.nic,
+                chat_name: this.props.chat_name,
+            });
+
+
+
+
+
+
 
 
         }

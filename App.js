@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import View_stuff from "./components/View_stuff";
 import Private from "./components/Private";
 import Private_List from "./components/Private_List";
+import {Profile_redactor} from "./components/Profile_redactor";
 export default class chat extends React.Component {
 
     constructor(props){
@@ -22,7 +23,7 @@ export default class chat extends React.Component {
     {
         return (
             <Router
-                routes={{Login, Chatting, Rooms, Registration,Profile,View_stuff,Private,Private_List}}
+                routes={{Login, Chatting, Rooms, Registration,Profile,View_stuff,Private,Private_List,Profile_redactor}}
                 initialRoute="Login"
                 router={router => (this.router = router)}
                 disableHardwareBack={false}

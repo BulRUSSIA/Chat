@@ -119,6 +119,28 @@ const styles = StyleSheet.create({
 
 
     },
+    Profile_redactor_Toolbar_text_down: {
+        fontSize: 20,
+        flex: 1,
+        fontWeight:'bold',
+        color: '#efefef',
+        marginLeft: 0,
+
+        paddingLeft: 180,
+        paddingBottom: 2
+
+
+    },
+    Profile_redactor_Toolbar_text_down_right: {
+        fontSize: 19,
+
+        fontWeight:'bold',
+        color: '#efefef',
+        paddingBottom: 2,
+
+
+
+    },
 
     Profile_List_text: {
         fontSize: 20,
@@ -304,6 +326,24 @@ const styles = StyleSheet.create({
 
 
     },
+
+    imageAvatar_redactor: {
+
+        width: 17,
+        height: 17,
+
+
+        resizeMode: 'contain',
+        position:'absolute',
+        marginTop:12,
+        marginLeft:4,
+
+        paddingTop:5,
+
+
+
+
+    },
     imageView1: {
 
         width: 25,
@@ -459,6 +499,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#25566e',
 
     },
+    containerToolbarRedactor1: {
+
+
+
+        flexDirection: 'column',
+        height: 25,
+        width: "100%",
+        marginTop:22,
+
+
+
+        backgroundColor: '#25566e',
+
+    },
     containerToolbarProfile_down: {
 
         flexDirection: 'column',
@@ -534,6 +588,17 @@ const styles = StyleSheet.create({
         color: '#121212',
 
     },
+
+    TextInput_Redactor: {
+        marginTop:15,
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: 'gray',
+        width: '100%',
+        backgroundColor:'rgba(184,205,238,0.47)'
+    },
+
+
 
 
 });

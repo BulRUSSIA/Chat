@@ -27,7 +27,7 @@ export class TextInput_Chatting extends React.Component {
                 }
 
                 placeholder='Введите сообщение...             '
-                keyboardType='default'
+                keyboardType='email-address'
 
                 ref='                          Сообщение...'
                 onChangeText={(text) => this.props.add_text(text)}
