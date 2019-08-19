@@ -14,6 +14,8 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import Modal from "react-native-modal";
 import colors from "./const/colors";
 import menusmiles from './const/colors_id'
+import request_EDIT_PROFILE from "../actions/fetch_edit_profile";
+import request_EDIT_NICK from "../actions/fetch_edit_nick";
 
 export class Profile_redactor extends React.Component {
 
@@ -24,13 +26,14 @@ export class Profile_redactor extends React.Component {
             bday: 'Дата Рождения',
             enabled: false,
             isVisible: false,
-            nic: " ",
-            firstName: " ",
-            lastName: " ",
-            city: " ",
-            email: " ",
+            nic: this.props.chat_name,
+            user_info: this.props.information.data,
+            firstName: "-",
+            lastName: "-",
+            city: "-",
+            email: "-",
             sex: 3,
-            about: " ",
+            about: "-",
             color: -100,
             sm: menusmiles,
             clr: '#010101',
@@ -41,6 +44,54 @@ export class Profile_redactor extends React.Component {
         this.animatedVal = new Animated.Value(-350);
 
     }
+
+    Profile_Edit = async () => {
+
+
+        const send = await request_EDIT_PROFILE(
+            this.props.chat_name,
+            this.state.bday,
+            this.state.firstName,
+            this.state.lastName,
+            this.state.city,
+            this.state.email,
+            this.state.sex,
+            this.state.color,
+            this.state.about,
+
+
+
+
+        );
+
+
+
+        const {router} = this.props;
+        router.pop({
+
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+        });
+
+
+
+
+    };
+
+
+    Change_nick = async () => {
+
+
+        const send = await request_EDIT_NICK(this.props.chat_name,this.state.nic);
+        this.hideModalNick()
+
+
+
+
+
+
+    };
 
     Change_color = () => {
 
@@ -321,7 +372,7 @@ export class Profile_redactor extends React.Component {
                 >
                     <View>
 
-                        <Text style={styles.Profile_redactor_Toolbar_text_down_right}
+                        <Text style={styles.Profile_redactor_Toolbar_text_down_right}  onPress={this.Profile_Edit}
 
 
                         >Сохранить</Text>
@@ -360,7 +411,7 @@ export class Profile_redactor extends React.Component {
                     isVisible={this.state.isVisible}
                 >
 
-                    <Text style={{fontWeight: 'bold', color: '#010101', fontSize: 24, marginBottom: 32,}}> Cмена
+                    <Text style={{fontWeight: 'bold', color: '#010101', fontSize: 24, marginBottom: 32,}}>   Cмена
                         ника</Text>
                     <TextInput
 
@@ -368,6 +419,7 @@ export class Profile_redactor extends React.Component {
                         placeholder='Ник             '
                         keyboardType='email'
                         onChangeText={(nic) => this.setState({nic})}
+                        value={this.state.nic}
 
 
                         maxLength={16}
@@ -375,7 +427,7 @@ export class Profile_redactor extends React.Component {
                     />
 
 
-                    <Button title='Ок' color="#25566e"/>
+                    <Button title='Ок' color="#25566e" onPress={this.Change_nick}/>
 
 
                 </Modal>

@@ -1,9 +1,9 @@
 import {address} from "../config_connect";
 
-async function request_EDIT_PROFILE(nic,bday,firsName,lastName,city,email,sex,color,about)  {
+async function request_EDIT_PROFILE(nic,bday,firstName,lastName,city,email,sex,color,about)  {
 
 
-    const url = address + `/edit/profile/${nic}/${bday}/${firsName}/${lastName}/${city}/${email}/${sex}/${color}/${about}`;
+    const url = address + `/edit/profile/${nic}/${bday}/${firstName}/${lastName}/${city}/${email}/${sex}/${color}/${about}`;
 
 
 
