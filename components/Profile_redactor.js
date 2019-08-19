@@ -27,7 +27,7 @@ export class Profile_redactor extends React.Component {
             enabled: false,
             isVisible: false,
             nic: this.props.chat_name,
-            user_info: this.props.information.data,
+            user_info: this.props.user_data.data,
             firstName: "-",
             lastName: "-",
             city: "-",
@@ -43,7 +43,10 @@ export class Profile_redactor extends React.Component {
         };
         this.animatedVal = new Animated.Value(-350);
 
+
     }
+
+
 
     Profile_Edit = async () => {
 
