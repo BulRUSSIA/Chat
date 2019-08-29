@@ -12,6 +12,7 @@
     "emoji-mart": "^2.11.1",
     "emoji-mart-native": "^0.4.7-beta",
     "hermes-engine": "^0.1.0",
+    "native-base": "^2.13.5",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-easy-router": "2.8.0",

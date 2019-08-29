@@ -1,6 +1,5 @@
 import {StyleSheet} from "react-native";
 
-
 const styles = StyleSheet.create({
 
 
@@ -426,7 +425,7 @@ const styles = StyleSheet.create({
         marginRight:5,
         paddingRight:16,
         paddingLeft:22,
-        backgroundColor:'rgb(53,169,211)',
+        backgroundColor:'rgba(87,174,91,0.9)',
         borderRadius:15,
         marginBottom:15,
         paddingTop: 20,
@@ -457,7 +456,7 @@ const styles = StyleSheet.create({
         paddingTop: 17,
         paddingBottom:17,
         paddingLeft:14,
-        paddingRight:13,
+        paddingRight:18,
 
         marginBottom:15,
         flex:1,
