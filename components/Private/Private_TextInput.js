@@ -73,7 +73,7 @@ export class Private_TextInput extends React.Component {
             >
 
                 <Image
-                    style={{width: 30, height: 30, marginTop: 5,}}
+                    style={{width: 25, height: 25, marginTop: 5,}}
                     source={require('../Image/send_button.png')}/>
             </TouchableOpacity>
 
