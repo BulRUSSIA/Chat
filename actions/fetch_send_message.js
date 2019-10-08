@@ -1,8 +1,8 @@
 import {address} from "../config_connect";
 
-async function request_SEND_MESSAGES(nic,msg,place)  {
+async function request_SEND_MESSAGES(nic,msg,place,attachments)  {
 
-    const url = address + `/sending`;
+    const url = address + `/sending/room`;
 
     try {
   await fetch(url, {
@@ -17,6 +17,7 @@ async function request_SEND_MESSAGES(nic,msg,place)  {
             Nic: nic,
             Msg: msg,
             Place:place,
+            attachments:attachments,
         }),
     });
     }

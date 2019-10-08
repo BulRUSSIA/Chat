@@ -1,6 +1,6 @@
 import {address} from "../config_connect";
 
-async function request_SEND_MESSAGES_PRIVATE(nic,msg,place)  {
+async function request_SEND_MESSAGES_PRIVATE(nic,msg,place,attachments)  {
 
     const url = address + `/sending/private`;
 
@@ -17,6 +17,8 @@ async function request_SEND_MESSAGES_PRIVATE(nic,msg,place)  {
                 Nic: nic,
                 Msg: msg,
                 Place:place,
+                attachments:attachments
+
             }),
         });
     }

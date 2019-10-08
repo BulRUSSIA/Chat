@@ -1,4 +1,4 @@
-const menuitem = [{title: 'личные сообщения', show: 'always',icon: require('../Image/privicon.png')},
+const menuitem = [{title: 'личные сообщения', show: 'always',icon: require('../Image/email.png')},
 
 
     {title: 'Чаттеры', show: 'never'},
@@ -11,6 +11,8 @@ const menuitem = [{title: 'личные сообщения', show: 'always',icon
     {title: 'Чат портал', show: 'never'},
 
     {title: 'Выход', show: 'never'},
+
+    {title: 'Прикрепить изображение', show: 'always',icon: require('../Image/attach_file_white_192x192.png')},
 
 
 ];

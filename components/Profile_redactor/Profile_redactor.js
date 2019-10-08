@@ -16,6 +16,7 @@ import colors from "../const/colors";
 import menusmiles from '../const/colors_id'
 import request_EDIT_PROFILE from "../../actions/fetch_edit_profile";
 import request_EDIT_NICK from "../../actions/fetch_edit_nick";
+import {Header} from "native-base";
 
 export class Profile_redactor extends React.Component {
 
@@ -179,7 +180,7 @@ export class Profile_redactor extends React.Component {
                              style={{width: '100%', height: '100%'}}>
 
                 <ToolbarAndroid style={styles.containerToolbar}
-
+                                androidStatusBarColor="#25566e"
                 >
 
 

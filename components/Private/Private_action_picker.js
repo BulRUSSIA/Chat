@@ -33,8 +33,9 @@ export class Private_action_picker extends React.Component {
                 selectedValue={this.props.selected}
                 onValueChange={this.props.change}
             >
-                <Picker.Item label="Прикрепить изображение" value="key0" />
+
                 <Picker.Item label="Удалить диалог" value="key1" />
+                <Picker.Item label="Прикрепить изображение" value="key0" />
                 <Picker.Item label="Черный список" value="key2" />
 
             </Picker>

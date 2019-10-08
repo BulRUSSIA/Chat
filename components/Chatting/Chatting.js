@@ -1,21 +1,19 @@
 import React from 'react';
 import {
-    Image,
-    Text,
+
     View,
     BackHandler,
     ImageBackground,
-    Alert, TouchableOpacity,
-    Keyboard
-} from 'react-native';
+    Alert,
 
+    Keyboard, ActivityIndicator,
+} from 'react-native';
 import menusmiles from '../const/smiles'
 import menuitem from '../const/menu'
 import styles from '../../styles'
 import Rooms_list from '../const/Room_List'
 import Rooms_banned from '../const/Room_list_banned'
-import {address} from "../../config_connect";
-
+import {Pattern_message1} from "./pattern_message1";
 import {Toolbar_Chatting} from "./Toolbar_Chatting";
 import {Flatlist_Chatting_Messaging} from "./Flatlist_Chatting_Messaging";
 import {Modal_Chatting_ListUsers_Flatlist} from "./Modal_Chatting_ListUsers_Flatlist";
@@ -25,17 +23,25 @@ import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import request_GET_GIFTS from "../../actions/fetch_user_gifts";
-import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
 import request_GET_PRIVATE_LIST from "../../actions/fetch_private_list";
 import fetch_users_in_room from "../../actions/fetch_users_in_room";
 import request_DELETE_USER_ROOM from "../../actions/fetch_delete_user";
 import request_SEND_MESSAGES from "../../actions/fetch_send_message";
+import {Pattern_message2} from "./pattern_message2";
+import {Pattern_message3} from "./pattern_message3";
+import {Pattern_message4} from "./pattern_message4";
+import {Pattern_message5} from "./pattern_message5";
+import {Pattern_message6} from "./pattern_message6";
+import {Alert_Action} from "../Alert_Action";
+import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_moderator";
+import ImagePicker from "react-native-image-picker";
+import SEND_PHOTO_request from "../../actions/fetch_upload_image";
+import {Attachments_preview} from "./Attachments_preview";
 
 
-
-const list = ['Ответить', 'Написать Личное', 'Профиль'];
-
+const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
+const list_user = ['Ответить', 'Написать Личное', 'Профиль', 'Добавить в друзья'];
 export default class Chatting extends React.Component {
 
 
@@ -52,20 +58,26 @@ export default class Chatting extends React.Component {
             rooms_Banned: Rooms_banned,
             text: '',
             ban: '',
-            action_nick: list,
+            action_nick: list_user,
             user_now: '',
             msg: '',
+            type: null,
             isVisible: false,
             isVisibleList: false,
-
+            showAlert: false,
+            animating: true,
+            photo: false,
+            attachments: 'Not',
+            modal_indicator:false,
 
 
         };
 
-        this.Change_Visible_List = this.Change_Visible_List.bind(this)
+        this.Change_Visible_List = this.Change_Visible_List.bind(this);
 
 
     }
+
 
     add_text = (text) => {
 
@@ -91,7 +103,20 @@ export default class Chatting extends React.Component {
 
     };
 
+    View_full_photo = async (attach) => {
 
+        const {router} = this.props;
+
+        await router.push.PHOTO_VIEWER({
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+            photo: attach,
+
+        });
+
+
+    };
     Action_Nick = (user) => {
 
 
@@ -101,9 +126,62 @@ export default class Chatting extends React.Component {
     };
 
 
-
-
     Action_nick_selected = async (position) => {
+        if (position === 'Напугать') {
+            this.Change_Visible_Action();
+            console.log('0');
+            console.log(this.props.nic);
+
+            await request_SEND_BANNED_ACTION(0, this.state.user_now, this.props.nic);
+
+
+        }
+
+        if (position === 'Добавить в друзья') {
+            Alert.alert('Раздел недоступен')
+            this.Change_Visible_Action()
+
+        }
+
+
+        if (position === 'Бан 5 минут') {
+            this.Change_Visible_Action();
+            console.log('ban 5 minutes');
+            console.log(this.props.nic);
+
+            await request_SEND_BANNED_ACTION(0.05, this.state.user_now, this.props.nic);
+
+
+        }
+
+        if (position === 'Бан 15 минут') {
+            this.Change_Visible_Action();
+            console.log('ban 15  minutes');
+            console.log(this.props.nic);
+
+            await request_SEND_BANNED_ACTION(0.25, this.state.user_now, this.props.nic);
+
+
+        }
+
+        if (position === 'Бан 60 минут') {
+            this.Change_Visible_Action();
+            console.log('ban 60 minutes');
+            console.log(this.props.nic);
+
+            await request_SEND_BANNED_ACTION(1, this.state.user_now, this.props.nic);
+
+
+        }
+        if (position === 'Бан 120 минут') {
+            this.Change_Visible_Action();
+            console.log('ban 120 minutes');
+            console.log(this.props.nic);
+
+            await request_SEND_BANNED_ACTION(2, this.state.user_now, this.props.nic);
+
+
+        }
 
 
         if (position === 'Ответить') {
@@ -113,8 +191,8 @@ export default class Chatting extends React.Component {
 
         }
         if (position === 'Написать Личное') {
-
-            this.setState({isVisible: !this.state.isVisible});
+//Исправить пропсы ник не находит
+            this.Change_Visible_Action();
             const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
             const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
 
@@ -137,7 +215,8 @@ export default class Chatting extends React.Component {
 
         if (position === 'Профиль') {
 
-            this.setState({isVisible: !this.state.isVisible});
+
+            this.Change_Visible_Action();
             const profile_info = await request_GET_PROFILE(this.state.user_now);
             const gifts = await request_GET_GIFTS(this.state.user_now);
 
@@ -154,68 +233,72 @@ export default class Chatting extends React.Component {
 
             });
 
+
         }
-
-
     };
 
 
-    ban_msg = () => {
+    //  ban_msg = async () => {
 
-        const ban = address + `/banned/room/${this.props.nic}`;
+    //  const ban = address + `/banned/room/${this.props.nic}`;
 
-        return fetch(ban)
-            .then((response) => response.json())
-            .then(async (responseJson) => {
-
-
-                this.setState({ban: responseJson['user']});
-
-                if (this.state.ban === 'banned') {
+    //   return fetch(ban)
+    //       .then((response) => response.json())
+    //       .then(async (responseJson) => {
 
 
-                    let check = this.props.room;
+    //        this.setState({ban: responseJson['user']});
+
+    //        if (this.state.ban === 'banned') {
 
 
-
-                    if (check === 'Тюрьма') {
-
-                        console.log('ok');
-                    } else {
-
-                        const {router} = this.props;
+    //         let check = this.props.room;
 
 
-                        Alert.alert('Вы были забанены на неопределенный срок');
-                        router.push.Rooms({name: this.props.nic, room: 'Тюрьма', roomlist: this.state.rooms_Banned});
+    //         if (check === 'Тюрьма') {
 
-                        await request_ENTRY_USER_ROOM(this.props.nic, this.props.room);
-                        console.log('prison' + this.props.room)
+    //   console.log('ok');
+    //   } else {
 
-                    }
+    //       const {router} = this.props;
 
-                } else if ((this.state.ban === 'unbanned' && this.props.room === 'Тюрьма')) {
 
-                    Alert.alert('Cрок закончился!');
-                    const {router} = this.props;
-                    router.pop({name: this.props.nic, room: 'Тюрьма', item_menu: this.props.item_menu});
+    //       Alert.alert('Вы были забанены на неопределенный срок');
+    //    router.push.Rooms({
+    //         name: this.props.nic,
+    //          room: 'Тюрьма',
+    //            roomlist: this.state.rooms_Banned,
+    //            recieve: this.props.recieve
+    //        });
 
-                    console.log('go')
+    //       await request_ENTRY_USER_ROOM(this.props.nic, this.props.room);
+    //   console.log('prison' + this.props.room)
 
-                } else {
+    //   }
 
-                    console.log('go')
+    //   } else if ((this.state.ban === 'unbanned' && this.props.room === 'Тюрьма')) {
 
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+    //        Alert.alert('Cрок закончился!');
+    //  const {router} = this.props;
+    //     router.pop({name: this.props.nic, room: 'Тюрьма', item_menu: this.props.item_menu});
 
-    };
+    //            console.log('go')
+
+    //       } else {
+
+    //           console.log('go')
+
+    //       }
+    //    })
+    //    .catch((error) => {
+    //   console.error(error);
+    //     });
+
+    //  };
 
 
     update_msg = async () => {
+
 
         const message = await request_GET_MESSAGES(this.props.room);
         this.setState({
@@ -225,21 +308,56 @@ export default class Chatting extends React.Component {
             }
         );
 
+        if (this.state.animating) {
+
+            await this.setState({animating: !this.state.animating});
+            this.componentWillUnmount();
+            this.componentDidMount();
+
+
+        }
+
 
     };
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(this.interval);
-        console.log('i am unmount chatting')
+        console.log('i am unmount chatting');
+
     }
 
     componentDidMount = () => {
+        if (this.props.type_user === 2 || this.props.type_user === 4) {
+
+            this.setState({action_nick: list_moder})
+
+        }
+
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
 
-        this.interval = setInterval(() => this.update_msg(), 2000);
+        this.interval = setInterval(() => this.update_msg(), 3000);
 
+
+    };
+
+    Modal_Activity = () => {
+
+        if (this.state.modal_indicator) {
+
+            return (
+
+
+                    <ActivityIndicator
+                        size='large'
+                        animating={this.state.modal_indicator}/>
+
+
+
+
+            )
+        }
 
     };
 
@@ -254,7 +372,14 @@ export default class Chatting extends React.Component {
     onActionSelected = async (position) => {
 
         if (position === 0) {
+            if (!this.state.animating) {
 
+                await this.setState({animating: !this.state.animating});
+                this.componentWillUnmount();
+                this.componentDidMount();
+
+
+            }
             const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
 
             const {router} = this.props;
@@ -264,12 +389,13 @@ export default class Chatting extends React.Component {
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
                 private_user_list: get_list,
-                select:this.onActionSelected.bind(this)
+                select: this.onActionSelected.bind(this),
+                mount: this.componentDidMount
 
 
             });
-
-
+            this.componentWillUnmount();
+            await this.setState({animating: !this.state.animating});
 
         }
 
@@ -285,13 +411,12 @@ export default class Chatting extends React.Component {
         }
 
 
-
         if (position === 2) {
 
 
-            await this.ban_msg();
-            this.Del_user_change();
-            this.componentWillUnmount()
+            //  await this.ban_msg();
+            await this.Del_user_change();
+            await this.componentWillUnmount()
 
 
         }
@@ -303,23 +428,22 @@ export default class Chatting extends React.Component {
             const profile_info = await request_GET_PROFILE(this.props.chat_name);
             const a = profile_info.data;
             const {router} = this.props;
-                for(let i = 0; i < a.length; i++) {
-                    let obj = a[i];
+            for (let i = 0; i < a.length; i++) {
+                let obj = a[i];
 
-                    this.setState({firstName:obj.firstName,
-                        lastName:obj.lastName,
-                        city:obj.city,
-                        about:obj.about,
-                        color:obj.color,
-                        photo:obj.photo,
-                        sex:obj.sex,
-                        balace:obj.balace,
+                this.setState({
+                    firstName: obj.firstName,
+                    lastName: obj.lastName,
+                    city: obj.city,
+                    about: obj.about,
+                    color: obj.color,
+                    photo: obj.photo,
+                    sex: obj.sex,
+                    balace: obj.balace,
 
-                    });
+                });
 
-                }
-
-
+            }
 
 
             await router.push.Profile_redactor({
@@ -328,20 +452,14 @@ export default class Chatting extends React.Component {
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
                 user_data: profile_info,
-                firstName:this.state.firstName,
-                lastName:this.state.lastName,
-                city:this.state.city,
-                about:this.state.about,
-                color:this.state.color,
-                photo:this.state.photo,
-                sex:this.state.sex,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                city: this.state.city,
+                about: this.state.about,
+                color: this.state.color,
+                photo: this.state.photo,
+                sex: this.state.sex,
             });
-
-
-
-
-
-
 
 
         }
@@ -350,7 +468,7 @@ export default class Chatting extends React.Component {
             const profile_info = await request_GET_PROFILE(this.props.chat_name);
             const a = profile_info.data;
             const {router} = this.props;
-            for(let i = 0; i < a.length; i++) {
+            for (let i = 0; i < a.length; i++) {
                 let obj = a[i];
 
                 this.setState({
@@ -364,11 +482,10 @@ export default class Chatting extends React.Component {
                 room: this.props.room,
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
-                balance_card:this.state.balace
+                balance_card: this.state.balace
 
 
             });
-
 
 
         }
@@ -380,19 +497,119 @@ export default class Chatting extends React.Component {
             const {router} = this.props;
 
             router.push.Login();
-            this.Del_user_change();
+            await this.Del_user_change();
             this.componentWillUnmount()
+
+
+        }
+        if (position === 6) {
+
+
+            await this.handleChoosePhoto();
+
+
+
 
 
         }
 
     };
 
+    handleChoosePhoto =  () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri) {
+                this.setState({photo: response});
+                Alert.alert("фото успешно загружено!\nЖмите кнопку отправить");
 
-    Del_user_change = () => {
+                this.componentWillUnmount();
+
+                this.componentDidMount()
 
 
-        request_DELETE_USER_ROOM(this.props.room, this.props.nic);
+            }
+
+
+        });
+
+
+
+
+
+    };
+
+    close_attach = () => {
+
+    this.setState({photo:null})
+
+    };
+
+    view = () =>{
+
+        if (this.state.photo) {
+
+          return(
+           <Attachments_preview
+              photo={this.state.photo}
+              close_attach={this.close_attach}
+
+           />
+          )
+        }
+    };
+
+    send_photo = async () => {
+        this.setState({modal_indicator:true});
+        const attach = await SEND_PHOTO_request(this.state.photo);
+        this.setState({attachments: attach});
+        console.log('attach123' +attach)
+        this.setState({modal_indicator:false});
+
+
+    };
+
+    showAlert = () => {
+
+        this.setState({
+            showAlert: true
+        });
+    };
+
+    showPrivate = async () => {
+        const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
+        const {router} = this.props;
+        router.push.Private({
+            profile_user: this.state.user_now,
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+            private_room: this.state.chatid,
+            private_chatter: this.state.user_now,
+            private_data: get_private_data,
+
+
+        });
+
+        this.setState({
+            showAlert: false
+        });
+
+
+    };
+
+    hideAlert = () => {
+        this.setState({
+            showAlert: false
+        });
+    };
+
+
+    Del_user_change = async () => {
+
+
+        await request_DELETE_USER_ROOM(this.props.room, this.props.nic);
         let nw = this.props.room;
         if (nw === 'Тюрьма') {
             const {router} = this.props;
@@ -401,7 +618,7 @@ export default class Chatting extends React.Component {
 
         } else {
             const {router} = this.props;
-            router.pop({name: this.props.nic, roomlist: this.props.item_menu, item_menu: this.props.roomlist});
+            await router.pop({name: this.props.nic, roomlist: this.props.item_menu, item_menu: this.props.roomlist});
 
         }
 
@@ -410,42 +627,56 @@ export default class Chatting extends React.Component {
 
     send_msg = async () => {
 
+       if (this.state.photo) {
+           await Keyboard.dismiss();
+           await this.send_photo();
+           //    if (this.state.text !=='') {
+           await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
+
+           await this.setState({
+
+               text: '', attachments: 'Not', photo: false
 
 
-        console.log('THIS TEXT:' + this.state.text);
-        await this.ban_msg();
-        if (this.state.text === '') {
-            Alert.alert('Сообщение не может быть пустым!');
-
-        }
-        else {
-
-            await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room);
-            console.log('my nicK' + this.props.nic);
-
-
-            this.setState({
-                isLoading: false,
-                text: '',
-
-
-            });
+           });
+           await this.update_msg();
 
 
 
-            await this.update_msg();
-            await this.componentDidMount();
-            Keyboard.dismiss();
-
-            return this.componentWillUnmount()
 
 
-        }
+       }
 
-        };
+       else
 
 
-        /*    .catch(error => this.setState({error}));*/
+        //    if (this.state.text !=='') {
+
+      await Keyboard.dismiss();
+       await  request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+        await this.setState({
+
+            text: '',
+
+
+        });
+
+        await this.update_msg();
+
+
+
+
+        //   }
+        //     else {
+        //       Alert.alert("Cообщение не может быть пустым")
+//
+        //  }
+
+
+    };
+
+
+    /*    .catch(error => this.setState({error}));*/
 
 
     _renderItem = ({item}) => {
@@ -454,38 +685,26 @@ export default class Chatting extends React.Component {
         let name = item.message.startsWith(this.props.chat_name + ',');
         let server = item.user;
         let attch = item.attachments;
+        let _class = item._class;
+        let avatars = item.avatars;
+        let message = item.message;
 
-        if (name === true) {
+        if (name) {
 
 
             return (
 
-                <TouchableOpacity onPress={() => this.Action_Nick(item.user)}>
+
+                <Pattern_message1
+
+                    Action_Nick={this.Action_Nick}
+                    user={server}
+                    _class={_class}
+                    avatars={avatars}
+                    message={message}
 
 
-                    <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#efefef'}}>
-
-
-                        <Image source={{uri: item.avatars}} style={styles.imageView}/>
-
-                        <Text style={[styles.prices, {color: item._class}]}
-
-                        >
-                            {item.user}:
-
-                            <Text style={[styles.symbols, {color: item._class}]}
-                            >
-                                {item.message}
-
-
-                            </Text>
-
-                        </Text>
-
-
-                    </View>
-
-                </TouchableOpacity>
+                />
 
 
             )
@@ -496,30 +715,14 @@ export default class Chatting extends React.Component {
 
             return (
 
-                <TouchableOpacity onPress={() => this.Action_Nick(item.user)}>
+                <Pattern_message2
+
+                    Action_Nick={this.Action_Nick}
+                    user={server}
+                    message={message}
 
 
-                    <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(215,215,215,0.7)'}}>
-
-
-                        <Text style={[styles.prices, {color: '#010101'}]}
-
-                        >
-                            {item.user}:
-
-                            <Text style={[styles.symbols, {color: '#010101'}]}
-                            >
-                                {item.message}
-
-
-                            </Text>
-
-                        </Text>
-
-
-                    </View>
-
-                </TouchableOpacity>
+                />
 
 
             )
@@ -531,27 +734,17 @@ export default class Chatting extends React.Component {
             return (
 
 
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                    <Image source={{uri: item.avatars}} style={styles.imageView}/>
-                    <Text style={[styles.prices2, {color: item._class}]}
+                <Pattern_message3
 
-                    >
-                        {item.user}:
-
-                        <Text style={[styles.prices2, {color: item._class}]}
-                        >
-                            {item.message}
+                    user={server}
+                    _class={_class}
+                    avatars={avatars}
+                    message={message}
+                    attachments={attch}
+                    view_attach={this.View_full_photo}
 
 
-                        </Text>
-
-                    </Text>
-
-
-                    <Image source={{uri: item.attachments}} style={styles.imageAttach}/>
-
-
-                </View>
+                />
 
 
             )
@@ -560,31 +753,15 @@ export default class Chatting extends React.Component {
 
             return (
 
+                <Pattern_message4
 
-                <TouchableOpacity onPress={() => this.Action_Nick(item.user)}>
-
-
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-
-
-                        <Text style={[styles.prices, {color: item._class}]}
-
-                        >
-                            {item.user}
-
-                            <Text style={[styles.symbols, {color: item._class}]}
-                            >
-                                {item.message}
+                    Action_Nick={this.Action_Nick}
+                    user={server}
+                    _class={_class}
+                    message={message}
 
 
-                            </Text>
-
-                        </Text>
-
-
-                    </View>
-
-                </TouchableOpacity>
+                />
 
 
             )
@@ -595,30 +772,15 @@ export default class Chatting extends React.Component {
             return (
 
 
-                <TouchableOpacity onPress={() => this.Action_Nick(item.user)}>
+                <Pattern_message5
+
+                    Action_Nick={this.Action_Nick}
+                    user={server}
+                    _class={_class}
+                    message={message}
 
 
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-
-
-                        <Text style={[styles.prices, {color: item._class}]}
-
-                        >
-                            {item.user}:
-
-                            <Text style={[styles.symbols, {color: item._class}]}
-                            >
-                                {item.message}
-
-
-                            </Text>
-
-                        </Text>
-
-
-                    </View>
-
-                </TouchableOpacity>
+                />
 
 
             )
@@ -628,32 +790,16 @@ export default class Chatting extends React.Component {
             return (
 
 
-                <TouchableOpacity onPress={() => this.Action_Nick(item.user)}>
+                <Pattern_message6
+
+                    Action_Nick={this.Action_Nick}
+                    user={server}
+                    _class={_class}
+                    avatars={avatars}
+                    message={message}
 
 
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-
-
-                        <Image source={{uri: item.avatars}} style={styles.imageView}/>
-
-                        <Text style={[styles.prices, {color: item._class}]}
-
-                        >
-                            {item.user}:
-
-                            <Text style={[styles.symbols, {color: item._class}]}
-                            >
-                                {item.message}
-
-
-                            </Text>
-
-                        </Text>
-
-
-                    </View>
-
-                </TouchableOpacity>
+                />
 
 
             )
@@ -668,12 +814,13 @@ export default class Chatting extends React.Component {
     render() {
 
 
-        return (
 
-            <View style={styles.container}
+        if (this.state.animating) {
 
-            >
-                <ImageBackground source={require('../Image/lastback1.webp')} style={{width: '100%', height: '100%'}}>
+            return (
+
+                <ImageBackground source={require('../Image/Chattingbackground.webp')}
+                                 style={{width: '100%', height: '100%'}}>
 
                     <Toolbar_Chatting select={this.onActionSelected.bind(this)}
 
@@ -684,14 +831,48 @@ export default class Chatting extends React.Component {
                                       room={this.props.room}
                     />
 
+
+                    <ActivityIndicator size="large" color="#3E8CB4"
+                                       animating={this.state.animating}/>
+                </ImageBackground>)
+        }
+
+
+        return (
+
+            <View style={styles.container}
+
+            >
+
+
+                <ImageBackground source={require('../Image/Chattingbackground.webp')}
+                                 style={{width: '100%', height: '100%'}}>
+
+                    <Toolbar_Chatting select={this.onActionSelected.bind(this)}
+
+
+                                      users={this.state.users}
+                                      item_menu={this.state.item_menu}
+
+                                      room={this.props.room}
+                    />
+
+                    {this.Modal_Activity()}
                     <Flatlist_Chatting_Messaging
 
                         dataSource={this.state.dataSource}
                         render={this._renderItem}
+
                     />
 
+                    {this.view()}
+                    <Alert_Action
+                        showAlert={this.state.showAlert}
+                        hideAlert={this.hideAlert}
+                        showPrivate={this.showPrivate}
 
 
+                    />
                     <Modal_Chatting_ListUsers_Flatlist
 
 

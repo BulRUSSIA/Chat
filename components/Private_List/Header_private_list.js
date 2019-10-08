@@ -11,7 +11,8 @@ export class Header_private_list extends React.Component {
 
         return      <Header style={{backgroundColor: '#25566e'}}
                             onActionSelected={this.props.onActionSelected.bind(this)}
-                            actions={this.props.item_menu}>
+                            actions={this.props.item_menu}
+                            androidStatusBarColor="#25566e">
 
             <Left style={{flex: 1}}>
                 <Button transparent

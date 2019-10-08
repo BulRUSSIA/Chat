@@ -5,13 +5,14 @@ import {
     Text,
     View,
     BackHandler,
-    ImageBackground, ToolbarAndroid, TouchableOpacity
+    ImageBackground,  TouchableOpacity,
 } from 'react-native';
 
 import Chatting from '../../components/Chatting/Chatting'
 
 
 import styles from '../../styles'
+import {Body, Button, Footer, Header, Icon, Left,  Right, Title} from "native-base";
 
 const list = [{
     action: 'Написать личное сообщение',
@@ -104,17 +105,29 @@ export default class Profile extends React.Component {
 
                 <ImageBackground source={require('../Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
 
-                    <ToolbarAndroid style={styles.containerToolbarProfile}
+                    <Header style={{backgroundColor: '#25566e'}}
+                            androidStatusBarColor="#25566e">
 
 
-                                    data={this.state.toolbar_text}
-                    >
-                        <View>
+                        <Left style={{flex: 1}}>
+                            <Button transparent
 
-                            <Text style={styles.Profile_Toolbar_text}>{this.state.toolbar_text}</Text>
-                        </View>
+                                    onPress={this.backs}>
+                                <Icon
+                                    style={{color: 'white'}}
+                                    name="ios-arrow-back"/>
+                            </Button>
 
-                    </ToolbarAndroid>
+                        </Left>
+                        <Body>
+                            <Title>Профиль</Title>
+                        </Body>
+                        <Right/>
+
+
+
+
+                    </Header>
 
 
                     <FlatList
@@ -238,19 +251,10 @@ export default class Profile extends React.Component {
                     </View>
 
 
-                    <ToolbarAndroid style={styles.containerToolbarProfile1}
 
+                    <Footer style={{backgroundColor: '#25566e', height: '5%'}}>
 
-                    >
-                        <View>
-                            <Text style={styles.Profile_Toolbar_text_down}
-                                  onPress={this.backs}
-
-
-                            >Назад</Text>
-                        </View>
-
-                    </ToolbarAndroid>
+                    </Footer>
 
 
                 </ImageBackground>

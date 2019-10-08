@@ -187,8 +187,10 @@ export default class Rooms extends React.Component {
                 router.push.Chatting({
                     nic: this.props.name,
                     room: event,
-                    chat_name: Nick_chats,
-                    item_menu: this.state.item_menu
+                    chat_name: Nick_chats[0],
+                    type_user: Nick_chats[1],
+                    item_menu: this.state.item_menu,
+
                 });
 
             } else {
@@ -205,23 +207,28 @@ export default class Rooms extends React.Component {
 
                     nic: this.props.name,
                     room: event,
-                    chat_name: Nick_chats,
-                    item_menu: this.state.item_menu
+                    chat_name: Nick_chats[0],
+                    type_user: Nick_chats[1],
+                    item_menu: this.state.item_menu,
+
                 });
             }
         } else {
             const Nick_chats = await request_MY_NICKNAME(this.props.name);
             console.log('category' + category);
-
+            console.log(Nick_chats);
             const rooms = await request_GET_ROOMS(category);
             const {router} = this.props;
-            router.push.Rooms({
-                name: this.props.name,
 
-                chat_name: Nick_chats,
-                roomlist: rooms,
-                count: this.props.count
-            });
+                router.push.Rooms({
+                    name: this.props.name,
+
+                    chat_name: Nick_chats[0],
+                    type_user: Nick_chats[1],
+                    roomlist: rooms,
+                    count: this.props.count
+                });
+
 
         }
 
@@ -255,7 +262,9 @@ export default class Rooms extends React.Component {
 
             <Container style={{backgroundColor: '#88a8b6',}}>
 
-                <Header style={{backgroundColor: '#25566e',}}>
+                <Header style={{backgroundColor: '#25566e',}}
+                 androidStatusBarColor="#25566e"
+                >
                     <Left style={{flex: 1}}>
                         <Button transparent
 
@@ -307,189 +316,5 @@ export default class Rooms extends React.Component {
 
     }
 }
-
-
-const styles = StyleSheet.create({
-
-
-    container1: {
-
-        backgroundColor: '#88a8b6',
-        width: '100%',
-        height: '100%',
-
-
-    },
-
-    container2: {
-
-
-        alignItems: 'center',
-        justifyContent: 'center',
-
-
-    },
-
-    count_radius: {
-
-
-        marginTop: 12,
-        marginBottom: 6,
-        fontSize: 15,
-        color: '#fefcfe',
-        position: 'relative',
-        marginLeft: 9,
-
-
-    },
-    rooms: {
-        fontSize: 22,
-
-        color: '#f7f7f7',
-        paddingRight: 5,
-        padding: 9,
-
-        marginTop: 5,
-        paddingBottom: 10,
-
-
-    },
-
-    prices: {
-        fontSize: 23,
-
-        flex: 1,
-
-
-        color: '#05077a',
-        marginLeft: 1,
-        padding: 9
-
-
-    },
-    imageView: {
-
-        width: 30,
-        height: 30,
-        paddingBottom: 1,
-        marginTop: 14,
-        marginLeft: 5,
-        backgroundColor: 'transparent',
-
-
-    },
-
-    imageView1: {
-
-        width: 34,
-        height: 34,
-        paddingBottom: 1,
-        marginTop: 6,
-        marginRight: 10,
-        backgroundColor: 'transparent',
-        position: 'absolute'
-
-
-    },
-
-    imageViewToolbarArrow: {
-
-        width: '12%',
-        height: '35%',
-
-        marginRight: 180,
-        marginTop: 41,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 1,
-        paddingLeft: 21,
-        paddingRight: 15,
-
-
-    },
-
-    imageViewToolbarDot: {
-
-        width: 15,
-        height: 15,
-        marginTop: 11,
-
-
-        flex: 1,
-        marginLeft: 320,
-
-
-    },
-
-    instructions: {
-
-
-        color: '#FFF',
-        fontSize: 30,
-
-
-        marginLeft: 93,
-        marginBottom: 30,
-        flex: 1,
-        flexDirection: 'row',
-
-
-        textAlign: 'center'
-
-
-    },
-    all_user_chat: {
-
-
-        color: '#c0bec0',
-        fontSize: 16,
-
-
-        marginLeft: 240,
-        marginTop: 14,
-
-
-        textAlign: 'center'
-
-
-    },
-
-    containerToolbar: {
-
-
-        flexDirection: 'row',
-        height: 45,
-        width: "100%",
-
-
-        justifyContent: 'space-between',
-
-
-        backgroundColor: '#25566e',
-    },
-    containerToolbarnon: {
-
-
-        flexDirection: 'row',
-        height: 30,
-        width: "100%",
-
-
-        backgroundColor: '#25566e',
-    },
-    containerToolbar1: {
-
-
-        flexDirection: 'row',
-        height: 31,
-        width: "100%",
-        marginTop: 590,
-
-
-        backgroundColor: '#25566e',
-    },
-});
-
-
 
 

@@ -5,15 +5,15 @@ import {
     View,
     BackHandler,
 
-    ImageBackground, Alert, Keyboard
+    ImageBackground, Alert, Keyboard,TouchableOpacity,Image
 } from 'react-native';
 import private_menu from '../const/private_menu'
 import styles from '../../styles'
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_SEND_MESSAGES_PRIVATE from "../../actions/fetch_send_private";
 import data from 'emoji-mart-native/data/apple.json'
-
-import {ModalPicker,} from 'emoji-mart-native'
+import ImagePicker from "react-native-image-picker";
+import {ModalPicker} from 'emoji-mart-native'
 
 import {Emoji} from 'emoji-mart-native'
 import {
@@ -35,6 +35,7 @@ import {Private_TextInput} from "./Private_TextInput";
 import {Private_Flatlist} from "./Private_Flatlist";
 
 
+
 export default class Private extends React.Component {
 
 
@@ -47,6 +48,7 @@ export default class Private extends React.Component {
 
             room: this.props.private_room,
             private: this.props.private_data,
+            private_chatter:this.props.private_chatter,
             users: [],
             item_menu: private_menu,
             text: '',
@@ -57,12 +59,40 @@ export default class Private extends React.Component {
             modalVisible: false,
             showEmojiPicker: false,
             selected: undefined,
+            photo: null,
+            attachments: 'Not',
+
+
+
 
 
         };
 
 
+
+
     }
+
+
+
+
+
+    createFormData = (photo) => {
+        const data = new FormData();
+
+        data.append("photo", {
+
+            name: photo.fileName,
+
+
+            type: photo.type,
+            uri:
+                Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+        });
+
+
+        return data;
+    };
 
 
     onValueChange = async (value: string) => {
@@ -72,8 +102,7 @@ export default class Private extends React.Component {
 
 
         if (value === 'key0') {
-            alert('photo send');
-
+            await this.handleChoosePhoto()
 
         }
 
@@ -102,7 +131,6 @@ export default class Private extends React.Component {
     componentDidMount = () => {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
-        console.log(this.state.DataSource);
         this.interval = setInterval(() => this.update_msg(), 10000);
 
 
@@ -131,8 +159,9 @@ export default class Private extends React.Component {
         }
         if (position === 3) {
 
+
             const {router} = this.props;
-            this.componentWillUnmount();
+
             router.pop({
                 room: this.props.room,
                 nic: this.props.nic,
@@ -140,39 +169,136 @@ export default class Private extends React.Component {
                 DataSource: this.props.list_data,
 
 
+
             });
+
+            console.log(this.props.nic + 'my nick to ls');
+
+
+            this.componentWillUnmount();
 
 
         }
+    };
+    handleChoosePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri) {
+                this.setState({photo: response});
+                this.Preview_attach()
+            }
+
+
+        })
+
+
+    };
+
+    Preview_attach = () => {
+        const {photo} = this.state;
+        if (this.state.photo) {
+
+            return (
+
+                <Image source={{uri: photo.uri}} style={styles.imageAttachPrivatePreview}/>
+
+            )
+
+
+        }
+
+
+    };
+
+
+    handleUploadPhoto = async () => {
+        await fetch("http://79.174.12.77:5000/uploads", {
+            headers: {
+
+                'Content-Type': 'multipart/form-data',
+
+
+            },
+            method: "POST",
+
+            body: this.createFormData(this.state.photo)
+
+
+        })
+            .then(response => response.json())
+            .then((responseJson) => {
+
+
+                    this.setState({attachments: responseJson['attach']});
+
+
+                    Alert.alert("фото успешно загружено!");
+                    this.setState({photo: null});
+
+
+                }
+            )
+
+
+            .catch(error => {
+
+                Alert.alert("Не удалoсь загрузить фото,обратитесь к производителю устройства!", error);
+
+                this.setState({photo: null, attachments: ''});
+
+
+            });
+
+
     };
 
 
     send_msg = async () => {
 
 
-        if (this.state.text !== '' || this.state.smiles !== '') {
+        if (this.state.photo) {
+
+            await this.handleUploadPhoto();
+
+            await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
 
 
-            await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room);
-            console.log('my nicK:' + this.props.nic);
+            await Keyboard.dismiss();
 
 
-            this.setState({
-                isLoading: false,
-                text: '',
+            await this.update_msg();
+
+
+            await this.setState({
+
+                text: '', attachments: 'Not'
 
 
             });
 
-            await this.update_msg();
-            await this.componentDidMount();
-            Keyboard.dismiss();
-
-            return this.componentWillUnmount()
-
         } else {
 
-            Alert.alert('Сообщение не может быть пустым!');
+            await request_SEND_MESSAGES_PRIVATE(this.props.nic,
+                this.state.text,
+                this.state.room,
+                this.state.attachments);
+
+
+            await Keyboard.dismiss();
+
+
+            await this.update_msg();
+
+
+            await this.setState({
+
+                text: '', attachments: 'Not'
+
+
+            });
+
 
 
         }
@@ -185,7 +311,6 @@ export default class Private extends React.Component {
     check_emoji = (emoji) => {
 
 
-        console.log(emoji);
 
         if (emoji.match((/:.*:/)) === null) {
 
@@ -201,7 +326,6 @@ export default class Private extends React.Component {
         } else {
 
             let a = (/:.*:/).exec(emoji).toString();
-            console.log(a + 'EMOJION');
 
 
             return (
@@ -275,6 +399,7 @@ export default class Private extends React.Component {
 
 
             return (
+
                 <Text style={styles.private1}
 
                 >{created + '\t\t\t\n'}
@@ -308,10 +433,94 @@ export default class Private extends React.Component {
     };
 
 
+    View_full_photo = async (attach) => {
+
+        const {router} = this.props;
+
+      await  router.push.PHOTO_VIEWER({
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+            photo: attach,
+            private_room: this.props.private_room,
+            private_chatter: this.props.private_chatter,
+            private_data: this.props.private_data,
+        });
+
+
+
+
+    };
+
+    attachments_view = (attach, username) => {
+
+
+        let me = this.props.chat_name;
+        if (attach.length > 1) {
+            console.log('me:' + me);
+
+
+            if (me === username) {
+
+                return (
+                    <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
+
+                        <View style={{
+                            borderColor: 'rgba(87,174,91,0.9)',
+                            borderWidth: 8,
+                            flex: 1,
+                            backgroundColor: 'rgba(87,174,91,0.9)',
+                            borderRadius: 14,
+                            marginTop: 5,
+                            marginBottom: 5,
+                            marginLeft: '15%',
+                            marginRight: '15%',
+                            alignItems: 'center',
+                        }}>
+                            <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
+
+                        </View>
+                    </TouchableOpacity>
+
+
+                );
+            } else {
+
+                return (
+                    <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
+
+                        <View style={{
+                            borderColor: 'rgba(193,225,255,0.8)',
+                            borderWidth: 8,
+                            flex: 1,
+                            backgroundColor: 'rgba(193,225,255,0.8)',
+                            borderRadius: 14,
+                            marginTop: 5,
+                            marginBottom: 5,
+                            marginLeft: '15%',
+                            marginRight: '15%',
+                            alignItems: 'center',
+                        }}>
+                            <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
+                        </View>
+                    </TouchableOpacity>
+
+
+                );
+
+
+            }
+
+
+        }
+    };
+
+
     _renderItem = ({item}) => {
 
 
         let user = this.props.private_chatter;
+
 
         if (item.user === user) {
 
@@ -324,6 +533,8 @@ export default class Private extends React.Component {
 
                     <View style={{position: 'relative'}}>
                         {this.check_text_2(item.createdAt, item.message)}
+                        {this.attachments_view(item.attachments, item.user)}
+
 
                     </View>
                     <View
@@ -337,6 +548,7 @@ export default class Private extends React.Component {
                             right: 0
                         }}>
                         {this.check_emoji(item.message)}
+
                     </View>
                 </View>
 
@@ -354,6 +566,8 @@ export default class Private extends React.Component {
 
                     <View style={{position: 'relative'}}>
                         {this.check_text_1(item.createdAt, item.message)}
+                        {this.attachments_view(item.attachments, item.user)}
+
 
                     </View>
                     <View style={{paddingTop: 40, marginBottom: 20, position: 'absolute', marginLeft: 164,}}>
@@ -380,13 +594,14 @@ export default class Private extends React.Component {
             <View style={styles.container}
 
             >
-                <ImageBackground source={require('../Image/last_back.jpg')}
+                <ImageBackground source={require('../Image/last_back.webp')}
                                  style={{width: '100%', height: '100%'}}>
 
 
                     <Header style={{backgroundColor: '#25566e'}}
                             onActionSelected={this.onActionSelected.bind(this)}
-                            actions={this.state.item_menu}>
+                            actions={this.state.item_menu}
+                            androidStatusBarColor="#25566e">
 
                         <Left style={{flex: 1}}>
                             <Button transparent
@@ -411,6 +626,11 @@ export default class Private extends React.Component {
 
 
                     </Header>
+
+
+
+
+
 
 
                     <Private_Flatlist
@@ -440,11 +660,14 @@ export default class Private extends React.Component {
                         />
 
 
+
                         <Private_TextInput
+
                             add_text={this.add_text}
                             send_msg={this.send_msg}
                             text={this.state.text}
                             selected={this.showPickerTrigger}
+
 
                         />
 

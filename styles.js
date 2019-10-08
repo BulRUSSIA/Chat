@@ -10,6 +10,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#06b3e9',
 
     },
+    modalbackground: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(45,101,127,0.37)',
+        height:'50%'
+
+    },
     container_pofile: {
 
         justifyContent: 'center',
@@ -50,28 +58,14 @@ const styles = StyleSheet.create({
     prices: {
         fontSize: 18,
         flex: 1,
-        color: '#598d68',
+
         marginLeft: 0,
         padding: 1,
 
 
-    },
-    chatter_list: {
-        fontSize: 22,
-        flex: 1,
-        color: '#e8e8e8',
-        marginLeft: 0,
-        padding: 1,
-        borderRadius:4,
-
-        backgroundColor:'#59a39e',
-
-
-
-
-
 
     },
+
     Profile_Toolbar_text: {
         fontSize: 18,
         flex: 1,
@@ -206,12 +200,13 @@ const styles = StyleSheet.create({
 
     },
     action_profile: {
-        fontSize: 24,
+        fontSize: 30,
         flex: 1,
         color: '#000000',
         textAlign: 'center',
-        backgroundColor:'rgba(196,218,254,0.61)',
-        borderRadius:13
+        justifyContent:'center',
+        backgroundColor:'rgba(67,155,198,0.49)',
+        borderRadius:9
 
     },
     smiles: {
@@ -394,13 +389,71 @@ const styles = StyleSheet.create({
 
     },
 
+    imageAttachPrivate: {
+
+        width: 150,
+        height: 150,
+
+
+        margin: 1,
+        borderRadius:14,
+        alignItems:'center',
+
+        flex:2,
+
+
+        resizeMode: 'contain',
+
+
+
+
+    },
+
+    imageAttachRoom: {
+
+        width: 150,
+        height: 150,
+
+
+        marginBottom:'6%',
+        borderRadius:14,
+        resizeMode: "stretch",
+
+
+
+        flex:1,
+
+
+
+
+
+
+
+    },
+    imageAttachPrivatePreview: {
+
+        width: 40,
+        height: 40,
+
+        marginTop: 20,
+        margin: 1,
+        alignItems:'center',
+
+        resizeMode: 'contain',
+        alignContent: 'stretch',
+
+
+
+    },
+
     instructions: {
 
         textAlign: 'center',
         alignItems: 'center',
         color: '#ffffff',
-        fontSize: 26,
+        fontSize: 17,
         flex: 1,
+        fontWeight:'bold',
         paddingLeft: 90,
         alignSelf: 'center',
         paddingBottom:7,
@@ -411,7 +464,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         paddingLeft: 50,
-        color: '#77ff86',
+
 
         flex: 1
 
@@ -584,7 +637,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
-        color: '#ffffff',
+        color: '#2a68ff',
         padding: 10,
         fontWeight:'bold'
     },
@@ -592,7 +645,7 @@ const styles = StyleSheet.create({
     nick: {
         fontSize: 20,
         textAlign: 'center',
-        marginTop:14,
+
         backgroundColor:'#7cffb2',
         fontWeight:'bold',
 

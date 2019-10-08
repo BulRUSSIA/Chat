@@ -14,12 +14,6 @@ export class TextInput_Chatting extends React.Component {
 
 
 
-
-
-
-
-
-
     render() {
 
 
@@ -50,6 +44,7 @@ export class TextInput_Chatting extends React.Component {
                        underlineColorAndroid="#00bfff"
                        placeholder='Сообщение             '
                        keyboardType='default'
+                       multiline={true}
 
 
                        onChangeText={(text) => this.props.add_text(text)}

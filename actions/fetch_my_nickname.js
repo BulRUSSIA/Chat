@@ -8,14 +8,13 @@ async function request_MY_NICKNAME(nick)  {
 
         .then((response) => response.json())
         .then( async (responseJson) => {
-
-            return (responseJson['Nickname'])
-
+            console.log(responseJson);
+            return [(responseJson['Nickname']),(responseJson['type'])];
 
         })
 
 
-        .catch((error) => {
+        .catch(() => {
             Alert.alert('Что-то пошло не по-плану!');
         });
 

@@ -28,6 +28,8 @@ export class Private_TextInput extends React.Component {
               paddingLeft:26,
 
           }}>
+
+
             <EmojiButton
                 buttonImage={emojiImage}
                 style={{
@@ -48,6 +50,7 @@ export class Private_TextInput extends React.Component {
                        underlineColorAndroid="#00bfff"
                        placeholder='Сообщение             '
                        keyboardType='default'
+                       multiline={true}
 
 
                        onChangeText={(text) => this.props.add_text(text)}
@@ -74,7 +77,7 @@ export class Private_TextInput extends React.Component {
 
                 <Image
                     style={{width: 25, height: 25, marginTop: 5,}}
-                    source={require('../Image/send_button.png')}/>
+                    source={require('../Image/send_button.webp')}/>
             </TouchableOpacity>
 
         </View>

@@ -31,14 +31,19 @@ export default class Login extends React.Component {
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
             isLoading:false,
+            recieve:''
 
 
         };
 
+
+
+
+
+
         this._retrieveData()
 
     }
-
 
 
 
