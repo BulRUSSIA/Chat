@@ -1,5 +1,5 @@
 import {
-    Text, TouchableOpacity,
+    Text,
     View
 } from "react-native";
 
@@ -13,10 +13,11 @@ export class Pattern_message4 extends React.Component {
     render() {
 
 
-        return     <TouchableOpacity onPress={() => this.props.Action_Nick(this.props.user)}>
+        return    (
 
 
             <View style={{flex: 1, flexDirection: 'row'}}>
+
 
 
                 <Text style={[styles.prices, {color: this.props._class}]}
@@ -26,17 +27,19 @@ export class Pattern_message4 extends React.Component {
 
                     <Text style={[{fontSize:18,fontWeight: 'bold'}, {color: this.props._class}]}
                     >
+
                         {this.props.message}
-
-
                     </Text>
+
+
 
                 </Text>
 
 
-            </View>
 
-        </TouchableOpacity>
+            </View>
+        )
+
 
     }
 }

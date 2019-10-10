@@ -5,6 +5,7 @@ import {
 
 import React from "react";
 import styles from "../../styles";
+import {Emoji} from "emoji-mart-native";
 
 
 export class Pattern_message3 extends React.Component {
@@ -50,6 +51,7 @@ export class Pattern_message3 extends React.Component {
 
 
                     <Image source={{uri: this.props.attachments}} style={styles.imageAttachRoom}/>
+
 
 
 

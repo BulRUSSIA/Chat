@@ -14,7 +14,7 @@ export class Pattern_message2 extends React.Component {
     render() {
 
 
-        return  <TouchableOpacity onPress={() => this.props.Action_Nick(this.props.user)}>
+        return  (
 
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(192,226,226,0.6)'}}>
@@ -35,9 +35,10 @@ export class Pattern_message2 extends React.Component {
                 </Text>
 
 
+
             </View>
 
-        </TouchableOpacity>
+    )
 
     }
 }

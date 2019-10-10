@@ -57,9 +57,11 @@ const styles = StyleSheet.create({
     },
     prices: {
         fontSize: 18,
-        flex: 1,
 
-        marginLeft: 0,
+
+
+
+
         padding: 1,
 
 
@@ -462,11 +464,22 @@ const styles = StyleSheet.create({
     },
     symbols: {
         fontSize: 18,
-        textAlign: 'center',
-        paddingLeft: 50,
+       flex:1,
 
 
+
+
+    },
+
+    emoji: {
+
+
+
+
+
+       marginBottom:'3%',
         flex: 1
+
 
     },
 

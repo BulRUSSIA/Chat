@@ -23,7 +23,9 @@ export class TextInput_Chatting extends React.Component {
             paddingVertical: 3,
         backgroundColor:'#ffffff'}}>
 
-            <TouchableOpacity style={{justifyContent: 'center',
+            <TouchableOpacity
+
+                style={{justifyContent: 'center',
                 alignItems: 'center',
                 marginLeft: 1,
                 paddingLeft:21,
@@ -45,6 +47,7 @@ export class TextInput_Chatting extends React.Component {
                        placeholder='Сообщение             '
                        keyboardType='default'
                        multiline={true}
+                       
 
 
                        onChangeText={(text) => this.props.add_text(text)}

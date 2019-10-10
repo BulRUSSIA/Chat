@@ -6,6 +6,9 @@ import {
 
 import React from "react";
 import styles from "../../styles";
+import {Emoji} from "emoji-mart-native";
+
+
 
 
 export class Pattern_message1 extends React.Component {
@@ -18,6 +21,7 @@ export class Pattern_message1 extends React.Component {
 
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#efefef'}}>
+
 
 
                 <Image source={{uri:  this.props.avatars}} style={styles.imageView}/>

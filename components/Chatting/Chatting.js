@@ -5,7 +5,7 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-
+    Text,
     Keyboard, ActivityIndicator,
 } from 'react-native';
 import menusmiles from '../const/smiles'
@@ -38,6 +38,9 @@ import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_modera
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
+import {Emoji} from "emoji-mart-native";
+import {getEmojiDataFromNative} from "emoji-mart";
+import data from 'emoji-mart-native/data/apple.json'
 
 
 const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
@@ -68,7 +71,9 @@ export default class Chatting extends React.Component {
             animating: true,
             photo: false,
             attachments: 'Not',
-            modal_indicator:false,
+            modal_indicator: false,
+            emojies_action: false,
+
 
 
         };
@@ -191,7 +196,7 @@ export default class Chatting extends React.Component {
 
         }
         if (position === 'Написать Личное') {
-//Исправить пропсы ник не находит
+//Исправить пропсы ник не находит (сделано)
             this.Change_Visible_Action();
             const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
             const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
@@ -308,6 +313,8 @@ export default class Chatting extends React.Component {
             }
         );
 
+
+
         if (this.state.animating) {
 
             await this.setState({animating: !this.state.animating});
@@ -328,6 +335,8 @@ export default class Chatting extends React.Component {
     }
 
     componentDidMount = () => {
+
+
         if (this.props.type_user === 2 || this.props.type_user === 4) {
 
             this.setState({action_nick: list_moder})
@@ -349,11 +358,9 @@ export default class Chatting extends React.Component {
             return (
 
 
-                    <ActivityIndicator
-                        size='large'
-                        animating={this.state.modal_indicator}/>
-
-
+                <ActivityIndicator
+                    size='large'
+                    animating={this.state.modal_indicator}/>
 
 
             )
@@ -508,14 +515,11 @@ export default class Chatting extends React.Component {
             await this.handleChoosePhoto();
 
 
-
-
-
         }
 
     };
 
-    handleChoosePhoto =  () => {
+    handleChoosePhoto = () => {
         const options = {
             noData: true,
         };
@@ -535,40 +539,40 @@ export default class Chatting extends React.Component {
         });
 
 
-
-
-
     };
 
     close_attach = () => {
 
-    this.setState({photo:null})
+        this.setState({photo: null})
 
     };
 
-    view = () =>{
+    view = () => {
 
         if (this.state.photo) {
 
-          return(
-           <Attachments_preview
-              photo={this.state.photo}
-              close_attach={this.close_attach}
+            return (
+                <Attachments_preview
+                    photo={this.state.photo}
+                    close_attach={this.close_attach}
 
-           />
-          )
+                />
+            )
         }
     };
 
     send_photo = async () => {
-        this.setState({modal_indicator:true});
+        this.setState({modal_indicator: true});
         const attach = await SEND_PHOTO_request(this.state.photo);
         this.setState({attachments: attach});
-        console.log('attach123' +attach)
-        this.setState({modal_indicator:false});
+        console.log('attach123' + attach);
+        this.setState({modal_indicator: false});
 
 
     };
+
+
+
 
     showAlert = () => {
 
@@ -627,33 +631,28 @@ export default class Chatting extends React.Component {
 
     send_msg = async () => {
 
-       if (this.state.photo) {
-           await Keyboard.dismiss();
-           await this.send_photo();
-           //    if (this.state.text !=='') {
-           await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
+        if (this.state.photo) {
+            await Keyboard.dismiss();
+            await this.send_photo();
+            //    if (this.state.text !=='') {
+            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
 
-           await this.setState({
+            await this.setState({
 
-               text: '', attachments: 'Not', photo: false
-
-
-           });
-           await this.update_msg();
+                text: '', attachments: 'Not', photo: false
 
 
+            });
+            await this.update_msg();
 
 
-
-       }
-
-       else
+        } else
 
 
         //    if (this.state.text !=='') {
 
-      await Keyboard.dismiss();
-       await  request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+            await Keyboard.dismiss();
+        await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
         await this.setState({
 
             text: '',
@@ -662,8 +661,6 @@ export default class Chatting extends React.Component {
         });
 
         await this.update_msg();
-
-
 
 
         //   }
@@ -689,8 +686,9 @@ export default class Chatting extends React.Component {
         let avatars = item.avatars;
         let message = item.message;
 
-        if (name) {
 
+        if (name) {
+            console.log('pattern1');
 
             return (
 
@@ -711,13 +709,13 @@ export default class Chatting extends React.Component {
 
 
         } else if (server === '') {
-
+            console.log('pattern2');
 
             return (
 
                 <Pattern_message2
 
-                    Action_Nick={this.Action_Nick}
+
                     user={server}
                     message={message}
 
@@ -729,7 +727,7 @@ export default class Chatting extends React.Component {
 
 
         } else if (attch.length > 5) {
-
+            console.log('pattern3');
 
             return (
 
@@ -749,13 +747,13 @@ export default class Chatting extends React.Component {
 
             )
         } else if (item.message.startsWith('\b\tзашел') || (item.message.startsWith('\b\tвышел') || (item.message.startsWith('\b\tзашла') || (item.message.startsWith('\b\tвышла') === true)))) {
-
+            console.log('pattern4');
 
             return (
 
                 <Pattern_message4
 
-                    Action_Nick={this.Action_Nick}
+
                     user={server}
                     _class={_class}
                     message={message}
@@ -767,7 +765,7 @@ export default class Chatting extends React.Component {
             )
 
         } else if ((item.avatars.slice(-1,).startsWith('g') === true) || (item.avatars.slice(-1,).startsWith('/')) === true) {
-
+            console.log('pattern5');
 
             return (
 
@@ -799,6 +797,7 @@ export default class Chatting extends React.Component {
                     message={message}
 
 
+
                 />
 
 
@@ -812,7 +811,6 @@ export default class Chatting extends React.Component {
 
 
     render() {
-
 
 
         if (this.state.animating) {
