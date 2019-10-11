@@ -5,7 +5,7 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-    Text,
+
     Keyboard, ActivityIndicator,
 } from 'react-native';
 import menusmiles from '../const/smiles'
@@ -38,11 +38,6 @@ import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_modera
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
-import {Emoji} from "emoji-mart-native";
-import {getEmojiDataFromNative} from "emoji-mart";
-import data from 'emoji-mart-native/data/apple.json'
-
-
 const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
 const list_user = ['Ответить', 'Написать Личное', 'Профиль', 'Добавить в друзья'];
 export default class Chatting extends React.Component {
@@ -69,41 +64,37 @@ export default class Chatting extends React.Component {
             isVisibleList: false,
             showAlert: false,
             animating: true,
-            photo: false,
+            photo_attachments: false,
             attachments: 'Not',
             modal_indicator: false,
-            emojies_action: false,
-
 
 
         };
-
-        this.Change_Visible_List = this.Change_Visible_List.bind(this);
 
 
     }
 
 
-    add_text = (text) => {
+    add_text = async (text) => {
 
 
-        this.setState({text: text})
+        await this.setState({text: text})
 
 
     };
 
 
-    Change_Visible_List() {
+    Change_Visible_List = async () => {
 
-        this.setState({isVisibleList: !this.state.isVisibleList});
-
-
-    }
-
-    Change_Visible_Action = () => {
+        await this.setState({isVisibleList: !this.state.isVisibleList});
 
 
-        this.setState({isVisible: !this.state.isVisible});
+    };
+
+    Change_Visible_Action = async () => {
+
+
+        await this.setState({isVisible: !this.state.isVisible});
 
 
     };
@@ -116,16 +107,16 @@ export default class Chatting extends React.Component {
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
-            photo: attach,
+            photo_attachments: attach,
 
         });
 
 
     };
-    Action_Nick = (user) => {
+    Action_Nick = async (user) => {
 
 
-        this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible});
+        await this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible});
 
 
     };
@@ -144,13 +135,13 @@ export default class Chatting extends React.Component {
 
         if (position === 'Добавить в друзья') {
             Alert.alert('Раздел недоступен')
-            this.Change_Visible_Action()
+           await this.Change_Visible_Action()
 
         }
 
 
         if (position === 'Бан 5 минут') {
-            this.Change_Visible_Action();
+          await  this.Change_Visible_Action();
             console.log('ban 5 minutes');
             console.log(this.props.nic);
 
@@ -160,7 +151,7 @@ export default class Chatting extends React.Component {
         }
 
         if (position === 'Бан 15 минут') {
-            this.Change_Visible_Action();
+         await   this.Change_Visible_Action();
             console.log('ban 15  minutes');
             console.log(this.props.nic);
 
@@ -170,7 +161,7 @@ export default class Chatting extends React.Component {
         }
 
         if (position === 'Бан 60 минут') {
-            this.Change_Visible_Action();
+         await   this.Change_Visible_Action();
             console.log('ban 60 minutes');
             console.log(this.props.nic);
 
@@ -179,7 +170,7 @@ export default class Chatting extends React.Component {
 
         }
         if (position === 'Бан 120 минут') {
-            this.Change_Visible_Action();
+         await   this.Change_Visible_Action();
             console.log('ban 120 minutes');
             console.log(this.props.nic);
 
@@ -196,8 +187,8 @@ export default class Chatting extends React.Component {
 
         }
         if (position === 'Написать Личное') {
-//Исправить пропсы ник не находит (сделано)
-            this.Change_Visible_Action();
+//Исправить пропсы ник не находит
+          await  this.Change_Visible_Action();
             const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
             const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
 
@@ -221,7 +212,7 @@ export default class Chatting extends React.Component {
         if (position === 'Профиль') {
 
 
-            this.Change_Visible_Action();
+         await   this.Change_Visible_Action();
             const profile_info = await request_GET_PROFILE(this.state.user_now);
             const gifts = await request_GET_GIFTS(this.state.user_now);
 
@@ -313,8 +304,6 @@ export default class Chatting extends React.Component {
             }
         );
 
-
-
         if (this.state.animating) {
 
             await this.setState({animating: !this.state.animating});
@@ -335,8 +324,6 @@ export default class Chatting extends React.Component {
     }
 
     componentDidMount = () => {
-
-
         if (this.props.type_user === 2 || this.props.type_user === 4) {
 
             this.setState({action_nick: list_moder})
@@ -453,7 +440,7 @@ export default class Chatting extends React.Component {
             }
 
 
-            await router.push.Profile_redactor({
+            router.push.Profile_redactor({
 
                 room: this.props.room,
                 nic: this.props.nic,
@@ -525,7 +512,7 @@ export default class Chatting extends React.Component {
         };
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
-                this.setState({photo: response});
+                this.setState({photo_attachments: response});
                 Alert.alert("фото успешно загружено!\nЖмите кнопку отправить");
 
                 this.componentWillUnmount();
@@ -543,17 +530,17 @@ export default class Chatting extends React.Component {
 
     close_attach = () => {
 
-        this.setState({photo: null})
+        this.setState({photo_attachments: false})
 
     };
 
     view = () => {
 
-        if (this.state.photo) {
+        if (this.state.photo_attachments) {
 
             return (
                 <Attachments_preview
-                    photo={this.state.photo}
+                    photo={this.state.photo_attachments}
                     close_attach={this.close_attach}
 
                 />
@@ -563,16 +550,12 @@ export default class Chatting extends React.Component {
 
     send_photo = async () => {
         this.setState({modal_indicator: true});
-        const attach = await SEND_PHOTO_request(this.state.photo);
+        const attach = await SEND_PHOTO_request(this.state.photo_attachments);
         this.setState({attachments: attach});
-        console.log('attach123' + attach);
         this.setState({modal_indicator: false});
 
 
     };
-
-
-
 
     showAlert = () => {
 
@@ -631,7 +614,7 @@ export default class Chatting extends React.Component {
 
     send_msg = async () => {
 
-        if (this.state.photo) {
+        if (this.state.photo_attachments) {
             await Keyboard.dismiss();
             await this.send_photo();
             //    if (this.state.text !=='') {
@@ -639,7 +622,7 @@ export default class Chatting extends React.Component {
 
             await this.setState({
 
-                text: '', attachments: 'Not', photo: false
+                text: '', attachments: 'Not', photo_attachments: false
 
 
             });
@@ -686,9 +669,8 @@ export default class Chatting extends React.Component {
         let avatars = item.avatars;
         let message = item.message;
 
-
         if (name) {
-            console.log('pattern1');
+
 
             return (
 
@@ -709,13 +691,13 @@ export default class Chatting extends React.Component {
 
 
         } else if (server === '') {
-            console.log('pattern2');
+
 
             return (
 
                 <Pattern_message2
 
-
+                    Action_Nick={this.Action_Nick}
                     user={server}
                     message={message}
 
@@ -727,7 +709,7 @@ export default class Chatting extends React.Component {
 
 
         } else if (attch.length > 5) {
-            console.log('pattern3');
+
 
             return (
 
@@ -747,13 +729,13 @@ export default class Chatting extends React.Component {
 
             )
         } else if (item.message.startsWith('\b\tзашел') || (item.message.startsWith('\b\tвышел') || (item.message.startsWith('\b\tзашла') || (item.message.startsWith('\b\tвышла') === true)))) {
-            console.log('pattern4');
+
 
             return (
 
                 <Pattern_message4
 
-
+                    Action_Nick={this.Action_Nick}
                     user={server}
                     _class={_class}
                     message={message}
@@ -765,7 +747,7 @@ export default class Chatting extends React.Component {
             )
 
         } else if ((item.avatars.slice(-1,).startsWith('g') === true) || (item.avatars.slice(-1,).startsWith('/')) === true) {
-            console.log('pattern5');
+
 
             return (
 
@@ -795,7 +777,6 @@ export default class Chatting extends React.Component {
                     _class={_class}
                     avatars={avatars}
                     message={message}
-
 
 
                 />
@@ -912,3 +893,4 @@ export default class Chatting extends React.Component {
 
     }
 }
+

@@ -5,10 +5,7 @@ import {
 
 import React from "react";
 import styles from "../../styles";
-import {Emoji} from "emoji-mart-native";
-import { getEmojiDataFromNative } from 'emoji-mart-native'
-import data from 'emoji-mart-native/data/apple.json'
-const emojiData = getEmojiDataFromNative('💰', 'apple', data)
+
 export class Pattern_message5 extends React.Component {
 
 
