@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
 
     },
     prices: {
-        fontSize: 18,
+        fontSize: 22,
 
 
 
 
 
-        padding: 1,
+
 
 
 
@@ -229,8 +229,8 @@ const styles = StyleSheet.create({
 
     imageView: {
 
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         paddingBottom: 12,
         marginBottom: 5,
         borderRadius: 7,
@@ -283,12 +283,13 @@ const styles = StyleSheet.create({
 
     imageViewAvatars: {
 
-        width: 35,
-        height: 35,
+        width: 50,
+        height: 70,
 
 
         resizeMode: 'contain',
         marginLeft:5,
+        marginTop:5
 
 
     },
@@ -463,8 +464,14 @@ const styles = StyleSheet.create({
 
     },
     symbols: {
-        fontSize: 18,
-       flex:1,
+
+        fontSize: 22,
+       flex:2,
+        marginBottom:'1%',
+        paddingLeft:'2%',
+        paddingRight:'2%',
+
+
 
 
 
@@ -477,8 +484,9 @@ const styles = StyleSheet.create({
 
 
 
-       marginBottom:'3%',
-        flex: 1
+
+        flex:3,
+
 
 
     },

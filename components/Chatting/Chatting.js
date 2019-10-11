@@ -124,7 +124,7 @@ export default class Chatting extends React.Component {
 
     Action_nick_selected = async (position) => {
         if (position === 'Напугать') {
-            this.Change_Visible_Action();
+          await  this.Change_Visible_Action();
             console.log('0');
             console.log(this.props.nic);
 

@@ -25,7 +25,7 @@ export class Pattern_message4 extends React.Component {
                 >
                     {this.props.user}
 
-                    <Text style={[{fontSize:18,fontWeight: 'bold'}, {color: this.props._class}]}
+                    <Text style={[{fontSize:20,fontWeight: 'bold'}, {color: this.props._class}]}
                     >
 
                         {this.props.message}
