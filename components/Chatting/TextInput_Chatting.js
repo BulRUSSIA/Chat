@@ -24,6 +24,7 @@ export class TextInput_Chatting extends React.Component {
         backgroundColor:'#ffffff'}}>
 
             <TouchableOpacity
+                onPress={()=> this.props.show()}
 
                 style={{justifyContent: 'center',
                 alignItems: 'center',

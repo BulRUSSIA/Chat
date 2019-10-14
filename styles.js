@@ -466,10 +466,10 @@ const styles = StyleSheet.create({
     symbols: {
 
         fontSize: 22,
-       flex:2,
-        marginBottom:'1%',
-        paddingLeft:'2%',
-        paddingRight:'2%',
+       flex:3,
+
+        paddingLeft:'3%',
+        paddingRight:'3%',
 
 
 
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
 
 
 
-        flex:3,
+        flex:1,
 
 
 

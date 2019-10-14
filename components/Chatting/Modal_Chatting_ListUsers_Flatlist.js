@@ -69,7 +69,7 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
 //
 //
 //                                       </Text>
-                                                <TouchableOpacity onPress={() => this.props.action_nick(item.user)}>
+                                                <TouchableOpacity onPress={() => this.props.action_nick(item.user,item.user_id)}>
                                                     <View style={{
                                                         flex: 1, flexDirection: 'row',
                                                     }}>

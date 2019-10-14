@@ -6,7 +6,6 @@ import {
 
 import React from "react";
 import styles from "../../styles";
-import {Emoji} from "emoji-mart-native";
 
 
 
@@ -17,10 +16,10 @@ export class Pattern_message1 extends React.Component {
     render() {
 
 
-        return <TouchableOpacity onPress={() => this.props.Action_Nick(this.props.user)}>
+        return <TouchableOpacity onPress={() => this.props.Action_Nick(this.props.user,this.props.user_id)}>
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#efefef'}}>
+            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#bceaef'}}>
 
 
 
@@ -39,7 +38,6 @@ export class Pattern_message1 extends React.Component {
                     </Text>
 
                 </Text>
-
 
             </View>
 

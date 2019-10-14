@@ -5,8 +5,8 @@ import {
 
 import React from "react";
 import styles from "../../styles";
-import {Emoji} from "emoji-mart-native";
-
+import {Dimensions} from "react-native";
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 export class Pattern_message3 extends React.Component {
 
@@ -17,36 +17,36 @@ export class Pattern_message3 extends React.Component {
 
         return(
 
-        <View style={{flex: 1, flexDirection: 'row'}}>
-            <Image source={{uri: this.props.avatars}} style={styles.imageView}/>
-            <Text style={[styles.prices2, {color: this.props._class}]}
-
-            >
-                {this.props.user}:
-
+            <View style={{flex: 1, flexDirection: 'row'}}>
+                <Image source={{uri: this.props.avatars}} style={styles.imageView}/>
                 <Text style={[styles.prices2, {color: this.props._class}]}
-                >
-                    {this.props.message}
 
+                >
+                    {this.props.user}:
+
+                    <Text style={[styles.prices2, {color: this.props._class}]}
+                    >
+                        {this.props.message}
+
+
+                    </Text>
 
                 </Text>
 
-            </Text>
 
 
+                <TouchableOpacity
+                    style={{ resizeMode:'scretch',  justifyContent:'center',
+                        alignContent:'center', borderColor: '#25566e',
+                        borderWidth: 16,
 
-            <TouchableOpacity
-                style={{ resizeMode:'scretch',  justifyContent:'center',
-                    alignContent:'center', borderColor: '#25566e',
-                    borderWidth: 16,
+                        backgroundColor: '#25566e',
+                        borderRadius: 25,
+                        marginTop: '20%',
+                        marginBottom:'19%',
 
-                    backgroundColor: '#25566e',
-                    borderRadius: 25,
-                    marginTop: '20%',
-                    marginBottom:'19%',
-
-                   right:'25%'}}
-                onPress={() => this.props.view_attach(this.props.attachments)}>
+                        right:screenWidth/2}}
+                    onPress={() => this.props.view_attach(this.props.attachments)}>
 
 
 
@@ -56,10 +56,10 @@ export class Pattern_message3 extends React.Component {
 
 
 
-            </TouchableOpacity>
+                </TouchableOpacity>
 
-        </View>
+            </View>
 
-    )
+        )
     }
 }

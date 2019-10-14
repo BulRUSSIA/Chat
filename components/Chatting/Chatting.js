@@ -5,8 +5,9 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
+    Text,
 
-    Keyboard, ActivityIndicator,
+    Keyboard, ActivityIndicator, FlatList, TouchableOpacity, Image,
 } from 'react-native';
 import menusmiles from '../const/smiles'
 import menuitem from '../const/menu'
@@ -38,6 +39,8 @@ import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_modera
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
+import emoticons_value from "../const/Flat_Emoji_Value";
+
 const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
 const list_user = ['Ответить', 'Написать Личное', 'Профиль', 'Добавить в друзья'];
 export default class Chatting extends React.Component {
@@ -67,6 +70,8 @@ export default class Chatting extends React.Component {
             photo_attachments: false,
             attachments: 'Not',
             modal_indicator: false,
+            user_id: '',
+            ShowSmiles: false,
 
 
         };
@@ -77,8 +82,19 @@ export default class Chatting extends React.Component {
 
     add_text = async (text) => {
 
+        console.log(text);
+        await this.setState({text: text});
+        console.log(this.state.text + 'textttt');
 
-        await this.setState({text: text})
+
+    };
+
+    add_emoji = async (emoji) => {
+
+
+
+
+        await   await this.setState({text: this.state.text + emoji});
 
 
     };
@@ -113,10 +129,10 @@ export default class Chatting extends React.Component {
 
 
     };
-    Action_Nick = async (user) => {
+    Action_Nick = async (user, user_id) => {
 
 
-        await this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible});
+        this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible, user_id: user_id});
 
 
     };
@@ -124,57 +140,58 @@ export default class Chatting extends React.Component {
 
     Action_nick_selected = async (position) => {
         if (position === 'Напугать') {
-          await  this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             console.log('0');
             console.log(this.props.nic);
 
-            await request_SEND_BANNED_ACTION(0, this.state.user_now, this.props.nic);
+            await request_SEND_BANNED_ACTION(0, this.state.user_id, this.props.nic);
 
 
         }
 
         if (position === 'Добавить в друзья') {
             Alert.alert('Раздел недоступен')
-           await this.Change_Visible_Action()
+            await this.Change_Visible_Action()
 
         }
 
 
         if (position === 'Бан 5 минут') {
-          await  this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             console.log('ban 5 minutes');
             console.log(this.props.nic);
+            console.log(this.state.user_id)
 
-            await request_SEND_BANNED_ACTION(0.05, this.state.user_now, this.props.nic);
+            await request_SEND_BANNED_ACTION(0.05, this.state.user_id, this.props.nic);
 
 
         }
 
         if (position === 'Бан 15 минут') {
-         await   this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             console.log('ban 15  minutes');
             console.log(this.props.nic);
 
-            await request_SEND_BANNED_ACTION(0.25, this.state.user_now, this.props.nic);
+            await request_SEND_BANNED_ACTION(0.25, this.state.user_id, this.props.nic);
 
 
         }
 
         if (position === 'Бан 60 минут') {
-         await   this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             console.log('ban 60 minutes');
             console.log(this.props.nic);
 
-            await request_SEND_BANNED_ACTION(1, this.state.user_now, this.props.nic);
+            await request_SEND_BANNED_ACTION(1, this.state.this.state.user_id, this.props.nic);
 
 
         }
         if (position === 'Бан 120 минут') {
-         await   this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             console.log('ban 120 minutes');
             console.log(this.props.nic);
 
-            await request_SEND_BANNED_ACTION(2, this.state.user_now, this.props.nic);
+            await request_SEND_BANNED_ACTION(2, this.state.this.state.user_id, this.props.nic);
 
 
         }
@@ -188,7 +205,7 @@ export default class Chatting extends React.Component {
         }
         if (position === 'Написать Личное') {
 //Исправить пропсы ник не находит
-          await  this.Change_Visible_Action();
+            await this.Change_Visible_Action();
             const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
             const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
 
@@ -212,9 +229,9 @@ export default class Chatting extends React.Component {
         if (position === 'Профиль') {
 
 
-         await   this.Change_Visible_Action();
-            const profile_info = await request_GET_PROFILE(this.state.user_now);
-            const gifts = await request_GET_GIFTS(this.state.user_now);
+            await this.Change_Visible_Action();
+            const profile_info = await request_GET_PROFILE(this.state.user_id);
+            const gifts = await request_GET_GIFTS(this.state.user_id);
 
 
             const {router} = this.props;
@@ -368,7 +385,7 @@ export default class Chatting extends React.Component {
         if (position === 0) {
             if (!this.state.animating) {
 
-                await this.setState({animating: !this.state.animating});
+                this.setState({animating: !this.state.animating});
                 this.componentWillUnmount();
                 this.componentDidMount();
 
@@ -377,7 +394,7 @@ export default class Chatting extends React.Component {
             const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
 
             const {router} = this.props;
-            await router.push.Private_List({
+            router.push.Private_List({
                 profile_user: this.state.user_now,
                 room: this.props.room,
                 nic: this.props.nic,
@@ -389,7 +406,7 @@ export default class Chatting extends React.Component {
 
             });
             this.componentWillUnmount();
-            await this.setState({animating: !this.state.animating});
+            this.setState({animating: !this.state.animating});
 
         }
 
@@ -419,7 +436,7 @@ export default class Chatting extends React.Component {
         if (position === 3) {
 
 
-            const profile_info = await request_GET_PROFILE(this.props.chat_name);
+            const profile_info = await request_GET_PROFILE(this.props.nic);
             const a = profile_info.data;
             const {router} = this.props;
             for (let i = 0; i < a.length; i++) {
@@ -459,7 +476,7 @@ export default class Chatting extends React.Component {
         }
         if (position === 4) {
 
-            const profile_info = await request_GET_PROFILE(this.props.chat_name);
+            const profile_info = await request_GET_PROFILE(this.props.nic);
             const a = profile_info.data;
             const {router} = this.props;
             for (let i = 0; i < a.length; i++) {
@@ -530,7 +547,7 @@ export default class Chatting extends React.Component {
 
     close_attach = () => {
 
-        this.setState({photo_attachments: false})
+        this.setState({photo_attachments: false,})
 
     };
 
@@ -547,6 +564,63 @@ export default class Chatting extends React.Component {
             )
         }
     };
+
+    ListSmileAction = () => {
+
+
+        if (this.state.ShowSmiles) {
+            Keyboard.dismiss();
+
+            return (
+
+
+                <View style={{backgroundColor:'#25566e',alignItems:'center'}}
+
+
+                >
+                    <FlatList
+
+
+           numColumns={10}
+                        data={emoticons_value}
+
+
+                        renderItem={(({item}) =>
+
+                                <TouchableOpacity onPress={() => this.add_emoji(item.value)}>
+                                    <View style={{flex: 1, flexDirection: 'column', margin: 3}}>
+
+                                        <Image style={{width:30,height:30,resizeMode: 'contain',marginTop:'1%'}} source={item.url}/>
+
+
+                                    </View>
+                                </TouchableOpacity>
+                        )
+                        }
+
+
+                        keyExtractor={(item, index) => index.toString()}
+
+
+
+                    />
+                </View>
+
+            )
+
+
+        }
+
+
+    };
+
+    ShowSmiles = () => {
+        console.log('smile activeis-',this.state.ShowSmiles);
+        this.setState({
+            ShowSmiles: !this.state.ShowSmiles});
+
+    };
+
 
     send_photo = async () => {
         this.setState({modal_indicator: true});
@@ -668,6 +742,7 @@ export default class Chatting extends React.Component {
         let _class = item._class;
         let avatars = item.avatars;
         let message = item.message;
+        let user_id = item.user_id
 
         if (name) {
 
@@ -682,6 +757,7 @@ export default class Chatting extends React.Component {
                     _class={_class}
                     avatars={avatars}
                     message={message}
+                    user_id={user_id}
 
 
                 />
@@ -716,12 +792,13 @@ export default class Chatting extends React.Component {
 
                 <Pattern_message3
 
-                    user={server}
+
                     _class={_class}
                     avatars={avatars}
                     message={message}
                     attachments={attch}
                     view_attach={this.View_full_photo}
+                    user={server}
 
 
                 />
@@ -753,7 +830,7 @@ export default class Chatting extends React.Component {
 
 
                 <Pattern_message5
-
+                    user_id={user_id}
                     Action_Nick={this.Action_Nick}
                     user={server}
                     _class={_class}
@@ -771,7 +848,7 @@ export default class Chatting extends React.Component {
 
 
                 <Pattern_message6
-
+                    user_id={user_id}
                     Action_Nick={this.Action_Nick}
                     user={server}
                     _class={_class}
@@ -798,7 +875,7 @@ export default class Chatting extends React.Component {
 
             return (
 
-                <ImageBackground source={require('../Image/Chattingbackground.webp')}
+                <ImageBackground source={require('../Image/whatsap.png')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <Toolbar_Chatting select={this.onActionSelected.bind(this)}
@@ -824,7 +901,7 @@ export default class Chatting extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/Chattingbackground.webp')}
+                <ImageBackground source={require('../Image/whatsap.png')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <Toolbar_Chatting select={this.onActionSelected.bind(this)}
@@ -876,13 +953,15 @@ export default class Chatting extends React.Component {
 
 
                     <TextInput_Chatting
+                        show={this.ShowSmiles}
                         add_text={this.add_text}
                         send_msg={this.send_msg}
                         text={this.state.text}
 
 
-                    />
 
+                    />
+                    {this.ListSmileAction()}
                 </ImageBackground>
 
 
