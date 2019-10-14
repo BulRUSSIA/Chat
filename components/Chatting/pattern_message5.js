@@ -1,12 +1,13 @@
 import {
+
     Image,
     Text, TouchableOpacity,
-    View
+    View,Dimensions
 } from "react-native";
 
 import React from "react";
 import styles from "../../styles";
-import emoticons from "../const/EmojiObject";
+import emoticons from '../const/EmojiObject'
 
 export class Pattern_message5 extends React.Component {
 
@@ -15,12 +16,10 @@ export class Pattern_message5 extends React.Component {
         let text = this.props.message;
         return text.split(/([\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
             if (!elem) return null;
-            //   if (elem.match((/(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/g))) {
-            //      const emojiData = getEmojiDataFromNative(`${elem}`, 'apple', data);
             if ((emoticons[elem]))
                 return (
 
-                    <Image style={{width:22,height:22,resizeMode: 'contain',marginTop:'1%'}} source={emoticons[elem]}/>
+                    <Image style={{width:20,height:20,resizeMode: 'contain',marginTop:'1%'}} source={emoticons[elem]}/>
 
 
                 );
@@ -28,9 +27,18 @@ export class Pattern_message5 extends React.Component {
 
 
                 return (
-                    <View>
-                        <Text style={[styles.symbols, {color: this.props._class}]}>{elem}</Text>
-                    </View>
+
+                    <Text style={{
+
+                        fontSize: 22,
+                        flex:1,
+
+
+
+
+
+                        color: this.props._class}}>{elem}</Text>
+
 
                 )
 
@@ -45,28 +53,22 @@ export class Pattern_message5 extends React.Component {
     render() {
 
 
-        return <TouchableOpacity style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}
-                                 onPress={() => this.props.Action_Nick(this.props.user,this.props.user_id)}>
+        return      <TouchableOpacity style={{flex:1,width:'94%',height:'100%'}} onPress={() => this.props.Action_Nick(this.props.user)}>
 
 
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-
-            }}>
+            <View style={{flex: 1, flexDirection: 'row',}}>
 
 
-                <View>
-                    <Text style={[styles.prices, {color: this.props._class}]}
 
-                    >
 
-                        {this.props.user}:
-                    </Text>
-                </View>
+                <Text style={[styles.prices, {color: this.props._class}]}
 
-                {this.ParsedText()}
+                >
+                    {this.props.user}:
+
+                    {this.ParsedText()}
+
+                </Text>
 
 
             </View>

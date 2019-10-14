@@ -1,7 +1,8 @@
 import {
+
     Image,
     Text, TouchableOpacity,
-    View
+    View,Dimensions
 } from "react-native";
 
 import React from "react";
@@ -18,7 +19,7 @@ export class Pattern_message6 extends React.Component {
                 if ((emoticons[elem]))
                     return (
 
-                        <Image style={{width:22,height:22,resizeMode: 'contain',marginTop:'1%'}} source={emoticons[elem]}/>
+                        <Image style={{width:20,height:20,resizeMode: 'cover',marginTop:'2%',paddingBottom:'1%'}} source={emoticons[elem]}/>
 
 
                     );
@@ -26,9 +27,16 @@ export class Pattern_message6 extends React.Component {
 
 
                 return (
-<View>
-                    <Text style={[styles.symbols, {color: this.props._class}]}>{elem}</Text>
-</View>
+
+                    <Text style={{
+
+                        fontSize: 22,
+                        flex:1,
+
+
+
+                        color: this.props._class}}>{elem}</Text>
+
 
                 )
 
@@ -43,30 +51,22 @@ export class Pattern_message6 extends React.Component {
     render() {
 
 
-        return <TouchableOpacity style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}
-                                 onPress={() => this.props.Action_Nick(this.props.user,this.props.user_id)}>
+        return      <TouchableOpacity style={{flex:1,width:'85%',height:'100%'}} onPress={() => this.props.Action_Nick(this.props.user)}>
 
 
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
+            <View style={{flex: 1, flexDirection: 'row',}}>
 
-            }}>
 
-                <View>
-                    <Image source={{uri: this.props.avatars}} style={styles.imageView}/>
-                </View>
-                <View>
-                    <Text style={[styles.prices, {color: this.props._class}]}
+                <Image source={{uri: this.props.avatars}} style={styles.imageView}/>
 
-                    >
+                <Text style={[styles.prices, {color: this.props._class}]}
 
-                        {this.props.user}:
-                    </Text>
-                </View>
+                >
+                    {this.props.user}:
 
-                {this.ParsedText()}
+                    {this.ParsedText()}
+
+                </Text>
 
 
             </View>
