@@ -2,14 +2,17 @@ import {
     Image,
 
     TextInput,
-
+   Dimensions,
     TouchableOpacity,
     View
 } from "react-native";
 
 import React from "react";
+import smile_image from '../Image/smile-256x256.png'
+import keyboard_image from '../Image/android-keyboard-icon-25.jpg'
 
 
+const screenWidth = Math.round(Dimensions.get('window').width);
 export class TextInput_Chatting extends React.Component {
 
 
@@ -24,7 +27,11 @@ export class TextInput_Chatting extends React.Component {
         backgroundColor:'#ffffff'}}>
 
             <TouchableOpacity
-                onPress={()=> this.props.show()}
+                onPress={()=> {{
+
+                    if(this.props.active) {
+                        this.secondTextInput.focus()
+                    } this.props.show()}}}
 
                 style={{justifyContent: 'center',
                 alignItems: 'center',
@@ -35,7 +42,7 @@ export class TextInput_Chatting extends React.Component {
                 backgroundColor: '#ffffff'}} >
                 <Image
                     style={{width: 30, height: 30, marginTop: 5,}}
-                    source={require('../Image/smile-256x256.png')}/>
+                    source={this.props.active ===  false ? smile_image : keyboard_image}/>
             </TouchableOpacity>
 
             <TextInput style={{
@@ -48,7 +55,9 @@ export class TextInput_Chatting extends React.Component {
                        placeholder='Сообщение             '
                        keyboardType='default'
                        multiline={true}
-                       
+
+
+                       ref={(input)=> this.secondTextInput = input}
 
 
                        onChangeText={(text) => this.props.add_text(text)}
@@ -69,12 +78,13 @@ export class TextInput_Chatting extends React.Component {
                 paddingLeft:21,
                 paddingRight: 15,
 
+
                 backgroundColor: '#ffffff'}}
 
             >
 
                 <Image
-                    style={{width: 25, height: 25, marginTop: 5,}}
+                    style={{ height: 20, marginTop: 5,width:22,}}
                     source={require('../Image/send_button.webp')}/>
             </TouchableOpacity>
 

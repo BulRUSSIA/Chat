@@ -5,7 +5,7 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-    Text,
+   Dimensions,
 
     Keyboard, ActivityIndicator, FlatList, TouchableOpacity, Image,
 } from 'react-native';
@@ -40,7 +40,7 @@ import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
 import emoticons_value from "../const/Flat_Emoji_Value";
-
+const screenHeight = Math.round(Dimensions.get('window').width);
 const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
 const list_user = ['Ответить', 'Написать Личное', 'Профиль', 'Добавить в друзья'];
 export default class Chatting extends React.Component {
@@ -76,7 +76,9 @@ export default class Chatting extends React.Component {
 
         };
 
-
+        this.keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+        );
     }
 
 
@@ -92,9 +94,7 @@ export default class Chatting extends React.Component {
     add_emoji = async (emoji) => {
 
 
-
-
-        await   await this.setState({text: this.state.text + emoji});
+        await await this.setState({text: this.state.text + emoji});
 
 
     };
@@ -132,7 +132,7 @@ export default class Chatting extends React.Component {
     Action_Nick = async (user, user_id) => {
 
 
-        this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible, user_id: user_id});
+        await this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible, user_id: user_id});
 
 
     };
@@ -574,14 +574,14 @@ export default class Chatting extends React.Component {
             return (
 
 
-                <View style={{backgroundColor:'#25566e',alignItems:'center'}}
+                <View style={{backgroundColor: '#25566e', alignItems: 'center',height:screenHeight-180}}
 
 
                 >
                     <FlatList
 
 
-           numColumns={10}
+                        numColumns={10}
                         data={emoticons_value}
 
 
@@ -590,7 +590,8 @@ export default class Chatting extends React.Component {
                                 <TouchableOpacity onPress={() => this.add_emoji(item.value)}>
                                     <View style={{flex: 1, flexDirection: 'column', margin: 3}}>
 
-                                        <Image style={{width:30,height:30,resizeMode: 'contain',marginTop:'1%'}} source={item.url}/>
+                                        <Image style={{width: 30, height: 30, resizeMode: 'contain', marginTop: '1%'}}
+                                               source={item.url}/>
 
 
                                     </View>
@@ -600,7 +601,6 @@ export default class Chatting extends React.Component {
 
 
                         keyExtractor={(item, index) => index.toString()}
-
 
 
                     />
@@ -614,10 +614,19 @@ export default class Chatting extends React.Component {
 
     };
 
+
+
     ShowSmiles = () => {
-        console.log('smile activeis-',this.state.ShowSmiles);
+
+
+
+
+
         this.setState({
-            ShowSmiles: !this.state.ShowSmiles});
+
+
+            ShowSmiles: !this.state.ShowSmiles
+        });
 
     };
 
@@ -957,7 +966,7 @@ export default class Chatting extends React.Component {
                         add_text={this.add_text}
                         send_msg={this.send_msg}
                         text={this.state.text}
-
+                        active={this.state.ShowSmiles}
 
 
                     />

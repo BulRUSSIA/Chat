@@ -97,6 +97,7 @@ export default class Rooms extends React.Component {
             || (item.room === 'Украина 🇺🇦 ')
             || (item.room === 'Регионы')
             || (item.room === 'Секс')
+            || (item.category==='5da58e010a975a3ece27314a')
         // || (item.category === '5d0342090a975a0b991e6b0d')
 
 
@@ -164,6 +165,7 @@ export default class Rooms extends React.Component {
             || (parent === '5c9a60fd0a975a14c67bcd7c')
             || (parent === '5d12088c0a975a06b5c3483b')
             || (parent === '5d0694370a975a1fec7eaba0')
+            || (parent ==='5da58e010a975a3ece27314a')
             || (parent === '5ca287980a975a5cf7ca1f4d')
             || (event === '\u041c\u0427\u0421')
             || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
