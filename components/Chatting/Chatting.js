@@ -5,10 +5,12 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-   Dimensions,
-
-    Keyboard, ActivityIndicator, FlatList, TouchableOpacity, Image,
+    Keyboard, ActivityIndicator,
 } from 'react-native';
+
+
+import list_moder from '../const/list_moder'
+import list_user from '../const/list_user'
 import menusmiles from '../const/smiles'
 import menuitem from '../const/menu'
 import styles from '../../styles'
@@ -39,10 +41,9 @@ import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_modera
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
-import emoticons_value from "../const/Flat_Emoji_Value";
-const screenHeight = Math.round(Dimensions.get('window').width);
-const list_moder = ['Ответить', 'Написать Личное', 'Профиль', 'Напугать', 'Бан 5 минут', 'Бан 15 минут', 'Бан 60 минут', 'Бан 120 минут'];
-const list_user = ['Ответить', 'Написать Личное', 'Профиль', 'Добавить в друзья'];
+import {Flatlist_smiles_chatting} from "./Flatlist_smiles_chatting";
+
+
 export default class Chatting extends React.Component {
 
 
@@ -68,7 +69,7 @@ export default class Chatting extends React.Component {
             showAlert: false,
             animating: true,
             photo_attachments: false,
-            attachments: 'Not',
+            attachments: 'Not', // Not для back-a
             modal_indicator: false,
             user_id: '',
             ShowSmiles: false,
@@ -76,65 +77,40 @@ export default class Chatting extends React.Component {
 
         };
 
-        this.keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-        );
+
     }
-
-
-    add_text = async (text) => {
+    add_text = async (text) => { // add text to textinput
 
         console.log(text);
         await this.setState({text: text});
         console.log(this.state.text + 'textttt');
-
-
     };
 
-    add_emoji = async (emoji) => {
-
-
+    add_emoji = async (emoji) => {              //add emoji to text
         await await this.setState({text: this.state.text + emoji});
-
-
     };
 
 
     Change_Visible_List = async () => {
-
         await this.setState({isVisibleList: !this.state.isVisibleList});
-
-
     };
 
     Change_Visible_Action = async () => {
-
-
         await this.setState({isVisible: !this.state.isVisible});
-
-
     };
 
-    View_full_photo = async (attach) => {
-
+    View_full_photo = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {router} = this.props;
-
         await router.push.PHOTO_VIEWER({
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
             photo_attachments: attach,
-
         });
-
-
     };
-    Action_Nick = async (user, user_id) => {
 
-
-        await this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible, user_id: user_id});
-
-
+    Action_Nick = async (user, user_id) => { ///Окно что сделать с чаттером передается его ник и его mongoID
+        await this.setState({user_now: user, isVisibleList: false, isVisible: !this.state.isVisible, user_id: user_id});//user_now=ник чаттера, флаги на модалки visible,user_id=его монго id
     };
 
 
@@ -143,10 +119,7 @@ export default class Chatting extends React.Component {
             await this.Change_Visible_Action();
             console.log('0');
             console.log(this.props.nic);
-
             await request_SEND_BANNED_ACTION(0, this.state.user_id, this.props.nic);
-
-
         }
 
         if (position === 'Добавить в друзья') {
@@ -161,55 +134,39 @@ export default class Chatting extends React.Component {
             console.log('ban 5 minutes');
             console.log(this.props.nic);
             console.log(this.state.user_id)
-
             await request_SEND_BANNED_ACTION(0.05, this.state.user_id, this.props.nic);
-
-
         }
 
         if (position === 'Бан 15 минут') {
             await this.Change_Visible_Action();
             console.log('ban 15  minutes');
             console.log(this.props.nic);
-
             await request_SEND_BANNED_ACTION(0.25, this.state.user_id, this.props.nic);
-
-
         }
 
         if (position === 'Бан 60 минут') {
             await this.Change_Visible_Action();
             console.log('ban 60 minutes');
             console.log(this.props.nic);
-
             await request_SEND_BANNED_ACTION(1, this.state.this.state.user_id, this.props.nic);
-
-
         }
+
         if (position === 'Бан 120 минут') {
             await this.Change_Visible_Action();
             console.log('ban 120 minutes');
             console.log(this.props.nic);
-
             await request_SEND_BANNED_ACTION(2, this.state.this.state.user_id, this.props.nic);
-
-
         }
 
 
         if (position === 'Ответить') {
-
             this.setState({isVisible: !this.state.isVisible, text: this.state.user_now + ', '});
-
-
         }
+
         if (position === 'Написать Личное') {
-//Исправить пропсы ник не находит
             await this.Change_Visible_Action();
             const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
             const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
-
-
             const {router} = this.props;
             router.push.Private({
                 profile_user: this.state.user_now,
@@ -219,21 +176,13 @@ export default class Chatting extends React.Component {
                 private_room: get_private,
                 private_chatter: this.state.user_now,
                 private_data: get_private_data,
-
-
             });
-
-
         }
 
         if (position === 'Профиль') {
-
-
             await this.Change_Visible_Action();
             const profile_info = await request_GET_PROFILE(this.state.user_id);
             const gifts = await request_GET_GIFTS(this.state.user_id);
-
-
             const {router} = this.props;
             router.push.Profile({
                 profile_user: this.state.user_now,
@@ -242,73 +191,9 @@ export default class Chatting extends React.Component {
                 user_data: profile_info,
                 chat_name: this.props.chat_name,
                 gift: gifts,
-
-
             });
-
-
         }
     };
-
-
-    //  ban_msg = async () => {
-
-    //  const ban = address + `/banned/room/${this.props.nic}`;
-
-    //   return fetch(ban)
-    //       .then((response) => response.json())
-    //       .then(async (responseJson) => {
-
-
-    //        this.setState({ban: responseJson['user']});
-
-    //        if (this.state.ban === 'banned') {
-
-
-    //         let check = this.props.room;
-
-
-    //         if (check === 'Тюрьма') {
-
-    //   console.log('ok');
-    //   } else {
-
-    //       const {router} = this.props;
-
-
-    //       Alert.alert('Вы были забанены на неопределенный срок');
-    //    router.push.Rooms({
-    //         name: this.props.nic,
-    //          room: 'Тюрьма',
-    //            roomlist: this.state.rooms_Banned,
-    //            recieve: this.props.recieve
-    //        });
-
-    //       await request_ENTRY_USER_ROOM(this.props.nic, this.props.room);
-    //   console.log('prison' + this.props.room)
-
-    //   }
-
-    //   } else if ((this.state.ban === 'unbanned' && this.props.room === 'Тюрьма')) {
-
-    //        Alert.alert('Cрок закончился!');
-    //  const {router} = this.props;
-    //     router.pop({name: this.props.nic, room: 'Тюрьма', item_menu: this.props.item_menu});
-
-    //            console.log('go')
-
-    //       } else {
-
-    //           console.log('go')
-
-    //       }
-    //    })
-    //    .catch((error) => {
-    //   console.error(error);
-    //     });
-
-    //  };
-
 
     update_msg = async () => {
 
@@ -316,7 +201,6 @@ export default class Chatting extends React.Component {
         const message = await request_GET_MESSAGES(this.props.room);
         this.setState({
                 dataSource: message,
-
 
             }
         );
@@ -326,8 +210,6 @@ export default class Chatting extends React.Component {
             await this.setState({animating: !this.state.animating});
             this.componentWillUnmount();
             this.componentDidMount();
-
-
         }
 
 
@@ -530,7 +412,7 @@ export default class Chatting extends React.Component {
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
                 this.setState({photo_attachments: response});
-                Alert.alert("фото успешно загружено!\nЖмите кнопку отправить");
+                Alert.alert("фото успешно загружено!", "\nЖмите кнопку отправить");
 
                 this.componentWillUnmount();
 
@@ -574,37 +456,13 @@ export default class Chatting extends React.Component {
             return (
 
 
-                <View style={{backgroundColor: '#25566e', alignItems: 'center',height:screenHeight-180}}
+                <Flatlist_smiles_chatting
+
+                    add_emoji={this.add_emoji}
 
 
-                >
-                    <FlatList
+                />
 
-
-                        numColumns={10}
-                        data={emoticons_value}
-
-
-                        renderItem={(({item}) =>
-
-                                <TouchableOpacity onPress={() => this.add_emoji(item.value)}>
-                                    <View style={{flex: 1, flexDirection: 'column', margin: 3}}>
-
-                                        <Image style={{width: 30, height: 30, resizeMode: 'contain', marginTop: '1%'}}
-                                               source={item.url}/>
-
-
-                                    </View>
-                                </TouchableOpacity>
-                        )
-                        }
-
-
-                        keyExtractor={(item, index) => index.toString()}
-
-
-                    />
-                </View>
 
             )
 
@@ -615,11 +473,7 @@ export default class Chatting extends React.Component {
     };
 
 
-
     ShowSmiles = () => {
-
-
-
 
 
         this.setState({
@@ -704,47 +558,19 @@ export default class Chatting extends React.Component {
             await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
 
             await this.setState({
-
                 text: '', attachments: 'Not', photo_attachments: false
-
-
             });
             await this.update_msg();
-
-
         } else
-
-
-        //    if (this.state.text !=='') {
 
             await Keyboard.dismiss();
         await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
         await this.setState({
-
             text: '',
-
-
         });
-
         await this.update_msg();
-
-
-        //   }
-        //     else {
-        //       Alert.alert("Cообщение не может быть пустым")
-//
-        //  }
-
-
     };
-
-
-    /*    .catch(error => this.setState({error}));*/
-
-
     _renderItem = ({item}) => {
-
-
         let name = item.message.startsWith(this.props.chat_name + ',');
         let server = item.user;
         let attch = item.attachments;
@@ -752,13 +578,10 @@ export default class Chatting extends React.Component {
         let avatars = item.avatars;
         let message = item.message;
         let user_id = item.user_id
-
         if (name) {
 
 
             return (
-
-
                 <Pattern_message1
 
                     Action_Nick={this.Action_Nick}
@@ -767,19 +590,11 @@ export default class Chatting extends React.Component {
                     avatars={avatars}
                     message={message}
                     user_id={user_id}
-
-
                 />
-
-
             )
-
-
         } else if (server === '') {
 
-
             return (
-
                 <Pattern_message2
 
                     Action_Nick={this.Action_Nick}
@@ -788,17 +603,10 @@ export default class Chatting extends React.Component {
 
 
                 />
-
-
             )
 
-
         } else if (attch.length > 5) {
-
-
             return (
-
-
                 <Pattern_message3
 
 
@@ -808,15 +616,9 @@ export default class Chatting extends React.Component {
                     attachments={attch}
                     view_attach={this.View_full_photo}
                     user={server}
-
-
                 />
-
-
             )
         } else if (item.message.startsWith('\b\tзашел') || (item.message.startsWith('\b\tвышел') || (item.message.startsWith('\b\tзашла') || (item.message.startsWith('\b\tвышла') === true)))) {
-
-
             return (
 
                 <Pattern_message4

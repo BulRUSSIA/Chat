@@ -30,7 +30,7 @@ export class Pattern_message6 extends React.Component {
 
                     <Text style={{
 
-                        fontSize: 22,
+                        fontSize: 18,
                         flex:1,
 
 

@@ -5,17 +5,16 @@ import {
     View,
     BackHandler,
 
-    ImageBackground, Alert, Keyboard,TouchableOpacity,Image
+    ImageBackground, Alert, Keyboard, TouchableOpacity, Image, Dimensions, ActivityIndicator
 } from 'react-native';
 import private_menu from '../const/private_menu'
 import styles from '../../styles'
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_SEND_MESSAGES_PRIVATE from "../../actions/fetch_send_private";
-import data from 'emoji-mart-native/data/apple.json'
 import ImagePicker from "react-native-image-picker";
-import {ModalPicker} from 'emoji-mart-native'
 
-import {Emoji} from 'emoji-mart-native'
+const screenWidth = Math.round(Dimensions.get('window').width);
+
 import {
 
     Header,
@@ -31,9 +30,12 @@ import {
 
 } from 'native-base';
 import {Private_action_picker} from "./Private_action_picker";
-import {Private_TextInput} from "./Private_TextInput";
 import {Private_Flatlist} from "./Private_Flatlist";
-
+import emoticons from "../const/EmojiObject";
+import {TextInput_Chatting} from "../Chatting/TextInput_Chatting";
+import {Flatlist_smiles_chatting} from "../Chatting/Flatlist_smiles_chatting";
+import SEND_PHOTO_request from "../../actions/fetch_upload_image";
+import {Attachments_preview} from "../Chatting/Attachments_preview";
 
 
 export default class Private extends React.Component {
@@ -48,7 +50,7 @@ export default class Private extends React.Component {
 
             room: this.props.private_room,
             private: this.props.private_data,
-            private_chatter:this.props.private_chatter,
+            private_chatter: this.props.private_chatter,
             users: [],
             item_menu: private_menu,
             text: '',
@@ -61,38 +63,14 @@ export default class Private extends React.Component {
             selected: undefined,
             photo: null,
             attachments: 'Not',
-
-
-
+            ShowSmiles: false,
+            modal_indicator: false,
 
 
         };
 
 
-
-
     }
-
-
-
-
-
-    createFormData = (photo) => {
-        const data = new FormData();
-
-        data.append("photo", {
-
-            name: photo.fileName,
-
-
-            type: photo.type,
-            uri:
-                Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
-        });
-
-
-        return data;
-    };
 
 
     onValueChange = async (value: string) => {
@@ -169,7 +147,6 @@ export default class Private extends React.Component {
                 DataSource: this.props.list_data,
 
 
-
             });
 
             console.log(this.props.nic + 'my nick to ls');
@@ -180,256 +157,91 @@ export default class Private extends React.Component {
 
         }
     };
+
     handleChoosePhoto = () => {
         const options = {
             noData: true,
         };
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
-                this.setState({photo: response});
-                this.Preview_attach()
+                this.setState({photo_attachments: response});
+                Alert.alert("фото успешно загружено!", "\nЖмите кнопку отправить");
+
+                this.componentWillUnmount();
+
+                this.componentDidMount()
+
+
             }
 
 
-        })
+        });
 
 
     };
+    close_attach = () => {
 
-    Preview_attach = () => {
-        const {photo} = this.state;
-        if (this.state.photo) {
+        this.setState({photo_attachments: false,})
+
+    };
+
+    view = () => {
+
+        if (this.state.photo_attachments) {
 
             return (
+                <Attachments_preview
+                    photo={this.state.photo_attachments}
+                    close_attach={this.close_attach}
 
-                <Image source={{uri: photo.uri}} style={styles.imageAttachPrivatePreview}/>
-
+                />
             )
-
-
         }
-
-
     };
 
 
-    handleUploadPhoto = async () => {
-        await fetch("http://79.174.12.77:5000/uploads", {
-            headers: {
-
-                'Content-Type': 'multipart/form-data',
-
-
-            },
-            method: "POST",
-
-            body: this.createFormData(this.state.photo)
-
-
-        })
-            .then(response => response.json())
-            .then((responseJson) => {
-
-
-                    this.setState({attachments: responseJson['attach']});
-
-
-                    Alert.alert("фото успешно загружено!");
-                    this.setState({photo: null});
-
-
-                }
-            )
-
-
-            .catch(error => {
-
-                Alert.alert("Не удалoсь загрузить фото,обратитесь к производителю устройства!", error);
-
-                this.setState({photo: null, attachments: ''});
-
-
-            });
+    send_photo = async () => {
+        this.setState({modal_indicator: true});
+        const attach = await SEND_PHOTO_request(this.state.photo_attachments);
+        this.setState({attachments: attach});
+        this.setState({modal_indicator: false});
 
 
     };
-
 
     send_msg = async () => {
 
-
-        if (this.state.photo) {
-
-            await this.handleUploadPhoto();
-
-            await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
-
-
+        if (this.state.photo_attachments) {
             await Keyboard.dismiss();
-
-
-            await this.update_msg();
-
+            await this.send_photo();
+            //    if (this.state.text !=='') {
+            await request_SEND_MESSAGES_PRIVATE(this.props.nic, 'Вложения', this.state.room, this.state.attachments);
 
             await this.setState({
-
-                text: '', attachments: 'Not'
-
-
+                text: '', attachments: 'Not', photo_attachments: false
             });
-
-        } else {
-
-            await request_SEND_MESSAGES_PRIVATE(this.props.nic,
-                this.state.text,
-                this.state.room,
-                this.state.attachments);
-
+            await this.update_msg();
+        } else
 
             await Keyboard.dismiss();
-
-
-            await this.update_msg();
-
-
-            await this.setState({
-
-                text: '', attachments: 'Not'
-
-
-            });
-
-
-
-        }
-
-
-        /*    .catch(error => this.setState({error}));*/
+        await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
+        await this.setState({
+            text: '',
+        });
+        await this.update_msg();
     };
 
 
-    check_emoji = (emoji) => {
+    add_text = async (text) => {
 
 
-
-        if (emoji.match((/:.*:/)) === null) {
-
-
-            return (
-
-                <Emoji emoji='' size={20}/>
-
-
-            )
-
-
-        } else {
-
-            let a = (/:.*:/).exec(emoji).toString();
-
-
-            return (
-
-                <Emoji emoji={a} size={20}/>
-
-
-            )
-
-
-        }
+        await this.setState({text: text})
 
 
     };
 
-
-    check_text_2 = (created, text) => {
-
-        let replacer = text.replace(/:.*:/g, '');
-
-        if (replacer === null) {
-
-
-            return (
-                <Text style={styles.private2}
-
-                >{created + '\t\t\t\n'}
-                    {'\t\t\t' + text}
-
-
-                </Text>
-
-
-            )
-
-
-        } else {
-
-
-            return (
-                <Text style={styles.private2}
-
-                >{created + '\t\t\t\n'}
-                    {'\t\t\t' + replacer}
-
-
-                </Text>
-
-
-            );
-
-
-        }
-
-    };
-
-    add_text = (text) => {
-
-
-        this.setState({text: text})
-
-
-    };
-
-
-    check_text_1 = (created, text) => {
-
-        let replacer = text.replace(/:.*:/g, '');
-
-        if (replacer === null) {
-
-
-            return (
-
-                <Text style={styles.private1}
-
-                >{created + '\t\t\t\n'}
-                    {'\t\t\t' + text}
-
-
-                </Text>
-
-
-            )
-
-
-        } else {
-
-
-            return (
-                <Text style={styles.private1}
-
-                >{created + '\t\t\t\n'}
-                    {'\t\t\t' + replacer}
-
-
-                </Text>
-
-
-            );
-
-
-        }
-
+    add_emoji = async (emoji) => {              //add emoji to text
+        await await this.setState({text: this.state.text + emoji});
     };
 
 
@@ -437,17 +249,15 @@ export default class Private extends React.Component {
 
         const {router} = this.props;
 
-      await  router.push.PHOTO_VIEWER({
+        await router.push.PHOTO_VIEWER({
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
-            photo: attach,
+            photo_attachments: attach,
             private_room: this.props.private_room,
             private_chatter: this.props.private_chatter,
             private_data: this.props.private_data,
         });
-
-
 
 
     };
@@ -466,15 +276,8 @@ export default class Private extends React.Component {
                     <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
 
                         <View style={{
-                            borderColor: 'rgba(87,174,91,0.9)',
-                            borderWidth: 8,
-                            flex: 1,
-                            backgroundColor: 'rgba(87,174,91,0.9)',
-                            borderRadius: 14,
-                            marginTop: 5,
-                            marginBottom: 5,
-                            marginLeft: '15%',
-                            marginRight: '15%',
+
+
                             alignItems: 'center',
                         }}>
                             <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
@@ -490,15 +293,7 @@ export default class Private extends React.Component {
                     <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
 
                         <View style={{
-                            borderColor: 'rgba(193,225,255,0.8)',
-                            borderWidth: 8,
-                            flex: 1,
-                            backgroundColor: 'rgba(193,225,255,0.8)',
-                            borderRadius: 14,
-                            marginTop: 5,
-                            marginBottom: 5,
-                            marginLeft: '15%',
-                            marginRight: '15%',
+
                             alignItems: 'center',
                         }}>
                             <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
@@ -516,6 +311,90 @@ export default class Private extends React.Component {
     };
 
 
+    ListSmileAction = () => {
+
+
+        if (this.state.ShowSmiles) {
+            Keyboard.dismiss();
+
+            return (
+
+
+                <Flatlist_smiles_chatting
+
+                    add_emoji={this.add_emoji}
+
+
+                />
+
+
+            )
+
+
+        }
+
+
+    };
+    ParsedText = (text, user) => {
+
+        return text.split(/([\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
+            if (!elem) return null;
+            if ((emoticons[elem]))
+                return (
+
+                    <Image style={{width: 20, height: 20, resizeMode: 'contain',}}
+                           source={emoticons[elem]}/>
+
+
+                );
+            else {
+
+                if (user === this.props.private_chatter) {
+                    return (
+
+                        <Text style={styles.private2}
+
+
+                        >{elem}</Text>
+
+
+                    )
+
+                }
+
+                return (
+
+                    <Text style={styles.private1}
+
+
+                    >{elem}</Text>
+
+                )
+
+
+            }
+
+
+        });
+    };
+
+    Modal_Activity = () => {
+
+        if (this.state.modal_indicator) {
+
+            return (
+
+
+                <ActivityIndicator
+                    size='large'
+                    animating={this.state.modal_indicator}/>
+
+
+            )
+        }
+
+    };
+
     _renderItem = ({item}) => {
 
 
@@ -528,28 +407,32 @@ export default class Private extends React.Component {
             return (
 
 
-                <View style={{flex: 1, flexDirection: 'row'}}>
-
-
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    marginRight: screenWidth / 2,
+                    backgroundColor: 'rgba(45,101,127,0.78)',
+                    marginTop: '2%',
+                    marginBottom: '2%',
+                    marginLeft: '2%',
+                    borderRadius: 14,
+                    paddingLeft: '2%',
+                    paddingBottom: '1%'
+                }}>
                     <View style={{position: 'relative'}}>
-                        {this.check_text_2(item.createdAt, item.message)}
+                        <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
+                        <Text style={{color: '#3e5d84'}}
+
+                        >
+
+
+                            {this.ParsedText(item.message, item.user)}
+
+                        </Text>
                         {this.attachments_view(item.attachments, item.user)}
-
-
                     </View>
-                    <View
-                        style={{
-                            position: 'absolute',
-                            marginTop: '10%',
-                            marginLeft: '2%',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0
-                        }}>
-                        {this.check_emoji(item.message)}
 
-                    </View>
+
                 </View>
 
 
@@ -561,18 +444,33 @@ export default class Private extends React.Component {
             return (
 
 
-                <View style={{flex: 1, flexDirection: 'row'}}>
-
-
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    marginLeft: screenWidth / 2,
+                    backgroundColor: 'rgba(42,154,78,0.78)',
+                    marginTop: '2%',
+                    marginBottom: '2%',
+                    marginRight: '2%',
+                    borderRadius: 14,
+                    paddingLeft: '2%',
+                    paddingBottom: '1%'
+                }}>
                     <View style={{position: 'relative'}}>
-                        {this.check_text_1(item.createdAt, item.message)}
+                        <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
+                        <Text style={{color: '#3e5d84'}}
+
+                        >
+
+
+                            {this.ParsedText(item.message, item.user)}
+
+
+                        </Text>
                         {this.attachments_view(item.attachments, item.user)}
+                    </View>
 
 
-                    </View>
-                    <View style={{paddingTop: 40, marginBottom: 20, position: 'absolute', marginLeft: 164,}}>
-                        {this.check_emoji(item.message)}
-                    </View>
                 </View>
 
 
@@ -581,10 +479,17 @@ export default class Private extends React.Component {
 
         }
     };
-    showPickerTrigger = (visible) => {
-        this.setState({modalVisible: visible})
-    };
 
+    ShowSmiles = () => {
+
+
+        this.setState({
+
+
+            ShowSmiles: !this.state.ShowSmiles
+        });
+
+    };
 
     render() {
 
@@ -594,7 +499,7 @@ export default class Private extends React.Component {
             <View style={styles.container}
 
             >
-                <ImageBackground source={require('../Image/last_back.webp')}
+                <ImageBackground source={require('../Image/whatsap.png')}
                                  style={{width: '100%', height: '100%'}}>
 
 
@@ -626,11 +531,7 @@ export default class Private extends React.Component {
 
 
                     </Header>
-
-
-
-
-
+                    {this.Modal_Activity()}
 
 
                     <Private_Flatlist
@@ -641,40 +542,22 @@ export default class Private extends React.Component {
 
                     />
 
-
-                    <View style={styles.inputBar}>
-                        <ModalPicker
-                            isVisible={this.state.modalVisible}
-                            showCloseButton={true}
-                            onPressClose={() => {
-                                this.showPickerTrigger(false)
-                            }}
-                            set='apple'
-                            data={data}
-
-                            onSelect={(emoji) => {
-                                this.setState({text: emoji['colons'] + (this.state.text)});
-                                this.showPickerTrigger(false);
-
-                            }}
-                        />
+                    {this.view()}
 
 
 
-                        <Private_TextInput
+                        <TextInput_Chatting
 
+                            show={this.ShowSmiles}
                             add_text={this.add_text}
                             send_msg={this.send_msg}
                             text={this.state.text}
-                            selected={this.showPickerTrigger}
+                            active={this.state.ShowSmiles}
 
 
                         />
 
-
-                    </View>
-
-
+                    {this.ListSmileAction()}
                 </ImageBackground>
 
 

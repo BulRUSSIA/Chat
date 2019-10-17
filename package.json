@@ -8,7 +8,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "emoji-datasource-apple": "^4.1.0",
     "emoji-mart": "^2.11.1",
     "emoji-mart-native": "^0.4.7-beta",
     "hermes-engine": "^0.1.0",

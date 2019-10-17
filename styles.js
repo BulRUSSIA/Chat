@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
     },
     prices: {
-        fontSize: 22,
+        fontSize: 18,
 
 
 
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
     },
     symbols: {
 
-        fontSize: 22,
+        fontSize: 18,
        flex:3,
 
         paddingLeft:'3%',
@@ -495,17 +495,9 @@ const styles = StyleSheet.create({
     private1: {
         fontSize: 18,
 
-        marginLeft: 150,
+
         color: '#fefcfe',
-        marginRight:5,
-        paddingRight:16,
-        paddingLeft:22,
-        backgroundColor:'rgba(87,174,91,0.9)',
-        borderRadius:15,
-        marginBottom:15,
-        paddingTop: 20,
-        paddingBottom:17,
-        flex: 1
+
 
     },
     imageViewToolbarArrow: {
@@ -523,18 +515,9 @@ const styles = StyleSheet.create({
 
     private2: {
         fontSize: 18,
-        marginLeft:4,
-        marginRight: 150,
-        color: '#3794b5',
-        backgroundColor:'rgba(193,225,255,0.8)',
-        borderRadius:15,
-        paddingTop: 17,
-        paddingBottom:17,
-        paddingLeft:14,
-        paddingRight:18,
 
-        marginBottom:15,
-        flex:1,
+
+        color: '#ffffff',
 
 
 

@@ -2,7 +2,7 @@ import {address} from "../config_connect";
 
 async function request_SEND_MESSAGES(nic,msg,place,attachments)  {
 
-    const url = address + `/sending/room`;
+    const url = address + `/sending/message/room`;
 
     try {
   await fetch(url, {

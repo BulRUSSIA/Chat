@@ -12,7 +12,6 @@ import smile_image from '../Image/smile-256x256.png'
 import keyboard_image from '../Image/android-keyboard-icon-25.jpg'
 
 
-const screenWidth = Math.round(Dimensions.get('window').width);
 export class TextInput_Chatting extends React.Component {
 
 
