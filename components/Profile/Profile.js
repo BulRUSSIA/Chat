@@ -1,18 +1,18 @@
 import React from 'react';
 import {
-    FlatList,
-    Image,
-    Text,
     View,
     BackHandler,
-    ImageBackground,  TouchableOpacity,
+    ImageBackground,
 } from 'react-native';
 
 import Chatting from '../../components/Chatting/Chatting'
-
-
 import styles from '../../styles'
-import {Body, Button, Footer, Header, Icon, Left,  Right, Title} from "native-base";
+import GiftList from "./GiftList";
+import ProfileInfoList from "./ProfileInfoList";
+import ActionsList from "./ActionsList";
+import HeaderBar from "./Header";
+import FooterDown from "./Footer";
+import PhotosList from "./PhotosList";
 
 const list = [{
     action: 'Написать личное сообщение',
@@ -39,6 +39,7 @@ export default class Profile extends React.Component {
             profile_info: list,
             user_info: this.props.user_data.data,
             gifts_list: this.props.gift,
+            photos_list:this.props.photos_list
 
 
         };
@@ -92,6 +93,16 @@ export default class Profile extends React.Component {
 
     };
 
+    View_full_photo =  (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
+        const {router} = this.props;
+         router.push.PHOTO_VIEWER({
+            room: this.props.room,
+            nic: this.props.nic,
+            chat_name: this.props.chat_name,
+            photo_attachments: attach,
+        });
+    };
+
 
     render() {
 
@@ -103,158 +114,34 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('../Image/reg_background.jpg')}
+                                 style={{width: '100%', height: '100%'}}>
 
-                    <Header style={{backgroundColor: '#25566e'}}
-                            androidStatusBarColor="#25566e">
-
-
-                        <Left style={{flex: 1}}>
-                            <Button transparent
-
-                                    onPress={this.backs}>
-                                <Icon
-                                    style={{color: 'white'}}
-                                    name="ios-arrow-back"/>
-                            </Button>
-
-                        </Left>
-                        <Body>
-                            <Title>Профиль</Title>
-                        </Body>
-                        <Right/>
-
-
-
-
-                    </Header>
-
-
-                    <FlatList
-
-                        data={this.state.user_info}
-                        extraData={this.state}
-
-
-                        renderItem={(({item}) =>
-
-
-                                //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-
-
-                                <View style={{
-
-                                    marginLeft: 1,
-                                    marginRight: 1,
-                                    marginBottom: 5,
-
-
-                                }}>
-
-                                    <View style={{marginLeft: 34,}}>
-                                        <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}/>
-
-                                    </View>
-
-
-                                    <Text style={styles.Profile_List_text_info}>
-                                        {'\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + item.nic + '\n\n'}
-                                        {item.sex + '\n'}
-                                        {item.bday + '\n'}
-                                        {item.email + '\n'}
-                                        {item.firstName + '\n'}
-                                        {item.lastName + '\n'}
-                                        {item.about + '\n'}
-                                        {item.city + '\n'}
-                                    </Text>
-
-
-                                </View>
-
-                        )
-                        }
-
-                        keyExtractor={(item, index) => index}
+                    <HeaderBar
+                        backs={this.backs}
                     />
-                    <View>
-                        <FlatList style={{
-                            marginLeft: 30,
-                            marginRight: 30,
-                            marginTop: 13,
-                        }}
-                                  horizontal
-                                  data={this.state.gifts_list}
-                                  renderItem={({item}) => {
-                                      return (
+                    <ProfileInfoList
+                        user_info={this.state.user_info}
+/>
 
 
-                                          <View style={{
+                        <PhotosList
+                            photos_list={this.state.photos_list}
+                            View_full_photo={this.View_full_photo}
 
-                                              marginTop: 1,
-                                              marginBottom: 14,
-                                              marginLeft: 5,
-                                              marginRight: 5,
-
-                                          }}>
-                                              <TouchableOpacity
-                                                  onPress={() => this.delete_gift(item.id, item.url, item.description)}>
-
-                                                  <Image source={{uri: item.url}} style={styles.imageViewAvatars}/>
-                                              </TouchableOpacity>
-
-                                          </View>
-
-                                      );
-                                  }}
-                                  keyExtractor={(item, index) => index}
-
+                        />
+                        <GiftList
+                            gifts_list={this.state.gifts_list}
+                            delete_gift={this.delete_gift}
 
                         />
 
-                        <FlatList style={{marginBottom: 5, marginTop: 6}}
-
-
-                                  data={this.state.profile_info}
-                                  extraData={this.state}
-
-
-                                  renderItem={(({item}) =>
-
-
-                                          //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-
-                                          <View style={{
-                                              flex: 1, flexDirection: 'row', paddingTop: 6,
-                                              borderRadius: 20
-                                          }}>
-
-                                              <Image source={item.icon} style={styles.imageViewProfile_icon}/>
-                                              <Text style={styles.Profile_List_text}
-                                              >
-
-                                                  {item.action}
-
-                                              </Text>
-
-
-                                          </View>
-
-                                  )
-                                  }
-
-
-                                  keyExtractor={(item, index) => index.toString()}
-
+                        <ActionsList
+                            profile_info={this.state.profile_info}
 
                         />
 
-                    </View>
-
-
-
-                    <Footer style={{backgroundColor: '#25566e', height: '5%'}}>
-
-                    </Footer>
+<FooterDown/>
 
 
                 </ImageBackground>

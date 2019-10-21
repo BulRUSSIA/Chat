@@ -2,7 +2,7 @@ import {
     Image,
 
     TextInput,
-   Dimensions,
+
     TouchableOpacity,
     View
 } from "react-native";

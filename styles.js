@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
     },
     prices: {
         fontSize: 18,
-
+        paddingBottom:'3%',
+        marginTop:'2%'
 
 
 
@@ -284,8 +285,8 @@ const styles = StyleSheet.create({
 
     imageViewAvatars: {
 
-        width: 50,
-        height: 70,
+        width: 25,
+        height: 25,
 
 
         resizeMode: 'contain',

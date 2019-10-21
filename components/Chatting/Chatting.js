@@ -8,7 +8,7 @@ import {
     Keyboard, ActivityIndicator,
 } from 'react-native';
 
-
+import menu_moderator from '../const/menu_moderator'
 import list_moder from '../const/list_moder'
 import list_user from '../const/list_user'
 import menusmiles from '../const/smiles'
@@ -42,6 +42,10 @@ import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
 import {Flatlist_smiles_chatting} from "./Flatlist_smiles_chatting";
+import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
+import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
+import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
+import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
 
 
 export default class Chatting extends React.Component {
@@ -79,6 +83,7 @@ export default class Chatting extends React.Component {
 
 
     }
+
     add_text = async (text) => { // add text to textinput
 
         console.log(text);
@@ -102,9 +107,7 @@ export default class Chatting extends React.Component {
     View_full_photo = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {router} = this.props;
         await router.push.PHOTO_VIEWER({
-            room: this.props.room,
-            nic: this.props.nic,
-            chat_name: this.props.chat_name,
+
             photo_attachments: attach,
         });
     };
@@ -115,97 +118,100 @@ export default class Chatting extends React.Component {
 
 
     Action_nick_selected = async (position) => {
-        if (position === 'Напугать') {
-            await this.Change_Visible_Action();
-            console.log('0');
-            console.log(this.props.nic);
-            await request_SEND_BANNED_ACTION(0, this.state.user_id, this.props.nic);
+
+        const {router} = this.props;
+
+        switch (position) {
+
+            case 'Напугать':
+
+                await this.Change_Visible_Action();
+                await request_SEND_BANNED_ACTION(0, this.state.user_id, this.props.nic);
+                break;
+
+            case 'Добавить в друзья':
+
+                Alert.alert('Раздел недоступен');
+                await this.Change_Visible_Action();
+                break;
+
+            case 'Бан 5 минут':
+
+                await this.Change_Visible_Action();
+                await request_SEND_BANNED_ACTION(0.083, this.state.user_id, this.props.nic);
+                break;
+
+            case 'Бан 15 минут' :
+
+                await this.Change_Visible_Action();
+                await request_SEND_BANNED_ACTION(0.25, this.state.user_id, this.props.nic);
+                break;
+
+            case 'Бан 60 минут':
+
+                await this.Change_Visible_Action();
+                await request_SEND_BANNED_ACTION(1, this.state.user_id, this.props.nic);
+                break;
+
+            case 'Бан 120 минут':
+
+                await this.Change_Visible_Action();
+                await request_SEND_BANNED_ACTION(2, this.state.user_id, this.props.nic);
+                break;
+
+            case 'Ответить':
+                this.setState({isVisible: !this.state.isVisible, text: this.state.user_now + ', '});
+                break;
+
+            case 'Написать Личное':
+
+                await this.Change_Visible_Action();
+                const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
+                const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
+
+                router.push.Private({
+                    profile_user: this.state.user_now,
+                    room: this.props.room,
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    private_room: get_private,
+                    private_chatter: this.state.user_now,
+                    private_data: get_private_data,
+                });
+
+                break;
+
+            case 'Профиль':
+                await this.Change_Visible_Action();
+                const profile_info = await request_GET_PROFILE(this.state.user_id);
+                const gifts = await request_GET_GIFTS(this.state.user_id);
+                const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
+
+                router.push.Profile({
+                    user_data: profile_info,
+                    chat_name: this.props.chat_name,
+                    gift: gifts,
+                    photos_list:photos_list
+                });
+
+
+
         }
 
-        if (position === 'Добавить в друзья') {
-            Alert.alert('Раздел недоступен')
-            await this.Change_Visible_Action()
 
-        }
-
-
-        if (position === 'Бан 5 минут') {
-            await this.Change_Visible_Action();
-            console.log('ban 5 minutes');
-            console.log(this.props.nic);
-            console.log(this.state.user_id)
-            await request_SEND_BANNED_ACTION(0.05, this.state.user_id, this.props.nic);
-        }
-
-        if (position === 'Бан 15 минут') {
-            await this.Change_Visible_Action();
-            console.log('ban 15  minutes');
-            console.log(this.props.nic);
-            await request_SEND_BANNED_ACTION(0.25, this.state.user_id, this.props.nic);
-        }
-
-        if (position === 'Бан 60 минут') {
-            await this.Change_Visible_Action();
-            console.log('ban 60 minutes');
-            console.log(this.props.nic);
-            await request_SEND_BANNED_ACTION(1, this.state.this.state.user_id, this.props.nic);
-        }
-
-        if (position === 'Бан 120 минут') {
-            await this.Change_Visible_Action();
-            console.log('ban 120 minutes');
-            console.log(this.props.nic);
-            await request_SEND_BANNED_ACTION(2, this.state.this.state.user_id, this.props.nic);
-        }
-
-
-        if (position === 'Ответить') {
-            this.setState({isVisible: !this.state.isVisible, text: this.state.user_now + ', '});
-        }
-
-        if (position === 'Написать Личное') {
-            await this.Change_Visible_Action();
-            const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
-            const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
-            const {router} = this.props;
-            router.push.Private({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                private_room: get_private,
-                private_chatter: this.state.user_now,
-                private_data: get_private_data,
-            });
-        }
-
-        if (position === 'Профиль') {
-            await this.Change_Visible_Action();
-            const profile_info = await request_GET_PROFILE(this.state.user_id);
-            const gifts = await request_GET_GIFTS(this.state.user_id);
-            const {router} = this.props;
-            router.push.Profile({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                user_data: profile_info,
-                chat_name: this.props.chat_name,
-                gift: gifts,
-            });
-        }
     };
 
     update_msg = async () => {
 
 
-        const message = await request_GET_MESSAGES(this.props.room);
+        const message = await request_GET_MESSAGES(this.props.room); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
         this.setState({
                 dataSource: message,
 
             }
         );
 
-        if (this.state.animating) {
+        if (this.state.animating) {    //индикатор при первом заходе в комнату
 
             await this.setState({animating: !this.state.animating});
             this.componentWillUnmount();
@@ -215,7 +221,7 @@ export default class Chatting extends React.Component {
 
     };
 
-    componentWillUnmount() {
+    componentWillUnmount() { //анмаунт из памяти
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(this.interval);
         console.log('i am unmount chatting');
@@ -223,9 +229,9 @@ export default class Chatting extends React.Component {
     }
 
     componentDidMount = () => {
-        if (this.props.type_user === 2 || this.props.type_user === 4) {
+        if (this.props.type_user === 2 || this.props.type_user === 4) { //проверяем тип пользователя если админ или мд открыть меню суперпользователя
 
-            this.setState({action_nick: list_moder})
+            this.setState({action_nick: list_moder, item_menu: menu_moderator})
 
         }
 
@@ -237,7 +243,7 @@ export default class Chatting extends React.Component {
 
     };
 
-    Modal_Activity = () => {
+    Modal_Activity = () => { // кидаем компонент индикатора во флетлист при первом заходе
 
         if (this.state.modal_indicator) {
 
@@ -262,150 +268,157 @@ export default class Chatting extends React.Component {
 
     };
 
-    onActionSelected = async (position) => {
+    onActionSelected = async (position) => { //меню чата , передаем позицию item из массива с меню
+        const {router} = this.props;
+        switch (position) {
 
-        if (position === 0) {
-            if (!this.state.animating) {
 
-                this.setState({animating: !this.state.animating});
+            case 0: // личные сообшения
+                if (!this.state.animating) {
+
+                    this.setState({animating: !this.state.animating});
+                    this.componentWillUnmount();
+                    this.componentDidMount();
+                }
+
+
+                const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
+
+
+                router.push.Private_List({
+                    profile_user: this.state.user_now,
+                    room: this.props.room,
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    private_user_list: get_list,
+                    select: this.onActionSelected.bind(this),
+                    mount: this.componentDidMount
+
+
+                });
                 this.componentWillUnmount();
-                this.componentDidMount();
+                this.setState({animating: !this.state.animating});
+                break;
 
 
-            }
-            const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
-
-            const {router} = this.props;
-            router.push.Private_List({
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                private_user_list: get_list,
-                select: this.onActionSelected.bind(this),
-                mount: this.componentDidMount
+            case 1:
+                const usr_list_vw = await fetch_users_in_room(this.props.room); //пользователи в комнате
+                this.setState({isVisibleList: !this.state.isVisibleList, users: usr_list_vw});
+                break;
 
 
-            });
-            this.componentWillUnmount();
-            this.setState({animating: !this.state.animating});
-
-        }
-
-        if (position === 1) {
-            console.log("I am in 0");
+            case 2: //сменить комнату
 
 
-            const usr_list_vw = await fetch_users_in_room(this.props.room);
-
-            this.setState({isVisibleList: !this.state.isVisibleList, users: usr_list_vw})
-
-
-        }
+                await this.Del_user_change();
+                await this.componentWillUnmount()
+                break;
 
 
-        if (position === 2) {
+            case 3: //профиль
 
 
-            //  await this.ban_msg();
-            await this.Del_user_change();
-            await this.componentWillUnmount()
+                const profile_info = await request_GET_PROFILE(this.props.nic);
+                const a = profile_info.data;
+
+                for (let i = 0; i < a.length; i++) {
+                    let obj = a[i];
+
+                    this.setState({
+                        firstName: obj.firstName,
+                        lastName: obj.lastName,
+                        city: obj.city,
+                        about: obj.about,
+                        color: obj.color,
+                        photo: obj.photo,
+                        sex: obj.sex,
+                        balace: obj.balace,
+
+                    });
+                }
+
+                router.push.Profile_redactor({
+
+                    room: this.props.room,
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    user_data: profile_info,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    city: this.state.city,
+                    about: this.state.about,
+                    color: this.state.color,
+                    photo: this.state.photo,
+                    sex: this.state.sex,
+                });
+                break;
 
 
-        }
+            case  4: //чат портал
 
+                const profile = await request_GET_PROFILE(this.props.nic);
+                const b = profile.data;
 
-        if (position === 3) {
+                for (let i = 0; i < b.length; i++) {
+                    let obj = b[i];
 
+                    this.setState({
+                        balace: obj.balace,
 
-            const profile_info = await request_GET_PROFILE(this.props.nic);
-            const a = profile_info.data;
-            const {router} = this.props;
-            for (let i = 0; i < a.length; i++) {
-                let obj = a[i];
+                    });
 
-                this.setState({
-                    firstName: obj.firstName,
-                    lastName: obj.lastName,
-                    city: obj.city,
-                    about: obj.about,
-                    color: obj.color,
-                    photo: obj.photo,
-                    sex: obj.sex,
-                    balace: obj.balace,
+                }
+                router.push.ChatPortal({
+
+                    room: this.props.room,
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    balance_card: this.state.balace
+
 
                 });
 
-            }
+                break;
 
 
-            router.push.Profile_redactor({
-
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                user_data: profile_info,
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                city: this.state.city,
-                about: this.state.about,
-                color: this.state.color,
-                photo: this.state.photo,
-                sex: this.state.sex,
-            });
+            case 5: //выход
 
 
-        }
-        if (position === 4) {
+                router.push.Login();
+                await this.Del_user_change();
+                this.componentWillUnmount();
+                break;
 
-            const profile_info = await request_GET_PROFILE(this.props.nic);
-            const a = profile_info.data;
-            const {router} = this.props;
-            for (let i = 0; i < a.length; i++) {
-                let obj = a[i];
 
-                this.setState({
-                    balace: obj.balace,
+            case 6: // прикрепить изображение
 
+
+                await this.handleChoosePhoto(); //
+                break;
+
+
+            case 7: //админ меню
+
+                const usr_banned_list = await fetch_REQUEST_BANNED_LIST();
+                const usr_moderator_list = await fetch_REQUEST_MODERATOR_LIST();
+                const usr_invisible_list = await fetch_REQUEST_INVISIBLE_LIST();
+
+
+                router.push.NavigationAdmin({
+                    banned_list: usr_banned_list,
+                    moderator_list: usr_moderator_list,
+                    invisible_list: usr_invisible_list,
+                    type_user: this.props.type_user
                 });
-
-            }
-            router.push.ChatPortal({
-
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                balance_card: this.state.balace
-
-
-            });
+                break;
 
 
         }
 
-
-        if (position === 5) {
-
-
-            const {router} = this.props;
-
-            router.push.Login();
-            await this.Del_user_change();
-            this.componentWillUnmount()
-
-
-        }
-        if (position === 6) {
-
-
-            await this.handleChoosePhoto();
-
-
-        }
 
     };
 
-    handleChoosePhoto = () => {
+    handleChoosePhoto = () => { //выбираем фото из памяти телефона
         const options = {
             noData: true,
         };
@@ -427,7 +440,7 @@ export default class Chatting extends React.Component {
 
     };
 
-    close_attach = () => {
+    close_attach = () => {        //закрыть превью attachmentsa
 
         this.setState({photo_attachments: false,})
 
@@ -447,7 +460,7 @@ export default class Chatting extends React.Component {
         }
     };
 
-    ListSmileAction = () => {
+    ListSmileAction = () => {    //вызываем смайлы
 
 
         if (this.state.ShowSmiles) {
@@ -473,7 +486,7 @@ export default class Chatting extends React.Component {
     };
 
 
-    ShowSmiles = () => {
+    ShowSmiles = () => { // логика отображения смайлов true/false
 
 
         this.setState({
@@ -485,7 +498,7 @@ export default class Chatting extends React.Component {
     };
 
 
-    send_photo = async () => {
+    send_photo = async () => {  //отправляем фото в mongoDb
         this.setState({modal_indicator: true});
         const attach = await SEND_PHOTO_request(this.state.photo_attachments);
         this.setState({attachments: attach});
@@ -570,14 +583,14 @@ export default class Chatting extends React.Component {
         });
         await this.update_msg();
     };
-    _renderItem = ({item}) => {
-        let name = item.message.startsWith(this.props.chat_name + ',');
-        let server = item.user;
-        let attch = item.attachments;
-        let _class = item._class;
-        let avatars = item.avatars;
-        let message = item.message;
-        let user_id = item.user_id
+    _renderItem = ({item}) => { //render листа с чат сообщениями
+        let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
+        let server = item.user; //имя пользователя
+        let attch = item.attachments;//аттач
+        let _class = item._class;//цвет ника и сообщения
+        let avatars = item.avatars;//аватарка
+        let message = item.message; //сообшение
+        let user_id = item.user_id; //id пользователя
         if (name) {
 
 

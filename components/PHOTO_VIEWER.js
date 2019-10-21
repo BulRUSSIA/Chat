@@ -28,17 +28,12 @@ export class PHOTO_VIEWER extends React.Component {
             <Left style={{flex: 1}}>
                 <Button transparent
 
-                        onPress={()=> {router.pop({
-                            room: this.props.room,
-                            nic: this.props.nic,
-                            chat_name: this.props.chat_name,
-                            private_room: this.props.private_room,
-                            private_chatter: this.props.private_chatter,
-                            private_data: this.props.private_data,
+                        onPress={()=> {router.pop()}
 
 
 
-                        })}
+
+
 
 
 

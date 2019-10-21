@@ -45,8 +45,9 @@ export default class Registration extends React.Component {
 
 
         } else {
-
-            return fetch(address + `/registration/${this.state.username}/${this.state.password}/${this.state.nick}/${this.state.color}`)
+            let  str = this.state.nick.trim();
+             let nick = str.replace(" ", "");
+            return fetch(address + `/registration/${this.state.username}/${this.state.password}/${nick}/${this.state.color}`)
                 .then((response) => response.json())
                 .then((responseJson) => {
 

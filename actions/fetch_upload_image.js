@@ -7,7 +7,6 @@ async function  createFormData(photo) {
 
     data.append("photo", {
 
-
         name: photo.fileName,
 
 
@@ -35,11 +34,8 @@ async function SEND_PHOTO_request(photo) {
 
     let responseJsonData = await a.json();
     let attach = responseJsonData['attach'] ;
-    console.log('my attach' + attach)
+    console.log('my attach' + attach);
     return attach
-
-
-
 
 }
 

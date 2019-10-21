@@ -13,6 +13,7 @@ import Chatting from '../../components/Chatting/Chatting'
 
 import styles from '../../styles'
 import request_DELETE_GIFT from "../../actions/fetch_delete_gifts";
+import HeaderBar from "./HeaderBar";
 
 
 console.disableYellowBox = true;
@@ -41,11 +42,11 @@ export default class View_stuff extends React.Component {
 
 
     delete_gift = async () => {
-
+        await this.pushing()
         console.log(this.state.gifts_id);
         const delete_gift = await request_DELETE_GIFT(this.state.gifts_id);
         Alert.alert('Подарок успешно удален!!!');
-       await this.pushing()
+
 
 
     };
@@ -75,9 +76,9 @@ export default class View_stuff extends React.Component {
     };
 
 
-    pushing =async () => {
+    pushing = async () => {
 
-        this.componentWillUnmount();
+
         const {router} = this.props;
         router.pop({
             nic: this.props.nic,
@@ -86,9 +87,9 @@ export default class View_stuff extends React.Component {
             user_data: this.props.user_information,
             gift: this.props.gifts_list,
             gift_description: this.props.gift_description
-        })
+        });
 
-
+        this.componentWillUnmount();
     };
 
 
@@ -97,7 +98,7 @@ export default class View_stuff extends React.Component {
 
         return (
 
-            <View style={styles.container_pofile}
+            <View style={{flex:1}}
 
             >
 
@@ -105,17 +106,9 @@ export default class View_stuff extends React.Component {
                 <ImageBackground source={require('../Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
 
 
-                    <ToolbarAndroid style={styles.containerToolbarProfile}
-
-
-                                    data={this.state.toolbar_text}
-                    >
-                        <View>
-
-                            <Text style={styles.Profile_Toolbar_text_stuff}>{this.state.toolbar_text}</Text>
-                        </View>
-
-                    </ToolbarAndroid>
+                 <HeaderBar
+                 pushing={this.pushing}
+                 />
 
 
                     <Image source={{uri: this.state.gifts_view}} style={styles.imageViewAvatars_stuff}/>
@@ -133,19 +126,6 @@ export default class View_stuff extends React.Component {
                     </TouchableOpacity>
 
 
-                    <ToolbarAndroid style={styles.containerToolbarProfile_down}
-
-
-                    >
-                        <View>
-                            <Text style={styles.Profile_Toolbar_text_down}
-                                  onPress={this.pushing}
-
-
-                            >назад</Text>
-                        </View>
-
-                    </ToolbarAndroid>
 
 
                 </ImageBackground>

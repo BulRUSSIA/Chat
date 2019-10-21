@@ -26,7 +26,7 @@ export default class Private_List extends React.Component {
             DataSource: this.props.private_user_list,
             item_menu: menuitem,
             selected: undefined,
-            animating:true,
+            animating:false,
 
 
         };
@@ -75,11 +75,12 @@ export default class Private_List extends React.Component {
 
 
     Get_Chat = async (event, chatter) => {
+        this.setState({animating:true});
         const get_private = await request_GET_MESSAGES_PRIVATE(event);
+        this.setState({animating:false});
+       const {router} = this.props;
 
-        const {router} = this.props;
-
-        router.push.Private({
+        await    router.push.Private({
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -91,7 +92,7 @@ export default class Private_List extends React.Component {
 
         });
 
-        this.componentWillUnmount()
+
 
     };
 
@@ -112,20 +113,37 @@ export default class Private_List extends React.Component {
 
 
 
- View_Avtivity = () => {
-     return(
-
-         <ActivityIndicator size="large" color="#3E8CB4"
-                            animating={this.state.animating}/>
-
-     )
 
 
 
- };
+
 
     render() {
+        if (this.state.animating) {
 
+            return ( <View style={styles.container1}>
+                <ImageBackground source={require('../Image/fon_private.webp')} style={{width: '100%', height: '100%'}}>
+
+                    <Header_private_list
+
+                        item_menu={this.state.item_menu}
+                        onValueChange={this.onValueChange}
+                        selectedValue={this.state.selected}
+                        back={this.back}
+                        onActionSelected={this.onActionSelected}
+
+                    />
+
+                    <ActivityIndicator size="large" color="#3E8CB4"
+                                       animating={this.state.animating}/>
+                </ImageBackground>
+
+                </View>
+
+                    )
+
+
+        }
 
         return (
 
@@ -143,7 +161,7 @@ export default class Private_List extends React.Component {
 
                     />
 
-                    {this.View_Avtivity}
+
 
                     <Private_List_flatlist
 

@@ -16,6 +16,9 @@ import request_login from '../../actions/fetch_login'
 import request_banned from '../../actions/fetch_banned'
 import request_GET_ROOMS from '../../actions/fetch_get_rooms'
 import request_all_users from "../../actions/fetch_all_users";
+import request_LAST_ROOM from "../../actions/fetch_last_room";
+import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
+import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -30,22 +33,16 @@ export default class Login extends React.Component {
             Imei: '11111111111',
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
-            isLoading:false,
-            recieve:''
+            isLoading: false,
+            recieve: ''
 
 
         };
 
 
-
-
-
-
         this._retrieveData()
 
     }
-
-
 
 
     _storeData = async () => {
@@ -60,8 +57,8 @@ export default class Login extends React.Component {
     _retrieveData = async () => {
         try {
 
-           // const imei = await request_IMEI();
-          //  this.setState({Imei: '111111111111111111'});
+            // const imei = await request_IMEI();
+            //  this.setState({Imei: '111111111111111111'});
 
 
             const value = await AsyncStorage.getItem('log');
@@ -71,7 +68,7 @@ export default class Login extends React.Component {
                 this.setState({
                     username: value,
                     password: passwd,
-                    isLoading:false,
+                    isLoading: false,
                 })
             }
 
@@ -79,7 +76,6 @@ export default class Login extends React.Component {
             // Error retrieving data
         }
     };
-
 
 
     login = async () => {
@@ -93,21 +89,20 @@ export default class Login extends React.Component {
         if (LoginLength > 3 || PasswordLength > 3) {
 
 
-           this._storeData();
+            this._storeData();
             request_READ_PHONE_STATE();
 
+            this.setState({isLoading: true});
 
-            const login = await request_login(this.state.username, this.state.password, this.state.Imei);
+            const login = await request_login(this.state.username.trim(), this.state.password.trim(), this.state.Imei);
 
 
-
-            this.setState({validator: login['auth'],isLoading:true});
+            this.setState({isLoading: !this.state.isLoading});
+            this.setState({validator: login['auth'], isLoading: true});
 
             if (this.state.validator === 'NO OK') {
 
                 Alert.alert('Данные введены неверно!');
-                this.setState({isLoading:false});
-
 
 
             } else {
@@ -134,13 +129,39 @@ export default class Login extends React.Component {
                     const count_all_users = await request_all_users();
                     const rooms = await request_GET_ROOMS('-1');
                     const all = count_all_users['all'];
-                    console.log(all);
+                    const last_rooms = await request_LAST_ROOM(nic);
 
-                    router.push.Rooms({name: nic, router, roomlist: rooms,count:all}); //this.state.rooms_Unbanned
 
+                    const Nick_chats = await request_MY_NICKNAME(nic);
+
+                    await router.replace.Rooms({name: nic, router, roomlist: rooms, count: all});
+                    try {
+                        await router.push.Chatting({
+
+                            nic: nic,
+                            room: last_rooms['last_room'],
+                            chat_name: Nick_chats[0],
+                            type_user: Nick_chats[1],
+
+
+                        });
+
+                        await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
+
+                    } catch  {
+                        await router.push.Chatting({
+
+                            nic: nic,
+                            room: 'Новички чата',
+                            chat_name: Nick_chats[0],
+                            type_user: Nick_chats[1],
+
+
+                        });
+
+                        await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
+                    }
                 }
-
-
             }
 
 
@@ -152,102 +173,113 @@ export default class Login extends React.Component {
     };
 
 
-    reg =() => {
-const {router} = this.props;
-       router.push.Registration({router});
-
-
-
+    reg = () => {
+        const {router} = this.props;
+        router.push.Registration({router});
 
 
     };
 
 
+    Login_indicator = () => {
+
+        if (this.state.isLoading) {
+
+            return (
+
+
+                <View
+                    style={{backgroundColor: '#97e8f5', width: 200, height: 100, borderRadius: 14, paddingLeft: '2%'}}>
+                    <Text style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>Подождите..............{'\n'}Выполняется вход в Airchat =)</Text>
+                    <ActivityIndicator size="large" color="#6aaabb"
+                                       animating={this.state.isLoading}/>
+                </View>
+
+            )
+        }
+    };
 
 
     render() {
 
 
-
-
-
-
         return <View style={styles.container}>
 
 
-
             <ImageBackground source={require('../Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
-            <View style={styles.logoContainer}>
-
-
                 <View style={styles.logoContainer}>
 
 
-
-                    <Image
-                        style={{width: 200, height: 200,borderRadius:400/2,bottom:8,borderWidth: 1}}
-                        source={require('../Image/logo.jpg')}
-                    />
-                    <ActivityIndicator size="large" color="#6aaabb"
-                                       animating={this.state.isLoading}/>
-                    <Text style={styles.labelText}>AirChat</Text>
+                    <View style={styles.logoContainer}>
 
 
+                        <Image
+                            style={{width: 200, height: 200, borderRadius: 400 / 2, bottom: 8, borderWidth: 1}}
+                            source={require('../Image/logo.jpg')}
+                        />
+                        {this.Login_indicator()}
+                        <Text style={styles.labelText}>AirChat</Text>
 
-                </View>
 
-                <View style={styles.logoContainer1}>
+                    </View>
 
-                    <View style={styles.inputView}>
+                    <View style={styles.logoContainer1}>
 
-                    <TextInput style={styles.input}
-                               placeholder="Логин"
-                               placeholderTextColor='rgba(255,255,255,0.8)'
-                               onChangeText={(username) => this.setState({username})}
-                               value={this.state.username}
-                               maxLength={16}
-                    />
+                        <View style={styles.inputView}>
 
-                        <View>
+                            <TextInput style={styles.input}
+                                       placeholder="Логин"
+                                       placeholderTextColor='rgba(255,255,255,0.8)'
+                                       onChangeText={(username) => this.setState({username})}
+                                       value={this.state.username}
+                                       maxLength={16}
+                            />
 
+                            <View>
+
+
+                            </View>
 
                         </View>
 
-                    </View>
+                        <View style={styles.inputView}>
+                            <TextInput style={styles.input}
+                                       placeholder="Пароль"
+                                       placeholderTextColor='rgba(255,255,255,0.8)'
+                                       returnKeyType='go'
+                                       secureTextEntry
+                                       autoCorrect={false}
+                                       onChangeText={(password) => this.setState({password})}
+                                       value={this.state.password}
+                                       maxLength={16}
 
-                    <View style={styles.inputView}>
-                    <TextInput style={styles.input}
-                               placeholder="Пароль"
-                               placeholderTextColor='rgba(255,255,255,0.8)'
-                               returnKeyType='go'
-                               secureTextEntry
-                               autoCorrect={false}
-                               onChangeText={(password) => this.setState({password})}
-                               value={this.state.password}
-                               maxLength={16}
-
-                    />
-                    </View>
+                            />
+                        </View>
 
 
-                    <TouchableOpacity onPress={this.login}>
+                        <TouchableOpacity onPress={this.login}>
 
-                        <Text
+                            <Text
 
-                            style={styles.buttonTextlogin}>Войти</Text>
+                                style={styles.buttonTextlogin}>Войти</Text>
 
-
-                    </TouchableOpacity>
-                    <View>
-                        <TouchableOpacity onPress={this.reg} style={styles.buttonText1}>
-                            <Text style={styles.buttonText}>
-
-                                Регистрация</Text>
 
                         </TouchableOpacity>
+                        <View>
+                            <TouchableOpacity onPress={this.reg} style={styles.buttonText1}>
+                                <Text style={styles.buttonText}>
+
+                                    Регистрация</Text>
+
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
             </ImageBackground>
         </View>
 
@@ -270,7 +302,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        color:'#5375bf',
+        color: '#5375bf',
         borderRadius: 14,
     },
     logo: {
@@ -304,12 +336,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
 
 
-        borderRadius: 400/2,
+        borderRadius: 400 / 2,
     },
     inputView: {
 
-        bottom:30,
-        borderRadius:20,
+        bottom: 30,
+        borderRadius: 20,
 
 
     },
@@ -326,12 +358,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
         paddingHorizontal: 10,
-        backgroundColor:'#3e9496',
-        paddingLeft:30,
-        paddingRight:30,
-        paddingTop:10,
-        paddingBottom:10,
-        borderRadius:14,
+        backgroundColor: '#3e9496',
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderRadius: 14,
     },
     buttonTextlogin: {
         textAlign: 'center',
@@ -340,12 +372,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 0,
         paddingHorizontal: 10,
-        backgroundColor:'#548695',
-        paddingLeft:60,
-        paddingRight:60,
-        paddingTop:10,
-        paddingBottom:10,
-        borderRadius:14,
+        backgroundColor: '#548695',
+        paddingLeft: 60,
+        paddingRight: 60,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderRadius: 14,
     },
 
     buttonText1: {
@@ -367,10 +399,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
 
-     //   backgroundColor:'#67a8be',
-        paddingLeft:71,
-        paddingRight:71,
-        paddingBottom:15,
+        //   backgroundColor:'#67a8be',
+        paddingLeft: 71,
+        paddingRight: 71,
+        paddingBottom: 15,
 
     },
 

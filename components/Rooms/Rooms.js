@@ -89,6 +89,8 @@ export default class Rooms extends React.Component {
 
     _renderItem = ({item}) => {
 
+        console.log('roooooms')
+
 
         if ((item.category === '5c9a60fd0a975a14c67bcd7c')
             || (item.category === '5c9a61080a975a14c67bcdab')

@@ -109,7 +109,7 @@ export default class Private extends React.Component {
     componentDidMount = () => {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
-        this.interval = setInterval(() => this.update_msg(), 10000);
+        this.interval = setInterval(() => this.update_msg(), 7000);
 
 
     };
@@ -342,7 +342,7 @@ export default class Private extends React.Component {
             if ((emoticons[elem]))
                 return (
 
-                    <Image style={{width: 20, height: 20, resizeMode: 'contain',}}
+                    <Image style={{ width: 20, height: 20,}}
                            source={emoticons[elem]}/>
 
 
@@ -458,7 +458,7 @@ export default class Private extends React.Component {
                 }}>
                     <View style={{position: 'relative'}}>
                         <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
-                        <Text style={{color: '#3e5d84'}}
+                        <Text style={{color: '#3e5d84',paddingBottom:'5%',marginTop:'1%'}}
 
                         >
 
@@ -545,17 +545,16 @@ export default class Private extends React.Component {
                     {this.view()}
 
 
+                    <TextInput_Chatting
 
-                        <TextInput_Chatting
-
-                            show={this.ShowSmiles}
-                            add_text={this.add_text}
-                            send_msg={this.send_msg}
-                            text={this.state.text}
-                            active={this.state.ShowSmiles}
+                        show={this.ShowSmiles}
+                        add_text={this.add_text}
+                        send_msg={this.send_msg}
+                        text={this.state.text}
+                        active={this.state.ShowSmiles}
 
 
-                        />
+                    />
 
                     {this.ListSmileAction()}
                 </ImageBackground>
