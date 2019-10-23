@@ -1,11 +1,33 @@
-import {FlatList, Text, View, Dimensions, Image} from "react-native";
+import {FlatList, Text, View, Image} from "react-native";
 import React from "react";
 import styles from "../../styles";
-const screenHeight = Math.round(Dimensions.get('window').width);
+
 
 export default class ProfileInfoList extends React.Component {
 
 
+    parsedText = (sex, firstName, lastName, about, city,bday,email) => {
+
+        let array = [sex,firstName,lastName,about,city, bday,email];
+        return array.map(elem => {
+            if (!elem) return null;
+            if (elem.length>2)
+                return (
+
+                    <Text style={{fontSize: 21,fontWeight: 'bold',color:'white'}}>
+                       {elem + '\n'}
+                    </Text>
+
+
+                );
+
+
+
+        });
+
+
+
+    };
 
     render() {
 
@@ -37,17 +59,9 @@ export default class ProfileInfoList extends React.Component {
 
                             </View>
 
+                            <Text style={{textAlign: 'center', fontWeight: 'bold', color: item.color,fontSize:20}}>{item.nic}</Text>
 
-                            <Text style={styles.Profile_List_text_info}>
-                                {'\t' + '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t' + item.nic + '\n\n'}
-                                {item.sex + '\n'}
-                                {item.bday + '\n'}
-                                {item.email + '\n'}
-                                {item.firstName + '\n'}
-                                {item.lastName + '\n'}
-                                {item.about + '\n'}
-                                {item.city + '\n'}
-                            </Text>
+                            {this.parsedText(item.sex,item.firstName, item.lastName, item.about, item.city,item.bday,item.email)}
 
 
                         </View>
@@ -55,7 +69,7 @@ export default class ProfileInfoList extends React.Component {
                 )
                 }
 
-                keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => index.toString()}
             />
         );
     }

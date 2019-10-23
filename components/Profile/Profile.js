@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+ScrollView,
+
     View,
     BackHandler,
     ImageBackground,
@@ -39,7 +41,8 @@ export default class Profile extends React.Component {
             profile_info: list,
             user_info: this.props.user_data.data,
             gifts_list: this.props.gift,
-            photos_list:this.props.photos_list
+            photos_list:this.props.photos_list,
+
 
 
         };
@@ -93,9 +96,19 @@ export default class Profile extends React.Component {
 
     };
 
+    View_all_photo = ()=> {
+        const {router} = this.props;
+        router.push.PhotosAll({
+            photos_list: this.state.photos_list,
+            View_full_photo: this.View_full_photo
+        })
+
+
+    };
+
     View_full_photo =  (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {router} = this.props;
-         router.push.PHOTO_VIEWER({
+        router.push.PHOTO_VIEWER({
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -120,33 +133,43 @@ export default class Profile extends React.Component {
                     <HeaderBar
                         backs={this.backs}
                     />
+                    <ScrollView>
+                    <View>
                     <ProfileInfoList
                         user_info={this.state.user_info}
 />
+                    </View>
+
+
 
 
                         <PhotosList
                             photos_list={this.state.photos_list}
                             View_full_photo={this.View_full_photo}
-
+                            View_all_photo={this.View_all_photo}
                         />
+
+
                         <GiftList
                             gifts_list={this.state.gifts_list}
                             delete_gift={this.delete_gift}
 
                         />
 
+                    <View>
                         <ActionsList
                             profile_info={this.state.profile_info}
 
                         />
+                    </View>
 
 <FooterDown/>
 
-
+                    </ScrollView>
                 </ImageBackground>
 
             </View>
+
         )
 
 

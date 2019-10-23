@@ -1,8 +1,8 @@
 import {address} from "../config_connect";
 
-async function request_GET_USER_PHOTO(nick)  {
+async function request_GET_AvatarList()  {
 
-    const url = address +`/users/photos/${nick}`;
+    const url = address +`/get/AvatarList`;
 
 
     try {
@@ -17,4 +17,4 @@ async function request_GET_USER_PHOTO(nick)  {
     }
 }
 
-export default request_GET_USER_PHOTO;
+export default request_GET_AvatarList;

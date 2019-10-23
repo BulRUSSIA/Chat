@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'react-native-easy-router'
 
-import Login from  './components/Login/Login'
+import Login from './components/Login/Login'
 import Chatting from './components/Chatting/Chatting'
 import Rooms from "./components/Rooms/Rooms";
 import Registration from "./components/Registration/Registration";
@@ -13,24 +13,40 @@ import {Profile_redactor} from "./components/Profile_redactor/Profile_redactor";
 import ChatPortal from "./components/ChatPortal/ChatPortal";
 import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
+import {PhotosAll} from "./components/PhotosAll";
+import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
+
 export default class chat extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-
 
 
     }
 
-    render()
-    {
+    render() {
         return (
 
             <Router
-                routes={{Login, Chatting, Rooms, Registration,Profile,View_stuff,Private,Private_List,Profile_redactor,ChatPortal,PHOTO_VIEWER,NavigationAdmin}}
+                routes={{
+                    Login,
+                    Chatting,
+                    Rooms,
+                    Registration,
+                    Profile,
+                    View_stuff,
+                    Private,
+                    Private_List,
+                    Profile_redactor,
+                    ChatPortal,
+                    PHOTO_VIEWER,
+                    NavigationAdmin,
+                    PhotosAll,
+                    ScreenAvatarList,
+                }}
                 initialRoute="Login"
                 router={router => (this.router = router)}
-                disableHardwareBack={false}
+                disableHardwareBack={true}
             />
 
 

@@ -519,6 +519,7 @@ export default class Private extends React.Component {
 
                         </Left>
                         <Body>
+
                             <Title>{this.props.private_chatter}</Title>
                         </Body>
 

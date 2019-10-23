@@ -158,13 +158,13 @@ const styles = StyleSheet.create({
     },
 
     Profile_List_text_info: {
-        fontSize: 14,
+        fontSize: 19,
 
-        color: '#3e3f56',
+        color: '#ffffff',
 
 
-        backgroundColor: '#8ac5c6',
-        borderRadius:20,
+        backgroundColor: 'rgba(106,168,180,0.26)',
+
 
 
     },
@@ -285,13 +285,14 @@ const styles = StyleSheet.create({
 
     imageViewAvatars: {
 
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
+        marginLeft:4,
+        marginBottom:4,
 
 
         resizeMode: 'contain',
-        marginLeft:5,
-        marginTop:5
+
 
 
     },
