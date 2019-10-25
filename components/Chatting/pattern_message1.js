@@ -56,7 +56,7 @@ export class Pattern_message1 extends React.Component {
                                  onPress={() => this.props.Action_Nick(this.props.user, this.props.user_id)}>
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(192,226,226,0.69)'}}>
+            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(191,191,191,0.49)'}}>
 
 
                 <Text style={[styles.prices, {color: this.props._class}]}

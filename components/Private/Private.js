@@ -221,16 +221,17 @@ export default class Private extends React.Component {
                 text: '', attachments: 'Not', photo_attachments: false
             });
             await this.update_msg();
-        } else
+        } else {
 
             await Keyboard.dismiss();
-        await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
-        await this.setState({
-            text: '',
-        });
-        await this.update_msg();
-    };
+            await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
+            await this.setState({
+                text: '',
+            });
+            await this.update_msg();
+        }
 
+    };
 
     add_text = async (text) => {
 

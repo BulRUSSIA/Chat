@@ -46,7 +46,9 @@ import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
 import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
 import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
-
+const TYPE_ADMIN = 2;
+const TYPE_MODERATOR = 4;
+const CHAT_UPDATE = 3000;
 
 export default class Chatting extends React.Component {
 
@@ -138,7 +140,7 @@ export default class Chatting extends React.Component {
             case 'Бан 5 минут':
 
                 await this.Change_Visible_Action();
-                await request_SEND_BANNED_ACTION(0.083, this.state.user_id, this.props.nic);
+                await request_SEND_BANNED_ACTION(0.088, this.state.user_id, this.props.nic);
                 break;
 
             case 'Бан 15 минут' :
@@ -229,7 +231,7 @@ export default class Chatting extends React.Component {
     }
 
     componentDidMount = () => {
-        if (this.props.type_user === 2 || this.props.type_user === 4) { //проверяем тип пользователя если админ или мд открыть меню суперпользователя
+        if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) { //проверяем тип пользователя если админ или мд открыть меню суперпользователя
 
             this.setState({action_nick: list_moder, item_menu: menu_moderator})
 
@@ -238,7 +240,7 @@ export default class Chatting extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
 
-        this.interval = setInterval(() => this.update_msg(), 3000);
+        this.interval = setInterval(() => this.update_msg(), CHAT_UPDATE);
 
 
     };
@@ -311,7 +313,7 @@ export default class Chatting extends React.Component {
 
 
                 await this.Del_user_change();
-                await this.componentWillUnmount()
+                await this.componentWillUnmount();
                 break;
 
 
@@ -333,6 +335,7 @@ export default class Chatting extends React.Component {
                         photo: obj.photo,
                         sex: obj.sex,
                         balace: obj.balace,
+                        bday:obj.bday,
 
                     });
                 }
@@ -350,6 +353,7 @@ export default class Chatting extends React.Component {
                     color: this.state.color,
                     photo: this.state.photo,
                     sex: this.state.sex,
+                    bday:this.state.bday,
                 });
                 break;
 
@@ -565,24 +569,29 @@ export default class Chatting extends React.Component {
     send_msg = async () => {
 
         if (this.state.photo_attachments) {
+
             await Keyboard.dismiss();
             await this.send_photo();
-            //    if (this.state.text !=='') {
             await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
-
             await this.setState({
                 text: '', attachments: 'Not', photo_attachments: false
             });
-            await this.update_msg();
-        } else
 
+            await this.update_msg();
+        }
+
+        else {
             await Keyboard.dismiss();
-        await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
-        await this.setState({
-            text: '',
-        });
-        await this.update_msg();
+            await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+            await this.setState({
+                text: '',
+            });
+            await this.update_msg();
+
+        }
     };
+
+
     _renderItem = ({item}) => { //render листа с чат сообщениями
         let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
         let server = item.user; //имя пользователя

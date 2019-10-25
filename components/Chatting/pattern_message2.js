@@ -1,6 +1,6 @@
 import {
     Text,
-    TouchableOpacity,
+
     View
 } from "react-native";
 
@@ -17,7 +17,7 @@ export class Pattern_message2 extends React.Component {
         return  (
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(192,226,226,0.6)'}}>
+            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(191,191,191,0.49)'}}>
 
 
                 <Text style={[styles.prices, {color: '#010101'}]}

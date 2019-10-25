@@ -1,4 +1,4 @@
-import {FlatList, View, Image, TouchableOpacity, Button, ImageBackground} from "react-native";
+import {FlatList, View, Image, TouchableOpacity, Button} from "react-native";
 import React from "react";
 
 

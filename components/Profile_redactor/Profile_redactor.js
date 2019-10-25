@@ -16,7 +16,12 @@ import colors from "../const/colors";
 import menusmiles from '../const/colors_id'
 import request_EDIT_PROFILE from "../../actions/fetch_edit_profile";
 import request_EDIT_NICK from "../../actions/fetch_edit_nick";
-import {Header} from "native-base";
+import ChangeName from "./ChangeName";
+import Toolbar_redactor from "./Toolbar_redactor";
+import ChangeColor from "./ChangeColor";
+import ChangeBirthday from "./ChangeBirthday";
+import DateTimePickerAction from "./DateTimePickerAction";
+import ChangeNameModal from "./ChangeNameModal";
 
 export class Profile_redactor extends React.Component {
 
@@ -24,7 +29,7 @@ export class Profile_redactor extends React.Component {
         super(props);
         this.state = {
             isDateTimePickerVisible: false,
-            bday: 'Дата Рождения',
+            bday: '',
             enabled: false,
             isVisible: false,
             nic: this.props.chat_name,
@@ -42,6 +47,7 @@ export class Profile_redactor extends React.Component {
 
 
 
+
         };
         this.animatedVal = new Animated.Value(-350);
 
@@ -50,12 +56,35 @@ export class Profile_redactor extends React.Component {
 
     }
 
+    SerializeSex = ()=> {
+
+        switch(this.state.sex) {
+
+            case 'Мужской':
+                this.setState({sex:1});
+                break;
+            case 'Женский':
+                this.setState({sex:2});
+                console.log(this.state.sex+'state')
+                break;
+            case 'Не определен':
+                this.setState({sex:3});
+                break;
+
+
+
+        }
+
+
+    };
+
 
 
     Profile_Edit = async () => {
+        console.log(this.state.sex+'sex:::')
 
-
-        const send = await request_EDIT_PROFILE(
+        this.SerializeSex();
+        await request_EDIT_PROFILE(
             this.props.chat_name,
             this.state.bday,
             this.state.firstName,
@@ -90,7 +119,7 @@ export class Profile_redactor extends React.Component {
     Change_nick = async () => {
 
 
-        const send = await request_EDIT_NICK(this.props.chat_name,this.state.nic);
+        await request_EDIT_NICK(this.props.chat_name,this.state.nic);
         this.hideModalNick()
 
 
@@ -156,6 +185,20 @@ export class Profile_redactor extends React.Component {
 
     };
 
+    ChangeBirthdayState = (itemValue,itemIndex)=> {
+
+        this.setState({language: itemValue, sex: itemValue})
+
+
+    };
+
+    ChangeNickModal = (nic)=> {
+
+        this.setState({nic:nic})
+
+
+    };
+
 
     Get_pop = () => {
 
@@ -178,101 +221,30 @@ export class Profile_redactor extends React.Component {
 
             <ImageBackground source={require('../Image/background_redactor.webp')}
                              style={{width: '100%', height: '100%'}}>
-
-                <ToolbarAndroid style={styles.containerToolbar}
-                                androidStatusBarColor="#25566e"
-                >
+<Toolbar_redactor/>
 
 
-                    <View>
-                        <Text style={styles.instructions}>Мой профиль </Text>
+               <ChangeName
+                   hideModalNick={this.hideModalNick}
+               />
 
-                    </View>
+            <ChangeColor
+                Change_color={this.Change_color}
+                clr={this.state.clr}
+                photo={this.state.photo}
+                chat_name={this.props.chat_name}
 
+            />
 
-                </ToolbarAndroid>
-                <TouchableOpacity onPress={this.hideModalNick}>
-                    <View style={{
-                        backgroundColor: 'rgba(194,191,215,0.78)',
-                    }}>
-                        <Image source={require('../Image/pen_edit.png')}
-                               style={styles.imageAvatar_redactor}/>
-                        <Text style={{
+            <ChangeBirthday
+                ChangeBirthdayState={this.ChangeBirthdayState}
+                hideModal={this.hideModal}
+                enabled={this.state.enabled}
+                language={this.state.language}
 
-                            marginTop: 5,
-                            color: 'white',
-                            fontWeight: 'bold',
-                            marginLeft: 20,
-                            fontSize: 20,
-                            borderRadius: 8,
-
-                        }}>
-                            Cменить ник
-                        </Text>
-
-                    </View>
-                </TouchableOpacity>
-
-                <View style={{marginLeft: 20,}}>
-                    <Image source={{uri: this.state.photo}}
-                           style={styles.imageAvatarProfileEdit}/>
-
-                    <Text style={{marginTop:30,marginLeft:70,position:'absolute',fontSize:25,}}>{this.props.chat_name}</Text>
-                    <TouchableOpacity style={{
-                        backgroundColor: this.state.clr,
-
-                        height: 40,
-                        width: 40,
-
-                        position: 'absolute',
-                        marginLeft: 280,
-                        marginBottom: 20,
-                        paddingHorizontal: 10,
-                        borderRadius: 14,
-                        marginTop: 25,
-
-                    }}
-
-                                      onPress={this.Change_color}
+            />
 
 
-                    />
-                </View>
-                <Modal
-                    useNativeDriver={true}
-                    coverScreen={true}
-                    animationIn='slideInUp'
-                    animationOut='slideOutDown'
-                    onBackdropPress={this.hideModal}
-                    style={{
-                        height: 50,
-                        width: 120,
-                        backgroundColor: '#e8f6ff',
-                        position: 'absolute',
-                        left: 70,
-                        top: 200,
-                        bottom: 0,
-                        right: 0,
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                    }}
-                    isVisible={this.state.enabled}
-                >
-                    <View>
-                        <Picker
-                            enabled={this.state.enabled}
-                            selectedValue={this.state.language}
-                            style={{height: 50, width: 100}}
-                            onValueChange={(itemValue, itemIndex) =>
-                                this.setState({language: itemValue, sex: itemIndex})
-                            }>
-                            <Picker.Item label="Мужской" value='Мужской'/>
-                            <Picker.Item label="Женский" value='Женский'/>
-                            <Picker.Item label="Не определен" value='Не определен'/>
-                        </Picker>
-
-                    </View>
-                </Modal>
 
                 <TextInput
                     style={
@@ -304,13 +276,23 @@ export class Profile_redactor extends React.Component {
                 }}>
                     {JSON.stringify(this.state.bday).replace(/['"]+/g, '').replace(/T.*Z/g, '')}
                 </Text>
-                <Button color="#25566e" title="Выбрать дату" onPress={this.showDateTimePicker}/>
-                <DateTimePicker
-                    datePickerModeAndroid='default'
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onConfirm={this.handleDatePicked}
-                    onCancel={this.hideDateTimePicker}
+                <DateTimePickerAction
+                    isDateTimePickerVisible={this.state.isDateTimePickerVisible}
+                    handleDatePicked={this.handleDatePicked}
+                    hideDateTimePicker={this.hideDateTimePicker}
+                    showDateTimePicker={this.showDateTimePicker}
                 />
+
+                <ChangeNameModal
+                    hideModalNick={this.hideModalNick}
+                    isVisible={this.state.isVisible}
+                    ChangeNickModal={this.ChangeNickModal}
+                    Change_nick={this.Change_nick}
+                    nic={this.state.nic}
+
+
+                />
+
                 <TextInput
                     style={
                         styles.TextInput_Redactor
@@ -400,47 +382,7 @@ export class Profile_redactor extends React.Component {
                 </ToolbarAndroid>
 
 
-                <Modal
-                    useNativeDriver={true}
-                    coverScreen={true}
-                    animationIn='slideInUp'
-                    animationOut='slideOutDown'
-                    onBackdropPress={this.hideModalNick}
-                    style={{
-                        height: 134,
-                        width: 170,
-                        backgroundColor: '#e8f6ff',
-                        position: 'absolute',
-                        left: 70,
-                        top: 200,
-                        bottom: 0,
-                        right: 0,
-                        borderRadius: 4,
-                        justifyContent: 'center',
-                    }}
-                    isVisible={this.state.isVisible}
-                >
 
-                    <Text style={{fontWeight: 'bold', color: '#010101', fontSize: 24, marginBottom: 32,}}>   Cмена
-                        ника</Text>
-                    <TextInput
-
-                        underlineColorAndroid="#00bfff"
-                        placeholder='Ник             '
-                        keyboardType='email'
-                        onChangeText={(nic) => this.setState({nic})}
-                        value={this.state.nic}
-
-
-                        maxLength={16}
-
-                    />
-
-
-                    <Button title='Ок' color="#25566e" onPress={this.Change_nick}/>
-
-
-                </Modal>
             </ImageBackground>
 
             <Animated.View style={{

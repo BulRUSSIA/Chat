@@ -19,7 +19,8 @@ export class Pattern_message6 extends React.Component {
                 if ((emoticons[elem]))
                     return (
 
-                        <Image style={{width:20,height:20,resizeMode: 'cover',marginTop:'2%',paddingBottom:'1%'}} source={emoticons[elem]}/>
+                        <Image style={{width:20,height:20,resizeMode: 'cover',marginTop:'2%',paddingBottom:'1%'}} source={emoticons[elem]}
+                        />
 
 
                     );

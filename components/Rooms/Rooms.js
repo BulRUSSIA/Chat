@@ -1,4 +1,4 @@
-import {BackHandler, FlatList,  StyleSheet, View} from "react-native";
+import {BackHandler, View} from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
 import request_ENTRY_USER_ROOM from '../../actions/fetch_entry_user'
@@ -8,12 +8,6 @@ import Rooms_banned from '../const/Room_list_banned'
 import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 import {
     Container,
-    Header,
-    Footer,
-    Title,
-    Button,
-    Icon,
-    Left,
     Body,
     Badge,
     Text,
@@ -21,6 +15,9 @@ import {
     Thumbnail,
     Right
 } from 'native-base';
+import ListRooms from "./ListRooms";
+import Footer_rooms from "./Footer_rooms";
+import Header_rooms from "./Header_rooms";
 
 
 export default class Rooms extends React.Component {
@@ -68,39 +65,19 @@ export default class Rooms extends React.Component {
         />
     );
 
-    checking = () => {
-
-        let prison = this.props.prison;
-        if (prison === true) {
-
-
-            this.setState({item_menu: this.state.rooms_Banned})
-
-
-        } else {
-
-
-            this.setState({item_menu: this.state.item_menu})
-
-        }
-
-
-    };
 
     _renderItem = ({item}) => {
 
         console.log('roooooms')
 
 
-        if ((item.category === '5c9a60fd0a975a14c67bcd7c')
+        if ((item.category === '5c9a60fd0a975a14c67bcd7c')   //Внещ
             || (item.category === '5c9a61080a975a14c67bcdab')
-            // (item.category === '5c9a62560a975a168bff8a8f')
             || (item.room === '\u041a\u0411\u0420')
             || (item.room === 'Украина 🇺🇦 ')
             || (item.room === 'Регионы')
             || (item.room === 'Секс')
-            || (item.category==='5da58e010a975a3ece27314a')
-        // || (item.category === '5d0342090a975a0b991e6b0d')
+            || (item.category === '5da58e010a975a3ece27314a')
 
 
         ) {
@@ -113,7 +90,7 @@ export default class Rooms extends React.Component {
                     onPress={(event) => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
                     <Thumbnail square source={require('../Image/go_folder.png')}/>
                     <Body>
-                        <Text style={{color: 'white', fontSize: 20}}>
+                        <Text style={{color: 'white', fontSize: 21}}>
                             {item.room}
 
 
@@ -125,6 +102,31 @@ export default class Rooms extends React.Component {
 
 
             )
+
+
+        } else if ((item.room === 'Vill')) {
+
+
+            return (
+
+                <ListItem
+                    onPress={() => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
+                    <Thumbnail square source={require('../Image/42500-castle-icon.png')}/>
+                    <Body>
+                        <Text style={{color: 'white', fontSize: 21}}>
+                            {item.room}
+
+
+                        </Text>
+                    </Body>
+
+
+                </ListItem>
+
+
+            )
+
+
         } else {
 
 
@@ -162,19 +164,19 @@ export default class Rooms extends React.Component {
 
 
         if ((parent === '-1')
-            || (parent === '5c9a61080a975a14c67bcdab')
-            // (parent === '5c9a62560a975a168bff8a8f')
+            || (parent === '5c9a61080a975a14c67bcdab')//категории в базе данных
             || (parent === '5c9a60fd0a975a14c67bcd7c')
             || (parent === '5d12088c0a975a06b5c3483b')
             || (parent === '5d0694370a975a1fec7eaba0')
-            || (parent ==='5da58e010a975a3ece27314a')
+            || (parent === '5da58e010a975a3ece27314a')
             || (parent === '5ca287980a975a5cf7ca1f4d')
             || (event === '\u041c\u0427\u0421')
             || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
             || (event === '\u0410\u0440\u0433\u0443\u043d')
             || (event === '\u0421\u0438\u043d\u043a\u044a\u0435\u0440\u0430\u043c')
-            || (event === 'Sex.\u041e\u0431\u0449\u0430\u044f')
-            || (parent === '5d5061490a975a4d4467fa52')
+            || (event === 'Sex.\u041e\u0431\u0449\u0430\u044f')//Если название комнаты существует в бд перейдем в нее
+            || (parent === '5d5061490a975a4d4467fa52')//# Если категория комнаты действительно категория с id в бд то переходим в комнату
+            || (parent === '5d5061490a975a4d9967fa52')
 
         ) {
             let prison = this.props.prison;
@@ -224,14 +226,14 @@ export default class Rooms extends React.Component {
             const rooms = await request_GET_ROOMS(category);
             const {router} = this.props;
 
-                router.push.Rooms({
-                    name: this.props.name,
+            router.push.Rooms({
+                name: this.props.name,
 
-                    chat_name: Nick_chats[0],
-                    type_user: Nick_chats[1],
-                    roomlist: rooms,
-                    count: this.props.count
-                });
+                chat_name: Nick_chats[0],
+                type_user: Nick_chats[1],
+                roomlist: rooms,
+                count: this.props.count
+            });
 
 
         }
@@ -253,10 +255,6 @@ export default class Rooms extends React.Component {
 
     };
 
-//<Text style={styles.instructions}>Комнаты</Text>   <Text style={styles.all_user_chat}>онлайн:{this.props.count}</Text>
-//
-//                             <Image source={require('./Image/dot_green.png')}
-//                                    style={styles.imageViewToolbarDot}/>
 
     render() {
 
@@ -266,52 +264,19 @@ export default class Rooms extends React.Component {
 
             <Container style={{backgroundColor: '#88a8b6',}}>
 
-                <Header style={{backgroundColor: '#25566e',}}
-                 androidStatusBarColor="#25566e"
-                >
-                    <Left style={{flex: 1}}>
-                        <Button transparent
-
-                                onPress={this.back_room}>
-                            <Icon
-
-                                name="ios-arrow-back"/>
-                        </Button>
-                    </Left>
-                    <Body style={{flex: 4, justifyContent: 'center', alignItems: 'center',}}>
-                        <Title
-                            style={{fontSize: 25}}>Комнаты</Title>
-                    </Body>
-                    <Body style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
-                        <Title> онлайн:{this.props.count}</Title>
-
-                    </Body>
-                    <Badge primary style={{backgroundColor: '#50d36e', width: 24, marginTop: 10,}}>
-
-                    </Badge>
-                </Header>
-
-
-                <FlatList
-
-
-                    data={this.state.item_menu}
-                    extraData={this.state}
-
-
-                    ItemSeparatorComponent={this.renderSeparator_1}
-
-
-                    renderItem={this._renderItem}
-
-
-                    keyExtractor={(item, index) => index.toString()}
-
+                <Header_rooms
+                    back_room={this.back_room}
+                    count={this.props.count}
 
                 />
-                <Footer style={{backgroundColor: '#25566e', height: '5%'}}>
 
-                </Footer>
+
+                <ListRooms
+                    _renderItem={this._renderItem}
+                    item_menu={this.state.item_menu}
+                />
+
+                <Footer_rooms/>
 
             </Container>
 
