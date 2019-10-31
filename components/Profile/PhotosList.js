@@ -14,7 +14,7 @@ export default class PhotosList extends React.Component {
             return (
                 <View style={{backgroundColor: 'rgba(21,135,117,0.45)'}}>
                     <Button onPress={this.props.View_all_photo}
-                            color='#25566e'
+                            color='#216C86'
                             title=' все фото'/>
                     <FlatList style={{
                         marginLeft: 30,

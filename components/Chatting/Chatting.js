@@ -46,6 +46,7 @@ import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
 import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
 import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
+import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 const TYPE_ADMIN = 2;
 const TYPE_MODERATOR = 4;
 const CHAT_UPDATE = 3000;
@@ -314,6 +315,9 @@ export default class Chatting extends React.Component {
 
                 await this.Del_user_change();
                 await this.componentWillUnmount();
+
+
+
                 break;
 
 
@@ -412,7 +416,8 @@ export default class Chatting extends React.Component {
                     banned_list: usr_banned_list,
                     moderator_list: usr_moderator_list,
                     invisible_list: usr_invisible_list,
-                    type_user: this.props.type_user
+                    type_user: this.props.type_user,
+                    nic:this.props.nic
                 });
                 break;
 

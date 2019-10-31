@@ -101,7 +101,9 @@ export default class Profile extends React.Component {
         router.push.PhotosAll({
             photos_list: this.state.photos_list,
             View_full_photo: this.View_full_photo
-        })
+        });
+
+
 
 
     };
@@ -127,7 +129,7 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/reg_background.jpg')}
+                <ImageBackground source={require('../Image/profile_background.webp')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <HeaderBar

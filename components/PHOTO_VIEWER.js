@@ -23,6 +23,9 @@ export class PHOTO_VIEWER extends React.Component {
 
         <Header style={{backgroundColor: '#25566e'
 }}
+
+
+                androidStatusBarColor="#25566e"
                           >
 
             <Left style={{flex: 1}}>
@@ -62,9 +65,9 @@ export class PHOTO_VIEWER extends React.Component {
 
 
 
-                <Image source={{uri: this.props.photo_attachments}} style={{width:'100%',height:'1000%',backgroundColor:'#25566e',
+                <Image source={{uri: this.props.photo_attachments}} style={{width:'100%',height:'1000%',resizeMode:'contain',
 
-                    resizeMode: 'stretch',
+
                     }}/>
 
 

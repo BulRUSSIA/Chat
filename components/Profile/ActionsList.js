@@ -22,7 +22,7 @@ export default class ActionsList extends React.Component {
 
                           <View style={{
                               flex: 1, flexDirection: 'row', paddingTop: 6,
-                              borderRadius: 20
+                              borderRadius: 20,backgroundColor:'rgba(29,93,116,0.72)',marginTop:5,
                           }}>
 
                               <Image source={item.icon} style={styles.imageViewProfile_icon}/>

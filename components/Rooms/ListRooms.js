@@ -26,6 +26,8 @@ export default class ListRooms extends React.Component {
 
 
                 keyExtractor={(item, index) => index.toString()}
+                onRefresh={() => this.props.onRefresh()}
+                refreshing={this.props.refreshing}
 
 
             />

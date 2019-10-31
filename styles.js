@@ -141,16 +141,8 @@ const styles = StyleSheet.create({
 
     Profile_List_text: {
         fontSize: 20,
-        flex:1,
-        color: '#3e3f56',
-        marginLeft: 0,
-        padding: 1,
-        backgroundColor: '#76a3ab',
-        borderRadius:8,
-        paddingBottom:5,
-        paddingRight: 10,
-        paddingLeft:10,
-        paddingTop:5,
+        fontWeight:'bold',
+        color:'rgba(255,255,255,0.89)'
 
 
 
@@ -245,12 +237,12 @@ const styles = StyleSheet.create({
 
         width: 25,
         height: 25,
-        paddingBottom: 12,
-        marginBottom: 5,
+        left:2,
+
         borderRadius: 7,
         marginLeft: 0,
         resizeMode: 'contain',
-        marginTop:6,
+
 
 
     },
@@ -316,11 +308,13 @@ const styles = StyleSheet.create({
 
     imageAvatarProfile: {
 
-        width: 48,
-        height: 48,
-        marginLeft: 120,
+        width: 82,
+        height: 82,
+
         marginTop: 20,
-        resizeMode: 'contain',
+        marginLeft:10,
+
+
         borderRadius: 400 / 2,
         marginBottom:5,
 

@@ -1,4 +1,4 @@
-import {FlatList, TouchableOpacity, View, Dimensions, Image, Button, ScrollView} from "react-native";
+import {FlatList, TouchableOpacity, View, Dimensions, Image, Button, ScrollView,Text} from "react-native";
 import React from "react";
 import styles from "../../styles";
 
@@ -12,10 +12,10 @@ export default class GiftList extends React.Component {
 
             return (
 
-                <View style={{backgroundColor: 'rgba(21,135,117,0.45)', marginTop: 2}}>
-                    <Button
-                        color="#25566e"
-                        title=' все подарки'/>
+                <View style={{backgroundColor: 'rgba(29,135,123,0.72)', marginTop: 2}}>
+                  <Text style={{alignSelf:'center',fontWeight: 'bold',fontsize:20,color:'white'}}>
+                      Подарки
+                  </Text>
                     <FlatList style={{
                         marginLeft: 30,
                         marginRight: 30,
@@ -36,7 +36,7 @@ export default class GiftList extends React.Component {
 
                                   );
                               }}
-                              keyExtractor={(item, index) => index.toString}
+                              keyExtractor={(item, index) => index.toString()}
 
 
                     />

@@ -1,10 +1,11 @@
 import {
     FlatList,
-    Image, ScrollView,
-    View, Dimensions, Text, ImageBackground
+    Image, ScrollView,Alert,
+    View, Dimensions, Text, ImageBackground,TouchableOpacity
 } from 'react-native';
 import React from "react";
-import {Body, Button, CardItem, Header, Icon, Left, Title} from "native-base";
+import {Body, Button, Header, Icon, Left, Title} from "native-base";
+import request_BUY_AVATAR from "../../actions/fetch_buy_avatar";
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
 
@@ -12,9 +13,57 @@ export class ScreenAvatarList extends React.Component {
 
 
 
+    BuyAvatar = async (avatar_id,price)=> {
+     Alert.alert(
+            'Покупка аватарки!',
+            "Вы уверены,что хотите купить аватарку за "+ price + " руб. на месяц?",
+            [
+
+                {
+                    text: 'Отмена',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'OK', onPress: async () => { await this.Buy_confirm(avatar_id,price)}},
+            ],
+            {cancelable: false},
+        );
+
+
+
+
+    };
+
+    Buy_confirm =async (avatar_id,price)=> {
+
+        const buy = await request_BUY_AVATAR(this.props.user_id,price,avatar_id);
+
+        let response = buy['Accept'];
+        console.log(response);
+
+        if (response===true) {
+
+            Alert.alert("Аватар успешно куплен!","Поздравляем с новой аватаркой!")
+
+        }
+
+        else {
+
+            Alert.alert("Недостаточно средств","Пополните баланс!!!")
+
+
+        }
+
+
+
+
+    };
+
     render() {
 
         const {router}= this.props;
+
+
 
 
 
@@ -79,8 +128,9 @@ export class ScreenAvatarList extends React.Component {
 
 
                                         }}>
-
+                                            <TouchableOpacity onPress={()=> {this.BuyAvatar(item.id,item.price)}}>
                                             <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+100)/12,height:40,resizeMode:'contain',alignSelf:'center'}}  />
+
                                             <Text style={{fontsize:10,color:'rgba(1,1,1,0.58)',alignItems: 'center',textAlign: 'center'}}>
                                                 {item.name}
 
@@ -89,7 +139,7 @@ export class ScreenAvatarList extends React.Component {
                                                 {item.price} руб.
 
                                             </Text>
-
+                                            </TouchableOpacity>
 
 
 

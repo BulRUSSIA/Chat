@@ -24,7 +24,10 @@ export class PhotosAll extends React.Component {
             <View >
 
                 <Header style={{backgroundColor: '#25566e'
+
+
                 }}
+                        androidStatusBarColor="#25566e"
                 >
 
                     <Left style={{flex: 1}}>
@@ -66,17 +69,19 @@ export class PhotosAll extends React.Component {
 
                                       <TouchableOpacity
                                           onPress={() => this.props.View_full_photo(item.url)}>
+
+
                                       <View style={{
                                           flex: 1,
                                           margin: 5,
 
-                                          borderColor:'#010101'
+
 
 
 
                                       }}>
 
-                                              <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+40)/5,height:100,
+                                              <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+40)/5,height:50,resizeMode: 'contain'
 
 
                                               }}/>

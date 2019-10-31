@@ -31,6 +31,7 @@ export default class ChatPortal extends React.Component {
         router.push.ScreenAvatarList({
 
             avatars_list:avatars_list,
+            user_id:this.props.nic
 
         })
 

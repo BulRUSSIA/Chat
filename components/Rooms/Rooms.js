@@ -18,6 +18,7 @@ import {
 import ListRooms from "./ListRooms";
 import Footer_rooms from "./Footer_rooms";
 import Header_rooms from "./Header_rooms";
+import request_all_users from "../../actions/fetch_all_users";
 
 
 export default class Rooms extends React.Component {
@@ -33,12 +34,38 @@ export default class Rooms extends React.Component {
             name: this.props.name,
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
+            isFetching: false,
+            all_users_online:this.props.count,
 
 
         };
 
 
     }
+
+
+
+
+    Get_update = async () => {
+
+
+       const refr =  await request_GET_ROOMS('-1');
+        const count_all_users = await request_all_users();
+        const all = count_all_users['all'];
+        this.setState({
+            item_menu:refr,
+            isFetching:false,
+            all_users_online:all
+        })
+
+
+
+    };
+
+    onRefresh =()=> {
+
+        this.setState({ isFetching: true},() => this.Get_update());
+    };
 
     componentWillUnmount() {
 
@@ -78,6 +105,7 @@ export default class Rooms extends React.Component {
             || (item.room === 'Регионы')
             || (item.room === 'Секс')
             || (item.category === '5da58e010a975a3ece27314a')
+            || (item.room === 'English')
 
 
         ) {
@@ -104,7 +132,7 @@ export default class Rooms extends React.Component {
             )
 
 
-        } else if ((item.room === 'Vill')) {
+        } else if ((item.room === 'Виллы')) {
 
 
             return (
@@ -174,9 +202,14 @@ export default class Rooms extends React.Component {
             || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
             || (event === '\u0410\u0440\u0433\u0443\u043d')
             || (event === '\u0421\u0438\u043d\u043a\u044a\u0435\u0440\u0430\u043c')
+            || (event === 'ВиллаТест1')
             || (event === 'Sex.\u041e\u0431\u0449\u0430\u044f')//Если название комнаты существует в бд перейдем в нее
-            || (parent === '5d5061490a975a4d4467fa52')//# Если категория комнаты действительно категория с id в бд то переходим в комнату
-            || (parent === '5d5061490a975a4d9967fa52')
+            || (parent === '5db74abd0a975a54ab7e5f0c')
+            || (parent === ' 5d5061490a975a4d9967fa52')
+            || (parent ==='5d5061490a975a4d4467fa52')
+
+
+
 
         ) {
             let prison = this.props.prison;
@@ -266,7 +299,7 @@ export default class Rooms extends React.Component {
 
                 <Header_rooms
                     back_room={this.back_room}
-                    count={this.props.count}
+                    count={this.state.all_users_online}
 
                 />
 
@@ -274,6 +307,8 @@ export default class Rooms extends React.Component {
                 <ListRooms
                     _renderItem={this._renderItem}
                     item_menu={this.state.item_menu}
+                    onRefresh={this.onRefresh}
+                    refreshing={this.state.isFetching}
                 />
 
                 <Footer_rooms/>

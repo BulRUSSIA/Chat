@@ -101,6 +101,8 @@ export default class NavigationAdmin extends React.Component {
 
     };
 
+
+
     render() {
 
         const {router} = this.props;
@@ -132,7 +134,9 @@ export default class NavigationAdmin extends React.Component {
                     screenProps={{
                         banned_list: this.props.banned_list,
                         moderator_list: this.props.moderator_list,
-                        invisible_list: this.props.invisible_list
+                        invisible_list: this.props.invisible_list,
+                        nic:this.props.nic,
+
                     }}
                     style={{backgroundColor: '#2d657f'}}>
                 </NavigationApp>
