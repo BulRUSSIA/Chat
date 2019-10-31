@@ -1,10 +1,26 @@
-import {FlatList, TouchableOpacity, View, Dimensions, Image, Button, ScrollView,Text} from "react-native";
+import {FlatList, TouchableOpacity, View, Image,Text} from "react-native";
 import React from "react";
 import styles from "../../styles";
 
 export default class GiftList extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            itemsCount: 15,
+            isFetching: false,
+        };
+    }
+    renderNewItem = () => {
+        if (this.state.itemsCount < this.props.gifts_list.length) {
+            this.setState((prevState) => ({ itemsCount: (prevState.itemsCount + 10) ,isFetching:false}));
+        }
+    };
 
+    onRefresh =()=> {
+
+        this.setState({ isFetching: true},() => this.renderNewItem());
+    };
 
 
     render() {
@@ -12,8 +28,8 @@ export default class GiftList extends React.Component {
 
             return (
 
-                <View style={{backgroundColor: 'rgba(29,135,123,0.72)', marginTop: 2}}>
-                  <Text style={{alignSelf:'center',fontWeight: 'bold',fontsize:20,color:'white'}}>
+                <View style={{backgroundColor: 'rgba(29,135,123,0.72)', marginTop: 5}}>
+                  <Text style={{alignSelf:'center',fontWeight: 'bold',fontSize:15,color:'white'}}>
                       Подарки
                   </Text>
                     <FlatList style={{
@@ -22,7 +38,9 @@ export default class GiftList extends React.Component {
                         marginTop: 13,
                     }}
                               horizontal
-                              data={this.props.gifts_list.slice(0, 15)}
+                              data={this.props.gifts_list.slice(0, this.itemsCount)}
+                              onRefresh={() => this.onRefresh()}
+                              refreshing={this.state.isFetching}
                               renderItem={({item}) => {
                                   return (
 
@@ -36,7 +54,7 @@ export default class GiftList extends React.Component {
 
                                   );
                               }}
-                              keyExtractor={(item, index) => index.toString()}
+                              keyExtractor={(item) => item.id}
 
 
                     />

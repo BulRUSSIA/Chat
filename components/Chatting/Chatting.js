@@ -141,7 +141,7 @@ export default class Chatting extends React.Component {
             case 'Бан 5 минут':
 
                 await this.Change_Visible_Action();
-                await request_SEND_BANNED_ACTION(0.088, this.state.user_id, this.props.nic);
+                await request_SEND_BANNED_ACTION(0.089, this.state.user_id, this.props.nic);
                 break;
 
             case 'Бан 15 минут' :

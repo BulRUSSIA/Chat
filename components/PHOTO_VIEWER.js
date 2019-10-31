@@ -3,7 +3,7 @@ import {
     View
 } from 'react-native';
 import React from "react";
-import {Body, Button, Header, Icon, Left,Container , Title} from "native-base";
+import {Body, Button, Header, Icon, Left,Container ,Content, Title} from "native-base";
 
 export class PHOTO_VIEWER extends React.Component {
 
@@ -19,7 +19,7 @@ export class PHOTO_VIEWER extends React.Component {
 
 
         return   (
-        <View >
+        <View style={{backgroundColor:'#010101'}}>
 
         <Header style={{backgroundColor: '#25566e'
 }}
@@ -58,20 +58,20 @@ export class PHOTO_VIEWER extends React.Component {
 
         </Header>
 
-            <Container style={{flex:1,alignItems:'center',marginTop:'18%'}}>
+
+
+            <View style={{backgroundColor:'#010101'}}>
 
 
 
-
-
-
-                <Image source={{uri: this.props.photo_attachments}} style={{width:'100%',height:'1000%',resizeMode:'contain',
+                <Image source={{uri: this.props.photo_attachments}} style={{alignSelf:'center',width:'100%',height:'100%',resizeMode:'contain',
 
 
                     }}/>
 
 
-            </Container>
+</View>
+
 
 
         </View>

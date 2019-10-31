@@ -18,6 +18,16 @@ const styles = StyleSheet.create({
         height:'50%'
 
     },
+
+
+    modalbackground_info: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(45,101,127,0.37)',
+        height:'50%'
+
+    },
     container_pofile: {
 
         justifyContent: 'center',
@@ -311,12 +321,14 @@ const styles = StyleSheet.create({
         width: 82,
         height: 82,
 
-        marginTop: 20,
+
         marginLeft:10,
+        marginBottom:'0.47%',
+
 
 
         borderRadius: 400 / 2,
-        marginBottom:5,
+
 
 
     },

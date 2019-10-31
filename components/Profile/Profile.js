@@ -1,20 +1,19 @@
 import React from 'react';
 import {
-ScrollView,
-
+    ScrollView,
+    Text,
     View,
     BackHandler,
-    ImageBackground,
+    ImageBackground, TouchableOpacity,
 } from 'react-native';
 
 import Chatting from '../../components/Chatting/Chatting'
 import styles from '../../styles'
 import GiftList from "./GiftList";
 import ProfileInfoList from "./ProfileInfoList";
-import ActionsList from "./ActionsList";
 import HeaderBar from "./Header";
 import FooterDown from "./Footer";
-import PhotosList from "./PhotosList";
+import NavigationApp from "./Navigation";
 
 const list = [{
     action: 'Написать личное сообщение',
@@ -41,8 +40,8 @@ export default class Profile extends React.Component {
             profile_info: list,
             user_info: this.props.user_data.data,
             gifts_list: this.props.gift,
-            photos_list:this.props.photos_list,
-
+            photos_list: this.props.photos_list,
+            visible:false,
 
 
         };
@@ -96,7 +95,7 @@ export default class Profile extends React.Component {
 
     };
 
-    View_all_photo = ()=> {
+    View_all_photo = () => {
         const {router} = this.props;
         router.push.PhotosAll({
             photos_list: this.state.photos_list,
@@ -104,11 +103,16 @@ export default class Profile extends React.Component {
         });
 
 
+    };
 
+    visible_action =()=>{
+
+      this.setState({visible:!this.state.visible});
+        console.log(this.state.visible)
 
     };
 
-    View_full_photo =  (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
+    View_full_photo = (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {router} = this.props;
         router.push.PHOTO_VIEWER({
             room: this.props.room,
@@ -117,6 +121,8 @@ export default class Profile extends React.Component {
             photo_attachments: attach,
         });
     };
+
+
 
 
     render() {
@@ -129,46 +135,86 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/profile_background.webp')}
+                <ImageBackground source={require('../Image/main-qimg-0548d95c40fa2abe7088c8a551fb5296.jpg')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <HeaderBar
                         backs={this.backs}
                     />
-                    <ScrollView>
+
                     <View>
-                    <ProfileInfoList
-                        user_info={this.state.user_info}
-/>
+
+
+                        <ProfileInfoList
+                            user_info={this.state.user_info}
+                            visible={this.state.visible}
+                            visible_action={this.visible_action}
+                        />
+                    </View>
+                    <View style={{flex: 0, flexDirection: 'row',padding:5,marginleft:2}}>
+                        <TouchableOpacity style={{
+                            backgroundColor: 'rgba(32,108,134,0.78)', flex: 1, borderRadius: 14,
+
+
+                            padding: 14,
+
+
+                        }}
+                                          activeOpacity={.5}
+
+                        >
+                            <Text style={{
+                                color: 'white',
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                fontSize: 15,
+                            }}>Написать</Text>
+
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{
+                            backgroundColor: 'rgba(33,108,134,0.78)', flex: 1, borderRadius: 14,marginLeft:3,
+
+
+                            padding: 14,
+
+
+                        }}
+                                          activeOpacity={.5}
+
+                        >
+                            <Text style={{
+                                color: 'white',
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                fontSize: 15,
+                            }}>Добавить в друзья</Text>
+
+                        </TouchableOpacity>
+
                     </View>
 
 
+                    <GiftList
+                        gifts_list={this.state.gifts_list}
+                        delete_gift={this.delete_gift}
+
+                    />
+                    <NavigationApp
+                        screenProps={{
+                            photos_list:this.state.photos_list,
+                            View_full_photo: this.View_full_photo,
+                            View_all_photo: this.View_all_photo,
+                        }}
 
 
-                        <PhotosList
-                            photos_list={this.state.photos_list}
-                            View_full_photo={this.View_full_photo}
-                            View_all_photo={this.View_all_photo}
-                        />
+                    />
 
 
-                        <GiftList
-                            gifts_list={this.state.gifts_list}
-                            delete_gift={this.delete_gift}
+                    <FooterDown/>
 
-                        />
 
-                    <View>
-                        <ActionsList
-                            profile_info={this.state.profile_info}
-
-                        />
-                    </View>
-
-<FooterDown/>
-
-                    </ScrollView>
                 </ImageBackground>
+
 
             </View>
 
@@ -179,3 +225,15 @@ export default class Profile extends React.Component {
 }
 
 
+//<View>
+//     //<ActionsList
+// //       profile_info={this.state.profile_info}
+
+// //    />
+//</View>
+
+//  <PhotosList
+//                             photos_list={this.state.photos_list}
+//                             View_full_photo={this.View_full_photo}
+//                             View_all_photo={this.View_all_photo}
+//                         />

@@ -18,7 +18,7 @@ export class Flatlist_Chatting_Messaging extends React.Component {
                          renderItem={this.props.render}
 
 
-                         keyExtractor={(item, index) => index.toString()}
+                         keyExtractor={(item) => item.key}
 
 
         />

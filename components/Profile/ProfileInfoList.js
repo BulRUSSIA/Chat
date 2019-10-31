@@ -1,36 +1,13 @@
-import {FlatList, Text, View, Image} from "react-native";
+import {FlatList, Text, View, Image,TouchableOpacity} from "react-native";
 import React from "react";
 import styles from "../../styles";
+import {Modal_information} from "./Modal_information";
 
 
 export default class ProfileInfoList extends React.Component {
 
 
-    parsedText = (sex, firstName, lastName, about, city, bday, ) => {
 
-        let array = [sex, firstName, lastName, about, city, bday];
-        return array.map(elem => {
-            if (!elem) return null;
-            if (elem.length > 3)
-                return (
-                    <View style={{backgroundColor: 'rgba(33,108,134,0.81)',marginTop:5}}>
-
-                    <Text style={{
-                        fontSize: 21, fontWeight: 'bold', color: 'white', marginTop: 5,
-
-                    }}>
-                        {elem + '\n'}
-                    </Text>
-                    </View>
-
-
-                );
-
-
-        });
-
-
-    };
 
     render() {
 
@@ -57,30 +34,33 @@ export default class ProfileInfoList extends React.Component {
 
                         }}>
 
-                            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(21,135,117,0.55)'}}>
+                            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(33,108,134,0.69)'}}>
 
                                 <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}>
                                 </Image>
                                 <Text style={{
                                     fontWeight: 'bold',
-                                    color: item.color,
+                                    color: '#010101',
                                     fontSize: 24,
                                     left: '10%',
                                     top: '11%'
                                 }}>{item.nic}</Text>
+                                <TouchableOpacity onPress={()=> {this.props.visible_action()}}>
+                                <Image source={require('.././Image/information.png')} style={{width:30,height:30}}>
+
+                                </Image>
+                                </TouchableOpacity>
 
 
                             </View>
-                            <View style={{marginTop: 10}}>
-                                <Text style={{
-                                    fontWeight: 'bold',
-                                    color:'white',
 
-                                    fontSize: 24,
-                                    alignSelf:'center'
-                                }}>Информация</Text>
-                                {this.parsedText(item.sex, item.firstName, item.lastName, item.about, item.city, item.bday)}
-                            </View>
+                            <Modal_information
+                                user_info={this.props.user_info}
+                                visible={this.props.visible}
+                                visible_action={this.props.visible_action}
+
+                            />
+
 
 
                         </View>
@@ -93,3 +73,13 @@ export default class ProfileInfoList extends React.Component {
         );
     }
 }
+//<View style={{marginTop: 10}}>
+//                                // <Text style={{
+//                                     fontWeight: 'bold',
+//                                     color:'white',
+//
+//                                     fontSize: 24,
+//                                     alignSelf:'center'
+//                                 }}>Информация</Text>
+//                            ///     {this.parsedText(item.sex, item.firstName, item.lastName, item.about, item.city, item.bday)}
+//                             </View>

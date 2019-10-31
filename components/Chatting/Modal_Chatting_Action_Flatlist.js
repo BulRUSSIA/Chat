@@ -1,4 +1,4 @@
-import {FlatList, ImageBackground, Text, TouchableOpacity, View, Modal,TouchableWithoutFeedback,ScrollView} from "react-native";
+import {FlatList, ImageBackground, Text, TouchableOpacity, View, Modal,TouchableWithoutFeedback} from "react-native";
 
 import React from "react";
 

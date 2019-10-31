@@ -1,113 +1,110 @@
 import {
     FlatList,
-    Image, TouchableOpacity,ScrollView,
-    View,Dimensions
+    Image, TouchableOpacity,
+    View,Text,Dimensions
 } from 'react-native';
 import React from "react";
-import {Body, Button, Header, Icon, Left,Container , Title} from "native-base";
 const ITEM_WIDTH = Dimensions.get('window').width;
 
 export class PhotosAll extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            itemsCount: 12,
+            isFetching: false,
+        };
+    }
+    renderNewItem = () => {
+        if (this.state.itemsCount < this.props.photos_list.length) {
+            this.setState((prevState) => ({ itemsCount: (prevState.itemsCount + 10) ,isFetching:false}));
+        }
+    };
 
+    onRefresh =()=> {
+
+        this.setState({ isFetching: true},() => this.renderNewItem());
+    };
 
 
 //SEE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TIMER HAS BEEN STOPPED,{FLATLIST_PRIVATE} NOT UPDATING
     render() {
 
-        const {router}= this.props;
+
+        if (this.props.photos_list.length < 1)
+
+           return (
+              <Text style={{fontWeight: 'bold',color:'white',fontSize:25,textAlign:'center'}}>
+
+                  Данный пользователь слишком стесняется показать себя!
+
+              </Text>
+
+           ) ;
+
+
+     else {
+
+
+            return (
+                <View>
 
 
 
+                        <View>
+                            <FlatList
 
 
-        return   (
-            <View >
-
-                <Header style={{backgroundColor: '#25566e'
-
-
-                }}
-                        androidStatusBarColor="#25566e"
-                >
-
-                    <Left style={{flex: 1}}>
-                        <Button transparent
-
-                                onPress={()=> {router.pop()}
+                                contentContainerStyle={{
+                                    justifyContent: 'center',
+                                    flexGrow:1
 
 
+                                }}
+                                numColumns={4}
 
-                                }>
-                            <Icon
-                                style={{color: 'white'}}
-                                name="ios-arrow-back"/>
-                        </Button>
+                                refreshing={this.state.isFetching}
+                                      onEndReached={this.onRefresh} // handle refresh
+                                      onEndReachedThreshold={10} //
 
-                    </Left>
-                    <Body style={{flex:2}}>
-                        <Title style={{alignItems:'center'}}>фотоальбом</Title>
-                    </Body>
+                                data={this.props.photos_list.slice(0, this.state.itemsCount)}
+                                renderItem={({item}) => {
+                                    return (
 
-
-
-                </Header>
-
-<ScrollView >
-<View>
-                    <FlatList
+                                        <TouchableOpacity
+                                            onPress={() => this.props.View_full_photo(item.url)}>
 
 
-                        contentContainerStyle={ {
-                        justifyContent: 'center',
+                                            <View style={{
+                                                flex: 1,
+                                                margin: 3,
 
 
-                    }}
-                             numColumns={4}
-                              data={this.props.photos_list}
-                              renderItem={({item}) => {
-                                  return (
+                                            }}>
 
-                                      <TouchableOpacity
-                                          onPress={() => this.props.View_full_photo(item.url)}>
+                                                <Image source={{uri: item.url}} style={{
+                                                    width: (ITEM_WIDTH + 60) / 5, height: 50,
 
 
-                                      <View style={{
-                                          flex: 1,
-                                          margin: 5,
+                                                }}/>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                    );
+                                }}
+                                keyExtractor={(item) => item.key}
 
 
+                         />
 
 
-
-                                      }}>
-
-                                              <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+40)/5,height:50,resizeMode: 'contain'
+                        </View>
 
 
-                                              }}/>
-                                      </View>
-                                      </TouchableOpacity>
-
-                                  );
-                              }}
-                              keyExtractor={(item, index) => index.toString()}
+                </View>
 
 
-                    />
+            )
 
-
-
-
-
-
-</View>
-</ScrollView>
-
-            </View>
-
-
-        )
-
-
+        }
     }
 }
