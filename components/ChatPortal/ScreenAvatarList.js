@@ -16,7 +16,7 @@ export class ScreenAvatarList extends React.Component {
     BuyAvatar = async (avatar_id,price)=> {
      Alert.alert(
             'Покупка аватарки!',
-            "Вы уверены,что хотите купить аватарку за "+ price + " руб. на месяц?",
+            "Вы уверены,что хотите купить аватарку на месяц за "+ price + " руб?",
             [
 
                 {
@@ -74,6 +74,7 @@ export class ScreenAvatarList extends React.Component {
 
                 <Header style={{backgroundColor: '#25566e'
                 }}
+                        androidStatusBarColor="#25566e"
                 >
 
                     <Left style={{flex: 1}}>
@@ -99,9 +100,9 @@ export class ScreenAvatarList extends React.Component {
                 </Header>
 
 <ScrollView >
-                    <View style={{height:ITEM_HEIGHT*2.5}}>
-                        <ImageBackground source={require('../Image/whatsap.png')}
-                                         style={{width: '100%', height: '100%'}}>
+                    <View style={{height:ITEM_HEIGHT*2.2}}>
+                        <ImageBackground source={require('../Image/avatars_background.jpg')}
+                                         style={{width: '100%', height: '100%',resizeMode:'contain'}}>
 
 
 
@@ -128,14 +129,14 @@ export class ScreenAvatarList extends React.Component {
 
 
                                         }}>
-                                            <TouchableOpacity onPress={()=> {this.BuyAvatar(item.id,item.price)}}>
+                                            <TouchableOpacity onPress={()=> this.BuyAvatar(item.id,item.price)}>
                                             <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+100)/12,height:40,resizeMode:'contain',alignSelf:'center'}}  />
 
-                                            <Text style={{fontsize:10,color:'rgba(1,1,1,0.58)',alignItems: 'center',textAlign: 'center'}}>
+                                            <Text style={{fontSize:12,color:'white',alignItems: 'center',textAlign: 'center'}}>
                                                 {item.name}
 
                                             </Text>
-                                            <Text style={{textAlign: 'center'}}>
+                                            <Text style={{textAlign: 'center',color:'white'}}>
                                                 {item.price} руб.
 
                                             </Text>

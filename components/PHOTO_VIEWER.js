@@ -1,9 +1,12 @@
 import {
+    Dimensions,
     Image,
     View
 } from 'react-native';
 import React from "react";
-import {Body, Button, Header, Icon, Left,Container ,Content, Title} from "native-base";
+import {Body, Button, Header, Icon, Left, Title} from "native-base";
+const ITEM_WIDTH = Dimensions.get('window').width;
+const ITEM_HEIGHT = Dimensions.get('window').height;
 
 export class PHOTO_VIEWER extends React.Component {
 
@@ -19,7 +22,7 @@ export class PHOTO_VIEWER extends React.Component {
 
 
         return   (
-        <View style={{backgroundColor:'#010101'}}>
+        <View style={{backgroundColor:'rgba(0,0,0,0.98)',height:ITEM_HEIGHT}}>
 
         <Header style={{backgroundColor: '#25566e'
 }}
@@ -31,16 +34,7 @@ export class PHOTO_VIEWER extends React.Component {
             <Left style={{flex: 1}}>
                 <Button transparent
 
-                        onPress={()=> {router.pop()}
-
-
-
-
-
-
-
-
-
+                        onPress={()=> {router.pop({type:'right-top',duration: 400, easing: 'ease-in-out' })}
 
 
                         }>
@@ -60,17 +54,17 @@ export class PHOTO_VIEWER extends React.Component {
 
 
 
-            <View style={{backgroundColor:'#010101'}}>
 
 
 
-                <Image source={{uri: this.props.photo_attachments}} style={{alignSelf:'center',width:'100%',height:'100%',resizeMode:'contain',
+
+                <Image source={{uri: this.props.photo_attachments}} style={{alignSelf:'center',width:ITEM_WIDTH/1.5,height:ITEM_HEIGHT/1.5,resizeMode:'contain',marginTop:ITEM_HEIGHT/10
 
 
                     }}/>
 
 
-</View>
+
 
 
 

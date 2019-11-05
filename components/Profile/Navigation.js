@@ -1,39 +1,15 @@
 import React from 'react';
 import {createAppContainer} from 'react-navigation';
-import { Text, View} from "react-native";
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import {PhotosAll} from "../PhotosAll";
-class HomeScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-               <PhotosAll
-
-                   photos_list={this.props.screenProps.photos_list}
-                   View_full_photo={this.props.screenProps.View_full_photo}
-                   View_all_photo={this.props.screenProps.View_all_photo}
+import ActionsList from "./ActionsList";
+import {PhotosAll} from "./PhotosAll";
 
 
-               />
-            </View>
-        );
-    }
-}
-
-class SettingsScreen extends React.Component {
-    render() {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Settings!</Text>
-            </View>
-        );
-    }
-}
 
 const AppNavigator = createMaterialTopTabNavigator(
     {
-        фото: HomeScreen,
-        Услуги: SettingsScreen,
+        фото: PhotosAll,
+        Услуги: ActionsList,
     },
     {
         tabBarOptions: {
@@ -53,7 +29,7 @@ const AppNavigator = createMaterialTopTabNavigator(
             showIcon: true,
 
             style: {
-                backgroundColor:'#216C86'
+                backgroundColor:'rgba(10,0,14,0.26)'
             }
         },
     }

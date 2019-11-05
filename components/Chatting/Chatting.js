@@ -25,7 +25,6 @@ import {TextInput_Chatting} from "./TextInput_Chatting";
 import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
-import request_GET_GIFTS from "../../actions/fetch_user_gifts";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
 import request_GET_PRIVATE_LIST from "../../actions/fetch_private_list";
 import fetch_users_in_room from "../../actions/fetch_users_in_room";
@@ -45,12 +44,10 @@ import {Flatlist_smiles_chatting} from "./Flatlist_smiles_chatting";
 import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
 import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
 import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
-import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
-import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 const TYPE_ADMIN = 2;
 const TYPE_MODERATOR = 4;
 const CHAT_UPDATE = 3000;
-
+//this.props.nic = your mongoDB-id
 export default class Chatting extends React.Component {
 
 
@@ -167,9 +164,8 @@ export default class Chatting extends React.Component {
                 break;
 
             case 'Написать Личное':
-
-                await this.Change_Visible_Action();
-                const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_now);
+                this.setState({isVisible: false});
+                const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_id);
                 const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
 
                 router.push.Private({
@@ -185,17 +181,27 @@ export default class Chatting extends React.Component {
                 break;
 
             case 'Профиль':
+
                 await this.Change_Visible_Action();
-                const profile_info = await request_GET_PROFILE(this.state.user_id);
-                const gifts = await request_GET_GIFTS(this.state.user_id);
-                const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
+             //   const profile_info = await request_GET_PROFILE(this.state.user_id);
+           //     const gifts = await request_GET_GIFTS(this.state.user_id);
+           //     const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
 
                 router.push.Profile({
-                    user_data: profile_info,
+
+                 //   data_user:profile_info,
                     chat_name: this.props.chat_name,
-                    gift: gifts,
-                    photos_list:photos_list
+                    user_id:this.state.user_id,
+                    from_id:this.props.nic,
+                    go_private:this.Action_nick_selected,
                 });
+
+
+
+           //         this.setState({animating: !this.state.animating});
+          //      this.componentWillUnmount();
+          //      this.componentDidMount();
+
 
 
 
@@ -277,7 +283,7 @@ export default class Chatting extends React.Component {
 
 
             case 0: // личные сообшения
-                if (!this.state.animating) {
+                              if (!this.state.animating) {
 
                     this.setState({animating: !this.state.animating});
                     this.componentWillUnmount();

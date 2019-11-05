@@ -12,7 +12,7 @@ import {StyleSheet} from "react-native";
     rooms: {
         fontSize: 14,
         flex: 1,
-        color: 'rgba(0,0,0,0.98)',
+        color: 'rgba(214,163,66,0.98)',
         marginTop: 2,
         fontWeight: 'bold'
 
@@ -31,7 +31,7 @@ import {StyleSheet} from "react-native";
     time_msg: {
         fontSize: 14,
         flex: 1,
-        color: 'rgba(2,4,6,0.98)',
+        color: 'rgba(255,255,255,0.98)',
 
         marginTop: 25,
         textAlign: 'left',

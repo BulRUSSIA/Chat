@@ -1,4 +1,4 @@
-import {
+ import {
     Body,
     CardItem,
     Container,
@@ -72,9 +72,7 @@ export default class CardsWedding extends React.Component {
                                 source={{uri: 'http://185.231.154.198:5000/attachments/photosollt5c9fd2810a975a0b4c4622c9'}}/>
                         </Right>
                         <Body style={{marginBottom: 90}}>
-                            <Image
-                                style={{width: 40, height: 40,}}
-                                source={require('../Image/weddingProfile.png')}/>
+
                             <Text
                                 style={{marginBottom: 10,}}
                             >01.09.19</Text>
@@ -92,3 +90,6 @@ export default class CardsWedding extends React.Component {
         );
     }
 }
+
+ //  style={{width: 40, height: 40,}}
+ //   source={require('../Image/weddingProfile.png')}

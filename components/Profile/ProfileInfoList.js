@@ -30,26 +30,29 @@ export default class ProfileInfoList extends React.Component {
                             marginLeft: 1,
                             marginRight: 1,
                             marginBottom: 5,
+                            marginTop:'1%'
 
 
                         }}>
 
-                            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(33,108,134,0.69)'}}>
+                            <View style={{flex: 1, flexDirection: 'row', backgroundColor:'rgba(10,0,14,0.26)'}}>
 
                                 <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}>
                                 </Image>
                                 <Text style={{
                                     fontWeight: 'bold',
-                                    color: '#010101',
-                                    fontSize: 24,
-                                    left: '10%',
-                                    top: '11%'
+                                    color:'rgba(179,134,55,0.88)',
+                                    fontSize: 20,
+                                    marginTop:'6%',
+                                    marginLeft:'2%'
                                 }}>{item.nic}</Text>
+                                <View style={{flex:4,marginLeft:'2%'}}>
                                 <TouchableOpacity onPress={()=> {this.props.visible_action()}}>
-                                <Image source={require('.././Image/information.png')} style={{width:30,height:30}}>
+                                <Image source={require('.././Image/information-icon-6058.png')} style={{width:25,height:25,marginTop:'13%',marginLeft:'4%'}}>
 
                                 </Image>
                                 </TouchableOpacity>
+                                </View>
 
 
                             </View>

@@ -28,6 +28,16 @@ const styles = StyleSheet.create({
         height:'50%'
 
     },
+
+    modalbackground_Profile_gift: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(45,101,127,0.37)',
+        height:'80%',
+        width:'80%',
+
+    },
     container_pofile: {
 
         justifyContent: 'center',
@@ -150,9 +160,12 @@ const styles = StyleSheet.create({
     },
 
     Profile_List_text: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight:'bold',
-        color:'rgba(255,255,255,0.89)'
+        color:'rgba(255,255,255,0.89)',
+        alignSelf: 'center',
+        marginLeft:'1%',
+        paddingBottom:'1%'
 
 
 
@@ -160,12 +173,15 @@ const styles = StyleSheet.create({
     },
 
     Profile_List_text_info: {
-        fontSize: 19,
+        fontSize: 18,
 
         color: '#ffffff',
 
 
         backgroundColor: 'rgba(106,168,180,0.26)',
+
+        textAlign:'center',
+
 
 
 
@@ -245,9 +261,10 @@ const styles = StyleSheet.create({
     },
     imageViewProfile_icon: {
 
-        width: 25,
-        height: 25,
-        left:2,
+        width: 50,
+        height: 50,
+        left:3,
+        alignSelf:'center',
 
         borderRadius: 7,
         marginLeft: 0,

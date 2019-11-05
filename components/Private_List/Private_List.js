@@ -122,7 +122,7 @@ export default class Private_List extends React.Component {
         if (this.state.animating) {
 
             return ( <View style={styles.container1}>
-                <ImageBackground source={require('../Image/fon_private.webp')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('../Image/avatars_background.jpg')} style={{width: '100%', height: '100%'}}>
 
                     <Header_private_list
 
@@ -149,7 +149,7 @@ export default class Private_List extends React.Component {
 
 
             <View style={styles.container1}>
-                <ImageBackground source={require('../Image/fon_private.webp')} style={{width: '100%', height: '100%'}}>
+                <ImageBackground source={require('../Image/avatars_background.jpg')} style={{width: '100%', height: '100%'}}>
 
                     <Header_private_list
 

@@ -47,7 +47,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
 
                                             <ImageBackground source={require('../Image/action_backgroud.webp')}
                                                              style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
-                                                <Text style={styles.nick}>
+                                                <Text style={{backgroundColor:  'rgba(32,108,134,0.96)',color:'white',fontSize:18,textAlign:'center',fontWeight: 'bold'}}>
                                                     {this.props.user_now}
                                                 </Text>
                                                 <FlatList
@@ -84,7 +84,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
                                                     keyExtractor={(item, index) => index.toString()}
 
                                                 />
-                                                <Text style={styles.nick}>
+                                                <Text style={{backgroundColor:  'rgba(32,108,134,0.96)',color:'white'}}>
 
                                                 </Text>
                                             </ImageBackground>

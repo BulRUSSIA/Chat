@@ -13,7 +13,7 @@ import {Profile_redactor} from "./components/Profile_redactor/Profile_redactor";
 import ChatPortal from "./components/ChatPortal/ChatPortal";
 import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
-import {PhotosAll} from "./components/PhotosAll";
+import {PhotosAll} from "./components/Profile/PhotosAll";
 import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
 
 export default class chat extends React.Component {
@@ -47,6 +47,7 @@ export default class chat extends React.Component {
                 initialRoute="Login"
                 router={router => (this.router = router)}
                 disableHardwareBack={true}
+                animations={'None'}
             />
 
 

@@ -500,7 +500,7 @@ export default class Private extends React.Component {
             <View style={styles.container}
 
             >
-                <ImageBackground source={require('../Image/whatsap.png')}
+                <ImageBackground source={require('../Image/avatars_background.jpg')}
                                  style={{width: '100%', height: '100%'}}>
 
 

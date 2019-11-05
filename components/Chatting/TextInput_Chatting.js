@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import React from "react";
-import smile_image from '../Image/smile-256x256.png'
+import smile_image from '../Image/smile-128x128.png'
 import keyboard_image from '../Image/android-keyboard-icon-25.jpg'
 
 

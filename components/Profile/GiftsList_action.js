@@ -4,167 +4,106 @@ import {
     Text,
 
     View,
-    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback,
+    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Image, Dimensions,
 
 } from "react-native";
 
 import React from "react";
 
 import styles from "../../styles";
+const ITEM_WIDTH = Dimensions.get('window').width;
 
 
-export class Modal_information extends React.Component {
-    parsedText = (sex, firstName, lastName, about, city, bday, ) => {
-
-        let array = [];
-        if (sex.length>1){
-
-            array.push('Пол:'+ sex)
-
-        }
-
-        if (firstName.length>=1){
-            array.push('Имя:'+ firstName)
-
-
-        }
-
-        if (lastName.length>=1){
-
-            array.push('Фамилия:'+ lastName)
-
-        }
-
-        if(about.length>=1){
-
-            array.push('Информация о себе:'+ about)
-
-
-        }
-
-        if(city.length>=1) {
-
-
-            array.push('Город:'+city)
-
-        }
-        try {
-            if(bday.length>=1){
-
-                array.push('Дата Рождения:' + bday)
-
-
-            }
-
-        }
-
-        catch (e) {
-
-            array.push('Дата Рождения:2019');
- console.log(e)
-        }
+export default class GiftsList_action extends React.Component {
 
 
 
 
-
-        return array.map((elem,index) => {
-            if (!elem) return null;
-
-                return (
-                    <View >
-
-                        <Text
-
-                            key={index.toString()}
-                            style={{
-                            fontSize: 16, color: 'rgba(179,134,55,0.88)', marginTop: 5,
-
-                        }}>
-                            {elem + '\n'}
-                        </Text>
-                    </View>
-
-
-                );
-
-
-        });
-
-
-    };
 
 
     render() {
 
 
-        return (<View>
+        return (<View >
                 <Modal
 
                     transparent={true}
-                    visible={this.props.visible}
-                    onRequestClose={this.props.visible_action}
+                    visible={this.props.visible_send_gift}
+                    onRequestClose={() =>this.props.Event_gift_handler(1)}
                 >
+
+
                     <TouchableOpacity
                         style={styles.modalbackground_info}
                         activeOpacity={1}
-                        onPressOut={this.props.visible_action}
+                        onPressOut={()=> this.props.Event_gift_handler(1)}
                     >
                         <TouchableWithoutFeedback>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center'}}>
                             <View style={{
-
-                                width:200,
-                                height:'48%'}}>
-
-                                <ImageBackground source={require('../Image/action_profile_info.jpg')}
-                                                 style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
-
-                    <FlatList
-
-                        data={this.props.user_info}
-                        extraData={this.props}
-
-
-                        renderItem={(({item}) =>
-
-
-                                //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-
-
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center'}}>
                                 <View style={{
 
-                                    marginLeft: 1,
-                                    marginRight: 1,
-                                    marginBottom: 5,
+                                    width:ITEM_WIDTH/1.5,
+                                    height:'90%'}}>
+
+                                    <ImageBackground source={require('../Image/action_profile_info.jpg')}
+                                                     style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
+
+                                        <FlatList
 
 
-                                }}>
+                                            contentContainerStyle={ {
+                                                justifyContent: 'center',
+
+
+                                            }}
+                                            numColumns={4}
+                                            data={this.props.avatars_list}
+                                            renderItem={({item}) => {
+                                                return (
+
+
+                                                    <View    style={{
+                                                        flex: 1,
+                                                        margin: 5,
+
+                                                        borderColor:'#010101'
 
 
 
-                                    {this.parsedText(item.sex, item.firstName, item.lastName, item.about, item.city, item.bday)}
-                                    </View>
+                                                    }}>
+                                                        <TouchableOpacity onPress={()=> this.props.BuyGift(item.id,item.price)}>
+                                                            <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+100)/12,height:40,resizeMode:'contain',alignSelf:'center'}}  />
+
+                                                            <Text style={{color:'white',fontSize:10,alignItems: 'center',textAlign: 'center'}}>
+                                                                {item.name}
+
+                                                            </Text>
+                                                            <Text style={{textAlign: 'center',color:'white'}}>
+                                                                {item.price} руб.
+
+                                                            </Text>
+                                                        </TouchableOpacity>
 
 
 
 
+                                                    </View>
 
 
+                                                );
+                                            }}
+                                            keyExtractor={(item) => item.id}
 
-                        )
-                        }
 
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                                        />
 
-                                </ImageBackground>
+                                    </ImageBackground>
+                                </View>
                             </View>
-                        </View>
                         </TouchableWithoutFeedback>
                     </TouchableOpacity>
                 </Modal>
