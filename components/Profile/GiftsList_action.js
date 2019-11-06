@@ -1,17 +1,20 @@
 import {
-    FlatList,
+
 
     Text,
 
     View,
-    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Image, Dimensions,
+    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Dimensions, FlatList,
 
 } from "react-native";
 
 import React from "react";
 
 import styles from "../../styles";
+import FastImage from "react-native-fast-image";
 const ITEM_WIDTH = Dimensions.get('window').width;
+const ITEM_HEIGHT = Dimensions.get('window').height;
+
 
 
 export default class GiftsList_action extends React.Component {
@@ -26,11 +29,13 @@ export default class GiftsList_action extends React.Component {
 
         return (<View >
                 <Modal
-
+                    style={{   width:ITEM_WIDTH/1.1,
+                        height:'80%'}}
                     transparent={true}
                     visible={this.props.visible_send_gift}
                     onRequestClose={() =>this.props.Event_gift_handler(1)}
                 >
+
 
 
                     <TouchableOpacity
@@ -46,12 +51,26 @@ export default class GiftsList_action extends React.Component {
                                 alignItems: 'center'}}>
                                 <View style={{
 
-                                    width:ITEM_WIDTH/1.5,
-                                    height:'90%'}}>
+                                    width:ITEM_WIDTH/1.1,
+                                    height:'80%'}}>
 
                                     <ImageBackground source={require('../Image/action_profile_info.jpg')}
                                                      style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
+                                        <View style={{backgroundColor:'#25566e',flex: 0,flexDirection:'column'}}>
 
+                                            <TouchableOpacity  onPress={()=> this.props.Event_gift_handler(1)}>
+                                        <Text style={{backgroundColor:'#25566e',fontSize:20,color:'white',fontWeight: 'bold'}}>
+                                            Выберите нужный подарок
+
+                                            <Text
+
+                                                style={{backgroundColor:'#25566e',fontSize:20,color:'white',fontWeight: 'bold'}}>
+                                                {'\t\t\t'}❌
+                                            </Text>
+
+                                        </Text>
+                                            </TouchableOpacity>
+                                        </View>
                                         <FlatList
 
 
@@ -76,9 +95,12 @@ export default class GiftsList_action extends React.Component {
 
                                                     }}>
                                                         <TouchableOpacity onPress={()=> this.props.BuyGift(item.id,item.price)}>
-                                                            <Image source={{uri: item.url}} style={{width:(ITEM_WIDTH+100)/12,height:40,resizeMode:'contain',alignSelf:'center'}}  />
+                                                            <FastImage source={{uri: item.url}} style={{width:(ITEM_WIDTH)/11,height:(ITEM_HEIGHT/14),alignSelf:'center'}}
+                                                                       resizeMode={FastImage.resizeMode.contain}
 
-                                                            <Text style={{color:'white',fontSize:10,alignItems: 'center',textAlign: 'center'}}>
+                                                            />
+
+                                                            <Text style={{color:'white',fontSize:10,textAlign: 'center'}}>
                                                                 {item.name}
 
                                                             </Text>
@@ -114,6 +136,7 @@ export default class GiftsList_action extends React.Component {
 
     }
 }
+//FastImage source={require('../Image/delete.png')} style={{width:25,height:25,}}
 //render() {
 //
 //

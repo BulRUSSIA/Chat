@@ -1,5 +1,5 @@
 import {
-    FlatList,
+
 
     Text,
 
@@ -11,6 +11,7 @@ import {
 import React from "react";
 
 import styles from "../../styles";
+import {OptimizedFlatList} from "react-native-optimized-flatlist";
 
 
 export class Modal_information extends React.Component {
@@ -124,7 +125,7 @@ export class Modal_information extends React.Component {
                                 <ImageBackground source={require('../Image/action_profile_info.jpg')}
                                                  style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
 
-                    <FlatList
+                    <OptimizedFlatList
 
                         data={this.props.user_info}
                         extraData={this.props}

@@ -1,10 +1,7 @@
 import {
-
-    Image,
     Text, TouchableOpacity,
-    View,
+    View,Image
 } from "react-native";
-
 import React from "react";
 import styles from "../../styles";
 import emoticons from '../const/EmojiObject'
@@ -19,13 +16,11 @@ export class Pattern_message1 extends React.Component {
             if ((emoticons[elem]))
                 return (
 
-                    <Image style={{width: 20, height: 20, resizeMode: 'contain', }}
+                    <Image
+                        style={{width: 20, height: 20, resizeMode: 'contain', }}
                            source={emoticons[elem]}/>
-
-
                 );
             else {
-
 
                 return (
 
@@ -33,26 +28,17 @@ export class Pattern_message1 extends React.Component {
 
                         fontSize: 18,
                         flex: 1,
-
-
                         color: this.props._class
                     }}>{elem}</Text>
-
-
                 )
-
-
             }
-
-
         });
     };
 
 
     render() {
 
-
-        return <TouchableOpacity style={{flex: 1, width: '100%', height: '100%'}}
+       return <TouchableOpacity style={{flex: 1, width: '100%', height: '100%'}}
                                  onPress={() => this.props.Action_Nick(this.props.user, this.props.user_id)}>
 
 
@@ -72,7 +58,6 @@ export class Pattern_message1 extends React.Component {
             </View>
 
         </TouchableOpacity>
-
 
     }
 }

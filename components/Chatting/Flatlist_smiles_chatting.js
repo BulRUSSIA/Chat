@@ -1,7 +1,8 @@
-import {Dimensions, FlatList, Image, TouchableOpacity, View} from "react-native";
+import {Dimensions, FlatList, TouchableOpacity, View} from "react-native";
 const screenHeight = Math.round(Dimensions.get('window').width);
 import React from "react";
 import emoticons_value from "../const/Flat_Emoji_Value";
+import FastImage from "react-native-fast-image";
 
 
 export class Flatlist_smiles_chatting extends React.Component {
@@ -26,7 +27,7 @@ export class Flatlist_smiles_chatting extends React.Component {
                         <TouchableOpacity onPress={() => this.props.add_emoji(item.value)}>
                             <View style={{flex: 1, flexDirection: 'column', margin: 3}}>
 
-                                <Image style={{width: 30, height: 30, resizeMode: 'contain', marginTop: '1%'}}
+                                <FastImage style={{width: 30, height: 30, resizeMode: 'contain', marginTop: '1%'}}
                                        source={item.url}/>
 
 

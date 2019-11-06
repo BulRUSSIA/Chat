@@ -1,5 +1,7 @@
-import {FlatList, TouchableOpacity, View, Image, Text} from "react-native";
+import { TouchableOpacity, View, Text} from "react-native";
 import React from "react";
+import {OptimizedFlatList} from "react-native-optimized-flatlist";
+import FastImage from "react-native-fast-image";
 
 export default class GiftList extends React.Component {
 
@@ -34,7 +36,7 @@ export default class GiftList extends React.Component {
                     <Text style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 15, color: 'white'}}>
                         Подарки
                     </Text>
-                    <FlatList style={{
+                    <OptimizedFlatList style={{
                         marginLeft: 30,
                         marginRight: 30,
                         marginTop: 13,
@@ -50,7 +52,9 @@ export default class GiftList extends React.Component {
                                       <TouchableOpacity
                                           onPress={() => this.props.delete_gift(item.id, item.url, item.description)}>
 
-                                          <Image source={{uri: item.url}} style={{width:40,height:40,marginLeft:4,resizeMode: 'contain'}}/>
+                                          <FastImage source={{uri: item.url}} style={{width:40,height:40,marginLeft:4,resizeMode: 'contain'}}
+                                                     resizeMode={FastImage.resizeMode.contain}
+                                          />
                                       </TouchableOpacity>
 
 

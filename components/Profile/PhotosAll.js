@@ -1,11 +1,12 @@
 import {
 
-    Image, TouchableOpacity
-    ,Text,Dimensions,Alert
+     TouchableOpacity
+    ,Text,Dimensions
 } from 'react-native';
 import React from "react";
 import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 const ITEM_WIDTH = Dimensions.get('window').width;
+import FastImage from "react-native-fast-image";
 
 export class PhotosAll extends React.Component {
     constructor(props) {
@@ -86,7 +87,7 @@ export class PhotosAll extends React.Component {
 
 
 
-                                                <Image source={{uri: item.url}} style={{flex:1,width:(ITEM_WIDTH)/1,height:120,borderRadius:0,borderWidth:3,borderColor:'#717584',
+                                                <FastImage source={{uri: item.url}} style={{flex:1,width:(ITEM_WIDTH)/1,height:120,borderRadius:0,borderWidth:3,borderColor:'#717584',
 
 
 

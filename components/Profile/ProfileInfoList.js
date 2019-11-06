@@ -2,6 +2,7 @@ import {FlatList, Text, View, Image,TouchableOpacity} from "react-native";
 import React from "react";
 import styles from "../../styles";
 import {Modal_information} from "./Modal_information";
+import FastImage from "react-native-fast-image";
 
 
 export default class ProfileInfoList extends React.Component {
@@ -37,8 +38,10 @@ export default class ProfileInfoList extends React.Component {
 
                             <View style={{flex: 1, flexDirection: 'row', backgroundColor:'rgba(10,0,14,0.26)'}}>
 
-                                <Image source={({uri: item.photo})} style={styles.imageAvatarProfile}>
-                                </Image>
+                                <FastImage source={({uri: item.photo})} style={styles.imageAvatarProfile}
+
+                                />
+
                                 <Text style={{
                                     fontWeight: 'bold',
                                     color:'rgba(179,134,55,0.88)',

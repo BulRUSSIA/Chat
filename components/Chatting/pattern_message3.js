@@ -6,6 +6,7 @@ import {
 import React from "react";
 import styles from "../../styles";
 import {Dimensions} from "react-native";
+import FastImage from "react-native-fast-image";
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 export class Pattern_message3 extends React.Component {
@@ -18,7 +19,10 @@ export class Pattern_message3 extends React.Component {
         return(
 
             <View style={{flex: 1, flexDirection: 'row'}}>
-                <Image source={{uri: this.props.avatars}} style={styles.imageView}/>
+                <Image source={{uri: this.props.avatars}}
+
+
+                           style={styles.imageView}/>
                 <Text style={[styles.prices2, {color: this.props._class}]}
 
                 >
@@ -50,7 +54,7 @@ export class Pattern_message3 extends React.Component {
 
 
 
-                    <Image source={{uri: this.props.attachments}} style={styles.imageAttachRoom}/>
+                    <FastImage source={{uri: this.props.attachments}} style={styles.imageAttachRoom}/>
 
 
 

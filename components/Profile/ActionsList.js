@@ -1,6 +1,7 @@
-import {FlatList, Text, View,Image,TouchableOpacity} from "react-native";
+import {FlatList, Text, View,TouchableOpacity} from "react-native";
 import styles from "../../styles";
 import React from "react";
+import FastImage from "react-native-fast-image";
 const list = [{
     action: 'Сделать подарок',
     icon: require('../Image/Shopping-Gift-icon.png'),
@@ -33,7 +34,8 @@ export default class ActionsList extends React.Component {
                               flex: 1, flexDirection: 'row', paddingTop: 6,backgroundColor:'rgba(77,84,103,0.91)',marginTop:5,
                           }}>
 
-                              <Image source={item.icon} style={styles.imageViewProfile_icon}/>
+                              <FastImage source={item.icon} style={styles.imageViewProfile_icon}
+                                         resizeMode={FastImage.resizeMode.contain}/>
                               <Text style={styles.Profile_List_text}
                               >
 

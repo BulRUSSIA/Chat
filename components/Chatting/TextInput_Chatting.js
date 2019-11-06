@@ -1,5 +1,5 @@
 import {
-    Image,
+
 
     TextInput,
 
@@ -10,6 +10,7 @@ import {
 import React from "react";
 import smile_image from '../Image/smile-128x128.png'
 import keyboard_image from '../Image/android-keyboard-icon-25.jpg'
+import FastImage from "react-native-fast-image";
 
 
 export class TextInput_Chatting extends React.Component {
@@ -39,7 +40,7 @@ export class TextInput_Chatting extends React.Component {
                 paddingRight: 15,
 
                 backgroundColor: '#ffffff'}} >
-                <Image
+                <FastImage
                     style={{width: 30, height: 30, marginTop: 5,}}
                     source={this.props.active ===  false ? smile_image : keyboard_image}/>
             </TouchableOpacity>
@@ -82,7 +83,7 @@ export class TextInput_Chatting extends React.Component {
 
             >
 
-                <Image
+                <FastImage
                     style={{ height: 20, marginTop: 5,width:22,}}
                     source={require('../Image/send_button.webp')}/>
             </TouchableOpacity>

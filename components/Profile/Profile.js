@@ -21,15 +21,8 @@ import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
 const pre_data = [
     {
-
-
-
-
-
-
         "nic": "Anonymous",
         "photo": "http://79.174.12.77:5000/attachments/photosollt5d27ed1d0a975a63283e4623",
-
     }
 ];
 
@@ -62,7 +55,7 @@ export default class Profile extends React.Component {
     componentDidMount  = async () => {
 
         const profile_info = await request_GET_PROFILE(this.state.user_id);
-        console.log(profile_info)
+        console.log(profile_info);
         const gifts = await request_GET_GIFTS(this.props.user_id);
         const photos_list = await request_GET_USER_PHOTO(this.props.user_id);
         this.setState({
@@ -111,7 +104,7 @@ export default class Profile extends React.Component {
 
         if (response===true) {
 
-            Alert.alert("Подарок  успешно отправлен!","Пользователь получил ваш подарок!")
+            Alert.alert("Подарок  успешно отправлен!","Пользователь получил ваш подарок!");
             const gifts = await request_GET_GIFTS(this.state.user_id);
             this.setState({gifts_list:gifts})
         }

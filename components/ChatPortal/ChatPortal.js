@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import {
     Container,
@@ -7,7 +7,7 @@ import {
     Card,
 
     Body,
-    Text,
+
     Title,
     Button,
     Icon,
