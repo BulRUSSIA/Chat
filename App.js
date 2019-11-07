@@ -15,7 +15,6 @@ import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
 import {PhotosAll} from "./components/Profile/PhotosAll";
 import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
-
 export default class chat extends React.Component {
 
     constructor(props) {
@@ -23,6 +22,10 @@ export default class chat extends React.Component {
 
 
     }
+
+
+
+
 
     render() {
         return (

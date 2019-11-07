@@ -4,10 +4,10 @@ import {
     View,
     BackHandler,
     ImageBackground,
-    Alert,
+    Alert,AsyncStorage,
     Keyboard, ActivityIndicator,
 } from 'react-native';
-
+import type { Notification, NotificationOpen } from 'react-native-firebase';
 import menu_moderator from '../const/menu_moderator'
 import list_moder from '../const/list_moder'
 import list_user from '../const/list_user'
@@ -47,6 +47,8 @@ import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
 const TYPE_ADMIN = 2;
 const TYPE_MODERATOR = 4;
 const CHAT_UPDATE = 3000;
+import firebase from 'react-native-firebase';
+
 //this.props.nic = your mongoDB-id
 export default class Chatting extends React.Component {
 
@@ -84,11 +86,45 @@ export default class Chatting extends React.Component {
 
     }
 
+
+     getToken = async () => {
+        let fcmToken =  await AsyncStorage.getItem('fcmToken');
+        console.log("before fcmToken: ", fcmToken);
+        if (!fcmToken) {
+            fcmToken = await firebase.messaging().getToken();
+            if (fcmToken) {
+                console.log("after fcmToken: ", fcmToken);
+                await AsyncStorage.setItem('fcmToken', fcmToken);
+
+            }
+        }
+    };
+
+
+    requestPermission = async () => {
+        try {
+           const perm = await firebase.messaging().requestPermission();
+            console.log(perm);
+            await this.checkPermission();
+        } catch (error) {
+            // User has rejected permissions
+        }
+    };
+
+    checkPermission = async () => {
+        const enabled = await firebase.messaging().hasPermission();
+        if (enabled) {
+           await this.getToken();
+        } else {
+           await this.requestPermission();
+        }
+    };
+
     add_text = async (text) => { // add text to textinput
 
         console.log(text);
         await this.setState({text: text});
-        console.log(this.state.text + 'textttt');
+        console.log(this.state.text + 'text');
     };
 
     add_emoji = async (emoji) => {              //add emoji to text
@@ -213,6 +249,9 @@ export default class Chatting extends React.Component {
     update_msg = async () => {
 
 
+        await  this.getToken();
+
+
         const message = await request_GET_MESSAGES(this.props.room); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
         this.setState({
                 dataSource: message,
@@ -233,8 +272,8 @@ export default class Chatting extends React.Component {
     componentWillUnmount() { //анмаунт из памяти
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(this.interval);
-        console.log('i am unmount chatting');
-
+        console.log('i am unmount chaastting');
+        this.notificationOpenedListener();
     }
 
     componentDidMount = () => {
@@ -247,10 +286,27 @@ export default class Chatting extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
 
 
+
         this.interval = setInterval(() => this.update_msg(), CHAT_UPDATE);
 
 
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+            const {title, body} = notificationOpen.notification;
+            this.showAlerst(title, body);
+        })
+
+
     };
+    showAlerst = (title, message) => {
+        Alert.alert(
+            title,
+            message,
+            [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            {cancelable: false},
+        );
+    }
 
     Modal_Activity = () => { // кидаем компонент индикатора во флетлист при первом заходе
 

@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply plugin: 'com.google.gms.google-services'
 import com.android.build.OutputFile
 
 /**
@@ -201,6 +201,10 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+    implementation "com.google.android.gms:play-services-base:17.0.0"
+    implementation "com.google.firebase:firebase-core:17.0.1"
+    implementation "com.google.firebase:firebase-messaging:19.0.0"
+
 
     if (enableHermes) {
        def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -219,5 +223,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
