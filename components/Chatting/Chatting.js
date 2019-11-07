@@ -1,4 +1,5 @@
 import React from 'react';
+import  {useEffect} from 'react';
 import {
 
     View,
@@ -48,6 +49,7 @@ const TYPE_ADMIN = 2;
 const TYPE_MODERATOR = 4;
 const CHAT_UPDATE = 3000;
 import firebase from 'react-native-firebase';
+import FireSingleTon from "../../FireSingleTon";
 
 //this.props.nic = your mongoDB-id
 export default class Chatting extends React.Component {
@@ -87,44 +89,12 @@ export default class Chatting extends React.Component {
     }
 
 
-     getToken = async () => {
-        let fcmToken =  await AsyncStorage.getItem('fcmToken');
-        console.log("before fcmToken: ", fcmToken);
-        if (!fcmToken) {
-            fcmToken = await firebase.messaging().getToken();
-            if (fcmToken) {
-                console.log("after fcmToken: ", fcmToken);
-                await AsyncStorage.setItem('fcmToken', fcmToken);
-
-            }
-        }
-    };
-
-
-    requestPermission = async () => {
-        try {
-           const perm = await firebase.messaging().requestPermission();
-            console.log(perm);
-            await this.checkPermission();
-        } catch (error) {
-            // User has rejected permissions
-        }
-    };
-
-    checkPermission = async () => {
-        const enabled = await firebase.messaging().hasPermission();
-        if (enabled) {
-           await this.getToken();
-        } else {
-           await this.requestPermission();
-        }
-    };
 
     add_text = async (text) => { // add text to textinput
 
         console.log(text);
         await this.setState({text: text});
-        console.log(this.state.text + 'text');
+        console.log(this.state.text + 'tex4t');
     };
 
     add_emoji = async (emoji) => {              //add emoji to text
@@ -219,13 +189,13 @@ export default class Chatting extends React.Component {
             case 'Профиль':
 
                 await this.Change_Visible_Action();
-             //   const profile_info = await request_GET_PROFILE(this.state.user_id);
-           //     const gifts = await request_GET_GIFTS(this.state.user_id);
-           //     const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
+                //   const profile_info = await request_GET_PROFILE(this.state.user_id);
+                //     const gifts = await request_GET_GIFTS(this.state.user_id);
+                //     const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
 
                 router.push.Profile({
 
-                 //   data_user:profile_info,
+                    //   data_user:profile_info,
                     chat_name: this.props.chat_name,
                     user_id:this.state.user_id,
                     from_id:this.props.nic,
@@ -234,9 +204,9 @@ export default class Chatting extends React.Component {
 
 
 
-           //         this.setState({animating: !this.state.animating});
-          //      this.componentWillUnmount();
-          //      this.componentDidMount();
+            //         this.setState({animating: !this.state.animating});
+            //      this.componentWillUnmount();
+            //      this.componentDidMount();
 
 
 
@@ -249,7 +219,6 @@ export default class Chatting extends React.Component {
     update_msg = async () => {
 
 
-        await  this.getToken();
 
 
         const message = await request_GET_MESSAGES(this.props.room); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
@@ -263,50 +232,76 @@ export default class Chatting extends React.Component {
 
             await this.setState({animating: !this.state.animating});
             this.componentWillUnmount();
-            this.componentDidMount();
+           await this.componentDidMount();
         }
 
 
     };
 
+
     componentWillUnmount() { //анмаунт из памяти
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(this.interval);
         console.log('i am unmount chaastting');
+        this.notificationDisplayedListener();
+        this.notificationListener();
         this.notificationOpenedListener();
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) { //проверяем тип пользователя если админ или мд открыть меню суперпользователя
 
             this.setState({action_nick: list_moder, item_menu: menu_moderator})
 
         }
 
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-
-
-
         this.interval = setInterval(() => this.update_msg(), CHAT_UPDATE);
+        const granted = await firebase.messaging().hasPermission();
+        if (granted) {
 
+          await  FireSingleTon.fetchToken();
 
+        } else {
+            await  FireSingleTon.askPermission();
+        }
+
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+            console.log('1'+notification)
+        });
+
+        this.notificationListener = firebase.notifications().onNotification((notification) => {
+           const body = notification['body'];
+            Alert.alert('Вам сообщение',body);
+        });
+
+// App (in background) was opened by a notification
         this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            const {title, body} = notificationOpen.notification;
-            this.showAlerst(title, body);
-        })
+
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notification = notificationOpen.notification;
+            console.log('3'+notification)
+
+        });
+
+// App was opened by a notification
+        const notificationOpen =  await firebase.notifications().getInitialNotification();
+        if (notificationOpen) {
+            // Get the action triggered by the notification being opened
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notification = notificationOpen.notification;
+            console.log('4'+notification)
+        }
+
+
+
+
 
 
     };
-    showAlerst = (title, message) => {
-        Alert.alert(
-            title,
-            message,
-            [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            {cancelable: false},
-        );
-    }
+
 
     Modal_Activity = () => { // кидаем компонент индикатора во флетлист при первом заходе
 
@@ -339,11 +334,11 @@ export default class Chatting extends React.Component {
 
 
             case 0: // личные сообшения
-                              if (!this.state.animating) {
+                if (!this.state.animating) {
 
                     this.setState({animating: !this.state.animating});
                     this.componentWillUnmount();
-                    this.componentDidMount();
+                 await   this.componentDidMount();
                 }
 
 
@@ -489,7 +484,7 @@ export default class Chatting extends React.Component {
 
     };
 
-    handleChoosePhoto = () => { //выбираем фото из памяти телефона
+    handleChoosePhoto = async () => { //выбираем фото из памяти телефона
         const options = {
             noData: true,
         };
@@ -500,14 +495,14 @@ export default class Chatting extends React.Component {
 
                 this.componentWillUnmount();
 
-                this.componentDidMount()
+
 
 
             }
 
 
         });
-
+        await  this.componentDidMount()
 
     };
 
@@ -872,4 +867,3 @@ export default class Chatting extends React.Component {
 
     }
 }
-

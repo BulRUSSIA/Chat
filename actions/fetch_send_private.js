@@ -1,10 +1,13 @@
 import {address} from "../config_connect";
+import FireSingleTon from "../FireSingleTon";
 
 async function request_SEND_MESSAGES_PRIVATE(nic,msg,place,attachments)  {
+
 
     const url = address + `/sending/private`;
 
     try {
+        let token = await FireSingleTon.fetchToken();
         await fetch(url, {
             method: 'POST',
             headers: {
@@ -17,7 +20,8 @@ async function request_SEND_MESSAGES_PRIVATE(nic,msg,place,attachments)  {
                 Nic: nic,
                 Msg: msg,
                 Place:place,
-                attachments:attachments
+                attachments:attachments,
+                FcmToken:token,
 
             }),
         });

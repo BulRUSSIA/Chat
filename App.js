@@ -1,6 +1,5 @@
 import React from 'react'
 import Router from 'react-native-easy-router'
-
 import Login from './components/Login/Login'
 import Chatting from './components/Chatting/Chatting'
 import Rooms from "./components/Rooms/Rooms";
@@ -28,6 +27,7 @@ export default class chat extends React.Component {
 
 
     render() {
+
         return (
 
             <Router
