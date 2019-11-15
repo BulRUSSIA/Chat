@@ -1,9 +1,10 @@
-import {FlatList, ImageBackground, Text, TouchableOpacity, View, Dimensions, Alert} from "react-native";
 import React from "react";
+import {ImageBackground, Text, TouchableOpacity, View, Alert} from "react-native";
 import request_UNBAN_USER from "../../actions/fetch_unban_user";
 import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
+import {OptimizedFlatList} from "react-native-optimized-flatlist";
 
-const screenHeight = Math.round(Dimensions.get('window').width);
+
 
 export default class HomeScreen extends React.Component {
 
@@ -12,13 +13,23 @@ export default class HomeScreen extends React.Component {
 
 
         this.state = {
-            BannedList: this.props.screenProps.banned_list,
+            BannedList: [],
 
 
         };
 
 
+
     }
+
+
+    componentDidMount =async ()=>{
+        const usr_banned_list =  await fetch_REQUEST_BANNED_LIST();
+        this.setState({BannedList:usr_banned_list})
+
+
+    }
+
 
 
     Unban_window = async (user_id, id_banner, name_admin, id_document, user) => {
@@ -78,14 +89,18 @@ export default class HomeScreen extends React.Component {
 
                                  style={{width: '100%', height: '100%'}}
                 >
-                    <View style={{marginLeft: screenHeight / 6, flex: 2}}>
-                        <Text style={{fontWeight: 'bold'}}>Забаненные</Text>
-                    </View>
-                    <View style={{marginLeft: screenHeight / 1.8, flex: 2, marginBottom: '1%'}}>
-                        <Text style={{fontWeight: 'bold', marginBottom: '1%'}}>Баннер</Text>
+                    <View style={{ flex: 0,alignSelf:'center'}}>
+                        <Text style={{fontWeight: 'bold'}}>Забаненные
+
+
+
+                        <Text style={{fontWeight: 'bold'}}>{'\t\t\t\t\t\t'}Баннер
+                        </Text>
+                        </Text>
+
                     </View>
 
-                    <FlatList style={{marginTop: '5%'}}
+                    <OptimizedFlatList style={{marginTop: '5%'}}
 
 
                               ItemSeparatorComponent={this.renderSeparator}

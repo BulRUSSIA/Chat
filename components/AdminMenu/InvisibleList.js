@@ -1,8 +1,9 @@
-import {FlatList, ImageBackground, Text, TouchableOpacity, View, Dimensions, Alert} from "react-native";
 import React from "react";
+import {Alert, Dimensions, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import request_UNBAN_USER from "../../actions/fetch_unban_user";
-import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
 import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
+import FastImage from "react-native-fast-image";
+
 const screenHeight = Math.round(Dimensions.get('window').width);
 
 export default class InvisibleList extends React.Component {
@@ -12,13 +13,22 @@ export default class InvisibleList extends React.Component {
 
 
         this.state = {
-            InvisibleList: this.props.screenProps.invisible_list,
+            InvisibleList: [],
 
 
         };
 
 
     }
+
+    componentDidMount = async () => {
+
+        const usr_invisible_list = await fetch_REQUEST_INVISIBLE_LIST();
+
+        this.setState({InvisibleList: usr_invisible_list})
+
+
+    };
 
 
     Unban_window = async (user_id, id_banner, name_admin, id_document, user) => {
@@ -48,7 +58,7 @@ export default class InvisibleList extends React.Component {
 
         await request_UNBAN_USER(user_id, id_banner, name_admin, id_document);
 
-        const refresh = await  fetch_REQUEST_INVISIBLE_LIST();
+        const refresh = await fetch_REQUEST_INVISIBLE_LIST();
 
         this.setState({InvisibleList: refresh})
 
@@ -69,67 +79,81 @@ export default class InvisibleList extends React.Component {
     render() {
 
 
-        return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        if (this.state.InvisibleList.length < 1) {
 
-                <ImageBackground source={require('../Image/whatsap.png')
+            return (
 
-
-                }
-
-                                 style={{width: '100%', height: '100%'}}
-                >
-
-                    <View style={{marginLeft:screenHeight/2.5,flex:0}} >
-                        <Text style={{fontWeight:'bold'}}>Невидимки</Text>
-                    </View>
-                    <FlatList  style={{marginTop:'4%'}}
-
-
-                               ItemSeparatorComponent={this.renderSeparator}
-                               data={this.state.InvisibleList}
-                               extraData={this.state}
-
-
-                               renderItem={(({item}) =>
-
-                                       <TouchableOpacity
-                                           onPress={() => this.Unban_window(item.user_id, this.props.screenProps.nic, 'NoneRes', '1233',item.nic)}>
-                                           <View style={{
-                                               flex: 1, flexDirection: 'row',
-                                           }}>
-
-
-                                               <Text style={{
-                                                   fontSize: 20,
-                                                   flex: 1,
-                                                   fontWeight:'bold',
-                                                   color: item.color,
+                <FastImage source={{uri: 'image_exist'}} style={{width:60,height:60,alignSelf:'center',marginTop:100
 
 
 
-                                                   padding: 1,
-                                                   borderRadius: 4,
+                }}/>
+               )
+
+        } else {
 
 
-                                               }}>
+            return (
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                                                   {item.nic}
-
-                                               </Text>
-
-
-                                           </View>
-                                       </TouchableOpacity>
-                               )
-                               }
+                    <ImageBackground source={require('../Image/whatsap.png')
 
 
-                               keyExtractor={(item, index) => index.toString()}
+                    }
 
-                    />
-                </ImageBackground>
-            </View>
-        );
+                                     style={{width: '100%', height: '100%'}}
+                    >
+
+                        <View style={{marginLeft: screenHeight / 2.5, flex: 0}}>
+                            <Text style={{fontWeight: 'bold'}}>Невидимки</Text>
+                        </View>
+                        <FlatList style={{marginTop: '4%'}}
+
+
+                                  ItemSeparatorComponent={this.renderSeparator}
+                                  data={this.state.InvisibleList}
+                                  extraData={this.state}
+
+
+                                  renderItem={(({item}) =>
+
+                                          <TouchableOpacity
+                                              onPress={() => this.Unban_window(item.user_id, this.props.screenProps.nic, 'NoneRes', '1233', item.nic)}>
+                                              <View style={{
+                                                  flex: 1, flexDirection: 'row',
+                                              }}>
+
+
+                                                  <Text style={{
+                                                      fontSize: 20,
+                                                      flex: 1,
+                                                      fontWeight: 'bold',
+                                                      color: item.color,
+
+
+                                                      padding: 1,
+                                                      borderRadius: 4,
+
+
+                                                  }}>
+
+                                                      {item.nic}
+
+                                                  </Text>
+
+
+                                              </View>
+                                          </TouchableOpacity>
+                                  )
+                                  }
+
+
+                                  keyExtractor={(item, index) => index.toString()}
+
+                        />
+                    </ImageBackground>
+                </View>
+            );
+        }
     }
 }

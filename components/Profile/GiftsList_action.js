@@ -1,17 +1,10 @@
-import {
-
-
-    Text,
-
-    View,
-    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Dimensions, FlatList,
-
-} from "react-native";
+import {Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View,} from "react-native";
 
 import React from "react";
 
 import styles from "../../styles";
 import FastImage from "react-native-fast-image";
+
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
 
@@ -54,9 +47,8 @@ export default class GiftsList_action extends React.Component {
                                     width:ITEM_WIDTH/1.1,
                                     height:'80%'}}>
 
-                                    <ImageBackground source={require('../Image/action_profile_info.jpg')}
-                                                     style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
-                                        <View style={{backgroundColor:'#25566e',flex: 0,flexDirection:'column'}}>
+
+                                        <View style={{backgroundColor:'#5c6a6e',flex: 0,flexDirection:'column'}}>
 
                                             <TouchableOpacity  onPress={()=> this.props.Event_gift_handler(1)}>
                                         <Text style={{backgroundColor:'#25566e',fontSize:20,color:'white',fontWeight: 'bold'}}>
@@ -71,7 +63,7 @@ export default class GiftsList_action extends React.Component {
                                         </Text>
                                             </TouchableOpacity>
                                         </View>
-                                        <FlatList
+                                        <FlatList style={{backgroundColor:'#3c3e5e'}}
 
 
                                             contentContainerStyle={ {
@@ -123,7 +115,7 @@ export default class GiftsList_action extends React.Component {
 
                                         />
 
-                                    </ImageBackground>
+
                                 </View>
                             </View>
                         </TouchableWithoutFeedback>

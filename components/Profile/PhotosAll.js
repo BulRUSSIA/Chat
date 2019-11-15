@@ -41,11 +41,11 @@ export class PhotosAll extends React.Component {
         if (this.props.screenProps.photos_list.length < 1)
 
            return (
-              <Text style={{fontWeight: 'bold',color:'white',fontSize:25,textAlign:'center'}}>
+               <FastImage source={{uri: 'image_exist'}} style={{width:(ITEM_WIDTH)/5,height:60,alignSelf:'center',marginTop:100
 
-                  Данный пользователь слишком стесняется пAоказать себя!
 
-              </Text>
+
+               }}/>
 
            ) ;
 

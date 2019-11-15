@@ -5,10 +5,11 @@ import {
     Left,
     Text,
 
-} from "native-base";
-import {Image, ImageBackground,} from "react-native";
-import React from "react";
 
+} from "native-base";
+import {Image,View,Dimensions } from "react-native";
+import React from "react";
+const {height} = Dimensions.get('window')
 export default class CardsBalance extends React.Component {
 
 
@@ -24,11 +25,10 @@ export default class CardsBalance extends React.Component {
 
                             cardBody
 
-                            style={{marginTop: '1%', backgroundColor: 'rgb(49,110,93)'}}>
+                            style={{marginTop: '1%', backgroundColor: 'rgb(49,110,93)',height:height/2}}>
 
 
-                            <ImageBackground source={require('../Image/last_back.webp')}
-                                             style={{height: 250, width: null, flex: 1}}>
+                                <View style={{flex:1}}>
                                 <Body style={{alignItems: 'center', backgroundColor: 'rgba(48,111,167,0.69)'}}>
                                     <Text style={{color: '#010101', fontWeight: 'bold'}}>Баланс чатлов</Text>
 
@@ -56,8 +56,8 @@ export default class CardsBalance extends React.Component {
                                     </Left>
 
                                 </Container>
-                            </ImageBackground>
 
+                                </View>
                         </CardItem>
 
 

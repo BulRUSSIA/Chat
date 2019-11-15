@@ -1,9 +1,8 @@
 import {
-    ActivityIndicator,
+
     BackHandler,
-    ImageBackground,
-    ToolbarAndroid,
-    View
+    ActivityIndicator,
+    View,
 } from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
@@ -12,7 +11,7 @@ import styles from './styles'
 import request_DELETE_PERSONALROOMS_ALL from "../../actions/fetch_delete_personalrooms_all";
 import {Private_List_flatlist} from "./Private_List_flatlist";
 import {Header_private_list} from "./Header_private_list";
-
+import request_GET_PRIVATE_LIST from "../../actions/fetch_private_list";
 const menuitem = [{title: 'Удалить все чаты', show: 'never', eventkey: 1},];
 
 
@@ -23,7 +22,7 @@ export default class Private_List extends React.Component {
 
         this.state = {
 
-            DataSource: this.props.private_user_list,
+            DataSource: [],
             item_menu: menuitem,
             selected: undefined,
             animating:false,
@@ -31,8 +30,17 @@ export default class Private_List extends React.Component {
 
         };
 
-        console.log('userslist' + this.state.DataSource)
+
     }
+
+    componentDidMount= async ()=> {
+        const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
+        this.setState({DataSource:get_list})
+
+
+
+    };
+
 
     onValueChange = async (value: string) => {
 
@@ -52,7 +60,7 @@ export default class Private_List extends React.Component {
 
 
         if (position === 0) {
-            console.log("lol");
+            console.log("loыl");
 
 
         }
@@ -98,15 +106,13 @@ export default class Private_List extends React.Component {
 
 
     back = async () => {
+        console.log('back');
 
-        await this.props.mount();
+
 
         const {router} = this.props;
-      await  router.pop({
-            room: this.props.room,
-            nic: this.props.nic,
-            chat_name: this.props.chat_name,
-        })
+        router.pop({
+      })
 
 
     };
@@ -121,23 +127,13 @@ export default class Private_List extends React.Component {
     render() {
         if (this.state.animating) {
 
-            return ( <View style={styles.container1}>
-                <ImageBackground source={require('../Image/avatars_background.jpg')} style={{width: '100%', height: '100%'}}>
+            return (
 
-                    <Header_private_list
-
-                        item_menu={this.state.item_menu}
-                        onValueChange={this.onValueChange}
-                        selectedValue={this.state.selected}
-                        back={this.back}
-                        onActionSelected={this.onActionSelected}
-
-                    />
-
-                    <ActivityIndicator size="large" color="#3E8CB4"
-                                       animating={this.state.animating}/>
-                </ImageBackground>
-
+                <View style={{flex:1,backgroundColor:'#3c3e5a'}}>
+                <ActivityIndicator
+                    style={{marginTop:'50%'}}
+                    size="large" color="#3E8CB4"
+                                   animating={this.state.animating}/>
                 </View>
 
                     )
@@ -149,7 +145,7 @@ export default class Private_List extends React.Component {
 
 
             <View style={styles.container1}>
-                <ImageBackground source={require('../Image/avatars_background.jpg')} style={{width: '100%', height: '100%'}}>
+
 
                     <Header_private_list
 
@@ -172,12 +168,9 @@ export default class Private_List extends React.Component {
 
                     />
 
-                    <ToolbarAndroid style={styles.containerToolbardown}>
 
 
-                    </ToolbarAndroid>
 
-                </ImageBackground>
 
             </View>
 

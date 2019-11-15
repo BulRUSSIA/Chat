@@ -32,7 +32,7 @@ export default class GiftList extends React.Component {
 
             return (
 
-                <View style={{backgroundColor: 'rgba(10,0,14,0.26)', marginTop: 5}}>
+                <View style={{backgroundColor: 'rgba(76,78,113,0.26)', marginTop: 5}}>
                     <Text style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 15, color: 'white'}}>
                         Подарки
                     </Text>
@@ -41,7 +41,8 @@ export default class GiftList extends React.Component {
                         marginRight: 30,
                         marginTop: 13,
                     }}
-                              horizontal
+                               horizontal
+                                       inverted={true}
                               data={this.props.gifts_list.slice(0, this.state.itemsCount)}
                               onRefresh={() => this.onRefresh}
                               refreshing={this.state.isFetching}

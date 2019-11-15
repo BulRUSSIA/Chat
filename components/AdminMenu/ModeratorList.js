@@ -1,10 +1,33 @@
-import {FlatList, ImageBackground, Text, TouchableOpacity, View,Dimensions} from "react-native";
 import React from "react";
+import {Dimensions, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
+import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
+
 const screenHeight = Math.round(Dimensions.get('window').width);
 
 export default class ModeratorList extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
 
+            usr_moderator_list:[],
+
+        }
+
+    }
+
+    componentDidMount =async ()=>
+    {
+
+        const usr_moderator_list = await fetch_REQUEST_MODERATOR_LIST();
+
+        this.setState({
+
+            usr_moderator_list:usr_moderator_list,
+
+        });
+
+    };
 
 
 
@@ -23,7 +46,7 @@ export default class ModeratorList extends React.Component {
 
 
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',width: '100%', height: '100%'}}>
 
                 <ImageBackground source={require('../Image/whatsap.png')
 
@@ -40,8 +63,8 @@ export default class ModeratorList extends React.Component {
 
 
                               ItemSeparatorComponent={this.renderSeparator}
-                              data={this.props.screenProps.moderator_list}
-                              extraData={this.props}
+                              data={this.state.usr_moderator_list}
+                              extraData={this.state}
 
 
                               renderItem={(({item}) =>

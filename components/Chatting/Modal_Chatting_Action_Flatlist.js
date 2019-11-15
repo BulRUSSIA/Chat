@@ -1,9 +1,10 @@
-import {FlatList, ImageBackground, Text, TouchableOpacity, View, Modal,TouchableWithoutFeedback} from "react-native";
+import {Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 
 import React from "react";
 
 import styles from "../../styles";
 
+const {height} = Dimensions.get('window');
 
 export class Modal_Chatting_Action_Flatlist extends React.Component {
 
@@ -11,7 +12,9 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
         <View
             style={{
                 backgroundColor: '#042441',
-                height: 0.5
+                height: 1,
+                width: 1,
+
 
             }}
         />
@@ -20,7 +23,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
     render() {
 
 
-        return (<View>
+        return (<View style={{backgroundColor: '#010101'}}>
                 <Modal
 
                     transparent={true}
@@ -33,65 +36,73 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
                         onPressOut={this.props.visible}
                     >
 
-                            <TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback>
 
-                                    <View style={{
-                                        flex: 1,
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'}}>
-                                        <View style={{
+                            <View style={{
+                                flex: 0,
 
-                                            width:200,
-                                           height:'48%'}}>
+                                backgroundColor: '#010101',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                            }}>
+                                <View style={{
 
-                                            <ImageBackground source={require('../Image/action_backgroud.webp')}
-                                                             style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
-                                                <Text style={{backgroundColor:  'rgba(32,108,134,0.96)',color:'white',fontSize:18,textAlign:'center',fontWeight: 'bold'}}>
-                                                    {this.props.user_now}
-                                                </Text>
-                                                <FlatList
+                                    width: 200,
+                                    height: height / 2.7
+                                }}>
 
 
-                                                    data={this.props.action_nick}
-                                                    extraData={this.props}
+                                    <Text style={{
+                                        backgroundColor: 'rgba(76,78,113,0.96)',
+                                        color: 'white',
+                                        fontSize: 18,
+                                        textAlign: 'center',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        {this.props.user_now}
+                                    </Text>
+                                    <FlatList
 
 
-                                                    ItemSeparatorComponent={this.renderSeparator}
-                                                    renderItem={(({item}) =>
-
-                                                            <TouchableOpacity onPress={() => this.props.action_selected(item)}>
-                                                                <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+                                        data={this.props.action_nick}
+                                        extraData={this.props}
 
 
-                                                                    <View style={{
-                                                                        flex: 1, flexDirection: 'row', flexWrap: 'wrap',
-                                                                    }}>
+                                        ItemSeparatorComponent={this.renderSeparator}
+                                        renderItem={(({item}) =>
+
+                                                <TouchableOpacity onPress={() => this.props.action_selected(item)}>
+                                                    <View style={{flex: 1, flexDirection: 'column',}}>
 
 
-                                                                        <Text style={styles.action_profile}>
-                                                                            {item}
-                                                                        </Text>
-                                                                    </View>
+                                                        <View style={{
+                                                            flex: 1, flexDirection: 'row', flexWrap: 'wrap',
+                                                        }}>
 
 
-                                                                </View>
-                                                            </TouchableOpacity>
-                                                    )
-                                                    }
+                                                            <Text style={styles.action_profile}>
+                                                                {item}
+                                                            </Text>
+                                                        </View>
 
 
-                                                    keyExtractor={(item, index) => index.toString()}
+                                                    </View>
+                                                </TouchableOpacity>
+                                        )
+                                        }
 
-                                                />
-                                                <Text style={{backgroundColor:  'rgba(32,108,134,0.96)',color:'white'}}>
 
-                                                </Text>
-                                            </ImageBackground>
-                                        </View>
-                                    </View>
+                                        keyExtractor={(item, index) => index.toString()}
 
-                            </TouchableWithoutFeedback>
+                                    />
+                                    <Text style={{backgroundColor: 'rgba(76,78,113,0.96)', color: 'white'}}>
+
+                                    </Text>
+
+                                </View>
+                            </View>
+
+                        </TouchableWithoutFeedback>
 
                     </TouchableOpacity>
                 </Modal>

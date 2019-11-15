@@ -1,109 +1,42 @@
 import React from 'react';
-import {Text, View, ImageBackground, Image} from 'react-native';
 import {createAppContainer} from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {Body, Button, Container, Header, Icon, Left, Title} from "native-base";
-import HomeScreen from './BannedList'
-import ModeratorList from "./ModeratorList";
-import InvisibleList from "./InvisibleList";
-
-
-
-class News extends React.Component {
-
-
-    render() {
-
-
-        return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-
-                <ImageBackground source={require('../Image/whatsap.png')}
-                                 style={{width: '100%', height: '100%'}}>
-                    <Text>В данном разделе будут публиковаться новости </Text>
-                </ImageBackground>
-            </View>
-        );
-    }
-}
-
-
-const TabNavigator =  createBottomTabNavigator({
-
-
-        Забаненные: HomeScreen,
-        Невидимки: InvisibleList,
-        Новости: News,
-        Модераторы:ModeratorList,
-    },
-
-    {
-        defaultNavigationOptions: ({navigation}) => ({
-            tabBarIcon: () => {
-                const {routeName} = navigation.state;
-                if (routeName === 'Забаненные') {
-                    return (
-                        <Image
-                            source={require('../Image/block-user-icon-25.jpg')}
-                            style={{width: 20, height: 20,}}/>
-                    );
-                } else if (routeName === 'Невидимки') {
-                    return (
-                        <Image
-                            source={require('../Image/invisible.png')}
-                            style={{width: 20, height: 20}}/>
-                    );
-                } else if (routeName === 'Новости') {
-                    return (
-                        <Image
-                            source={require('../Image/news.png')}
-                            style={{width: 20, height: 20}}/>
-                    );
-                } else if (routeName === 'Модераторы') {
-                    return (
-                        <Image
-                            source={require('../Image/Users-Moderator-icon.png')}
-                            style={{width: 20, height: 20}}/>
-                    );
-                }
-            },
-        }),
-        tabBarOptions: {
-            activeTintColor: '#2a9a4e',
-            inactiveTintColor: '#ffffff',
-            style: {
-                backgroundColor: '#25566e',
-            }
-        },
-
-    }
-);
+import TabNavigator from "./CreateBottomTabNav";
 
 const NavigationApp = createAppContainer(TabNavigator);
 
-
 export default class NavigationAdmin extends React.Component {
-    Determinate_type = ()=> {
-      if(this.props.type_user ===4) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usr_banned_list: [],
+            usr_moderator_list: [],
+            usr_invisible_list: [],
+        }
 
-          console.log(this.props.type_user + 'moderator or admin')
-
-
-      }
-
-
-      else {
-
-          console.log(this.props.type_user + 'moderator or admin')
+    }
 
 
-      }
+    Determinate_type = () => {
+        if (this.props.type_user === 4) {
+
+            console.log(this.props.type_user + 'moderator or admin')
+
+
+        } else {
+
+            console.log(this.props.type_user + 'moderator or adfmin')
+
+
+        }
 
     };
 
 
-
     render() {
+
+
+
 
         const {router} = this.props;
         this.Determinate_type();
@@ -112,8 +45,8 @@ export default class NavigationAdmin extends React.Component {
 
 
             <Container>
-                <Header style={{backgroundColor: '#25566e',}}
-                        androidStatusBarColor="#25566e"
+                <Header style={{backgroundColor: '#3c3e5a',}}
+                        androidStatusBarColor="#3c3e5a"
                 >
 
                     <Left style={{flex: 1}}>
@@ -132,13 +65,11 @@ export default class NavigationAdmin extends React.Component {
                 </Header>
                 <NavigationApp
                     screenProps={{
-                        banned_list: this.props.banned_list,
-                        moderator_list: this.props.moderator_list,
-                        invisible_list: this.props.invisible_list,
-                        nic:this.props.nic,
+
+                        nic: this.props.nic,
 
                     }}
-                    style={{backgroundColor: '#2d657f'}}>
+                    style={{backgroundColor: '#3c3e5a'}}>
                 </NavigationApp>
             </Container>
 

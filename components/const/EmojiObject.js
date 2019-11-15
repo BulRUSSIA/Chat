@@ -78,6 +78,9 @@ const emoticons = Object.freeze({
     "💘":require('../Image/emoji/emoji_1f498.png'),
     "👑":require('../Image/emoji/emoji_1f451.png'),
     "💖":require('../Image/emoji/emoji_1f496.png'),
+    "🤔":require('../Image/emoji/emoji_1f914.png'),
+    "🙄":require('../Image/emoji/emoji_1f644.png'),
+    "🙂":require('../Image/emoji/emoji_1f642.png')
 
 
 });

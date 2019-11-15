@@ -1,5 +1,8 @@
 const emoticons_value = [
+    {value:"🤔",url:require('../Image/emoji/emoji_1f914.png')},
+    {value:"🙂",url:require('../Image/emoji/emoji_1f642.png')},
     {value:"😘",url:require('../Image/emoji/emoji_1f618.png')},
+    {value:"🙄",url:require('../Image/emoji/emoji_1f644.png')},
     {value:"😬",url:require('../Image/emoji/emoji_1f62c.png')},
     {value:"😷",url:require('../Image/emoji/emoji_1f637.png')},
     {value:"😠",url:require('../Image/emoji/emoji_1f620.png')},

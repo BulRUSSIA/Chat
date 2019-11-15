@@ -8,8 +8,8 @@ import {
 } from "react-native";
 
 import React from "react";
-import smile_image from '../Image/smile-128x128.png'
-import keyboard_image from '../Image/android-keyboard-icon-25.jpg'
+import smile_image from '../Image/ic_insert_emoticon_light_blue_500_24dp.png'
+import keyboard_image from '../Image/ic_keyboard_light_blue_500_24dp.png'
 import FastImage from "react-native-fast-image";
 
 
@@ -24,7 +24,8 @@ export class TextInput_Chatting extends React.Component {
             justifyContent: 'space-between',
             paddingHorizontal: 5,
             paddingVertical: 3,
-        backgroundColor:'#ffffff'}}>
+            backgroundColor:'#3c3e5a'
+       }}>
 
             <TouchableOpacity
                 onPress={()=> {{
@@ -39,20 +40,23 @@ export class TextInput_Chatting extends React.Component {
                 paddingLeft:21,
                 paddingRight: 15,
 
-                backgroundColor: '#ffffff'}} >
+
+                    backgroundColor:'#3c3e5a'}} >
                 <FastImage
-                    style={{width: 30, height: 30, marginTop: 5,}}
+                    style={{width: 20, height: 20, marginTop: 5, backgroundColor:'#3c3e5a',resizeMode: 'contain'}}
                     source={this.props.active ===  false ? smile_image : keyboard_image}/>
             </TouchableOpacity>
 
             <TextInput style={{
-                backgroundColor: '#ffffff',
+                backgroundColor:'#3c3e5a',
                 fontSize: 16,
                 padding:8,
                 height:50,
+                color : "white",
             width:'65%'}}
                        underlineColorAndroid="#00bfff"
-                       placeholder='Сообщение             '
+                       placeholderTextColor = "#5C6A6E"
+                       placeholder='Сообщение.....             '
                        keyboardType='default'
                        multiline={true}
 
@@ -77,9 +81,12 @@ export class TextInput_Chatting extends React.Component {
                 marginLeft: 1,
                 paddingLeft:21,
                 paddingRight: 15,
+                    backgroundColor:'#3c3e5a'
 
 
-                backgroundColor: '#ffffff'}}
+
+
+               }}
 
             >
 

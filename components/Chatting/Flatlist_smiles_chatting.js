@@ -11,7 +11,7 @@ export class Flatlist_smiles_chatting extends React.Component {
     render() {
 
 
-        return   <View style={{backgroundColor: '#25566e', alignItems: 'center',height:screenHeight-150}}
+        return   <View style={{backgroundColor: '#3c3e5e', alignItems: 'center',height:screenHeight-100}}
 
 
         >
@@ -28,7 +28,7 @@ export class Flatlist_smiles_chatting extends React.Component {
                             <View style={{flex: 1, flexDirection: 'column', margin: 3}}>
 
                                 <FastImage style={{width: 30, height: 30, resizeMode: 'contain', marginTop: '1%'}}
-                                       source={item.url}/>
+                                           source={item.url}/>
 
 
                             </View>

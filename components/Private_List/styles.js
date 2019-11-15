@@ -4,8 +4,9 @@ import {StyleSheet} from "react-native";
 
     container1: {
 
-        backgroundColor: '#E8F6FF',
-        width: '100%',
+        backgroundColor: '#343445',
+        flex:1
+
 
 
     },

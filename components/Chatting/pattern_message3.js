@@ -7,8 +7,7 @@ import React from "react";
 import styles from "../../styles";
 import {Dimensions} from "react-native";
 import FastImage from "react-native-fast-image";
-const screenWidth = Math.round(Dimensions.get('window').width);
-
+const {height, width} = Dimensions.get('window');
 export class Pattern_message3 extends React.Component {
 
 
@@ -40,16 +39,19 @@ export class Pattern_message3 extends React.Component {
 
 
                 <TouchableOpacity
-                    style={{ resizeMode:'scretch',  justifyContent:'center',
-                        alignContent:'center', borderColor: '#25566e',
+                    style={{ resizeMode:'contain',flexd:'row',
+                       borderColor: '#25566e',alignSelf:'center',
                         borderWidth: 16,
-
                         backgroundColor: '#25566e',
                         borderRadius: 25,
-                        marginTop: '20%',
-                        marginBottom:'19%',
+                        marginTop:height/15,
+                        marginBottom:height/15,
+                        right:width/4
 
-                        right:screenWidth/2}}
+
+
+
+                  }}
                     onPress={() => this.props.view_attach(this.props.attachments)}>
 
 

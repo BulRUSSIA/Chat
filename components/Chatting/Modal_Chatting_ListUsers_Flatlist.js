@@ -1,7 +1,8 @@
-import {FlatList,Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 
 import React from "react";
 import styles from "../../styles";
+const {height, width} = Dimensions.get('window');
 
 
 export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
@@ -17,47 +18,43 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
     render() {
 
 
-        return (
-                <Modal
+        return (<View style={{backgroundColor:'#676998'}}>
+            <Modal
 
 
+                transparent={true}
 
-                    transparent={true}
-
-                    visible={this.props.isVisibleList}
-                    onRequestClose={this.props.Change_Visible_List}
+                visible={this.props.isVisibleList}
+                onRequestClose={this.props.Change_Visible_List}
+            >
+                <TouchableOpacity
+                    style={styles.modalbackground}
+                    activeOpacity={1}
+                    onPressOut={this.props.Change_Visible_List}
                 >
-                    <TouchableOpacity
-                        style={styles.modalbackground}
-                        activeOpacity={1}
-                        onPressOut={this.props.Change_Visible_List}
-                    >
 
-                        <TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback>
 
+                        <View style={{
+                            flex: 0,
+                            borderColor:'#494b6c',
+                            borderWidth:3,
+                            marginLeft:width/2,
+                            marginBottom:'1.5%',
+
+                            backgroundColor:'rgb(255,255,255)',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                        }}>
                             <View style={{
-                                flex: 1,
-                               marginLeft:'70%',
-                                height:140,
-                                borderRadius:2,
-                                borderWidth:5,
-                                borderColor:'#25566e',
 
-
-                                backgroundColor:'white'
-
-                               }}
-                            >
-                                <View style={{
-
-                                    width:240,
-                                    height:'100%',
-                                backgroundColor: 'white'}}>
+                                width:200,
+                                height:height/1.267}}>
 
                                     <FlatList
                                         style={{borderRadius: 14,height:40}}
 
-                                        ItemSeparatorComponent={this.renderSeparator}
+                                     //   ItemSeparatorComponent={this.renderSeparator}
                                         data={this.props.users}
                                         extraData={this.props}
 
@@ -75,12 +72,13 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                                                     }}>
 
                                                         <Text style={{
-                                                            fontSize: 22,
+                                                            fontSize: 18,
                                                             flex: 1,
                                                             color: item.color,
                                                             marginLeft: 0,
-                                                            padding: 1,
+                                                            padding: 6,
                                                             borderRadius: 4,
+                                                            fontWeight: 'bold'
 
 
                                                         }}>
@@ -102,10 +100,12 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                                 </View>
                             </View>
 
+
                         </TouchableWithoutFeedback>
 
                     </TouchableOpacity>
                 </Modal>
+            </View>
 
 
 

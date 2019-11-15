@@ -1,11 +1,8 @@
-import {
-    FlatList,
-    Image, ScrollView,Alert,
-    View, Dimensions, Text, ImageBackground,TouchableOpacity
-} from 'react-native';
+import {Alert, Dimensions, FlatList, Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React from "react";
 import {Body, Button, Header, Icon, Left, Title} from "native-base";
 import request_BUY_AVATAR from "../../actions/fetch_buy_avatar";
+
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
 
@@ -72,9 +69,9 @@ export class ScreenAvatarList extends React.Component {
         return   (
             <View >
 
-                <Header style={{backgroundColor: '#25566e'
-                }}
-                        androidStatusBarColor="#25566e"
+                <Header
+                    style={{backgroundColor: '#3c3e5a',}}
+                    androidStatusBarColor="#3c3e5a"
                 >
 
                     <Left style={{flex: 1}}>
@@ -100,9 +97,7 @@ export class ScreenAvatarList extends React.Component {
                 </Header>
 
 <ScrollView >
-                    <View style={{height:ITEM_HEIGHT*2.2}}>
-                        <ImageBackground source={require('../Image/avatars_background.jpg')}
-                                         style={{width: '100%', height: '100%',resizeMode:'contain'}}>
+                    <View style={{height:ITEM_HEIGHT*2.2,backgroundColor:'#4c4e71'}}>
 
 
 
@@ -158,7 +153,7 @@ export class ScreenAvatarList extends React.Component {
 
 
 
-</ImageBackground>
+
 
                     </View>
 </ScrollView>

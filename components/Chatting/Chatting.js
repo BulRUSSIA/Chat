@@ -1,12 +1,11 @@
 import React from 'react';
-import  {useEffect} from 'react';
 import {
 
     View,
     BackHandler,
     ImageBackground,
-    Alert,AsyncStorage,
-    Keyboard, ActivityIndicator,
+    Alert,
+    Keyboard, ActivityIndicator, Dimensions,
 } from 'react-native';
 import type { Notification, NotificationOpen } from 'react-native-firebase';
 import menu_moderator from '../const/menu_moderator'
@@ -27,7 +26,6 @@ import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
-import request_GET_PRIVATE_LIST from "../../actions/fetch_private_list";
 import fetch_users_in_room from "../../actions/fetch_users_in_room";
 import request_DELETE_USER_ROOM from "../../actions/fetch_delete_user";
 import request_SEND_MESSAGES from "../../actions/fetch_send_message";
@@ -42,14 +40,13 @@ import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
 import {Flatlist_smiles_chatting} from "./Flatlist_smiles_chatting";
-import fetch_REQUEST_BANNED_LIST from "../../actions/fetch_banned_list";
-import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
-import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
 const TYPE_ADMIN = 2;
 const TYPE_MODERATOR = 4;
 const CHAT_UPDATE = 3000;
 import firebase from 'react-native-firebase';
 import FireSingleTon from "../../FireSingleTon";
+import FastImage from "react-native-fast-image";
+const screenWidtht = Math.round(Dimensions.get('window').width);
 
 //this.props.nic = your mongoDB-id
 export default class Chatting extends React.Component {
@@ -81,10 +78,8 @@ export default class Chatting extends React.Component {
             modal_indicator: false,
             user_id: '',
             ShowSmiles: false,
-
-
-        };
-
+            new_pm: false,
+        }
 
     }
 
@@ -242,7 +237,7 @@ export default class Chatting extends React.Component {
     componentWillUnmount() { //анмаунт из памяти
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         clearInterval(this.interval);
-        console.log('i am unmount chaastting');
+        console.log('i am unmount chaast12ting');
         this.notificationDisplayedListener();
         this.notificationListener();
         this.notificationOpenedListener();
@@ -267,12 +262,12 @@ export default class Chatting extends React.Component {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
-            console.log('1'+notification)
+
         });
 
         this.notificationListener = firebase.notifications().onNotification((notification) => {
            const body = notification['body'];
-            Alert.alert('Вам сообщение',body);
+            this.setState({new_pm:!this.state.new_pm});
         });
 
 // App (in background) was opened by a notification
@@ -281,7 +276,7 @@ export default class Chatting extends React.Component {
             const action = notificationOpen.action;
             // Get information about the notification that was opened
             const notification = notificationOpen.notification;
-            console.log('3'+notification)
+            console.log('63'+notification)
 
         });
 
@@ -292,7 +287,7 @@ export default class Chatting extends React.Component {
             const action = notificationOpen.action;
             // Get information about the notification that was opened
             const notification = notificationOpen.notification;
-            console.log('4'+notification)
+            console.log('45'+notification)
         }
 
 
@@ -334,34 +329,22 @@ export default class Chatting extends React.Component {
 
 
             case 0: // личные сообшения
-                if (!this.state.animating) {
-
-                    this.setState({animating: !this.state.animating});
-                    this.componentWillUnmount();
-                 await   this.componentDidMount();
-                }
-
-
-                const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
-
 
                 router.push.Private_List({
-                    profile_user: this.state.user_now,
-                    room: this.props.room,
+
                     nic: this.props.nic,
                     chat_name: this.props.chat_name,
-                    private_user_list: get_list,
                     select: this.onActionSelected.bind(this),
-                    mount: this.componentDidMount
 
 
                 });
-                this.componentWillUnmount();
-                this.setState({animating: !this.state.animating});
+
+                this.setState({new_pm:false});
                 break;
 
 
             case 1:
+
                 const usr_list_vw = await fetch_users_in_room(this.props.room); //пользователи в комнате
                 this.setState({isVisibleList: !this.state.isVisibleList, users: usr_list_vw});
                 break;
@@ -464,15 +447,7 @@ export default class Chatting extends React.Component {
 
             case 7: //админ меню
 
-                const usr_banned_list = await fetch_REQUEST_BANNED_LIST();
-                const usr_moderator_list = await fetch_REQUEST_MODERATOR_LIST();
-                const usr_invisible_list = await fetch_REQUEST_INVISIBLE_LIST();
-
-
                 router.push.NavigationAdmin({
-                    banned_list: usr_banned_list,
-                    moderator_list: usr_moderator_list,
-                    invisible_list: usr_invisible_list,
                     type_user: this.props.type_user,
                     nic:this.props.nic
                 });
@@ -658,7 +633,7 @@ export default class Chatting extends React.Component {
         let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
         let server = item.user; //имя пользователя
         let attch = item.attachments;//аттач
-        let _class = item._class;//цвет ника и сообщения
+        let _class = item._class;//цвет ника и сообщения!
         let avatars = item.avatars;//аватарка
         let message = item.message; //сообшение
         let user_id = item.user_id; //id пользователя
@@ -763,6 +738,23 @@ export default class Chatting extends React.Component {
     };
 
 
+    NewPrivate_Message =()=> {
+
+
+
+      if(this.state.new_pm) {
+
+          return(  <FastImage source={require('../Image/lsmsg.png')}
+                              style={{width:40,height:50,marginLeft:screenWidtht/1.12,paddingBottom:'2%'}}
+          />)
+
+      }
+
+
+
+    };
+
+
     render() {
 
 
@@ -770,7 +762,7 @@ export default class Chatting extends React.Component {
 
             return (
 
-                <ImageBackground source={require('../Image/whatsap.png')}
+                <ImageBackground source={require('../Image/e1.png')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <Toolbar_Chatting select={this.onActionSelected.bind(this)}
@@ -796,7 +788,7 @@ export default class Chatting extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/whatsap.png')}
+                <ImageBackground source={require('../Image/e1.png')}
                                  style={{width: '100%', height: '100%'}}>
 
                     <Toolbar_Chatting select={this.onActionSelected.bind(this)}
@@ -807,6 +799,10 @@ export default class Chatting extends React.Component {
 
                                       room={this.props.room}
                     />
+
+                    {this.NewPrivate_Message()}
+
+
 
                     {this.Modal_Activity()}
                     <Flatlist_Chatting_Messaging

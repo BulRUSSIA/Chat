@@ -1,34 +1,11 @@
 import React from 'react';
-import {
-
-
-    View,
-    BackHandler,
-
-    ImageBackground, Alert, Keyboard, TouchableOpacity, Image, Dimensions, ActivityIndicator
-} from 'react-native';
+import {ActivityIndicator, Alert, Dimensions, Image, Keyboard, TouchableOpacity, View} from 'react-native';
 import private_menu from '../const/private_menu'
 import styles from '../../styles'
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_SEND_MESSAGES_PRIVATE from "../../actions/fetch_send_private";
 import ImagePicker from "react-native-image-picker";
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-
-import {
-
-    Header,
-
-    Title,
-    Button,
-    Icon,
-    Left,
-    Body,
-
-    Text,
-
-
-} from 'native-base';
+import {Body, Button, Header, Icon, Left, Text, Title,} from 'native-base';
 import {Private_action_picker} from "./Private_action_picker";
 import {Private_Flatlist} from "./Private_Flatlist";
 import emoticons from "../const/EmojiObject";
@@ -36,6 +13,8 @@ import {TextInput_Chatting} from "../Chatting/TextInput_Chatting";
 import {Flatlist_smiles_chatting} from "../Chatting/Flatlist_smiles_chatting";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "../Chatting/Attachments_preview";
+
+const screenWidth = Math.round(Dimensions.get('window').width);
 
 
 export default class Private extends React.Component {
@@ -101,13 +80,13 @@ export default class Private extends React.Component {
     };
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+
         clearInterval(this.interval);
         console.log('i am unmount chatting')
     }
 
     componentDidMount = () => {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
 
         this.interval = setInterval(() => this.update_msg(), 7000);
 
@@ -338,7 +317,7 @@ export default class Private extends React.Component {
     };
     ParsedText = (text, user) => {
 
-        return text.split(/([\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
+        return text.split(/([\u00a9|\u00ae[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
             if (!elem) return null;
             if ((emoticons[elem]))
                 return (
@@ -412,7 +391,7 @@ export default class Private extends React.Component {
                     flex: 1,
                     flexDirection: 'row',
                     marginRight: screenWidth / 2,
-                    backgroundColor: 'rgba(45,101,127,0.78)',
+                    backgroundColor: 'rgba(53,55,81,0.94)',
                     marginTop: '2%',
                     marginBottom: '2%',
                     marginLeft: '2%',
@@ -449,7 +428,7 @@ export default class Private extends React.Component {
                     flex: 1,
                     flexDirection: 'row',
                     marginLeft: screenWidth / 2,
-                    backgroundColor: 'rgba(42,154,78,0.78)',
+                    backgroundColor: 'rgba(37,86,110,0.9)',
                     marginTop: '2%',
                     marginBottom: '2%',
                     marginRight: '2%',
@@ -459,7 +438,7 @@ export default class Private extends React.Component {
                 }}>
                     <View style={{position: 'relative'}}>
                         <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
-                        <Text style={{color: '#3e5d84',paddingBottom:'5%',marginTop:'1%'}}
+                        <Text style={{color: 'rgba(37,86,110,0.96)',paddingBottom:'5%',marginTop:'1%'}}
 
                         >
 
@@ -497,17 +476,17 @@ export default class Private extends React.Component {
 
         return (
 
-            <View style={styles.container}
+            <View style={{backgroundColor: '#21212f',flex:1}}
 
             >
-                <ImageBackground source={require('../Image/avatars_background.jpg')}
-                                 style={{width: '100%', height: '100%'}}>
 
 
-                    <Header style={{backgroundColor: '#25566e'}}
+
+                    <Header style={{backgroundColor: '#3c3e5a',}}
+                            androidStatusBarColor="#3c3e5a"
                             onActionSelected={this.onActionSelected.bind(this)}
                             actions={this.state.item_menu}
-                            androidStatusBarColor="#25566e">
+                         >
 
                         <Left style={{flex: 1}}>
                             <Button transparent
@@ -559,7 +538,7 @@ export default class Private extends React.Component {
                     />
 
                     {this.ListSmileAction()}
-                </ImageBackground>
+
 
 
             </View>

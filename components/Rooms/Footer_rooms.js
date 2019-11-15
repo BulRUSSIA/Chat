@@ -12,7 +12,7 @@ export default class Footer_rooms extends React.Component {
 
         return (
 
-            <Footer style={{backgroundColor: '#25566e', height: '5%'}}>
+            <Footer style={{backgroundColor: '#3c3e5a', height: '5%'}}>
 
             </Footer>
 

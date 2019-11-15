@@ -83,10 +83,13 @@ export default class Rooms extends React.Component {
     renderSeparator_1 = () => (
         <View
             style={{
-                backgroundColor: '#2c5577',
+
                 height: 1,
-                borderWidth: 1,
-                borderColor: '#2c5577'
+
+                width:'100%',
+                backgroundColor:'white',
+                color:'white',
+
 
             }}
         />
@@ -106,6 +109,7 @@ export default class Rooms extends React.Component {
             || (item.room === 'Секс')
             || (item.category === '5da58e010a975a3ece27314a')
             || (item.room === 'English')
+            || (item.category ==='5dbfd1350a975a38689c9915')
 
 
         ) {
@@ -137,7 +141,7 @@ export default class Rooms extends React.Component {
 
             return (
 
-                <ListItem
+                <ListItem style={{width:'100%'}}
                     onPress={() => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
                     <Thumbnail square source={require('../Image/42500-castle-icon.png')}/>
                     <Body>
@@ -207,6 +211,7 @@ export default class Rooms extends React.Component {
             || (parent === '5db74abd0a975a54ab7e5f0c')
             || (parent === ' 5d5061490a975a4d9967fa52')
             || (parent ==='5d5061490a975a4d4467fa52')
+            || (parent==='5dbfd1350a975a38689c9915')
 
 
 
@@ -295,7 +300,7 @@ export default class Rooms extends React.Component {
         return (
 
 
-            <Container style={{backgroundColor: '#88a8b6',}}>
+            <Container style={{backgroundColor: '#3c3e5e',}}>
 
                 <Header_rooms
                     back_room={this.back_room}
@@ -309,6 +314,7 @@ export default class Rooms extends React.Component {
                     item_menu={this.state.item_menu}
                     onRefresh={this.onRefresh}
                     refreshing={this.state.isFetching}
+                    sep={this.renderSeparator_1}
                 />
 
                 <Footer_rooms/>

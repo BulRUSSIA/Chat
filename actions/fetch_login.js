@@ -1,13 +1,13 @@
 import {address} from "../config_connect";
+import FireSingleTon from "../FireSingleTon";
 
 async  function request_login(login,password,imei) {
 
     try {
 
 
-
-
-       const response =  await fetch(address + `/auth/${login}/${password}/${imei}`);
+        let token = await FireSingleTon.fetchToken();
+       const response =  await fetch(address + `/authChat/${login}/${password}/${imei}/${token}`);
        let responseJsonData = await response.json();
 
 

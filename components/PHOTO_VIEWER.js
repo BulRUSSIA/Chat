@@ -24,11 +24,8 @@ export class PHOTO_VIEWER extends React.Component {
         return   (
         <View style={{backgroundColor:'rgba(0,0,0,0.98)',height:ITEM_HEIGHT}}>
 
-        <Header style={{backgroundColor: '#25566e'
-}}
-
-
-                androidStatusBarColor="#25566e"
+        <Header style={{backgroundColor: '#3c3e5a',}}
+                androidStatusBarColor="#3c3e5a"
                           >
 
             <Left style={{flex: 1}}>

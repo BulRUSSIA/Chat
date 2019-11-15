@@ -48,9 +48,10 @@ export default class ChatPortal extends React.Component {
         const {router} = this.props;
         return (
             <Container>
-                <Header
-                    androidStatusBarColor="#25566e"
-                    style={{backgroundColor: '#25566e',}}>
+                <Header  style={{backgroundColor: '#3c3e5a',}}
+                         androidStatusBarColor="#3c3e5a"
+
+>
                     <Left style={{flex: 1}}>
                         <Button transparent
                                 onPress={() => router.pop({

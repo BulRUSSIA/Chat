@@ -3,6 +3,7 @@ import {FlatList, Image,  TouchableOpacity, View} from "react-native";
 import React from "react";
 import {Text} from "native-base";
 import styles from './styles'
+import FastImage from "react-native-fast-image";
 
 
 export class Private_List_flatlist extends React.Component {
@@ -14,9 +15,12 @@ export class Private_List_flatlist extends React.Component {
 
             return (
 
-                <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white', textAlign: 'center'}}>
-                    Нет личных сообщений!
-                </Text>
+                <FastImage source={{uri: 'image_exist'}} style={{width:60,height:60,alignSelf:'center',marginTop:100
+
+
+
+                }}/>
+
             )
 
 
@@ -38,7 +42,7 @@ export class Private_List_flatlist extends React.Component {
                             <View style={{
                                 flexDirection: 'row',
                                 flex: 1,
-                                backgroundColor: 'rgba(96,120,126,0.87)',
+                                backgroundColor: 'rgba(76,78,113,0.87)',
                                 marginTop: 5,
                                 borderRadius: 14
                             }}>
@@ -75,7 +79,7 @@ export class Private_List_flatlist extends React.Component {
 
 
                 keyExtractor={(item, index) => index.toString()}
-                // contentContainerStyle={{paddingTop: 10}}
+
 
 
             />

@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     prices2: {
         fontSize: 18,
 
-        color: '#221fb7',
+        color: '#2e29b7',
         marginLeft: 0,
         padding: 1,
         paddingBottom: 20,
@@ -222,13 +222,13 @@ const styles = StyleSheet.create({
 
     },
     action_profile: {
-        fontSize: 30,
+        fontSize: 25,
         flex: 1,
-        color: '#000000',
+        color: '#ffffff',
         textAlign: 'center',
         justifyContent:'center',
-        backgroundColor:'rgba(67,155,198,0.49)',
-        borderRadius:9
+        backgroundColor:'rgba(143,151,215,0.49)',
+
 
     },
     smiles: {
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
         width: "100%",
 
 
-        backgroundColor: '#25566e',
+        backgroundColor:'#3c3e5a',
 
     },
 
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
         width: "100%",
 
 
-        backgroundColor: '#25566e',
+        backgroundColor:'#3c3e5a',
 
     },
 
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
         width: "100%",
 
 
-        backgroundColor: '#25566e',
+        backgroundColor:'#3c3e5a',
 
     },
     containerToolbarRedactor1: {
@@ -604,7 +604,7 @@ const styles = StyleSheet.create({
 
 
 
-        backgroundColor: '#25566e',
+        backgroundColor:'#3c3e5a',
 
     },
     containerToolbarProfile_down: {

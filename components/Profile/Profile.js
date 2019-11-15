@@ -19,12 +19,14 @@ import request_SEND_GIFT from "../../actions/fetch_send_gift";
 import request_GET_GIFTS from "../../actions/fetch_user_gifts";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
-const pre_data = [
+const pre_data =
     {
+     data:[{
         "nic": "Anonymous",
-        "photo": "http://79.174.12.77:5000/attachments/photosollt5d27ed1d0a975a63283e4623",
-    }
-];
+        "photo": 'image_exist'}]
+    };
+
+
 
 export default class Profile extends React.Component {
 
@@ -76,7 +78,7 @@ export default class Profile extends React.Component {
 
     BuyGift = async (gift_id,price)=> {
         Alert.alert(
-            'Отправка Подарка!!',
+            'Отправка Подарка!',
             "Вы уверены,что хотите сделать подарок данному пользователю за "+ price + " руб?",
             [
 
