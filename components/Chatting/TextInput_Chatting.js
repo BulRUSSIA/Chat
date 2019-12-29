@@ -24,7 +24,7 @@ export class TextInput_Chatting extends React.Component {
             justifyContent: 'space-between',
             paddingHorizontal: 5,
             paddingVertical: 3,
-            backgroundColor:'#3c3e5a'
+            backgroundColor:this.props.key_color,
        }}>
 
             <TouchableOpacity
@@ -41,18 +41,18 @@ export class TextInput_Chatting extends React.Component {
                 paddingRight: 15,
 
 
-                    backgroundColor:'#3c3e5a'}} >
+                    backgroundColor:this.props.key_color,}} >
                 <FastImage
-                    style={{width: 20, height: 20, marginTop: 5, backgroundColor:'#3c3e5a',resizeMode: 'contain'}}
+                    style={{width: 20, height: 20, marginTop: 5, backgroundColor:this.props.key_color,resizeMode: 'contain'}}
                     source={this.props.active ===  false ? smile_image : keyboard_image}/>
             </TouchableOpacity>
 
             <TextInput style={{
-                backgroundColor:'#3c3e5a',
+                backgroundColor:this.props.key_color,
                 fontSize: 16,
                 padding:8,
                 height:50,
-                color : "white",
+                color : "#169dd2",
             width:'65%'}}
                        underlineColorAndroid="#00bfff"
                        placeholderTextColor = "#5C6A6E"
@@ -81,7 +81,7 @@ export class TextInput_Chatting extends React.Component {
                 marginLeft: 1,
                 paddingLeft:21,
                 paddingRight: 15,
-                    backgroundColor:'#3c3e5a'
+                    backgroundColor:this.props.key_color,
 
 
 

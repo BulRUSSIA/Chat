@@ -19,6 +19,8 @@ import request_all_users from "../../actions/fetch_all_users";
 import request_LAST_ROOM from "../../actions/fetch_last_room";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
+const DEFAULT_SIZE_MESSAGE = 14;
+const DEFAULT_AVATAR_SIZE = 35;
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -63,6 +65,7 @@ export default class Login extends React.Component {
 
             const value = await AsyncStorage.getItem('log');
             const passwd = await AsyncStorage.getItem('pass');
+
             if (value !== null) {
                 // We have data!!
                 this.setState({
@@ -75,7 +78,31 @@ export default class Login extends React.Component {
         } catch (error) {
             // Error retrieving data
         }
+
+
+
+        try {
+
+            // const imei = await request_IMEI();
+            //  this.setState({Imei: '111111111111111111'});
+
+
+            const backgr = await AsyncStorage.getItem('background_fon');
+            const size_msg = await AsyncStorage.getItem('size_message');
+             const size_av =  await AsyncStorage.getItem('size_avatar');
+            if (backgr&&size_av&&size_msg == null) {
+                await AsyncStorage.setItem('background_fon', 'default_background');
+                await AsyncStorage.setItem('size_message', DEFAULT_SIZE_MESSAGE.toString());
+                await AsyncStorage.setItem('size_avatar', DEFAULT_AVATAR_SIZE.toString());
+                console.log(error,'set key async succsessful')
+            }
+
+        } catch (error) {
+           console.log(error,'errror get key async')
+        }
     };
+
+
 
 
     login = async () => {
@@ -206,6 +233,8 @@ export default class Login extends React.Component {
 
 
     render() {
+        const {router} = this.props;
+
 
 
         return <View style={styles.container}>
@@ -275,6 +304,13 @@ export default class Login extends React.Component {
                                 <Text style={styles.buttonText}>
 
                                     Регистрация</Text>
+
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={()=>  router.push.Settings()} style={styles.buttonText1}>
+                                <Text style={styles.buttonText}>
+
+                                    Настройки</Text>
 
                             </TouchableOpacity>
                         </View>

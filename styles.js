@@ -200,12 +200,13 @@ const styles = StyleSheet.create({
 
     },
     Gift_Description: {
-        fontSize: 15,
+        fontSize: 16,
+        fontWeight:'bold',
 
-        color: '#2045b4',
+        color: '#ffffff',
 
 
-        backgroundColor: '#E8F6FF',
+
         textAlign:'center'
 
 
@@ -317,12 +318,12 @@ const styles = StyleSheet.create({
     },
     imageViewAvatars_stuff: {
 
-        width: 55,
-        height: 55,
-        marginLeft:155,
+        width: 40,
+        height: 40,
         marginTop:20,
         marginBottom:10,
        // backgroundColor:'#E8F6FF',
+        alignSelf:'center',
 
 
 
@@ -440,13 +441,13 @@ const styles = StyleSheet.create({
 
     imageAttachRoom: {
 
-        width: 150,
+        width: '100%',
         height: 150,
 
 
-        marginBottom:'6%',
+
         borderRadius:14,
-        resizeMode: "stretch",
+        resizeMode: "contain",
 
 
 

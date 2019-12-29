@@ -4,7 +4,7 @@ import {
     Text,
     View,
     BackHandler,
-    ImageBackground, TouchableOpacity, Alert,
+    TouchableOpacity, Alert,
 } from 'react-native';
 
 import Chatting from '../../components/Chatting/Chatting'
@@ -19,13 +19,15 @@ import request_SEND_GIFT from "../../actions/fetch_send_gift";
 import request_GET_GIFTS from "../../actions/fetch_user_gifts";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
+import request_ZAGS_REQUEST from "../../actions/fetch_zags_request";
+
 const pre_data =
     {
-     data:[{
-        "nic": "Anonymous",
-        "photo": 'image_exist'}]
+        data: [{
+            "nic": "Anonymous",
+            "photo": 'image_exist'
+        }]
     };
-
 
 
 export default class Profile extends React.Component {
@@ -44,17 +46,16 @@ export default class Profile extends React.Component {
             visible: false,
             visible_send_gift: false,
             avatars_list: [],
-            user_id:this.props.user_id,
-            from_id:this.props.from_id,
+            user_id: this.props.user_id,
+            from_id: this.props.from_id,
 
 
         };
 
 
-
     }
 
-    componentDidMount  = async () => {
+    componentDidMount = async () => {
 
         const profile_info = await request_GET_PROFILE(this.state.user_id);
         console.log(profile_info);
@@ -62,24 +63,21 @@ export default class Profile extends React.Component {
         const photos_list = await request_GET_USER_PHOTO(this.props.user_id);
         this.setState({
 
-            user_info:profile_info,
-            gifts_list:gifts,
-            photos_list:photos_list,
+            user_info: profile_info,
+            gifts_list: gifts,
+            photos_list: photos_list,
 
 
         })
 
 
-
-
-
     };
 
 
-    BuyGift = async (gift_id,price)=> {
+    BuyGift = async (gift_id, price, title, message, event) => {
         Alert.alert(
-            'Отправка Подарка!',
-            "Вы уверены,что хотите сделать подарок данному пользователю за "+ price + " руб?",
+            title,
+            message + price + " руб?",
             [
 
                 {
@@ -87,54 +85,85 @@ export default class Profile extends React.Component {
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'OK', onPress: async () => { await this.Buy_confirm(gift_id,price)}},
+                {
+                    text: 'OK', onPress: async () => {
+                        await this.Service_Choice(event, gift_id, price)
+                    }
+                },
             ],
             {cancelable: false},
         );
 
 
+    };
+
+    Service_Choice = async (choice, params1, params2) => {
+
+
+        switch (choice) {
+            case 0:
+                await this.Buy_confirm(params1, params2);
+
+                break;
+
+            case 1:
+                await this.Zags_Request();
+
+                break;
+
+
+        }
 
 
     };
 
-    Buy_confirm =async (gift_id,price)=> {
+    Zags_Request = async () => {
 
-        const buy = await request_SEND_GIFT(this.state.user_id,this.state.from_id,gift_id,price);
+        const buy = await request_ZAGS_REQUEST(this.state.user_id, this.state.from_id);
 
         let response = buy['Accept'];
         console.log(response);
 
-        if (response===true) {
+        if (response === true) {
 
-            Alert.alert("Подарок  успешно отправлен!","Пользователь получил ваш подарок!");
-            const gifts = await request_GET_GIFTS(this.state.user_id);
-            this.setState({gifts_list:gifts})
-        }
+            Alert.alert("Заявка Одобрена!", "Пользователь получил ваше предложение на вступление в брак!");
+        } else {
 
-        else {
-
-            Alert.alert("Недостаточно средств","Пополните баланс!!!")
+            Alert.alert("Недостаточно средств", "Пополните баланс!!!")
 
 
         }
-
-
 
 
     };
 
 
+    Buy_confirm = async (gift_id, price) => {
+
+        const buy = await request_SEND_GIFT(this.state.user_id, this.state.from_id, gift_id, price);
+
+        let response = buy['Accept'];
+        console.log(response);
+
+        if (response === true) {
+
+            Alert.alert("Подарок  успешно отправлен!", "Пользователь получил ваш подарок!");
+            const gifts = await request_GET_GIFTS(this.state.user_id);
+            this.setState({gifts_list: gifts})
+        } else {
+
+            Alert.alert("Недостаточно средств", "Пополните баланс!!!")
+        }
+    };
 
 
-
-    Get_Gifts_List = async ()=> {
+    Get_Gifts_List = async () => {
 
         const avatars_list = await request_GET_GiftsList();
         this.setState({
 
             avatars_list: avatars_list,
             visible_send_gift: !this.state.visible_send_gift
-
         });
 
     };
@@ -142,21 +171,20 @@ export default class Profile extends React.Component {
     Event_gift_handler = async (event) => {
 
         switch (event) {
-
-
             case(1):
                 console.log('gift');
-               await this.Get_Gifts_List();
+                await this.Get_Gifts_List();
 
                 break;
             case(2):
-                console.log('avaastar');
+                console.log('avaasitar');
                 break;
             case(3):
                 console.log('avtoritet');
                 break;
             case(4):
-                console.log('wedd0ing');
+
+               await this.BuyGift(null,'50','Запрос на Бракосочетание!','Вы уверены,что хотите вступить в брак с данным пользователем за',1);
                 break;
 
         }
@@ -168,7 +196,7 @@ export default class Profile extends React.Component {
     backs = () => {
         const {router} = this.props;
         this.componentWillUnmount();
-        router.pop({type:'bottom'})
+        router.pop({type: 'bottom'})
     };
 
 
@@ -177,16 +205,11 @@ export default class Profile extends React.Component {
 
         const {router} = this.props;
         router.push.View_stuff({
-            nic: this.props.nic,
-            room: this.props.room,
-            chat_name: this.props.chat_name,
+
             gift_view: url,
             gift_id: gift,
             gift_description: description,
-            user_information: this.props.user_data,
-            gifts_list: this.state.gifts_list,
-            _isMounted: false,
-            dataSource: []
+
         });
 
 
@@ -217,12 +240,12 @@ export default class Profile extends React.Component {
     View_full_photo = (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {router} = this.props;
         router.push.PHOTO_VIEWER({
-            room: this.props.room,
-            nic: this.props.nic,
-            chat_name: this.props.chat_name,
-            photo_attachments: attach,
-        }
-);
+                room: this.props.room,
+                nic: this.props.nic,
+                chat_name: this.props.chat_name,
+                photo_attachments: attach,
+            }
+        );
     };
 
 
@@ -236,8 +259,8 @@ export default class Profile extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/main-qimg-0548d95c40fa2abe7088c8a551fb5296.jpg')}
-                                 style={{width: '100%', height: '100%'}}>
+                <View
+                    style={{width: '100%', height: '100%', backgroundColor: '#2e3044'}}>
 
                     <HeaderBar
                         backs={this.backs}
@@ -267,16 +290,16 @@ export default class Profile extends React.Component {
                     <View style={{flex: 0, flexDirection: 'row', padding: 5, marginleft: 2}}>
                         <TouchableOpacity
 
-                            onPress={()=> this.props.go_private('Написать Личное')}
+                            onPress={() => this.props.go_private('Написать Личное')}
                             style={{
-                            backgroundColor: 'rgba(32,108,134,0.78)', flex: 1, borderRadius: 14,
+                                backgroundColor: 'rgba(32,108,134,0.78)', flex: 1, borderRadius: 14,
 
 
-                            padding: 15,
+                                padding: 15,
 
 
-                        }}
-                                          activeOpacity={.5}
+                            }}
+                            activeOpacity={.5}
 
                         >
                             <Text style={{
@@ -327,7 +350,7 @@ export default class Profile extends React.Component {
                     />
 
 
-                </ImageBackground>
+                </View>
 
 
             </View>

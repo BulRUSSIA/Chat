@@ -6,7 +6,6 @@ import {
 } from "react-native";
 
 import React from "react";
-import styles from "../../styles";
 import emoticons from '../const/EmojiObject'
 
 export class Pattern_message5 extends React.Component {
@@ -19,7 +18,7 @@ export class Pattern_message5 extends React.Component {
             if ((emoticons[elem]))
                 return (
 
-                    <Image style={{width:20,height:20,resizeMode: 'contain',marginTop:'1%'}} source={emoticons[elem]}
+                    <Image style={{width:this.props.size_msg,height:this.props.size_msg,resizeMode: 'contain',marginTop:'1%'}} source={emoticons[elem]}
                     key={index*5}
                     />
 
@@ -32,10 +31,10 @@ export class Pattern_message5 extends React.Component {
 
                     <Text
 
-                        key={index*4}
+                        key={index*8}
                         style={{
 
-                        fontSize: 18,
+                        fontSize: this.props.size_msg,
                         flex:1,
 
 
@@ -58,15 +57,15 @@ export class Pattern_message5 extends React.Component {
     render() {
 
 
-        return      <TouchableOpacity style={{flex:1,width:'94%',height:'100%'}} onPress={() => this.props.Action_Nick(this.props.user,this.props.user_id)}>
+        return     (
 
 
             <View style={{flex: 1, flexDirection: 'row',}}>
 
 
+                <TouchableOpacity style={{flex:1,width:'94%',height:'100%'}} onPress={() => this.props.Action_Nick(this.props.user,this.props.user_id)}>
 
-
-                <Text style={[styles.prices, {color: this.props._class}]}
+                <Text style={{color: this.props._class,fontSize: this.props.size_msg,}}
 
                 >
                     {this.props.user}:
@@ -74,11 +73,11 @@ export class Pattern_message5 extends React.Component {
                     {this.ParsedText()}
 
                 </Text>
-
+                </TouchableOpacity>
 
             </View>
 
-        </TouchableOpacity>
+        )
 
 
     }

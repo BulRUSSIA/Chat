@@ -1,15 +1,14 @@
 import {
     Body,
     CardItem,
-    Container,
-    Left,
-    Text,
+      Text,
 
 
 } from "native-base";
-import {Image,View,Dimensions } from "react-native";
+import {Dimensions } from "react-native";
 import React from "react";
-const {height} = Dimensions.get('window')
+import FastImage from "react-native-fast-image";
+const {height} = Dimensions.get('window');
 export default class CardsBalance extends React.Component {
 
 
@@ -25,39 +24,23 @@ export default class CardsBalance extends React.Component {
 
                             cardBody
 
-                            style={{marginTop: '1%', backgroundColor: 'rgb(49,110,93)',height:height/2}}>
+                            style={{ backgroundColor: 'rgb(46,48,68)',height:height/4}}>
 
 
-                                <View style={{flex:1}}>
-                                <Body style={{alignItems: 'center', backgroundColor: 'rgba(48,111,167,0.69)'}}>
-                                    <Text style={{color: '#010101', fontWeight: 'bold'}}>Баланс чатлов</Text>
+
+<Body>
+                                    <Text style={{color: '#FFFFF1',alignSelf:'center',fontSize:20}}>Баланс чатлов</Text>
+
+    <Text style={{fontSize:50,color:'white',alignSelf: 'center'}}>{this.props.balance_card}rur.</Text>
+    <FastImage
+        style={{width:40,height:40,alignSelf:'center'}}
+        source={{uri:'wallet'}}/>
+</Body>
 
 
-                                </Body>
 
 
-                                <Body style={{alignItems: 'center', backgroundColor: 'rgb(113,166,200)'}}>
-                                    <Text style={{color: '#c0f9fb', fontWeight: 'bold', marginTop: '1%'}}>{this.props.balance_card}
-                                        rur</Text>
-                                </Body>
 
-
-                                <Container style={{backgroundColor: 'rgba(131,197,160,0.69)', flex: 7}}>
-                                    <Body style={{alignItems: 'center', marginTop: 20}}>
-                                        <Image
-                                            style={{width: 100, height: 100, resizeMode: 'contain'}}
-                                            source={require('../Image/dollar.png')}/>
-
-                                    </Body>
-
-                                    <Left style={{alignItems: 'center', marginTop: '10%'}}>
-
-                                        <Text style={{color: '#30578d', fontWeight: 'bold',fontSize:25}}>Пополнить баланс</Text>
-                                    </Left>
-
-                                </Container>
-
-                                </View>
                         </CardItem>
 
 

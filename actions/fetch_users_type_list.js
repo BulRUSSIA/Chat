@@ -1,8 +1,8 @@
 import {address} from "../config_connect";
 
-async function fetch_REQUEST_INVISIBLE_LIST()  {
+async function fetch_REQUEST_USERS_TYPE_LIST(type)  {
 
-    const url = address +`/invisible/list`;
+    const url = address +`/get/users/type/${type}`;
 
 
     try {
@@ -16,4 +16,4 @@ async function fetch_REQUEST_INVISIBLE_LIST()  {
     }
 }
 
-export default fetch_REQUEST_INVISIBLE_LIST
+export default fetch_REQUEST_USERS_TYPE_LIST

@@ -103,7 +103,7 @@ export default class View_stuff extends React.Component {
             >
 
 
-                <ImageBackground source={require('../Image/reg_background.jpg')} style={{width: '100%', height: '100%'}}>
+                <View style={{width: '100%', height: '100%',backgroundColor:'#27293b'}}>
 
 
                  <HeaderBar
@@ -128,7 +128,7 @@ export default class View_stuff extends React.Component {
 
 
 
-                </ImageBackground>
+                </View>
 
             </View>
         )

@@ -12,8 +12,14 @@ import {Profile_redactor} from "./components/Profile_redactor/Profile_redactor";
 import ChatPortal from "./components/ChatPortal/ChatPortal";
 import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
+
+import NavigationSuperAdmin from "./components/SuperAdminMenu/SuperAdminMenu";
+
 import {PhotosAll} from "./components/Profile/PhotosAll";
 import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
+import ScreenWeddings from "./components/ChatPortal/ScreenWeddings";
+import Settings from "./components/Settings/Settings";
+
 export default class chat extends React.Component {
 
     constructor(props) {
@@ -21,9 +27,6 @@ export default class chat extends React.Component {
 
 
     }
-
-
-
 
 
     render() {
@@ -46,6 +49,9 @@ export default class chat extends React.Component {
                     NavigationAdmin,
                     PhotosAll,
                     ScreenAvatarList,
+                    Settings,
+                    ScreenWeddings,
+                    NavigationSuperAdmin
                 }}
                 initialRoute="Login"
                 router={router => (this.router = router)}

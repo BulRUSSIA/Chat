@@ -4,7 +4,6 @@ import {
 } from "react-native";
 
 import React from "react";
-import styles from "../../styles";
 
 
 export class Pattern_message4 extends React.Component {
@@ -16,10 +15,10 @@ export class Pattern_message4 extends React.Component {
         return    (
 
             <View style={{flex: 1, flexDirection: 'row'}}>
-                <Text style={[styles.prices, {color: this.props._class}]}>
+                <Text style={{color: this.props._class,fontSize: this.props.size_msg,}}>
                     {this.props.user}
 
-                    <Text style={[{fontSize:20,fontWeight: 'bold'}, {color: this.props._class}]}>
+                    <Text style={[{fontSize:this.props.size_msg,fontWeight: 'bold'}, {color: this.props._class}]}>
 
                         {this.props.message}
                     </Text>

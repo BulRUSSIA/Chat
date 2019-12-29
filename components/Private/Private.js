@@ -527,7 +527,7 @@ export default class Private extends React.Component {
 
 
                     <TextInput_Chatting
-
+                        key_color='#3C3E5A'
                         show={this.ShowSmiles}
                         add_text={this.add_text}
                         send_msg={this.send_msg}

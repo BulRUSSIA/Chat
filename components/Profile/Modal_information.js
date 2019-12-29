@@ -18,7 +18,7 @@ export class Modal_information extends React.Component {
     parsedText = (sex, firstName, lastName, about, city, bday, ) => {
 
         let array = [];
-        if (sex.length>1){
+        if (sex.length>=1){
 
             array.push('Пол:'+ sex)
 

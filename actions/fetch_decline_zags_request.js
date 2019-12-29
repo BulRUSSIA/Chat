@@ -1,33 +1,37 @@
 import {address} from "../config_connect";
 
-async function request_GET_PRIVATE_LIST(nic) {
+async function request_DECLINE_ZAGS_REQUEST(user_request,user_from)  {
 
-    const url = address + `/personalrooms/`;
+    const url = address + `/sending/zags/request/decline`;
     try {
         const data = await fetch(url, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+
                 'Content-Encoding': 'utf-8',
             },
-
-
             body: JSON.stringify({
-                nic_id: nic,
-            }),
+                user_request: user_request,
+                user_from:user_from,
 
-                                 });
+
+
+            }),
+        });
 
         let responseJsonData = await data.json();
-        console.log(responseJsonData);
-
-        return responseJsonData.data;
 
 
-    } catch (e) {
+        return responseJsonData;
+
+
+    }
+
+    catch (e) {
         console.log(e)
     }
 }
 
-export default request_GET_PRIVATE_LIST
+export default request_DECLINE_ZAGS_REQUEST;

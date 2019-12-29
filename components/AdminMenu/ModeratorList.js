@@ -1,6 +1,6 @@
 import React from "react";
 import {Dimensions, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
-import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_moderators_list";
+import fetch_REQUEST_MODERATOR_LIST from "../../actions/fetch_users_type_list";
 
 const screenHeight = Math.round(Dimensions.get('window').width);
 
@@ -19,7 +19,7 @@ export default class ModeratorList extends React.Component {
     componentDidMount =async ()=>
     {
 
-        const usr_moderator_list = await fetch_REQUEST_MODERATOR_LIST();
+        const usr_moderator_list = await fetch_REQUEST_MODERATOR_LIST(4);
 
         this.setState({
 
@@ -42,7 +42,10 @@ export default class ModeratorList extends React.Component {
         />
     );
 
+
+
     render() {
+
 
 
         return (
@@ -69,7 +72,8 @@ export default class ModeratorList extends React.Component {
 
                               renderItem={(({item}) =>
 
-                                      <TouchableOpacity>
+                                      <TouchableOpacity onPress={()=>this.props.screenProps.Go_Profile(item.id,item.nic)}>
+
                                           <View style={{
                                               flex: 1, flexDirection: 'row',
                                           }}>

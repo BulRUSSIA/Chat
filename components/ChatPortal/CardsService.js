@@ -6,8 +6,9 @@ import {
     Text,
 
 } from "native-base";
-import {ImageBackground, View, Image, TouchableOpacity} from "react-native";
+import { View,  TouchableOpacity} from "react-native";
 import React from "react";
+import FastImage from "react-native-fast-image";
 
 export default class CardsService extends React.Component {
 
@@ -20,46 +21,46 @@ export default class CardsService extends React.Component {
         return (
 
             <CardItem cardBody
-                      style={{marginTop: '1%', backgroundColor: 'rgb(49,110,93)'}}>
+                      style={{marginTop: '0.1%',backgroundColor: 'rgb(46,48,68)'}}>
 
-                <ImageBackground source={require('../Image/last_back.webp')}
+                <View
                                  style={{height: 250, width: null, flex: 1}}>
 
-                    <Body style={{alignItems: 'center', backgroundColor: 'rgba(48,111,167,0.69)'}}>
-                        <Text style={{color: '#010101', fontWeight: 'bold'}}>Сервисы</Text>
+                    <Body style={{alignItems: 'center', backgroundColor: 'rgba(46,93,133,0.51)'}}>
+                        <Text style={{color: '#ffffff', fontWeight: 'bold'}}>Сервисы</Text>
 
 
                     </Body>
 
-                    <Container style={{backgroundColor: 'rgba(131,197,160,0.69)', flex: 7}}>
+                    <Container style={{backgroundColor: 'rgba(46,48,68,0.69)', flex: 7}}>
 
 <View style={{flex:1,flexDirection:'row'}}>
-    <Image source={require('../Image/avatarProfile.png')}
+    <FastImage source={{uri:'avatar'}}
                      style={{height: 40, width: 40}}/>
     <TouchableOpacity onPress={this.props.GetAvatarList}>
-                    <Text style={{fontWeight:'bold',fontSize:22,color:'#285d8c'}}>
-                        Купить аватар
+                    <Text style={{fontWeight:'bold',fontSize:22,color:'#ffffff'}}>
+                        {'\t'}   Купить аватар
                     </Text>
     </TouchableOpacity>
 </View>
 
                         <View style={{flex:1,flexDirection:'row'}}>
-                            <Image source={require('../Image/avtoritetProfile.png')}
+                            <FastImage source={{uri:'avtoritet'}}
 
-                                   style={{height: 40, width: 40}}/>
-                        <Text style={{fontWeight:'bold',fontSize:22,color:'#285d8c'}}>
-                            Купить авторитет
+                                   style={{height: 38, width: 38}}/>
+                        <Text style={{fontWeight:'bold',fontSize:22,color:'#ffffff'}}>
+                            {'\t\t\t'} Купить авторитет
                         </Text >
                         </View>
                         <View style={{flex:1,flexDirection:'row'}}>
-                            <Image source={require('../Image/news.png')}
+                            <FastImage source={{uri:'linerun'}}
                                    style={{height: 40, width: 40}}/>
-                        <Text style={{fontWeight:'bold',fontSize:22,color:'#285d8c'}}>
-                            Заказать бегущую строку
+                        <Text style={{fontWeight:'bold',fontSize:22,color:'#ffffff'}}>
+                            {'\t'}    Заказать бегущую строку
                         </Text>
                         </View>
                     </Container>
-                </ImageBackground>
+                </View>
 
             </CardItem>
 

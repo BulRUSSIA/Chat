@@ -8,8 +8,9 @@ import {PhotosAll} from "./PhotosAll";
 
 const AppNavigator = createMaterialTopTabNavigator(
     {
-        фото: PhotosAll,
         Услуги: ActionsList,
+        фото: PhotosAll,
+
     },
     {
         tabBarOptions: {

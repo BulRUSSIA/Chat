@@ -1,8 +1,8 @@
 import React from "react";
 import {Alert, Dimensions, FlatList, ImageBackground, Text, TouchableOpacity, View} from "react-native";
 import request_UNBAN_USER from "../../actions/fetch_unban_user";
-import fetch_REQUEST_INVISIBLE_LIST from "../../actions/fetch_invisible_list";
 import FastImage from "react-native-fast-image";
+import fetch_REQUEST_USERS_TYPE_LIST from "../../actions/fetch_users_type_list";
 
 const screenHeight = Math.round(Dimensions.get('window').width);
 
@@ -23,7 +23,7 @@ export default class InvisibleList extends React.Component {
 
     componentDidMount = async () => {
 
-        const usr_invisible_list = await fetch_REQUEST_INVISIBLE_LIST();
+        const usr_invisible_list = await fetch_REQUEST_USERS_TYPE_LIST(16);
 
         this.setState({InvisibleList: usr_invisible_list})
 
@@ -33,7 +33,7 @@ export default class InvisibleList extends React.Component {
 
     Unban_window = async (user_id, id_banner, name_admin, id_document, user) => {
         Alert.alert(
-            'Разбанить пользователя',
+            'Cнять невидимку',
             "Вы уверены,что хотите cнять невидимку пользователя  " + user + "?",
             [
 
@@ -58,7 +58,7 @@ export default class InvisibleList extends React.Component {
 
         await request_UNBAN_USER(user_id, id_banner, name_admin, id_document);
 
-        const refresh = await fetch_REQUEST_INVISIBLE_LIST();
+        const refresh = await fetch_REQUEST_USERS_TYPE_LIST(16);
 
         this.setState({InvisibleList: refresh})
 

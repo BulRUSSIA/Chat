@@ -5,9 +5,7 @@ import {
     Header,
     Content,
     Card,
-
     Body,
-
     Title,
     Button,
     Icon,
@@ -17,27 +15,198 @@ import {
 import CardsBalance from "./CardsBalance";
 import CardsWedding from "./CardsWedding";
 import CardsService from "./CardsService";
-import CardsGame from "./CardsGame";
-import CardsAvtoritet from "./CardsAvtoritet";
-import request_GET_AvatarList from "../../actions/fetch_Avatar_List";
+import request_ACCEPT_ZAGS_REQUEST from "../../actions/fetch_accept_zags_request";
+import {Alert} from "react-native";
+import request_DECLINE_ZAGS_REQUEST from "../../actions/fetch_decline_zags_request";
+import request_DELETE_ZAGS_REQUEST from "../../actions/fetch_zags_delete";
+import SingleTonUpdatePortal from "./SingleTonUpdatePortal";
+import request_GET_WeddingList from "../../actions/fetch_wedding_list";
+import {ScreenWeddings} from "./ScreenWeddings";
+
 
 export default class ChatPortal extends React.Component {
 
 
-    GetAvatarList  = async ()=> {
+    constructor(props) {
+        super(props);
 
-        const avatars_list = await request_GET_AvatarList();
-        const {router} = this.props;
-        router.push.ScreenAvatarList({
 
-            avatars_list:avatars_list,
-            user_id:this.props.nic
+        this.state = {
+
+            zags: '1',
+            zagsName: 'Server',
+            zagsRequest: '1',
+            zagsRequestName: 'Server',
+            balace: '0',
+            wedding_list: []
+
+        };
+
+
+    }
+
+    componentDidMount = async () => {
+
+        await this.Update_Portal()
+
+
+    };
+
+
+    Update_Portal = async () => {
+        const data_user = await SingleTonUpdatePortal.PortalUpdates(this.props.nic);
+        const wedding_list = await request_GET_WeddingList();
+        this.setState({
+
+            zags: data_user[0],
+            zagsName: data_user[1],
+            zagsRequest: data_user[2],
+            zagsRequestName: data_user[3],
+            balace: data_user[4],
+            wedding_list: wedding_list
+
 
         })
 
 
+    };
 
 
+    GetAvatarList = async () => {
+
+
+        const {router} = this.props;
+        router.push.ScreenAvatarList({
+
+
+            user_id: this.props.nic,
+            updater: this.Update_Portal
+
+        });
+
+
+    };
+
+
+    Go_Profile = async (user_id, username) => {
+
+
+        await this.props.Change_User_id(user_id, username);
+        const {router} = this.props;
+        router.push.Profile({
+
+            go_private: this.props.go_private_from_portal,
+            user_id: user_id,
+            from_id: this.props.nic,
+
+
+        })
+    };
+
+    All_Weddings = () => {
+
+        const {router} = this.props;
+        console.log('push weddings');
+
+        router.push.ScreenWeddings({
+            wedding_list: this.state.wedding_list,
+            Profile_screen: this.Go_Profile
+        })
+
+    };
+
+
+    fetch_zags = async (zags_from) => {
+        console.log('request zags is 5done1!');
+
+
+        await request_ACCEPT_ZAGS_REQUEST(zags_from, this.props.nic);
+        await this.Update_Portal()
+
+    };
+
+
+    fetch_zags_decline = async (zags_from) => {
+        console.log('request zags decline is done!');
+
+
+        await request_DECLINE_ZAGS_REQUEST(zags_from, this.props.nic);
+        await this.Update_Portal()
+
+    };
+
+    fetch_zags_delete = async (zags_from) => {
+        console.log('request zags decline is done!');
+
+
+        await request_DELETE_ZAGS_REQUEST(zags_from, this.props.nic);
+        await this.Update_Portal()
+
+
+    };
+
+
+    Delete_Zags = async (zags_from) => {
+
+        Alert.alert(
+            '' + this.state.zagsName,
+            'Вы хотите удалить брак?', // <- this part is optional, you can pass an empty string
+            [
+
+                {
+                    text: 'нет',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+
+
+                {
+                    text: 'хочу', onPress: async () => {
+                        await this.fetch_zags_delete(zags_from)
+                    },
+
+
+                }
+            ],
+            {cancelable: false},
+        );
+
+
+    };
+
+
+    Accept_Zags_Req = async (zags_from) => {
+
+
+        Alert.alert(
+            '' + this.state.zagsRequestName,
+            'Запрос на брак!', // <- this part is optional, you can pass an empty string
+            [
+
+                {
+                    text: 'отмена',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'отклонить',
+                    onPress: async () => {
+                        await this.fetch_zags_decline(zags_from)
+                    },
+                    style: 'cancel',
+                },
+
+
+                {
+                    text: 'принять', onPress: async () => {
+                        await this.fetch_zags(zags_from)
+                    },
+
+
+                }
+            ],
+            {cancelable: false},
+        );
 
 
     };
@@ -48,10 +217,10 @@ export default class ChatPortal extends React.Component {
         const {router} = this.props;
         return (
             <Container>
-                <Header  style={{backgroundColor: '#3c3e5a',}}
-                         androidStatusBarColor="#3c3e5a"
+                <Header style={{backgroundColor: '#353751',}}
+                        androidStatusBarColor="#3c3e5a"
 
->
+                >
                     <Left style={{flex: 1}}>
                         <Button transparent
                                 onPress={() => router.pop({
@@ -71,19 +240,27 @@ export default class ChatPortal extends React.Component {
                         <Title>Чат портал</Title>
                     </Body>
                 </Header>
-                <Content style={{backgroundColor: 'rgb(49,110,93)', flex: 7}}>
+                <Content style={{backgroundColor: 'rgb(39,41,59)', flex: 7}}>
 
                     <Card>
                         <CardsBalance
-                        balance_card={this.props.balance_card}
+                            balance_card={this.state.balace}
                         />
-                        <CardsWedding/>
+                        <CardsWedding zags={this.state.zags}
+                                      zagsName={this.state.zagsName}
+                                      zagsRequest={this.state.zagsRequest}
+                                      zagsRequestName={this.state.zagsRequestName}
+                                      Accept_Zags_Req={this.Accept_Zags_Req}
+                                      Delete_Zags={this.Delete_Zags}
+                                      wedding_list={this.state.wedding_list}
+                                      Profile_screen={this.Go_Profile}
+                                      All_Weddings={this.All_Weddings}
+
+                        />
                         <CardsService
                             GetAvatarList={this.GetAvatarList}
 
                         />
-                        <CardsAvtoritet/>
-                        <CardsGame/>
 
 
                     </Card>

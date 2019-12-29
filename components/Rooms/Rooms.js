@@ -110,6 +110,8 @@ export default class Rooms extends React.Component {
             || (item.category === '5da58e010a975a3ece27314a')
             || (item.room === 'English')
             || (item.category ==='5dbfd1350a975a38689c9915')
+            || (item.category ==='5de2cbaf0a975a6ffb0c5694')
+        || (item.category ==='5de2cbaf0a975a6ffb0c5694')
 
 
         ) {
@@ -211,7 +213,7 @@ export default class Rooms extends React.Component {
             || (parent === '5db74abd0a975a54ab7e5f0c')
             || (parent === ' 5d5061490a975a4d9967fa52')
             || (parent ==='5d5061490a975a4d4467fa52')
-            || (parent==='5dbfd1350a975a38689c9915')
+            || (parent==='5de2cbaf0a975a6ffb0c5694')
 
 
 

@@ -86,7 +86,7 @@ export default class GiftsList_action extends React.Component {
 
 
                                                     }}>
-                                                        <TouchableOpacity onPress={()=> this.props.BuyGift(item.id,item.price)}>
+                                                        <TouchableOpacity onPress={()=> this.props.BuyGift(item.id,item.price,'Отправка Подарка!',"Вы уверены,что хотите сделать подарок данному пользователю за ",0)}>
                                                             <FastImage source={{uri: item.url}} style={{width:(ITEM_WIDTH)/11,height:(ITEM_HEIGHT/14),alignSelf:'center'}}
                                                                        resizeMode={FastImage.resizeMode.contain}
 

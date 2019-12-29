@@ -28,7 +28,7 @@ export default class HomeScreen extends React.Component {
         this.setState({BannedList:usr_banned_list})
 
 
-    }
+    };
 
 
 
