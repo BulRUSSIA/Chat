@@ -98,21 +98,20 @@ export default class Private_List extends React.Component {
             list_data: this.state.DataSource
 
 
-        });
+        },{type: 'fade', duration: 100, easing: 'ease' });
 
 
 
     };
 
 
-    back = async () => {
-        console.log('back');
+    back =  () => {
+
 
 
 
         const {router} = this.props;
-        router.pop({
-      })
+        router.pop()
 
 
     };

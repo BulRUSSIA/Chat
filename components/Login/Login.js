@@ -19,6 +19,7 @@ import request_all_users from "../../actions/fetch_all_users";
 import request_LAST_ROOM from "../../actions/fetch_last_room";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
+import request_GET_CATEGORIES from "../../actions/fetch_get_categories";
 const DEFAULT_SIZE_MESSAGE = 14;
 const DEFAULT_AVATAR_SIZE = 35;
 
@@ -155,13 +156,15 @@ export default class Login extends React.Component {
                     const {router} = this.props;
                     const count_all_users = await request_all_users();
                     const rooms = await request_GET_ROOMS('-1');
+                    const categories = await request_GET_CATEGORIES('-1');
                     const all = count_all_users['all'];
                     const last_rooms = await request_LAST_ROOM(nic);
 
 
                     const Nick_chats = await request_MY_NICKNAME(nic);
 
-                    await router.replace.Rooms({name: nic, router, roomlist: rooms, count: all});
+                    await router.replace.Rooms({name: nic, router, roomlist: rooms, count: all,categorieslist:categories,category_name_toolbar:'Комнаты',category_update:'-1',previous_category:'-1',
+                        type_user: Nick_chats[1],});
                     try {
                         await router.push.Chatting({
 

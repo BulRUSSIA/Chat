@@ -82,7 +82,7 @@ export default class ChatPortal extends React.Component {
             user_id: this.props.nic,
             updater: this.Update_Portal
 
-        });
+        },{type: 'fade', duration: 100, easing: 'ease' });
 
 
     };
@@ -100,7 +100,7 @@ export default class ChatPortal extends React.Component {
             from_id: this.props.nic,
 
 
-        })
+        },{type: 'fade', duration: 100, easing: 'ease' })
     };
 
     All_Weddings = () => {

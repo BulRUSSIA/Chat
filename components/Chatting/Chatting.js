@@ -367,7 +367,7 @@ export default class Chatting extends React.Component {
                     select: this.onActionSelected.bind(this),
 
 
-                });
+                },{type: 'fade', duration: 100, easing: 'ease-in' });
 
                 this.setState({new_pm: false});
                 break;
@@ -443,7 +443,7 @@ export default class Chatting extends React.Component {
                     Change_User_id:this.Change_User_id,
 
 
-                });
+                },{type: 'fade', duration: 100, easing: 'ease' });
 
                 break;
 
@@ -471,7 +471,7 @@ export default class Chatting extends React.Component {
                     nic: this.props.nic,
                     Change_User_id: this.Change_User_id,
                     go_private: this.Action_nick_selected,
-                });
+                },{type: 'fade', duration: 100, easing: 'ease' });
                 break;
 
 

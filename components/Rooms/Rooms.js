@@ -1,4 +1,4 @@
-import {BackHandler, View} from "react-native";
+import {BackHandler, View, Alert} from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
 import request_ENTRY_USER_ROOM from '../../actions/fetch_entry_user'
@@ -19,6 +19,10 @@ import ListRooms from "./ListRooms";
 import Footer_rooms from "./Footer_rooms";
 import Header_rooms from "./Header_rooms";
 import request_all_users from "../../actions/fetch_all_users";
+import ModalRoomsActions from "./ModalRoomsActions";
+import request_UPDATE_CATEGORIES from "../../actions/fetch_update_categories";
+import request_DELETE_CATEGORIES from "../../actions/fetch_delete_category";
+import request_CREATE_CATEGORIES from "../../actions/fetch_create_category";
 
 
 export default class Rooms extends React.Component {
@@ -29,13 +33,28 @@ export default class Rooms extends React.Component {
         this.state = {
 
             DataSource: [],
-            item_menu: this.props.roomlist,
+            item_menu: this.props.roomlist, //item_menu ==9 2сп4ис12ок0 ко0мнат-
+            categories_list: this.props.categorieslist,
             room: '',
             name: this.props.name,
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
             isFetching: false,
-            all_users_online:this.props.count,
+            all_users_online: this.props.count,
+            category_name_toolbar: this.props.category_name_toolbar,
+            category_update: this.props.category_update,
+            isVisible: false,
+            text_change: '',
+            name_create: this.props.category_name_toolbar,
+            update_root:'',
+            previous_category:this.props.previous_category,
+            mask: 0,
+            rooms_set_change:null,
+            list: [{checked: false, id: 0, name: 'Пользователь', disable_item: false, mask: 1},
+                {checked: true, id: 1, name: 'Администратор', disable_item: true, mask: 2},
+                {checked: false, id: 2, name: 'Невидимка', disable_item: false, mask: 16},
+                {checked: false, id: 3, name: 'Забаненный', disable_item: false, mask: 8},
+                {checked: false, id: 4, name: 'Модератор', disable_item: false, mask: 4}],
 
 
         };
@@ -43,28 +62,90 @@ export default class Rooms extends React.Component {
 
     }
 
+    checkThisBox =  (itemID) => {
+        let list = this.state.list;
+        list[itemID].checked = !list[itemID].checked;
+        this.setState({list: list});
+        console.log(this.state.list)
+    };
+
+    ChangeNameCreateRooms = (name) => {
 
 
 
-    Get_update = async () => {
+        this.setState({name_create: name});
 
 
-       const refr =  await request_GET_ROOMS('-1');
-        const count_all_users = await request_all_users();
-        const all = count_all_users['all'];
-        this.setState({
-            item_menu:refr,
-            isFetching:false,
-            all_users_online:all
-        })
 
+
+};
+
+    hideRoomsMenu =  () => {
+
+         this.setState({isVisible: !this.state.isVisible});
 
 
     };
 
-    onRefresh =()=> {
+    mask_count = async (item) => {
+        await this.hideRoomsMenu();
+        let list = this.state.list;
+        let arr = [];
 
-        this.setState({ isFetching: true},() => this.Get_update());
+        for (let i = 0; i < list.length; i++) {
+            let obj = list[i];
+
+
+            let mask = obj.mask;
+            let checked = obj.checked;
+            if (checked === true) {
+
+                arr.push(mask);
+            }
+
+
+        }
+
+        this.setState({mask: arr});
+
+        switch (item) {
+
+            case 0:
+                await request_UPDATE_CATEGORIES(this.props.name, this.state.name_create, this.state.category_update, this.state.mask);
+                break;
+
+            case 1:
+
+                await this.Create_category();
+                break;
+
+        }
+
+
+
+        await this.Get_update(this.state.category_update)
+
+    };
+
+
+    Get_update = async (category) => {
+
+
+        const refr = await request_GET_ROOMS(category);
+        const count_all_users = await request_all_users();
+        const all = count_all_users['all'];
+        this.setState({
+            item_menu: refr,
+            isFetching: false,
+            all_users_online: all
+        })
+
+
+    };
+
+    onRefresh = () => {
+
+        this.setState({isFetching: true}, () => this.Get_update(this.state.category_update));
     };
 
     componentWillUnmount() {
@@ -80,15 +161,112 @@ export default class Rooms extends React.Component {
 
     };
 
+    Rooms_menu_selected = async (selected, name) => {
+
+        switch (selected) {
+
+
+            case 0:
+
+                if (this.state.category_update === '-1') {
+
+                    Alert.alert('Изменение категории', 'Эту категорию невозможно изменить')
+
+
+                } else {
+
+                    this.setState({text_change: 'Изменение категории',rooms_set_change:0});
+                     this.hideRoomsMenu();
+
+                }
+                break;
+
+            case 1:
+                this.setState({text_change: 'Добавление категории',rooms_set_change:1});
+                this.hideRoomsMenu();
+
+
+                break;
+
+
+            case 2:
+                this.setState({text_change: 'Добавление комнаты',rooms_set_change:2});
+                 this.hideRoomsMenu();
+                break;
+
+            case 3:
+                if (this.state.category_update === '-1') {
+
+                    Alert.alert('Удаление категории', 'Эту категорию невозможно удалить')
+
+
+                } else {
+
+                    this.setState({text_change: 'Удаление категории'});
+                 await   this.Delete_dialog('Вы хотите действительно хотите удалить категорию');
+
+                }
+
+                break;
+        }
+
+
+    };
+
+
+
+    Delete_dialog = async (message) => {
+        Alert.alert(
+            '' + this.state.text_change,
+            '' + message + '\t\t' + this.state.category_name_toolbar + '?', // <- this part is optional, you can pass an empty string
+            [
+
+                {
+                    text: 'отмена',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+
+
+                {
+                    text: 'ок', onPress: async () => {
+                        await this.Delete_category()
+                    },
+
+
+                }
+            ],
+            {cancelable: false},
+        );
+
+
+    };
+
+    Delete_category = async () => {
+
+        await request_DELETE_CATEGORIES(this.props.name, this.state.category_update);
+         await this.back_room()
+
+
+
+
+
+
+    };
+
+    Create_category = async ()=> {
+        await request_CREATE_CATEGORIES(this.props.name,this.state.name_create,this.state.category_update,this.state.mask);
+
+    };
+
     renderSeparator_1 = () => (
         <View
             style={{
 
                 height: 1,
 
-                width:'100%',
-                backgroundColor:'white',
-                color:'white',
+                width: '100%',
+                backgroundColor: '#aaaaaa',
 
 
             }}
@@ -98,199 +276,117 @@ export default class Rooms extends React.Component {
 
     _renderItem = ({item}) => {
 
-        console.log('roooooms')
-
-
-        if ((item.category === '5c9a60fd0a975a14c67bcd7c')   //Внещ
-            || (item.category === '5c9a61080a975a14c67bcdab')
-            || (item.room === '\u041a\u0411\u0420')
-            || (item.room === 'Украина 🇺🇦 ')
-            || (item.room === 'Регионы')
-            || (item.room === 'Секс')
-            || (item.category === '5da58e010a975a3ece27314a')
-            || (item.room === 'English')
-            || (item.category ==='5dbfd1350a975a38689c9915')
-            || (item.category ==='5de2cbaf0a975a6ffb0c5694')
-        || (item.category ==='5de2cbaf0a975a6ffb0c5694')
-
-
-        ) {
+        if (item.parent) {
 
 
             return (
-
 
                 <ListItem
-                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
-                    <Thumbnail square source={require('../Image/go_folder.png')}/>
-                    <Body>
-                        <Text style={{color: 'white', fontSize: 21}}>
-                            {item.room}
-
-
-                        </Text>
-                    </Body>
-
-
-                </ListItem>
-
-
-            )
-
-
-        } else if ((item.room === 'Виллы')) {
-
-
-            return (
-
-                <ListItem style={{width:'100%'}}
-                    onPress={() => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
-                    <Thumbnail square source={require('../Image/42500-castle-icon.png')}/>
-                    <Body>
-                        <Text style={{color: 'white', fontSize: 21}}>
-                            {item.room}
-
-
-                        </Text>
-                    </Body>
-
-
-                </ListItem>
-
-
-            )
-
-
-        } else {
-
-
-            return (
-
-
-                <ListItem
-                    onPress={(event) => this.Get_room(item.room, item.category, item.parent_category, item.count)}>
-                    <Thumbnail source={require('../Image/go_room.png')}/>
+                    onPress={(event) => this.Get_category(item.name, item.parent, item._id.$oid)}>
+                    <Thumbnail source={{uri: 'go_folder'}} style={{width: 20, height: 20, resizeMode: 'contain'}}/>
                     <Body>
                         <Text style={{color: 'white', fontSize: 20}}>
-                            {item.room}
+                            {item.name}
 
 
                         </Text>
                     </Body>
-                    <Right>
-                        <Badge>
-                            <Text>{item.count}</Text>
-                        </Badge>
-                    </Right>
+
 
                 </ListItem>
-
-
             )
-
-
         }
+
+
+        return (
+
+
+            <ListItem
+                onPress={(event) => this.Get_room(item.name, item.category, item.count)}>
+                <Thumbnail source={{uri: 'room_arrow'}} style={{width: 20, height: 20}}/>
+                <Body>
+                    <Text style={{color: 'white', fontSize: 20}}>
+                        {item.name}
+
+
+                    </Text>
+                </Body>
+                <Right>
+                    <Badge style={{backgroundColor: '#a5a5a5'}}>
+                        <Text style={{color: '#ff0112'}}>{item.count}</Text>
+                    </Badge>
+                </Right>
+
+            </ListItem>
+
+
+        )
+
 
     };
 
+    Get_category = async (name, parent, category_id) => {
 
-    Get_room = async (event, category, parent, count) => {
 
+        const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
-        if ((parent === '-1')
-            || (parent === '5c9a61080a975a14c67bcdab')//категории в базе данных
-            || (parent === '5c9a60fd0a975a14c67bcd7c')
-            || (parent === '5d12088c0a975a06b5c3483b')
-            || (parent === '5d0694370a975a1fec7eaba0')
-            || (parent === '5da58e010a975a3ece27314a')
-            || (parent === '5ca287980a975a5cf7ca1f4d')
-            || (event === '\u041c\u0427\u0421')
-            || (event === '\u0413\u0443\u0434\u0435\u0440\u043c\u0435\u0441')
-            || (event === '\u0410\u0440\u0433\u0443\u043d')
-            || (event === '\u0421\u0438\u043d\u043a\u044a\u0435\u0440\u0430\u043c')
-            || (event === 'ВиллаТест1')
-            || (event === 'Sex.\u041e\u0431\u0449\u0430\u044f')//Если название комнаты существует в бд перейдем в нее
-            || (parent === '5db74abd0a975a54ab7e5f0c')
-            || (parent === ' 5d5061490a975a4d9967fa52')
-            || (parent ==='5d5061490a975a4d4467fa52')
-            || (parent==='5de2cbaf0a975a6ffb0c5694')
+        console.log(Nick_chats);
+        const rooms = await request_GET_ROOMS(category_id);
+        const {router} = this.props;
 
 
 
+        router.push.Rooms({
+            name: this.props.name,
+            category_update: category_id,
+            previous_category:this.state.category_update,
+            chat_name: Nick_chats[0],
+            type_user: Nick_chats[1],
+            roomlist: rooms,
+            count: this.props.count,
+            category_name_toolbar: name
 
-        ) {
-            let prison = this.props.prison;
-
-
-            if (prison === true) {
-
-                const a = this.props.name;
-                const Nick_chats = await request_MY_NICKNAME(this.props.name);
-                await request_ENTRY_USER_ROOM(event, a);
-
-
-                const {router} = this.props;
-                router.push.Chatting({
-                    nic: this.props.name,
-                    room: event,
-                    chat_name: Nick_chats[0],
-                    type_user: Nick_chats[1],
-                    item_menu: this.state.item_menu,
-
-                });
-
-            } else {
-                const Nick_chats = await request_MY_NICKNAME(this.props.name);
-
-                console.log(Nick_chats);
-
-                const a = this.props.name;
-                await request_ENTRY_USER_ROOM(event, a);
-
-
-                const {router} = this.props;
-                router.push.Chatting({
-
-                    nic: this.props.name,
-                    room: event,
-                    chat_name: Nick_chats[0],
-                    type_user: Nick_chats[1],
-                    item_menu: this.state.item_menu,
-
-                });
-            }
-        } else {
-            const Nick_chats = await request_MY_NICKNAME(this.props.name);
-            console.log('category' + category);
-            console.log(Nick_chats);
-            const rooms = await request_GET_ROOMS(category);
-            const {router} = this.props;
-
-            router.push.Rooms({
-                name: this.props.name,
-
-                chat_name: Nick_chats[0],
-                type_user: Nick_chats[1],
-                roomlist: rooms,
-                count: this.props.count
-            });
-
-
-        }
+        },{type: 'fade', duration: 100, easing: 'ease' });
 
 
     };
 
 
-    back_room = () => {
+
+
+
+    Get_room = async (event, category, parent) => {
+
+
+        const Nick_chats = await request_MY_NICKNAME(this.props.name);
+
+        console.log(Nick_chats);
+
+        const a = this.props.name;
+        await request_ENTRY_USER_ROOM(event, a);
+
 
         const {router} = this.props;
-        router.pop({
-            name: this.props.name,
+        router.push.Chatting({
 
-            chat_name: this.props.chat_name,
-            roomlist: this.state.item_menu
-        });
+            nic: this.props.name,
+            room: event,
+            chat_name: Nick_chats[0],
+            type_user: Nick_chats[1],
+            item_menu: this.state.item_menu,
+
+        },{type: 'fade', duration: 100, easing: 'ease' });
+
+
+    };
+
+
+    back_room = async () => {
+
+        const {router} = this.props;
+
+        router.pop();
+
 
 
     };
@@ -307,6 +403,22 @@ export default class Rooms extends React.Component {
                 <Header_rooms
                     back_room={this.back_room}
                     count={this.state.all_users_online}
+                    Rooms_menu_selected={this.Rooms_menu_selected}
+                    category_name_toolbar={this.state.category_name_toolbar}
+                    type_user={this.props.type_user}
+
+                />
+                <ModalRoomsActions
+                    hideRoomsMenu={this.hideRoomsMenu}
+                    list_checkbox={this.state.list}
+                    isVisible={this.state.isVisible}
+                    textchange={this.state.text_change}
+                    ChangeNameCreateRooms={this.ChangeNameCreateRooms}
+                    checkThisBox={this.checkThisBox}
+                    name_create={this.state.name_create}
+                    mask_count={this.mask_count}
+                    set_change={this.state.rooms_set_change}
+
 
                 />
 
