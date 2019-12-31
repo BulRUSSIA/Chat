@@ -14,8 +14,7 @@ import list_user from '../const/list_user'
 import menusmiles from '../const/smiles'
 import menuitem from '../const/menu'
 import styles from '../../styles'
-import Rooms_list from '../const/Room_List'
-import Rooms_banned from '../const/Room_list_banned'
+
 import {Pattern_message1} from "./pattern_message1";
 import {Toolbar_Chatting} from "./Toolbar_Chatting";
 import {Flatlist_Chatting_Messaging} from "./Flatlist_Chatting_Messaging";
@@ -65,13 +64,9 @@ export default class Chatting extends React.Component {
             users: [],
             item_menu: menuitem,
             item_smiles: menusmiles,
-            rooms_Unbanned: Rooms_list,
-            rooms_Banned: Rooms_banned,
             text: '',
-            ban: '',
             action_nick: list_user,
             user_now: '',
-            msg: '',
             type: null,
             isVisible: false,
             isVisibleList: false,
@@ -118,9 +113,9 @@ export default class Chatting extends React.Component {
 
     add_text = async (text) => { // add text to textinput
 
-        console.log(text);
+
         await this.setState({text: text});
-        console.log(this.state.text + 'tex4t');
+
     };
 
     add_emoji = async (emoji) => {              //add emoji to text
@@ -137,8 +132,8 @@ export default class Chatting extends React.Component {
     };
 
     View_full_photo = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
-        const {router} = this.props;
-        await router.push.PHOTO_VIEWER({
+        const {navigator} = this.props;
+        await navigator.push('PHOTO_VIEWER', {
 
             photo_attachments: attach,
         });
@@ -151,7 +146,7 @@ export default class Chatting extends React.Component {
 
     Action_nick_selected = async (position) => {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
 
         switch (position) {
 
@@ -200,7 +195,7 @@ export default class Chatting extends React.Component {
                 const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_id);
                 const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
 
-                router.push.Private({
+                navigator.push('Private', {
                     profile_user: this.state.user_now,
                     room: this.props.room,
                     nic: this.props.nic,
@@ -219,7 +214,7 @@ export default class Chatting extends React.Component {
                 //     const gifts = await request_GET_GIFTS(this.state.user_id);
                 //     const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
 
-                router.push.Profile({
+                navigator.push('Profile', {
 
                     //   data_user:profile_info,
                     chat_name: this.props.chat_name,
@@ -354,20 +349,20 @@ export default class Chatting extends React.Component {
     };
 
     onActionSelected = async (position) => { //меню чата , передаем позицию item из массива с меню
-        const {router} = this.props;
+        const {navigator} = this.props;
         switch (position) {
 
 
             case 0: // личные сообшения
 
-                router.push.Private_List({
+                navigator.push('Private_List', {
 
                     nic: this.props.nic,
                     chat_name: this.props.chat_name,
                     select: this.onActionSelected.bind(this),
 
 
-                },{type: 'fade', duration: 100, easing: 'ease-in' });
+                });
 
                 this.setState({new_pm: false});
                 break;
@@ -413,7 +408,7 @@ export default class Chatting extends React.Component {
                     });
                 }
 
-                router.push.Profile_redactor({
+                navigator.push('Profile_redactor', {
 
                     room: this.props.room,
                     nic: this.props.nic,
@@ -434,16 +429,16 @@ export default class Chatting extends React.Component {
             case  4: //чат портал
 
 
-                router.push.ChatPortal({
+                navigator.push('ChatPortal', {
 
                     room: this.props.room,
                     nic: this.props.nic,
                     chat_name: this.props.chat_name,
                     go_private_from_portal: this.Action_nick_selected,
-                    Change_User_id:this.Change_User_id,
+                    Change_User_id: this.Change_User_id,
 
 
-                },{type: 'fade', duration: 100, easing: 'ease' });
+                });
 
                 break;
 
@@ -451,7 +446,7 @@ export default class Chatting extends React.Component {
             case 5: //выход
 
 
-                router.push.Login();
+                navigator.push('Login');
                 await this.Del_user_change();
                 this.componentWillUnmount();
                 break;
@@ -466,12 +461,12 @@ export default class Chatting extends React.Component {
 
             case 7: //админ меню
 
-                router.push.NavigationAdmin({
+                navigator.push('NavigationAdmin', {
                     type_user: this.props.type_user,
                     nic: this.props.nic,
                     Change_User_id: this.Change_User_id,
                     go_private: this.Action_nick_selected,
-                },{type: 'fade', duration: 100, easing: 'ease' });
+                });
                 break;
 
 
@@ -547,7 +542,7 @@ export default class Chatting extends React.Component {
     };
 
 
-    ShowSmiles = () => { // логика отображения смайлов true/false
+    ShowSmiles = () => { // логика отображения смайлов true/1false1
 
 
         this.setState({
@@ -577,8 +572,8 @@ export default class Chatting extends React.Component {
 
     showPrivate = async () => {
         const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
-        const {router} = this.props;
-        router.push.Private({
+        const {navigator} = this.props;
+        navigator.push('Private', {
             profile_user: this.state.user_now,
             room: this.props.room,
             nic: this.props.nic,
@@ -608,17 +603,19 @@ export default class Chatting extends React.Component {
 
 
         await request_DELETE_USER_ROOM(this.props.room, this.props.nic);
-        let nw = this.props.room;
-        if (nw === 'Тюрьма') {
-            const {router} = this.props;
 
-            router.pop({name: this.props.nic, item_menu: this.state.rooms_Banned,});
 
-        } else {
-            const {router} = this.props;
-            await router.pop({name: this.props.nic, roomlist: this.props.item_menu, item_menu: this.props.roomlist});
-
-        }
+        const {navigator} = this.props;
+        await navigator.reset('Rooms',{
+            name: this.props.nic,
+            roomlist: this.props.item_menu,
+            chat_name: this.props.chat_name,
+            type_user: this.props.type_user,
+            category_update: this.props.category_update,
+            category_name_toolbar:this.props.category_name_toolbar,
+            count: this.props.count,
+            parent:this.props.parent,
+        });
 
 
     };

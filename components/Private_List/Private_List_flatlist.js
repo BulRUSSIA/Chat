@@ -8,7 +8,19 @@ import FastImage from "react-native-fast-image";
 
 export class Private_List_flatlist extends React.Component {
 
+    renderSeparator_1 = () => (
+        <View
+            style={{
 
+                height: 1,
+
+                width: '100%',
+                backgroundColor: '#aaaaaa',
+
+
+            }}
+        />
+    );
     render() {
 
         if (this.props.DataSource.length < 1) {
@@ -32,7 +44,7 @@ export class Private_List_flatlist extends React.Component {
 
                 data={this.props.DataSource}
                 extraData={this.props}
-
+                ItemSeparatorComponent={this.renderSeparator_1}
 
                 renderItem={(({item}) =>
 
@@ -42,7 +54,7 @@ export class Private_List_flatlist extends React.Component {
                             <View style={{
                                 flexDirection: 'row',
                                 flex: 1,
-                                backgroundColor: 'rgba(76,78,113,0.87)',
+                                backgroundColor: 'rgba(76,78,113,0)',
                                 marginTop: 5,
                                 borderRadius: 14
                             }}>

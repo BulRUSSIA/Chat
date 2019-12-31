@@ -102,8 +102,8 @@ export class Profile_redactor extends React.Component {
 
 
 
-        const {router} = this.props;
-        router.pop({
+        const {navigator} = this.props;
+        navigator.pop({
 
             room: this.props.room,
             nic: this.props.nic,
@@ -202,8 +202,8 @@ export class Profile_redactor extends React.Component {
 
     Get_pop = () => {
 
-        const {router} = this.props;
-        router.pop({
+        const {navigator} = this.props;
+        navigator.pop({
 
             room: this.props.room,
             nic: this.props.nic,

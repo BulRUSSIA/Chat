@@ -53,15 +53,10 @@ export default class Header_rooms extends React.Component {
                     <Title> онлайн:{this.props.count}</Title>
 
                 </Body>
-                <Badge primary style={{backgroundColor: '#50d36e', width: 15,height:15, marginTop: 10,}}>
+                <Badge primary style={{backgroundColor: '#50d36e', width: 8,height:10, marginTop: 10,}}>
 
                 </Badge>
-                <Right>
-                    <PopupMenu
-                        actions={['Изменить категорию','Добавить Категорию', 'Добавить комнату','Удалить категорию']}
-                        onPress={(e,i) => this.props.Rooms_menu_selected(i,e)}
-                    />
-                </Right>
+                {this.check_permission_admin()}
             </Header>
 
 

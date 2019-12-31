@@ -1,4 +1,4 @@
-import {Alert, Dimensions, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Dimensions,ImageBackground, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React from "react";
 import {Body, Button, Header, Icon, Left, Title} from "native-base";
 import request_BUY_AVATAR from "../../actions/fetch_buy_avatar";
@@ -72,11 +72,14 @@ export class ScreenAvatarList extends React.Component {
 
     render() {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
 
 
         return (
             <ScrollView>
+                <ImageBackground
+                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                    source={{uri:'default_background'}}>
                 <View>
 
                     <Header
@@ -88,7 +91,7 @@ export class ScreenAvatarList extends React.Component {
                             <Button transparent
 
                                     onPress={() => {
-                                        router.pop()
+                                        navigator.pop()
                                     }
 
 
@@ -107,7 +110,7 @@ export class ScreenAvatarList extends React.Component {
                     </Header>
 
 
-                    <FlatList style={{backgroundColor: '#3c3e5e'}}
+                    <FlatList style={{backgroundColor: 'rgba(60,62,94,0)'}}
 
 
                               contentContainerStyle={{
@@ -139,11 +142,11 @@ export class ScreenAvatarList extends React.Component {
 
                                               />
 
-                                              <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
+                                              <Text style={{color: 'black', fontSize: 10, textAlign: 'center'}}>
                                                   {item.name}
 
                                               </Text>
-                                              <Text style={{textAlign: 'center', color: 'white'}}>
+                                              <Text style={{textAlign: 'center', color: 'black'}}>
                                                   {item.price} руб.
 
                                               </Text>
@@ -162,7 +165,7 @@ export class ScreenAvatarList extends React.Component {
 
 
                 </View>
-
+                </ImageBackground>
             </ScrollView>
 
 

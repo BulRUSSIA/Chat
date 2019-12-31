@@ -3,6 +3,7 @@ import {
     BackHandler,
     ActivityIndicator,
     View,
+    ImageBackground,
 } from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
@@ -47,7 +48,7 @@ export default class Private_List extends React.Component {
 
         if (value === 'key1') {
 
-             await request_DELETE_PERSONALROOMS_ALL(this.props.nic);
+            await request_DELETE_PERSONALROOMS_ALL(this.props.nic);
             this.props.select(0);
             this.componentWillUnmount();
 
@@ -86,9 +87,9 @@ export default class Private_List extends React.Component {
         this.setState({animating:true});
         const get_private = await request_GET_MESSAGES_PRIVATE(event);
         this.setState({animating:false});
-       const {router} = this.props;
+        const {navigator} = this.props;
 
-        await    router.push.Private({
+        await    navigator.push('Private',{
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -98,7 +99,7 @@ export default class Private_List extends React.Component {
             list_data: this.state.DataSource
 
 
-        },{type: 'fade', duration: 100, easing: 'ease' });
+        });
 
 
 
@@ -110,8 +111,8 @@ export default class Private_List extends React.Component {
 
 
 
-        const {router} = this.props;
-        router.pop()
+        const {navigator} = this.props;
+        navigator.pop()
 
 
     };
@@ -129,13 +130,13 @@ export default class Private_List extends React.Component {
             return (
 
                 <View style={{flex:1,backgroundColor:'#3c3e5a'}}>
-                <ActivityIndicator
-                    style={{marginTop:'50%'}}
-                    size="large" color="#3E8CB4"
-                                   animating={this.state.animating}/>
+                    <ActivityIndicator
+                        style={{marginTop:'50%'}}
+                        size="large" color="#3E8CB4"
+                        animating={this.state.animating}/>
                 </View>
 
-                    )
+            )
 
 
         }
@@ -144,31 +145,33 @@ export default class Private_List extends React.Component {
 
 
             <View style={styles.container1}>
+                <ImageBackground
+                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                    source={{uri:'default_background'}}>
 
+                <Header_private_list
 
-                    <Header_private_list
+                    item_menu={this.state.item_menu}
+                    onValueChange={this.onValueChange}
+                    selectedValue={this.state.selected}
+                    back={this.back}
+                    onActionSelected={this.onActionSelected}
 
-                        item_menu={this.state.item_menu}
-                        onValueChange={this.onValueChange}
-                        selectedValue={this.state.selected}
-                        back={this.back}
-                        onActionSelected={this.onActionSelected}
-
-                    />
-
-
-
-                    <Private_List_flatlist
-
-
-                        DataSource={this.state.DataSource}
-                        get_chat={this.Get_Chat}
-
-
-                    />
+                />
 
 
 
+                <Private_List_flatlist
+
+
+                    DataSource={this.state.DataSource}
+                    get_chat={this.Get_Chat}
+
+
+                />
+
+
+</ImageBackground>
 
 
             </View>

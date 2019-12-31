@@ -1,4 +1,4 @@
-import {Dimensions, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, FlatList,ImageBackground ,ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React from "react";
 import {Body, Button, CardItem, Header, Icon, Left, Title} from "native-base";
 import FastImage from "react-native-fast-image";
@@ -30,8 +30,8 @@ export default class ScreenWeddings extends React.Component {
                 height: 1,
 
                 width:'100%',
-                backgroundColor:'white',
-                color:'white',
+                backgroundColor:'rgba(170,170,170,0.78)',
+                color:'rgba(170,170,170,0.78)',
 
 
             }}
@@ -39,13 +39,15 @@ export default class ScreenWeddings extends React.Component {
     );
     render() {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
 
 
         return (
 
             <View style={{justifyContent: 'center', backgroundColor: 'rgba(41,84,120,0.95)',}}>
-
+                <ImageBackground
+                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                    source={{uri:'default_background'}}>
                 <Header
                     style={{backgroundColor: '#3c3e5a',}}
                     androidStatusBarColor="#3c3e5a"
@@ -55,7 +57,7 @@ export default class ScreenWeddings extends React.Component {
                         <Button transparent
 
                                 onPress={() => {
-                                    router.pop()
+                                    navigator.pop()
                                 }
 
 
@@ -85,6 +87,7 @@ export default class ScreenWeddings extends React.Component {
 
 
                                            <View style={{alignSelf:'center',marginBottom:'10%',marginTop:'10%'}}>
+
                                                <View style={{flexDirection: 'row'}}>
 
                                                    <View style={{alignSelf:'center'}}>
@@ -103,7 +106,7 @@ export default class ScreenWeddings extends React.Component {
                                                            onPress={() => this.props.Profile_screen(item.users[0], item.username0)}>
                                                            <Text style={{
                                                                textAlign: 'center',
-                                                               color: 'white',
+                                                               color: 'black',
                                                                fontWeight: 'bold',
                                                                maxWidth:'100%'
                                                            }}>
@@ -112,58 +115,59 @@ export default class ScreenWeddings extends React.Component {
                                                            </Text>
                                                        </TouchableOpacity>
                                                    </View>
-                                                       <View style={{alignSelf:'center',marginLeft:'7%',marginRight:'7%'}}>
-                                                           <FastImage
-                                                               source={{uri: 'weddings_ring'}}
-                                                               style={{
-                                                                   width: 25,
-                                                                   height: 25,
-                                                                   alignSelf:'center'
+                                                   <View style={{alignSelf:'center',marginLeft:'7%',marginRight:'7%'}}>
+                                                       <FastImage
+                                                           source={{uri: 'weddings_ring'}}
+                                                           style={{
+                                                               width: 25,
+                                                               height: 25,
+                                                               alignSelf:'center'
 
-                                                               }}>
-                                                           </FastImage>
+                                                           }}>
+                                                       </FastImage>
+                                                       <Text style={{
+                                                           textAlign: 'center',
+                                                           color: '#4ba3e2',
+                                                           fontSize: 15,
+
+                                                       }}>
+
+                                                           {this.convert_time(item.date.$date)}
+                                                       </Text>
+                                                   </View>
+                                                   <View style={{alignSelf:'center'}}>
+                                                       <FastImage
+
+                                                           source={{uri: item.photo1}}
+                                                           style={{
+                                                               width: 50,
+                                                               height: 50,
+
+                                                               borderRadius: 8,
+                                                               alignSelf: 'center',
+                                                           }}>
+                                                       </FastImage>
+                                                       <TouchableOpacity
+                                                           onPress={() => this.props.Profile_screen(item.users[1], item.username1)}>
                                                            <Text style={{
                                                                textAlign: 'center',
-                                                               color: '#4ba3e2',
-                                                               fontSize: 15,
+                                                               color: 'black',
+                                                               fontWeight: 'bold',
+                                                               maxWidth:'100%'
 
                                                            }}>
 
-                                                               {this.convert_time(item.date.$date)}
+                                                               {item.username1}
                                                            </Text>
-                                                       </View>
-                                                       <View style={{alignSelf:'center'}}>
-                                                           <FastImage
-
-                                                               source={{uri: item.photo1}}
-                                                               style={{
-                                                                   width: 50,
-                                                                   height: 50,
-
-                                                                   borderRadius: 8,
-                                                                   alignSelf: 'center',
-                                                               }}>
-                                                           </FastImage>
-                                                           <TouchableOpacity
-                                                               onPress={() => this.props.Profile_screen(item.users[1], item.username1)}>
-                                                               <Text style={{
-                                                                   textAlign: 'center',
-                                                                   color: 'white',
-                                                                   fontWeight: 'bold',
-                                                                   maxWidth:'100%'
-
-                                                               }}>
-
-                                                                   {item.username1}
-                                                               </Text>
-                                                           </TouchableOpacity>
-                                                       </View>
-
-
+                                                       </TouchableOpacity>
                                                    </View>
 
+
                                                </View>
-                                               // </Body>
+
+                                           </View>
+
+                                       // </Body>
 
                                        // </CardItem>
 
@@ -177,7 +181,7 @@ export default class ScreenWeddings extends React.Component {
 
                 />
 
-
+                </ImageBackground>
 
             </View>
 

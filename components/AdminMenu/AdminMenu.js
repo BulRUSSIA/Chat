@@ -31,8 +31,8 @@ export default class NavigationAdmin extends React.Component {
 
         this.props.Change_User_id(user_id,chat_name);
 
-        const {router} = this.props;
-        router.push.Profile({
+        const {navigator} = this.props;
+        navigator.push('Profile',{
 
 
             chat_name:chat_name,
@@ -47,8 +47,8 @@ export default class NavigationAdmin extends React.Component {
 
     Go_Admin = ()=> {
 
-        const {router} = this.props;
-        router.push.NavigationSuperAdmin({
+        const {navigator} = this.props;
+        navigator.push('NavigationSuperAdmin',{
             type_user: this.props.type_user,
             nic: this.props.nic,
             Change_User_id: this.props.Change_User_id,
@@ -81,7 +81,7 @@ export default class NavigationAdmin extends React.Component {
 
     render() {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
 
 
 
@@ -99,7 +99,7 @@ export default class NavigationAdmin extends React.Component {
                     <Left style={{flex: 1}}>
                         <Button transparent
 
-                                onPress={() => router.pop()}>
+                                onPress={() => navigator.pop()}>
                             <Icon
 
                                 name="ios-arrow-back"/>

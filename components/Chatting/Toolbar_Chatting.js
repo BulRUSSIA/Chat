@@ -1,6 +1,7 @@
 import { Text, ToolbarAndroid, View} from "react-native";
 import styles from "../../styles";
 import React from "react";
+import {Header} from "native-base";
 
 export class Toolbar_Chatting extends React.Component {
 
@@ -13,7 +14,7 @@ export class Toolbar_Chatting extends React.Component {
 
 
         return  <ToolbarAndroid style={styles.containerToolbar}
-
+                                androidStatusBarColor="#3c3e5a"
                                 onActionSelected={this.props.select}
 
                                 data={this.props.users}

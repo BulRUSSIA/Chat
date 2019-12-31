@@ -1,5 +1,5 @@
 import React from 'react'
-import Router from 'react-native-easy-router'
+import Navigator from 'react-native-easy-router'
 import Login from './components/Login/Login'
 import Chatting from './components/Chatting/Chatting'
 import Rooms from "./components/Rooms/Rooms";
@@ -33,8 +33,9 @@ export default class chat extends React.Component {
 
         return (
 
-            <Router
-                routes={{
+            <Navigator
+                initialStack={[{screen: 'Login', transitionProps: {animation: 'fade'}}]}
+                screens={{
                     Login,
                     Chatting,
                     Rooms,
@@ -53,10 +54,11 @@ export default class chat extends React.Component {
                     ScreenWeddings,
                     NavigationSuperAdmin
                 }}
-                initialRoute="Login"
-                router={router => (this.router = router)}
+
+                animations='faded'
+                duration={150}
                 disableHardwareBack={true}
-                animations={'None'}
+
             />
 
 

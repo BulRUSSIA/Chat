@@ -15,7 +15,7 @@ export class PHOTO_VIEWER extends React.Component {
 //SEE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TIMER HAS BEEN STOPPED,{FLATLIST_PRIVATE} NOT UPDATING
     render() {
 
-        const {router}= this.props;
+        const {navigator}= this.props;
 
 
 
@@ -31,7 +31,7 @@ export class PHOTO_VIEWER extends React.Component {
             <Left style={{flex: 1}}>
                 <Button transparent
 
-                        onPress={()=> {router.pop({type:'right-top',duration: 400, easing: 'ease-in-out' })}
+                        onPress={()=> {navigator.pop({type:'right-top',duration: 300, easing: 'ease' })}
 
 
                         }>

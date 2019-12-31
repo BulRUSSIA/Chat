@@ -11,9 +11,9 @@ import {StyleSheet} from "react-native";
 
     },
     rooms: {
-        fontSize: 14,
+        fontSize: 18,
         flex: 1,
-        color: 'rgba(214,163,66,0.98)',
+        color: 'rgba(1,1,1,0.98)',
         marginTop: 2,
         fontWeight: 'bold'
 
@@ -23,7 +23,7 @@ import {StyleSheet} from "react-native";
     time: {
         fontSize: 10,
         flex: 1,
-        color: 'rgba(255,255,255,0.98)',
+        color: 'rgba(65,157,216,0.98)',
         marginRight: 2,
         marginTop: 2
 
@@ -32,7 +32,7 @@ import {StyleSheet} from "react-native";
     time_msg: {
         fontSize: 14,
         flex: 1,
-        color: 'rgba(255,255,255,0.98)',
+        color: 'rgba(46,93,133,0.98)',
 
         marginTop: 25,
         textAlign: 'left',

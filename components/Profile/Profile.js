@@ -4,7 +4,7 @@ import {
     Text,
     View,
     BackHandler,
-    TouchableOpacity, Alert,
+    TouchableOpacity, Alert,ImageBackground
 } from 'react-native';
 
 import Chatting from '../../components/Chatting/Chatting'
@@ -184,7 +184,7 @@ export default class Profile extends React.Component {
                 break;
             case(4):
 
-               await this.BuyGift(null,'50','Запрос на Бракосочетание!','Вы уверены,что хотите вступить в брак с данным пользователем за',1);
+                await this.BuyGift(null,'50','Запрос на Бракосочетание!','Вы уверены,что хотите вступить в брак с данным пользователем за',1);
                 break;
 
         }
@@ -194,17 +194,17 @@ export default class Profile extends React.Component {
 
 
     backs = () => {
-        const {router} = this.props;
+        const {navigator} = this.props;
         this.componentWillUnmount();
-        router.pop({type: 'bottom'})
+        navigator.pop({type: 'bottom'})
     };
 
 
     delete_gift = (gift, url, description) => {
 
 
-        const {router} = this.props;
-        router.push.View_stuff({
+        const {navigator} = this.props;
+        navigator.push('View_stuff',{
 
             gift_view: url,
             gift_id: gift,
@@ -238,8 +238,8 @@ export default class Profile extends React.Component {
     };
 
     View_full_photo = (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
-        const {router} = this.props;
-        router.push.PHOTO_VIEWER({
+        const {navigator} = this.props;
+        navigator.push('PHOTO_VIEWER',{
                 room: this.props.room,
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
@@ -258,9 +258,9 @@ export default class Profile extends React.Component {
 
             >
 
-
-                <View
-                    style={{width: '100%', height: '100%', backgroundColor: '#2e3044'}}>
+                <ImageBackground
+                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                    source={{uri:'default_background'}}>
 
                     <HeaderBar
                         backs={this.backs}
@@ -350,7 +350,7 @@ export default class Profile extends React.Component {
                     />
 
 
-                </View>
+                </ImageBackground>
 
 
             </View>

@@ -79,7 +79,7 @@ export class Modal_information extends React.Component {
 
                             key={index.toString()}
                             style={{
-                            fontSize: 16, color: 'rgba(179,134,55,0.88)', marginTop: 5,
+                            fontSize: 16, color: 'rgba(56,142,216,0.88)', marginTop: 5,
 
                         }}>
                             {elem + '\n'}
@@ -122,7 +122,7 @@ export class Modal_information extends React.Component {
                                 width:200,
                                 height:'48%'}}>
 
-                                <ImageBackground source={require('../Image/action_profile_info.jpg')}
+                                <ImageBackground source={{uri:'default_background'}}
                                                  style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
 
                     <OptimizedFlatList

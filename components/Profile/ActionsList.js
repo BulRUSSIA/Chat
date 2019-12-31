@@ -31,7 +31,7 @@ export default class ActionsList extends React.Component {
                           //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
 <TouchableOpacity onPress={()=> this.props.screenProps.Event_gift_handler(item.event)}>
                           <View style={{
-                              flex: 1, flexDirection: 'row', paddingTop: 6,backgroundColor:'rgba(77,84,103,0.91)',marginTop:5,
+                              flex: 1, flexDirection: 'row', paddingTop: 6,backgroundColor:'rgb(170,170,170)',marginTop:5,
                           }}>
 
                               <FastImage source={item.icon} style={styles.imageViewProfile_icon}

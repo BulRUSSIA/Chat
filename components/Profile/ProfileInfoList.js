@@ -44,7 +44,7 @@ export default class ProfileInfoList extends React.Component {
 
                                 <Text style={{
                                     fontWeight: 'bold',
-                                    color:'rgba(179,134,55,0.88)',
+                                    color:'rgba(1,1,1,0.88)',
                                     fontSize: 20,
                                     marginTop:'6%',
                                     marginLeft:'2%'

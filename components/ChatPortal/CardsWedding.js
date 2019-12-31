@@ -57,7 +57,7 @@ export default class CardsWedding extends React.Component {
         } else {
 
             return (<Text style={{
-                color: 'white',
+                color: 'red',
                 flex: 0,
                 backgroundColor: 'rgba(75,163,226,0.66)',
                 width: '100%',
@@ -95,28 +95,28 @@ export default class CardsWedding extends React.Component {
 
     render() {
 
-        const {router} = this.props;
+
 
 
         return (
 
 
             <CardItem cardBody
-                      style={{marginTop: '0.1%', backgroundColor: 'rgb(46,48,68)',maxWidth:width, flexDirection:'column',
+                      style={{marginTop: '0.1%', backgroundColor: 'rgba(46,48,68,0)',maxWidth:width, flexDirection:'column',
                           flex:1,}}>
 
                 <View
                     style={{height: height / 1.5, width: null, flex: 1}}>
 
-                    <Body style={{alignItems: 'center', backgroundColor: 'rgba(46,93,133,0.51)', flex: 0}}>
-                        <Text style={{color: '#ffffff', fontWeight: 'bold'}}>Виртуальный ЗАГС</Text>
+                    <Body style={{alignItems: 'center', backgroundColor: 'rgba(47,96,137,0.4)', flex: 0,width:width}}>
+                        <Text style={{color: '#010101', fontWeight: 'bold',}}>Виртуальный ЗАГС</Text>
 
 
                     </Body>
                     <Body style={{alignItems: 'center'}}>
 
                         {this.Wedding_action()}
-                        <Text style={{color: '#ffffff', fontWeight: 'bold', marginTop: 10, fontSize: 20}}>Последнее
+                        <Text style={{color: '#010101', fontWeight: 'bold', marginTop: 10, fontSize: 20}}>Последнее
                             бракосочетание</Text>
                     </Body>
 
@@ -151,7 +151,7 @@ export default class CardsWedding extends React.Component {
                                                                    onPress={() => this.props.Profile_screen(item.users[0], item.username0)}>
                                                                    <Text style={{
                                                                        textAlign: 'center',
-                                                                       color: 'white',
+                                                                       color: 'black',
                                                                        fontWeight: 'bold',
                                                                        maxWidth:'100%'
                                                                    }}>
@@ -196,7 +196,7 @@ export default class CardsWedding extends React.Component {
                                                                    onPress={() => this.props.Profile_screen(item.users[1], item.username1)}>
                                                                    <Text style={{
                                                                        textAlign: 'center',
-                                                                       color: 'white',
+                                                                       color: 'black',
                                                                        fontWeight: 'bold',
                                                                        maxWidth:'100%'
 

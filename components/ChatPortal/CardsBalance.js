@@ -24,14 +24,14 @@ export default class CardsBalance extends React.Component {
 
                             cardBody
 
-                            style={{ backgroundColor: 'rgb(46,48,68)',height:height/4}}>
+                            style={{ backgroundColor: 'rgba(255,255,255,0)',height:height/4}}>
 
 
 
 <Body>
-                                    <Text style={{color: '#FFFFF1',alignSelf:'center',fontSize:20}}>Баланс чатлов</Text>
+                                    <Text style={{color: '#010101',alignSelf:'center',fontSize:20}}>Баланс чатлов</Text>
 
-    <Text style={{fontSize:50,color:'white',alignSelf: 'center'}}>{this.props.balance_card}rur.</Text>
+    <Text style={{fontSize:50,color:'black',alignSelf: 'center'}}>{this.props.balance_card}rur.</Text>
     <FastImage
         style={{width:40,height:40,alignSelf:'center'}}
         source={{uri:'wallet'}}/>

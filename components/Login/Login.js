@@ -19,7 +19,6 @@ import request_all_users from "../../actions/fetch_all_users";
 import request_LAST_ROOM from "../../actions/fetch_last_room";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
-import request_GET_CATEGORIES from "../../actions/fetch_get_categories";
 const DEFAULT_SIZE_MESSAGE = 14;
 const DEFAULT_AVATAR_SIZE = 35;
 
@@ -61,7 +60,7 @@ export default class Login extends React.Component {
         try {
 
             // const imei = await request_IMEI();
-            //  this.setState({Imei: '111111111111111111'});
+            //  this.setState({Imei: '11111111111111111'});
 
 
             const value = await AsyncStorage.getItem('log');
@@ -109,7 +108,7 @@ export default class Login extends React.Component {
     login = async () => {
 
 
-        // const uniqueId = DeviceInfo.getSerialNumber();
+        // const uniqueId = DeviceInfo.getSerialNumber()1;
         // console.log(uniqueId);
         let LoginLength = this.state.username.length;
         let PasswordLength = this.state.password.length;
@@ -146,27 +145,24 @@ export default class Login extends React.Component {
                 if (this.state.ban === 'banned') {
 
 
-                    const {router} = this.props;
-                    router.push.Rooms({name: nic, router, roomlist: this.state.rooms_Banned});
+                    const {navigator} = this.props;
+                    navigator.push('Rooms',{name: nic, roomlist: this.state.rooms_Banned});
 
 
                 } else {
 
 
-                    const {router} = this.props;
-                    const count_all_users = await request_all_users();
-                    const rooms = await request_GET_ROOMS('-1');
-                    const categories = await request_GET_CATEGORIES('-1');
-                    const all = count_all_users['all'];
+                    const {navigator} = this.props;
+
+
                     const last_rooms = await request_LAST_ROOM(nic);
 
 
                     const Nick_chats = await request_MY_NICKNAME(nic);
 
-                    await router.replace.Rooms({name: nic, router, roomlist: rooms, count: all,categorieslist:categories,category_name_toolbar:'Комнаты',category_update:'-1',previous_category:'-1',
-                        type_user: Nick_chats[1],});
+                     navigator.reset('Rooms',{name: nic,category_update:'-1'}, {animation: 'right'});
                     try {
-                        await router.push.Chatting({
+                        navigator.push('Chatting',{
 
                             nic: nic,
                             room: last_rooms['last_room'],
@@ -179,17 +175,8 @@ export default class Login extends React.Component {
                         await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
 
                     } catch  {
-                        await router.push.Chatting({
 
-                            nic: nic,
-                            room: 'Новички чата',
-                            chat_name: Nick_chats[0],
-                            type_user: Nick_chats[1],
-
-
-                        });
-
-                        await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
+                        console.log('catch')
                     }
                 }
             }
@@ -204,8 +191,8 @@ export default class Login extends React.Component {
 
 
     reg = () => {
-        const {router} = this.props;
-        router.push.Registration({router});
+        const {navigator} = this.props;
+        navigator.push('Registration', {animation: 'fade'})
 
 
     };
@@ -236,7 +223,7 @@ export default class Login extends React.Component {
 
 
     render() {
-        const {router} = this.props;
+        const {navigator} = this.props;
 
 
 
@@ -310,7 +297,8 @@ export default class Login extends React.Component {
 
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={()=>  router.push.Settings()} style={styles.buttonText1}>
+                            <TouchableOpacity onPress={()=> navigator.push('Settings', {animation: 'right'})}
+                                style={styles.buttonText1}>
                                 <Text style={styles.buttonText}>
 
                                     Настройки</Text>

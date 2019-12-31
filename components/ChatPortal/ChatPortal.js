@@ -12,6 +12,8 @@ import {
     Left,
 
 } from 'native-base';
+
+import {ImageBackground} from 'react-native'
 import CardsBalance from "./CardsBalance";
 import CardsWedding from "./CardsWedding";
 import CardsService from "./CardsService";
@@ -21,7 +23,7 @@ import request_DECLINE_ZAGS_REQUEST from "../../actions/fetch_decline_zags_reque
 import request_DELETE_ZAGS_REQUEST from "../../actions/fetch_zags_delete";
 import SingleTonUpdatePortal from "./SingleTonUpdatePortal";
 import request_GET_WeddingList from "../../actions/fetch_wedding_list";
-import {ScreenWeddings} from "./ScreenWeddings";
+import ScreenWeddings from "./ScreenWeddings";
 
 
 export default class ChatPortal extends React.Component {
@@ -75,8 +77,8 @@ export default class ChatPortal extends React.Component {
     GetAvatarList = async () => {
 
 
-        const {router} = this.props;
-        router.push.ScreenAvatarList({
+        const {navigator} = this.props;
+        navigator.push('ScreenAvatarList',{
 
 
             user_id: this.props.nic,
@@ -92,8 +94,8 @@ export default class ChatPortal extends React.Component {
 
 
         await this.props.Change_User_id(user_id, username);
-        const {router} = this.props;
-        router.push.Profile({
+        const {navigator} = this.props;
+        navigator.push('Profile',{
 
             go_private: this.props.go_private_from_portal,
             user_id: user_id,
@@ -105,10 +107,10 @@ export default class ChatPortal extends React.Component {
 
     All_Weddings = () => {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
         console.log('push weddings');
 
-        router.push.ScreenWeddings({
+        navigator.push('ScreenWeddings',{
             wedding_list: this.state.wedding_list,
             Profile_screen: this.Go_Profile
         })
@@ -214,7 +216,7 @@ export default class ChatPortal extends React.Component {
 
     render() {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
         return (
             <Container>
                 <Header style={{backgroundColor: '#353751',}}
@@ -223,7 +225,7 @@ export default class ChatPortal extends React.Component {
                 >
                     <Left style={{flex: 1}}>
                         <Button transparent
-                                onPress={() => router.pop({
+                                onPress={() => navigator.pop({
                                     room: this.props.room,
                                     nic: this.props.nic,
                                     chat_name: this.props.chat_name,
@@ -240,9 +242,13 @@ export default class ChatPortal extends React.Component {
                         <Title>Чат портал</Title>
                     </Body>
                 </Header>
-                <Content style={{backgroundColor: 'rgb(39,41,59)', flex: 7}}>
+                <Content style={{backgroundColor: 'rgba(255,255,255,0)', flex: 7}}>
+
 
                     <Card>
+                        <ImageBackground
+                            style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                            source={{uri:'default_background'}}>
                         <CardsBalance
                             balance_card={this.state.balace}
                         />
@@ -262,7 +268,7 @@ export default class ChatPortal extends React.Component {
 
                         />
 
-
+                        </ImageBackground>
                     </Card>
 
 

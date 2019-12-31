@@ -1,10 +1,8 @@
-import {BackHandler, View, Alert} from "react-native";
+import {BackHandler, View, Alert,ImageBackground} from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
 import request_ENTRY_USER_ROOM from '../../actions/fetch_entry_user'
 import request_MY_NICKNAME from '../../actions/fetch_my_nickname'
-import Rooms_list from '../const/Room_List'
-import Rooms_banned from '../const/Room_list_banned'
 import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 import {
     Container,
@@ -23,7 +21,13 @@ import ModalRoomsActions from "./ModalRoomsActions";
 import request_UPDATE_CATEGORIES from "../../actions/fetch_update_categories";
 import request_DELETE_CATEGORIES from "../../actions/fetch_delete_category";
 import request_CREATE_CATEGORIES from "../../actions/fetch_create_category";
+import request_CREATE_ROOM from "../../actions/fetch_create_room";
 
+const checkbox = [{checked: false, id: 0, name: 'Пользователь', disable_item: false, mask: 1},
+    {checked: true, id: 1, name: 'Администратор', disable_item: true, mask: 2},
+    {checked: false, id: 2, name: 'Невидимка', disable_item: false, mask: 16},
+    {checked: false, id: 3, name: 'Забаненный', disable_item: false, mask: 8},
+    {checked: false, id: 4, name: 'Модератор', disable_item: false, mask: 4}];
 
 export default class Rooms extends React.Component {
     constructor(props) {
@@ -32,29 +36,21 @@ export default class Rooms extends React.Component {
 
         this.state = {
 
-            DataSource: [],
-            item_menu: this.props.roomlist, //item_menu ==9 2сп4ис12ок0 ко0мнат-
-            categories_list: this.props.categorieslist,
-            room: '',
-            name: this.props.name,
-            rooms_Unbanned: Rooms_list,
-            rooms_Banned: Rooms_banned,
+
+            item_menu: null, //item_menu ==9 2сп4ис12ок0 ко0мнат-
             isFetching: false,
-            all_users_online: this.props.count,
-            category_name_toolbar: this.props.category_name_toolbar,
-            category_update: this.props.category_update,
+            all_users_online: null,
+            category_name_toolbar: null,
+            category_update: null,
+            parent_prev: null,
             isVisible: false,
+            parent: null,
             text_change: '',
+            parent_name: 'Комнаты',
             name_create: this.props.category_name_toolbar,
-            update_root:'',
-            previous_category:this.props.previous_category,
             mask: 0,
-            rooms_set_change:null,
-            list: [{checked: false, id: 0, name: 'Пользователь', disable_item: false, mask: 1},
-                {checked: true, id: 1, name: 'Администратор', disable_item: true, mask: 2},
-                {checked: false, id: 2, name: 'Невидимка', disable_item: false, mask: 16},
-                {checked: false, id: 3, name: 'Забаненный', disable_item: false, mask: 8},
-                {checked: false, id: 4, name: 'Модератор', disable_item: false, mask: 4}],
+            rooms_set_change: null,
+            list: checkbox,
 
 
         };
@@ -62,7 +58,31 @@ export default class Rooms extends React.Component {
 
     }
 
-    checkThisBox =  (itemID) => {
+
+    componentDidMount = async () => {
+
+
+        const count_all_users = await request_all_users();
+        const rooms = await request_GET_ROOMS(this.props.category_update);
+        const all = count_all_users['all'];
+        const Nick_chats = await request_MY_NICKNAME(this.props.name);
+
+
+        this.setState({
+            item_menu: rooms,
+            all_users_online: all,
+            category_name_toolbar: 'Комнаты ',
+            category_update: '-1',
+            parent: '-1',
+            type_user: Nick_chats[1],
+            chat_name: Nick_chats[0]
+        })
+
+
+    };
+
+
+    checkThisBox = (itemID) => {
         let list = this.state.list;
         list[itemID].checked = !list[itemID].checked;
         this.setState({list: list});
@@ -72,17 +92,14 @@ export default class Rooms extends React.Component {
     ChangeNameCreateRooms = (name) => {
 
 
-
         this.setState({name_create: name});
 
 
+    };
 
+    hideRoomsMenu = () => {
 
-};
-
-    hideRoomsMenu =  () => {
-
-         this.setState({isVisible: !this.state.isVisible});
+        this.setState({isVisible: !this.state.isVisible});
 
 
     };
@@ -119,8 +136,13 @@ export default class Rooms extends React.Component {
                 await this.Create_category();
                 break;
 
-        }
 
+            case 2:
+
+                await this.Create_room();
+                break;
+
+        }
 
 
         await this.Get_update(this.state.category_update)
@@ -175,14 +197,14 @@ export default class Rooms extends React.Component {
 
                 } else {
 
-                    this.setState({text_change: 'Изменение категории',rooms_set_change:0});
-                     this.hideRoomsMenu();
+                    this.setState({text_change: 'Изменение категории', rooms_set_change: 0});
+                    this.hideRoomsMenu();
 
                 }
                 break;
 
             case 1:
-                this.setState({text_change: 'Добавление категории',rooms_set_change:1});
+                this.setState({text_change: 'Добавление категории', rooms_set_change: 1});
                 this.hideRoomsMenu();
 
 
@@ -190,8 +212,8 @@ export default class Rooms extends React.Component {
 
 
             case 2:
-                this.setState({text_change: 'Добавление комнаты',rooms_set_change:2});
-                 this.hideRoomsMenu();
+                this.setState({text_change: 'Добавление комнаты', rooms_set_change: 2});
+                this.hideRoomsMenu();
                 break;
 
             case 3:
@@ -203,7 +225,7 @@ export default class Rooms extends React.Component {
                 } else {
 
                     this.setState({text_change: 'Удаление категории'});
-                 await   this.Delete_dialog('Вы хотите действительно хотите удалить категорию');
+                    await this.Delete_dialog('Вы хотите действительно хотите удалить категорию');
 
                 }
 
@@ -212,7 +234,6 @@ export default class Rooms extends React.Component {
 
 
     };
-
 
 
     Delete_dialog = async (message) => {
@@ -245,17 +266,20 @@ export default class Rooms extends React.Component {
     Delete_category = async () => {
 
         await request_DELETE_CATEGORIES(this.props.name, this.state.category_update);
-         await this.back_room()
-
-
-
-
+        await this.back_room()
 
 
     };
 
-    Create_category = async ()=> {
-        await request_CREATE_CATEGORIES(this.props.name,this.state.name_create,this.state.category_update,this.state.mask);
+    Create_category = async () => {
+        await request_CREATE_CATEGORIES(this.props.name, this.state.name_create, this.state.category_update, this.state.mask);
+
+    };
+
+
+    Create_room = async () => {
+        await request_CREATE_ROOM(this.props.name, this.state.name_create, this.state.category_update, this.state.mask);
+
 
     };
 
@@ -283,9 +307,9 @@ export default class Rooms extends React.Component {
 
                 <ListItem
                     onPress={(event) => this.Get_category(item.name, item.parent, item._id.$oid)}>
-                    <Thumbnail source={{uri: 'go_folder'}} style={{width: 20, height: 20, resizeMode: 'contain'}}/>
+                    <Thumbnail source={{uri: 'go_folder'}} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
                     <Body>
-                        <Text style={{color: 'white', fontSize: 20}}>
+                        <Text style={{color: 'black', fontSize: 35}}>
                             {item.name}
 
 
@@ -303,17 +327,17 @@ export default class Rooms extends React.Component {
 
             <ListItem
                 onPress={(event) => this.Get_room(item.name, item.category, item.count)}>
-                <Thumbnail source={{uri: 'room_arrow'}} style={{width: 20, height: 20}}/>
+                <Thumbnail source={{uri: 'room_arrow'}} style={{width: 40, height: 40}}/>
                 <Body>
-                    <Text style={{color: 'white', fontSize: 20}}>
+                    <Text style={{color: 'black', fontSize: 30}}>
                         {item.name}
 
 
                     </Text>
                 </Body>
                 <Right>
-                    <Badge style={{backgroundColor: '#a5a5a5'}}>
-                        <Text style={{color: '#ff0112'}}>{item.count}</Text>
+                    <Badge style={{backgroundColor: '#ffffff',width:30,height:30}}>
+                        <Text style={{color: '#ff361c',fontSize:15,textAlign: 'center'}}>{item.count}</Text>
                     </Badge>
                 </Right>
 
@@ -326,56 +350,55 @@ export default class Rooms extends React.Component {
     };
 
     Get_category = async (name, parent, category_id) => {
+        console.log('category=', category_id);
+        console.log('parent=', parent);
 
-
+        const count_all_users = await request_all_users();
+        const rooms = await request_GET_ROOMS(category_id);
+        const all = count_all_users['all'];
         const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
-        console.log(Nick_chats);
-        const rooms = await request_GET_ROOMS(category_id);
-        const {router} = this.props;
 
 
-
-        router.push.Rooms({
-            name: this.props.name,
+        this.setState({
+            item_menu: rooms,
+            parent_name: this.state.category_name_toolbar,
+            all_users_online: all,
+            category_name_toolbar: name,
             category_update: category_id,
-            previous_category:this.state.category_update,
-            chat_name: Nick_chats[0],
+            parent: parent,
             type_user: Nick_chats[1],
-            roomlist: rooms,
-            count: this.props.count,
-            category_name_toolbar: name
-
-        },{type: 'fade', duration: 100, easing: 'ease' });
-
+            chat_name: Nick_chats[0],
+        })
 
     };
 
 
-
-
-
-    Get_room = async (event, category, parent) => {
+    Get_room = async (event) => {
 
 
         const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
-        console.log(Nick_chats);
 
         const a = this.props.name;
         await request_ENTRY_USER_ROOM(event, a);
 
 
-        const {router} = this.props;
-        router.push.Chatting({
+        const {navigator} = this.props;
+        navigator.reset('Chatting', {
 
             nic: this.props.name,
             room: event,
+            category_name_toolbar: this.state.category_name_toolbar,
             chat_name: Nick_chats[0],
             type_user: Nick_chats[1],
             item_menu: this.state.item_menu,
+            category_update: this.state.category_update,
+            count: this.props.count,
+            parent: this.state.parent,
 
-        },{type: 'fade', duration: 100, easing: 'ease' });
+
+        });
 
 
     };
@@ -383,11 +406,16 @@ export default class Rooms extends React.Component {
 
     back_room = async () => {
 
-        const {router} = this.props;
 
-        router.pop();
+        await this.setState({isFetching: true},
 
+           async ()  => {
 
+              await this.Get_category(this.state.category_name_toolbar, '-1', this.state.parent)
+
+            });
+
+        await this.setState({isFetching: false})
 
     };
 
@@ -399,13 +427,16 @@ export default class Rooms extends React.Component {
 
 
             <Container style={{backgroundColor: '#3c3e5e',}}>
+                <ImageBackground
+                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
+                    source={{uri:'default_background'}}>
 
                 <Header_rooms
                     back_room={this.back_room}
                     count={this.state.all_users_online}
                     Rooms_menu_selected={this.Rooms_menu_selected}
                     category_name_toolbar={this.state.category_name_toolbar}
-                    type_user={this.props.type_user}
+                    type_user={this.state.type_user}
 
                 />
                 <ModalRoomsActions
@@ -432,7 +463,7 @@ export default class Rooms extends React.Component {
                 />
 
                 <Footer_rooms/>
-
+                </ImageBackground>
             </Container>
 
 

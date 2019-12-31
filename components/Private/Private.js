@@ -117,9 +117,9 @@ export default class Private extends React.Component {
         if (position === 3) {
 
 
-            const {router} = this.props;
+            const {navigator} = this.props;
 
-            router.pop({
+            navigator.pop({
                 room: this.props.room,
                 nic: this.props.nic,
                 chat_name: this.props.chat_name,
@@ -227,9 +227,9 @@ export default class Private extends React.Component {
 
     View_full_photo = async (attach) => {
 
-        const {router} = this.props;
+        const {navigator} = this.props;
 
-        await router.push.PHOTO_VIEWER({
+        await navigator.push('PHOTO_VIEWER',{
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -482,62 +482,62 @@ export default class Private extends React.Component {
 
 
 
-                    <Header style={{backgroundColor: '#3c3e5a',}}
-                            androidStatusBarColor="#3c3e5a"
-                            onActionSelected={this.onActionSelected.bind(this)}
-                            actions={this.state.item_menu}
-                         >
+                <Header style={{backgroundColor: '#3c3e5a',}}
+                        androidStatusBarColor="#3c3e5a"
+                        onActionSelected={this.onActionSelected.bind(this)}
+                        actions={this.state.item_menu}
+                >
 
-                        <Left style={{flex: 1}}>
-                            <Button transparent
+                    <Left style={{flex: 1}}>
+                        <Button transparent
 
-                                    onPress={() => this.onActionSelected(3)}>
-                                <Icon
-                                    style={{color: 'white'}}
-                                    name="ios-arrow-back"/>
-                            </Button>
+                                onPress={() => this.onActionSelected(3)}>
+                            <Icon
+                                style={{color: 'white'}}
+                                name="ios-arrow-back"/>
+                        </Button>
 
-                        </Left>
-                        <Body>
+                    </Left>
+                    <Body>
 
-                            <Title>{this.props.private_chatter}</Title>
-                        </Body>
+                        <Title>{this.props.private_chatter}</Title>
+                    </Body>
 
-                        <Private_action_picker
-                            selected={this.state.selected}
-                            change={this.onValueChange.bind(this)}
-
-
-                        />
-
-
-                    </Header>
-                    {this.Modal_Activity()}
-
-
-                    <Private_Flatlist
-
-                        private={this.state.private}
-                        render={this._renderItem}
+                    <Private_action_picker
+                        selected={this.state.selected}
+                        change={this.onValueChange.bind(this)}
 
 
                     />
 
-                    {this.view()}
+
+                </Header>
+                {this.Modal_Activity()}
 
 
-                    <TextInput_Chatting
-                        key_color='#3C3E5A'
-                        show={this.ShowSmiles}
-                        add_text={this.add_text}
-                        send_msg={this.send_msg}
-                        text={this.state.text}
-                        active={this.state.ShowSmiles}
+                <Private_Flatlist
+
+                    private={this.state.private}
+                    render={this._renderItem}
 
 
-                    />
+                />
 
-                    {this.ListSmileAction()}
+                {this.view()}
+
+
+                <TextInput_Chatting
+                    key_color='#3C3E5A'
+                    show={this.ShowSmiles}
+                    add_text={this.add_text}
+                    send_msg={this.send_msg}
+                    text={this.state.text}
+                    active={this.state.ShowSmiles}
+
+
+                />
+
+                {this.ListSmileAction()}
 
 
 

@@ -6,7 +6,7 @@ import {
     View,
 
 
-    ImageBackground, ToolbarAndroid, Alert, TouchableOpacity, BackHandler
+    Alert, TouchableOpacity, BackHandler
 } from 'react-native';
 import Chatting from '../../components/Chatting/Chatting'
 
@@ -42,7 +42,7 @@ export default class View_stuff extends React.Component {
 
 
     delete_gift = async () => {
-        await this.pushing()
+        await this.pushing();
         console.log(this.state.gifts_id);
         const delete_gift = await request_DELETE_GIFT(this.state.gifts_id);
         Alert.alert('Подарок успешно удален!!!');
@@ -79,15 +79,10 @@ export default class View_stuff extends React.Component {
     pushing = async () => {
 
 
-        const {router} = this.props;
-        router.pop({
-            nic: this.props.nic,
-            room: this.props.room,
-            chat_name: this.props.chat_name,
-            user_data: this.props.user_information,
-            gift: this.props.gifts_list,
-            gift_description: this.props.gift_description
-        });
+        const {navigator} = this.props;
+        navigator.pop(
+
+        );
 
         this.componentWillUnmount();
     };

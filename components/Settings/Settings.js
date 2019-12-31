@@ -79,8 +79,8 @@ export default class Settings extends React.Component {
 
             await AsyncStorage.setItem('size_avatar', (this.state.size_avatar.toString()));
             await AsyncStorage.setItem('background_fon', (this.state.choice_background));
-            const {router} = this.props;
-            router.pop()
+            const {navigator} = this.props;
+            navigator.pop()
 
         } catch (error) {
             console.log(error)
