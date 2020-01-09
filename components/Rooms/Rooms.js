@@ -320,7 +320,7 @@ export default class Rooms extends React.Component {
 
     room_view = (name, category, count) => {
         return (
-            <ListItem style={{paddingLeft: '10%'}}
+            <ListItem
                       onPress={() => this.Get_room(name, category, count)}>
                 <Thumbnail source={{uri: 'room_arrow'}}
                            style={{

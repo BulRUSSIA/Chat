@@ -1,7 +1,6 @@
 
 import React from "react";
 import {FlatList} from "react-native";
-import {OptimizedFlatList} from "react-native-optimized-flatlist";
 
 export class Flatlist_Chatting_Messaging extends React.Component {
 
@@ -9,11 +8,11 @@ export class Flatlist_Chatting_Messaging extends React.Component {
     render() {
 
 
-        return <FlatList inverted
+        return <FlatList inverted={true}
 
                          extraData={this.props}
                          data={this.props.dataSource}
-                         initialNumToRender={25}
+
 
                          renderItem={this.props.render}
 

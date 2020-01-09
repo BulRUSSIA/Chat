@@ -34,7 +34,7 @@ export default class Login extends React.Component {
             Imei: '11111111111',
             rooms_Unbanned: Rooms_list,
             rooms_Banned: Rooms_banned,
-            isLoading: true,
+            isLoading: false,
             recieve: ''
 
 

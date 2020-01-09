@@ -250,6 +250,8 @@ export default class Chatting extends React.Component {
             }
         );
 
+        console.log('message:' + message);
+
         if (this.state.animating) {    //индикатор при первом заходе в комнату
 
             await this.setState({animating: !this.state.animating});
@@ -716,7 +718,7 @@ export default class Chatting extends React.Component {
 
             )
 
-        } else if ((item.avatars.slice(-1,).startsWith('g') === true) || (item.avatars.slice(-1,).startsWith('/')) === true) {
+        } else if (item.avatars === false) {
 
 
             return (
