@@ -7,7 +7,6 @@ import React from "react";
 import styles from "../../styles";
 import {Dimensions} from "react-native";
 import FastImage from "react-native-fast-image";
-const {height, width} = Dimensions.get('window');
 export class Pattern_message3 extends React.Component {
     view_attach = ()=>{
 
@@ -15,17 +14,19 @@ export class Pattern_message3 extends React.Component {
 
         <TouchableOpacity
             style={{
-                borderColor: '#221e3c',
-                borderWidth: 14,
-                backgroundColor: '#221e3c',
-                borderRadius: 24,
-                marginTop:height/15,
-                marginBottom:height/15,
+                // borderColor: '#221e3c',
+                // borderWidth: 10,
+                // backgroundColor: '#221e3c',
+                // borderRadius:10,
+                //
+                 flex:1,
+                //
+                //
+                //
+                 alignItems: 'center',
+                // width:width,
+                // height:height/4,
 
-                alignItems: 'center',
-                width:150,
-                height:150,
-                right:width/1.8,
 
 
 
@@ -56,7 +57,7 @@ export class Pattern_message3 extends React.Component {
 
         return(
 
-            <View style={{flex: 1, flexDirection: 'row',maxWidth:'100%'}}>
+            <View style={{flex: 1, flexDirection: 'column',maxWidth:'100%'}}>
                 {/*1/!*<FastImage source={{uri: this.props.avatars}} style={{*!/*/}
                 {/*/!*    width: this.props.size_av,*!/*/}
                 {/*/!*    height: this.props.size_av,*!/*/}

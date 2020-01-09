@@ -1,34 +1,35 @@
 
 import React from "react";
-import {Text, ToolbarAndroid, View} from "react-native";
-import styles from "../../styles";
-import profile_redactor from "../const/profile_redactor";
-
+import {Body, Button, Icon, Left, Right, Title,Header} from "native-base";
 export default class Toolbar_redactor extends React.Component {
-
-
 
 
     render() {
 
-
         return (
+            <Header
+                style={{backgroundColor: '#3c3e5a',}}
+                androidStatusBarColor="#3c3e5a">
 
 
-            <ToolbarAndroid style={styles.containerToolbar}
-                            androidStatusBarColor="#25566e"
-                            actions={profile_redactor}
-            >
+                <Left style={{flex: 1}}>
+                    <Button transparent
+
+                            onPress={this.props.backs}>
+                        <Icon
+                            style={{color: 'white'}}
+                            name="ios-arrow-back"/>
+                    </Button>
+
+                </Left>
+                <Body>
+                    <Title>Профиль</Title>
+                </Body>
+                <Right/>
 
 
-                <View>
-                    <Text style={styles.instructions}>Мой профиль </Text>
-
-                </View>
-
-
-            </ToolbarAndroid>
-
-        );
+            </Header>
+        )
     }
 }
+

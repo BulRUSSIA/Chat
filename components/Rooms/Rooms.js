@@ -1,4 +1,4 @@
-import {BackHandler, View, Alert,ImageBackground} from "react-native";
+import {BackHandler, View, Alert, ImageBackground, AsyncStorage, Dimensions} from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
 import request_ENTRY_USER_ROOM from '../../actions/fetch_entry_user'
@@ -7,7 +7,7 @@ import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 import {
     Container,
     Body,
-    Badge,
+
     Text,
     ListItem,
     Thumbnail,
@@ -22,7 +22,9 @@ import request_UPDATE_CATEGORIES from "../../actions/fetch_update_categories";
 import request_DELETE_CATEGORIES from "../../actions/fetch_delete_category";
 import request_CREATE_CATEGORIES from "../../actions/fetch_create_category";
 import request_CREATE_ROOM from "../../actions/fetch_create_room";
+import {TYPE_ADMIN, TYPE_BANNED, TYPE_INVISIBLE, TYPE_MODERATOR, TYPE_USER} from "../const/const type_user_chats";
 
+const {width} = Dimensions.get('window');
 const checkbox = [{checked: false, id: 0, name: 'Пользователь', disable_item: false, mask: 1},
     {checked: true, id: 1, name: 'Администратор', disable_item: true, mask: 2},
     {checked: false, id: 2, name: 'Невидимка', disable_item: false, mask: 16},
@@ -37,7 +39,7 @@ export default class Rooms extends React.Component {
         this.state = {
 
 
-            item_menu: null, //item_menu ==9 2сп4ис12ок0 ко0мнат-
+            item_menu: null, //ite1m_menu ==9 2сп4ис12ок10 ко10мнат--
             isFetching: false,
             all_users_online: null,
             category_name_toolbar: null,
@@ -51,6 +53,7 @@ export default class Rooms extends React.Component {
             mask: 0,
             rooms_set_change: null,
             list: checkbox,
+            size_rooms: 18,
 
 
         };
@@ -62,21 +65,37 @@ export default class Rooms extends React.Component {
     componentDidMount = async () => {
 
 
-        const count_all_users = await request_all_users();
-        const rooms = await request_GET_ROOMS(this.props.category_update);
-        const all = count_all_users['all'];
-        const Nick_chats = await request_MY_NICKNAME(this.props.name);
+        try {
+
+            const count_all_users = await request_all_users();
+            const rooms = await request_GET_ROOMS(this.props.category_update);
+            const all = count_all_users['all'];
+            const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
 
-        this.setState({
-            item_menu: rooms,
-            all_users_online: all,
-            category_name_toolbar: 'Комнаты ',
-            category_update: '-1',
-            parent: '-1',
-            type_user: Nick_chats[1],
-            chat_name: Nick_chats[0]
-        })
+            const size_rooms = await AsyncStorage.getItem('size_rooms');
+
+
+            // We have data!!
+            this.setState({
+                size_rooms: Number(size_rooms),
+                item_menu: rooms,
+                all_users_online: all,
+                category_name_toolbar: 'Комнаты',
+                category_update: '-1',
+                parent: '-1',
+                type_user: Nick_chats[1],
+                chat_name: Nick_chats[0]
+
+            });
+
+
+            console.log(this.state.size_msg);
+
+
+        } catch (error) {
+            console.log('error -asyncstore', error)
+        }
 
 
     };
@@ -182,6 +201,7 @@ export default class Rooms extends React.Component {
         return true
 
     };
+
 
     Rooms_menu_selected = async (selected, name) => {
 
@@ -298,66 +318,135 @@ export default class Rooms extends React.Component {
     );
 
 
-    _renderItem = ({item}) => {
-
-        if (item.parent) {
-
-
-            return (
-
-                <ListItem
-                    onPress={(event) => this.Get_category(item.name, item.parent, item._id.$oid)}>
-                    <Thumbnail source={{uri: 'go_folder'}} style={{width: 40, height: 40, resizeMode: 'contain'}}/>
-                    <Body>
-                        <Text style={{color: 'black', fontSize: 35}}>
-                            {item.name}
-
-
-                        </Text>
-                    </Body>
-
-
-                </ListItem>
-            )
-        }
-
-
+    room_view = (name, category, count) => {
         return (
-
-
-            <ListItem
-                onPress={(event) => this.Get_room(item.name, item.category, item.count)}>
-                <Thumbnail source={{uri: 'room_arrow'}} style={{width: 40, height: 40}}/>
+            <ListItem style={{paddingLeft: '10%'}}
+                      onPress={() => this.Get_room(name, category, count)}>
+                <Thumbnail source={{uri: 'room_arrow'}}
+                           style={{
+                               width: this.state.size_rooms * 2.5,
+                               height: this.state.size_rooms * 2.5
+                           }}/>
                 <Body>
-                    <Text style={{color: 'black', fontSize: 30}}>
-                        {item.name}
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
+                        {name}
 
 
                     </Text>
                 </Body>
                 <Right>
-                    <Badge style={{backgroundColor: '#ffffff',width:30,height:30}}>
-                        <Text style={{color: '#ff361c',fontSize:15,textAlign: 'center'}}>{item.count}</Text>
-                    </Badge>
+
+                    <Text style={{
+                        color: '#ff361c',
+                        fontSize: this.state.size_rooms,
+                        textAlign: 'center',
+                        fontWeight: 'bold'
+                    }}>{count}</Text>
+
                 </Right>
 
             </ListItem>
-
-
         )
-
 
     };
 
+
+    _renderItem = ({item}) => {
+
+        if (item.parent) {
+
+
+            if (this.state.type_user !== TYPE_BANNED) {
+
+
+                return (
+
+                    <ListItem style={{width: '100%'}}
+                              onPress={() => this.Get_category(item.name, item.parent, item._id.$oid)}>
+                        <Thumbnail source={{uri: 'go_folder'}} style={{
+                            width: this.state.size_rooms * 2.5,
+                            height: this.state.size_rooms * 2.5,
+                            resizeMode: 'contain'
+                        }}/>
+                        <Body>
+                            <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
+                                {item.name}
+
+
+                            </Text>
+                        </Body>
+
+
+                    </ListItem>
+                )
+            }
+        }
+
+        if (this.state.type_user === TYPE_ADMIN) {
+
+            return this.room_view(item.name, item.category, item.count)
+
+        }
+
+        if (this.state.type_user === TYPE_USER) {
+
+            let mask = item.mask;
+            switch (mask) {
+                case TYPE_BANNED + TYPE_ADMIN:
+                    break;
+                case TYPE_BANNED + TYPE_ADMIN + TYPE_INVISIBLE:
+                    break;
+                case TYPE_MODERATOR + TYPE_ADMIN:
+                    break;
+                case TYPE_ADMIN:
+                    break;
+                default:
+
+                    return this.room_view(item.name, item.category, item.count)
+            }
+        } else if (this.state.type_user === TYPE_BANNED) {
+
+            let mask = item.mask;
+            switch (mask) {
+
+                case TYPE_BANNED + TYPE_ADMIN:
+
+                    return this.room_view(item.name, item.category, item.count);
+
+
+                case TYPE_BANNED + TYPE_ADMIN + TYPE_MODERATOR:
+
+                    return this.room_view(item.name, item.category, item.count)
+            }
+        } else if (this.state.type_user === TYPE_MODERATOR) {
+
+            let mask = item.mask;
+            switch (mask) {
+                case TYPE_USER + TYPE_INVISIBLE + TYPE_BANNED + TYPE_ADMIN:
+                    return null;
+                case TYPE_ADMIN:
+                    return null;
+                case TYPE_ADMIN + TYPE_BANNED:
+                    return null;
+                case TYPE_ADMIN + TYPE_INVISIBLE:
+                    return null;
+                default:
+
+
+                    return this.room_view(item.name, item.category, item.count)
+            }
+
+        }
+    };
+
     Get_category = async (name, parent, category_id) => {
-        console.log('category=', category_id);
+        console.log('category1=', category_id);
         console.log('parent=', parent);
 
         const count_all_users = await request_all_users();
         const rooms = await request_GET_ROOMS(category_id);
         const all = count_all_users['all'];
         const Nick_chats = await request_MY_NICKNAME(this.props.name);
-
 
 
         this.setState({
@@ -409,9 +498,9 @@ export default class Rooms extends React.Component {
 
         await this.setState({isFetching: true},
 
-           async ()  => {
+            async () => {
 
-              await this.Get_category(this.state.category_name_toolbar, '-1', this.state.parent)
+                await this.Get_category(this.state.category_name_toolbar, '-1', this.state.parent)
 
             });
 
@@ -428,41 +517,41 @@ export default class Rooms extends React.Component {
 
             <Container style={{backgroundColor: '#3c3e5e',}}>
                 <ImageBackground
-                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
-                    source={{uri:'default_background'}}>
+                    style={{resizeMode: 'contain', height: '100%', width: '100%'}}
+                    source={{uri: 'default_background'}}>
 
-                <Header_rooms
-                    back_room={this.back_room}
-                    count={this.state.all_users_online}
-                    Rooms_menu_selected={this.Rooms_menu_selected}
-                    category_name_toolbar={this.state.category_name_toolbar}
-                    type_user={this.state.type_user}
+                    <Header_rooms
+                        back_room={this.back_room}
+                        count={this.state.all_users_online}
+                        Rooms_menu_selected={this.Rooms_menu_selected}
+                        category_name_toolbar={this.state.category_name_toolbar}
+                        type_user={this.state.type_user}
 
-                />
-                <ModalRoomsActions
-                    hideRoomsMenu={this.hideRoomsMenu}
-                    list_checkbox={this.state.list}
-                    isVisible={this.state.isVisible}
-                    textchange={this.state.text_change}
-                    ChangeNameCreateRooms={this.ChangeNameCreateRooms}
-                    checkThisBox={this.checkThisBox}
-                    name_create={this.state.name_create}
-                    mask_count={this.mask_count}
-                    set_change={this.state.rooms_set_change}
-
-
-                />
+                    />
+                    <ModalRoomsActions
+                        hideRoomsMenu={this.hideRoomsMenu}
+                        list_checkbox={this.state.list}
+                        isVisible={this.state.isVisible}
+                        textchange={this.state.text_change}
+                        ChangeNameCreateRooms={this.ChangeNameCreateRooms}
+                        checkThisBox={this.checkThisBox}
+                        name_create={this.state.name_create}
+                        mask_count={this.mask_count}
+                        set_change={this.state.rooms_set_change}
 
 
-                <ListRooms
-                    _renderItem={this._renderItem}
-                    item_menu={this.state.item_menu}
-                    onRefresh={this.onRefresh}
-                    refreshing={this.state.isFetching}
-                    sep={this.renderSeparator_1}
-                />
+                    />
 
-                <Footer_rooms/>
+
+                    <ListRooms
+                        _renderItem={this._renderItem}
+                        item_menu={this.state.item_menu}
+                        onRefresh={this.onRefresh}
+                        refreshing={this.state.isFetching}
+                        sep={this.renderSeparator_1}
+                    />
+
+                    <Footer_rooms/>
                 </ImageBackground>
             </Container>
 

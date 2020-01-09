@@ -352,14 +352,17 @@ const styles = StyleSheet.create({
     },
     imageAvatarProfileEdit: {
 
-        width: 48,
-        height: 48,
-        marginLeft: 1,
-        marginRight:20,
-        marginTop: 20,
-        resizeMode: 'contain',
+        width: 45,
+        height: 45,
+        marginRight:'2%',
+        marginLeft:'2%',
+        marginTop:'2%',
+        marginBottom:'2%',
+
+
+
         borderRadius: 400 / 2,
-        marginBottom:5,
+
 
 
     },
@@ -441,8 +444,11 @@ const styles = StyleSheet.create({
 
     imageAttachRoom: {
 
-        width: '100%',
-        height: 150,
+        width: '80%',
+        height:200,
+        borderWidth:12,
+        borderColor:'#1e4457',
+
 
 
 

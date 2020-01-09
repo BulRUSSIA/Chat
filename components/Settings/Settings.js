@@ -4,7 +4,7 @@ import {
     Text,
     StyleSheet,
     TouchableWithoutFeedback,
-    View,
+    View,ScrollView,
     TouchableOpacity
 
 } from "react-native";
@@ -45,6 +45,7 @@ export default class Settings extends React.Component {
             size_message: 18,
             size_avatar: 30,
             size_message_chatter_list: 14,
+            size_rooms:16,
             selectedIds: background_fon,
             choice_background: 'default_background'
 
@@ -60,6 +61,7 @@ export default class Settings extends React.Component {
         const background_image = await AsyncStorage.getItem('background_fon');
         const size_msg = await AsyncStorage.getItem('size_message');
         const size_av = await AsyncStorage.getItem('size_avatar');
+        const size_rooms = await AsyncStorage.getItem('size_rooms');
         this.setState({
             size_message: Number(size_msg),
             size_avatar: Number(size_av),
@@ -75,8 +77,8 @@ export default class Settings extends React.Component {
         try {
 
             await AsyncStorage.setItem('size_message', (this.state.size_message.toString()));
-            console.log('message size:' + this.state.size_message.toString())
-
+            console.log('message size:' + this.state.size_message.toString());
+            await AsyncStorage.setItem('size_rooms', (this.state.size_rooms.toString()));
             await AsyncStorage.setItem('size_avatar', (this.state.size_avatar.toString()));
             await AsyncStorage.setItem('background_fon', (this.state.choice_background));
             const {navigator} = this.props;
@@ -97,7 +99,11 @@ export default class Settings extends React.Component {
     render() {
 
 
-        return <View style={styles.container}>
+        return     <ScrollView>
+
+
+        <View style={styles.container}>
+
 
             <Text style={{
                 fontSize: 26,
@@ -129,12 +135,25 @@ export default class Settings extends React.Component {
                 Размер аватарок
             </Text>
             <Slider
+            style={{width: 300, height: 80, alignSelf: 'center'}}
+            minimumValue={2}
+            maximumValue={60}
+            value={this.state.size_avatar}
+            step={2}
+            onValueChange={(sliderValue) => this.setState({size_avatar: sliderValue})}
+            minimumTrackTintColor="#2ABB28"
+            maximumTrackTintColor="#000000"
+        />
+            <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+                Размер текста в списке комнат
+            </Text>
+            <Slider
                 style={{width: 300, height: 80, alignSelf: 'center'}}
-                minimumValue={2}
-                maximumValue={60}
-                value={this.state.size_avatar}
+                minimumValue={10}
+                maximumValue={26}
+                value={this.state.size_rooms}
                 step={2}
-                onValueChange={(sliderValue) => this.setState({size_avatar: sliderValue})}
+                onValueChange={(sliderValue) => this.setState({size_rooms: sliderValue})}
                 minimumTrackTintColor="#2ABB28"
                 maximumTrackTintColor="#000000"
             />
@@ -190,7 +209,9 @@ export default class Settings extends React.Component {
                     Cохранить</Text>
 
             </TouchableOpacity>
+
         </View>
+    </ScrollView>
 
     }
 }

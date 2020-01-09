@@ -1,7 +1,7 @@
-import { Text, ToolbarAndroid, View} from "react-native";
+import {StatusBar, Text, ToolbarAndroid, View} from "react-native";
 import styles from "../../styles";
 import React from "react";
-import {Header} from "native-base";
+import Navigator from "react-native-easy-router";
 
 export class Toolbar_Chatting extends React.Component {
 
@@ -15,6 +15,7 @@ export class Toolbar_Chatting extends React.Component {
 
         return  <ToolbarAndroid style={styles.containerToolbar}
                                 androidStatusBarColor="#3c3e5a"
+                                subtitleColor="#3c3e5a"
                                 onActionSelected={this.props.select}
 
                                 data={this.props.users}
@@ -23,6 +24,7 @@ export class Toolbar_Chatting extends React.Component {
 
             <View>
                 <Text style={styles.instructions}>{this.props.room} </Text>
+                <StatusBar backgroundColor="#3c3e5a"/>
 
             </View>
 

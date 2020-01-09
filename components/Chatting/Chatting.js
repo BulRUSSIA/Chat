@@ -408,7 +408,7 @@ export default class Chatting extends React.Component {
                     });
                 }
 
-                navigator.push('Profile_redactor', {
+                navigator.push('Profile_Redactor_New', {
 
                     room: this.props.room,
                     nic: this.props.nic,
@@ -634,7 +634,10 @@ export default class Chatting extends React.Component {
             await this.update_msg();
         } else {
             await Keyboard.dismiss();
+
             await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+
+
             await this.setState({
                 text: '',
             });
@@ -647,7 +650,7 @@ export default class Chatting extends React.Component {
     _renderItem = ({item}) => { //render листа с чат сообщениями
         let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
         let server = item.user; //имя пользователя
-        let attch = item.attachments;//аттач
+        let attch = item.attachments;//аттач-
         let _class = item._class;//цвет ника и сообщения0!
         let avatars = item.avatars;//аватарка
         let message = item.message; //сообшение

@@ -246,21 +246,7 @@ export class Profile_redactor extends React.Component {
 
 
 
-                <TextInput
-                    style={
-                        styles.TextInput_Redactor
-                    }
 
-                    placeholder='Пол             '
-                    keyboardType='default'
-                    pointerEvents="none"
-
-                    ref='                          Сообщение...'
-                    onChangeText={() => this.setState({enabled: true})}
-                    value={this.state.sex}
-
-
-                />
 
                 <Text style={{
                     backgroundColor: 'rgba(107,215,155,0.31)',

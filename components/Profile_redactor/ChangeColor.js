@@ -1,8 +1,8 @@
 
 import React from "react";
-import {Image, ImageBackground, Text, ToolbarAndroid, TouchableOpacity, View} from "react-native";
+import {Dimensions, Image, ImageBackground, Text, TextInput, TouchableOpacity, View} from "react-native";
 import styles from "../../styles";
-import profile_redactor from "../const/profile_redactor";
+const {height, width} = Dimensions.get('window');
 
 export default class ChangeColor extends React.Component {
 
@@ -15,23 +15,32 @@ export default class ChangeColor extends React.Component {
         return (
 
 
-            <View style={{marginLeft: 20,}}>
+            <View style={{flex:1,flexDirection:'row'}}>
                 <Image source={{uri: this.props.photo}}
                        style={styles.imageAvatarProfileEdit}/>
 
-                <Text style={{marginTop:30,marginLeft:70,position:'absolute',fontSize:25,}}>{this.props.chat_name}</Text>
+                <TextInput style={{borderRadius:13,borderColor:'#f61800',borderWidth:1,marginTop:10,width:width/1.8,height:height/15}}
+
+
+
+
+                       value={this.props.chat_name}
+
+
+
+                />
                 <TouchableOpacity style={{
                     backgroundColor: this.props.clr,
 
-                    height: 40,
-                    width: 40,
+                    height: 45,
+                    width: 45,
+                    marginTop:'2%',
+                    marginLeft:'4%',
 
-                    position: 'absolute',
-                    marginLeft: 280,
-                    marginBottom: 20,
-                    paddingHorizontal: 10,
-                    borderRadius: 14,
-                    marginTop: 25,
+
+
+                    borderRadius: 400/2,
+
 
                 }}
 

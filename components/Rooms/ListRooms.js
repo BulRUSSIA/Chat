@@ -12,14 +12,14 @@ export default class ListRooms extends React.Component {
 
         return (
 
-            <FlatList
+            <FlatList style={{width:'100%'}}
 
 
                 data={this.props.item_menu}
                 extraData={this.props}
 
 
-                ItemSeparatorComponent={this.props.sep}
+                // ItemSeparatorComponen-t={this.props.sep}
 
 
                 renderItem={this.props._renderItem}
