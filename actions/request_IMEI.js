@@ -6,12 +6,12 @@ async  function request_IMEI() {
         const IMEI = require('react-native-imei');
 
 
-        let hyeta = await IMEI.getImei();
-        return hyeta[0];
+        let imei = await IMEI.getImei();
+        return imei[0];
 
 
     } catch (err) {
-        console.warn(err)
+        return imei
     }
 }
 export default request_IMEI

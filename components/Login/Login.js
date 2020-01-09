@@ -13,7 +13,6 @@ import request_READ_PHONE_STATE from '../../actions/request_phone_state'
 import Rooms_list from '../const/Room_List'
 import Rooms_banned from '../const/Room_list_banned'
 import request_login from '../../actions/fetch_login'
-import request_banned from '../../actions/fetch_banned'
 import request_LAST_ROOM from "../../actions/fetch_last_room";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
@@ -74,33 +73,29 @@ export default class Login extends React.Component {
                 })
             }
 
-        } catch (error) {
+        } catch (e) {
+            console.log(e)
+
+
             // Error retrieving data
         }
 
 
         try {
 
-            // const imei = await request_IMEI();
-            //  this.setState({Imei: '111111111111111111'});
-
-
             const backgr = await AsyncStorage.getItem('background_fon');
             const size_msg = await AsyncStorage.getItem('size_message');
             const size_av = await AsyncStorage.getItem('size_avatar');
             const size_rooms = await AsyncStorage.getItem('size_rooms');
+            console.log('get key async');
+            console.log(backgr,size_msg,size_av,size_rooms)
 
-            if (backgr || size_av || size_msg || size_rooms == null) {
+        } catch (e) {
 
-                await AsyncStorage.setItem('background_fon', 'default_background');
-                await AsyncStorage.setItem('size_message', DEFAULT_SIZE_MESSAGE.toString());
-                await AsyncStorage.setItem('size_avatar', DEFAULT_AVATAR_SIZE.toString());
-                await AsyncStorage.setItem('size_rooms', DEFAULT_ROOMS_SIZE.toString());
-                console.log(error, 'set key async succsessf1ul')
-            }
-
-        } catch (error) {
-            console.log(error, 'errror get key async')
+            await AsyncStorage.setItem('background_fon', 'default_background');
+            await AsyncStorage.setItem('size_message', DEFAULT_SIZE_MESSAGE.toString());
+            await AsyncStorage.setItem('size_avatar', DEFAULT_AVATAR_SIZE.toString());
+            await AsyncStorage.setItem('size_rooms', DEFAULT_ROOMS_SIZE.toString());
         }
     };
 
@@ -108,7 +103,7 @@ export default class Login extends React.Component {
     login = async () => {
 
 
-        // const uniqueId = DeviceInfo.getSerialNumber()1;
+        // const uniqueId = DeviceInfo.getSerialNumber()1;1
         // console.log(uniqu2eId);
         let LoginLength = this.state.username.length;
         let PasswordLength = this.state.password.length;
@@ -127,11 +122,13 @@ export default class Login extends React.Component {
             this.setState({isLoading: !this.state.isLoading, validator: login['auth']});
 
 
-            if (this.state.validator === 'NO OK') {
+            if (this.state.validator === false) {
 
                 Alert.alert('Ошибка', 'Данные введены неверно!');
 
-            } else {
+            }
+
+            else {
 
                 let nicks = login['nic'];
                 let nic = (nicks['$oid']);
@@ -141,14 +138,15 @@ export default class Login extends React.Component {
                 const Nick_chats = await request_MY_NICKNAME(nic);
 
                 try {
+                    navigator.reset('Rooms', {name: nic, category_update: '-1'}, {animation: 'right'});
 
-                    navigator.push('Chatting', {
-
-                        nic: nic,
-                        room: last_rooms['last_room'],
-                        chat_name: Nick_chats[0],
-                        type_user: Nick_chats[1],
-                    });
+                    // navigator.push('Chatting', { Переход сразц в комнату(доделатьб)
+                    //
+                    //     nic: nic,
+                    //     room: last_rooms['last_room'],
+                    //     chat_name: Nick_chats[0],
+                    //     type_user: Nick_chats[1],
+                    // });
 
                 } catch {
 

@@ -48,6 +48,8 @@ import FireSingleTon from "../../FireSingleTon";
 import FastImage from "react-native-fast-image";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import SingleTonUpdateZags from "../ChatPortal/SingleTonUpdatePortal";
+import {TYPE_BANNED} from "../const/const type_user_chats";
+import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 
 const screenWidtht = Math.round(Dimensions.get('window').width);
 
@@ -67,7 +69,7 @@ export default class Chatting extends React.Component {
             text: '',
             action_nick: list_user,
             user_now: '',
-            type: null,
+            type_user: null,
             isVisible: false,
             isVisibleList: false,
             showAlert: false,
@@ -75,6 +77,7 @@ export default class Chatting extends React.Component {
             photo_attachments: false,
             attachments: 'Not', // Not для back-a
             modal_indicator: false,
+            room_now: this.props.room,
             user_id: '',
             ShowSmiles: false,
             new_pm: false,
@@ -243,7 +246,7 @@ export default class Chatting extends React.Component {
     update_msg = async () => {
 
 
-        const message = await request_GET_MESSAGES(this.props.room); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
+        const message = await request_GET_MESSAGES(this.state.room_now); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
         this.setState({
                 dataSource: message,
 
@@ -448,7 +451,7 @@ export default class Chatting extends React.Component {
             case 5: //выход
 
 
-                navigator.push('Login');
+                navigator.reset('Login');
                 await this.Del_user_change();
                 this.componentWillUnmount();
                 break;
@@ -607,16 +610,17 @@ export default class Chatting extends React.Component {
         await request_DELETE_USER_ROOM(this.props.room, this.props.nic);
 
 
+
         const {navigator} = this.props;
-        await navigator.reset('Rooms',{
+        await navigator.reset('Rooms', {
             name: this.props.nic,
             roomlist: this.props.item_menu,
             chat_name: this.props.chat_name,
             type_user: this.props.type_user,
             category_update: this.props.category_update,
-            category_name_toolbar:this.props.category_name_toolbar,
+            category_name_toolbar: this.props.category_name_toolbar,
             count: this.props.count,
-            parent:this.props.parent,
+            parent: this.props.parent,
         });
 
 
@@ -657,6 +661,13 @@ export default class Chatting extends React.Component {
         let avatars = item.avatars;//аватарка
         let message = item.message; //сообшение
         let user_id = item.user_id; //id пользователя
+        let system = item.system;
+        let user_type = item.user_type;
+
+        // if (this.props.nic === user_id && user_type === TYPE_BANNED) {
+        //
+        //     alert('Вы были забанены')
+        // }
         if (name) {
 
 
@@ -673,7 +684,26 @@ export default class Chatting extends React.Component {
                     user_id={user_id}
                 />
             )
-        } else if (server === '') {
+        }
+
+        // else if (this.props.nic===user_id){
+        //
+        //     if (user_type ===TYPE_BANNED) {
+        //
+        //
+        //
+        //        this.setState({room_now:'Тюрьма'})
+        //
+        //
+        //     }
+        //
+        //
+        //
+        //
+        // }
+
+
+        else if (system) {
 
             return (
                 <Pattern_message2
@@ -701,7 +731,8 @@ export default class Chatting extends React.Component {
                     user={server}
                 />
             )
-        } else if (item.message.startsWith('\b\tзашел') || (item.message.startsWith('\b\tвышел') || (item.message.startsWith('\b\tзашла') || (item.message.startsWith('\b\tвышла') === true)))) {
+
+        } else if (item.hideNic) {
             return (
 
                 <Pattern_message4
@@ -718,7 +749,7 @@ export default class Chatting extends React.Component {
 
             )
 
-        } else if (item.avatars === false) {
+        } else if (!item.avatars) {
 
 
             return (
