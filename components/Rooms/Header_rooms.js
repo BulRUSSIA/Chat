@@ -4,15 +4,16 @@ import {Badge, Body, Button, Header,  Left, Title,Right} from "native-base";
 
 
 
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from "react-native-vector-icons/AntDesign";
 import PopupMenu from "./PopupMenu";
+import {TYPE_ADMIN} from "../const/const type_user_chats";
 export default class Header_rooms extends React.Component {
 
     check_permission_admin = ()=> {
 
         console.log('typeeeeeeeeeeeeee',this.props.type_user);
 
-        if (this.props.type_user===2)
+        if (this.props.type_user===TYPE_ADMIN)
             return(
                 <Right>
                     <PopupMenu
@@ -42,7 +43,7 @@ export default class Header_rooms extends React.Component {
                         <Icon style={{color:'white'}}
                               size={25}
 
-                            name="ios-arrow-back"/>
+                            name="arrowleft"/>
                     </Button>
                 </Left>
                 <Body style={{flex: 4, justifyContent: 'center', alignItems: 'center',}}>

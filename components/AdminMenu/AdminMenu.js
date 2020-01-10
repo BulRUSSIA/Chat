@@ -1,6 +1,8 @@
 import React from 'react';
 import {createAppContainer} from 'react-navigation';
-import {Body, Button, Container, Header, Icon, Left, Title,Right} from "native-base";
+import {Body, Button, Container, Header, Left, Title,Right} from "native-base";
+import Icon from "react-native-vector-icons/AntDesign";
+
 import TabNavigator from "./CreateBottomTabNav";
 import {Image,TouchableOpacity} from "react-native";
 
@@ -101,8 +103,8 @@ export default class NavigationAdmin extends React.Component {
 
                                 onPress={() => navigator.pop()}>
                             <Icon
-
-                                name="ios-arrow-back"/>
+                                size={25}
+                                name="arrowleft"/>
                         </Button>
 
 

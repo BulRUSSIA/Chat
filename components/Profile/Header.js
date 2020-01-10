@@ -1,6 +1,8 @@
 
 import React from "react";
-import {Body, Button, Icon, Left, Right, Title,Header} from "native-base";
+import {Body, Button, Left, Right, Title,Header} from "native-base";
+import Icon from "react-native-vector-icons/AntDesign";
+
 export default class HeaderBar extends React.Component {
 
 
@@ -18,8 +20,9 @@ export default class HeaderBar extends React.Component {
 
                             onPress={this.props.backs}>
                         <Icon
+                            size={25}
                             style={{color: 'white'}}
-                            name="ios-arrow-back"/>
+                            name="arrowleft"/>
                     </Button>
 
                 </Left>

@@ -1,6 +1,7 @@
 
 import React from "react";
-import {Body, Button, Header, Icon, Left, Picker, Right,  Title} from "native-base";
+import {Body, Button, Header, Left, Picker, Right,  Title} from "native-base";
+import Icon from "react-native-vector-icons/AntDesign";
 
 
 export class Header_private_list extends React.Component {
@@ -21,7 +22,8 @@ export class Header_private_list extends React.Component {
                         onPress={this.props.back}>
                     <Icon
                         style={{color: 'white'}}
-                        name="ios-arrow-back"/>
+                        size={25}
+                        name="arrowleft"/>
                 </Button>
 
             </Left>

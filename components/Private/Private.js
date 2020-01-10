@@ -5,7 +5,9 @@ import styles from '../../styles'
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_SEND_MESSAGES_PRIVATE from "../../actions/fetch_send_private";
 import ImagePicker from "react-native-image-picker";
-import {Body, Button, Header, Icon, Left, Text, Title,} from 'native-base';
+import {Body, Button, Header,  Left, Text, Title,} from 'native-base';
+import Icon from "react-native-vector-icons/AntDesign";
+
 import {Private_action_picker} from "./Private_action_picker";
 import {Private_Flatlist} from "./Private_Flatlist";
 import emoticons from "../const/EmojiObject";
@@ -494,7 +496,8 @@ export default class Private extends React.Component {
                                 onPress={() => this.onActionSelected(3)}>
                             <Icon
                                 style={{color: 'white'}}
-                                name="ios-arrow-back"/>
+                                size={25}
+                                name="arrowleft"/>
                         </Button>
 
                     </Left>

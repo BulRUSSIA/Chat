@@ -7,6 +7,7 @@ async  function request_IMEI() {
 
 
         let imei = await IMEI.getImei();
+        console.log(imei)
         return imei[0];
 
 

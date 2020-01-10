@@ -246,23 +246,50 @@ export default class Chatting extends React.Component {
     update_msg = async () => {
 
 
-        const message = await request_GET_MESSAGES(this.state.room_now); //обновляем сообщения повешен интервал 3 секунды в ComponentDIDmount setInterval
-        this.setState({
-                dataSource: message,
+        const message = await request_GET_MESSAGES(this.props.nic,this.state.room_now);
+        console.log('message types' + message);
+        //обновляем сообщения повешен интервал 3 секун ды в ComponentDIDmount setInterval
+        if (!message && this.state.room_now!=='Тюрьма'){
 
-            }
-        );
+            console.log('banneeeeed');
 
-        console.log('message:' + message);
+            Alert.alert(
+                'Бан',
+                'Вы были забанены и будете перемещены в тюрьму ', // <- this part is optional, you can pass an empty string
+                [
 
-        if (this.state.animating) {    //индикатор при первом заходе в комнату
 
-            await this.setState({animating: !this.state.animating});
-            this.componentWillUnmount();
-            await this.componentDidMount();
+                    {
+                        text: 'ну,пойду посижу', onPress: async () => {
+                            await this.Del_user_change()
+                        },
+
+
+                    }
+                ],
+                {cancelable: false},
+            );
+
         }
 
+        else {
 
+            console.log('not banned')
+            this.setState({
+                    dataSource: message,
+
+                }
+            );
+
+
+            if (this.state.animating) {    //индикатор при первом заходе в комнату
+
+                await this.setState({animating: !this.state.animating});
+                this.componentWillUnmount();
+                await this.componentDidMount();
+            }
+
+        }
     };
 
 
@@ -607,7 +634,7 @@ export default class Chatting extends React.Component {
     Del_user_change = async () => {
 
 
-        await request_DELETE_USER_ROOM(this.props.room, this.props.nic);
+        await request_DELETE_USER_ROOM(this.state.room_now, this.props.nic);
 
 
 
@@ -641,13 +668,37 @@ export default class Chatting extends React.Component {
         } else {
             await Keyboard.dismiss();
 
-            await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+           await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+
 
 
             await this.setState({
                 text: '',
             });
+
             await this.update_msg();
+            //
+            // if (res === false && this.state.room_now!=='Тюрьма') {
+            //
+            //     Alert.alert(
+            //         'Бан',
+            //         'Вы были забанены и будете перемещены в тюрьму ', // <- this part is optional, you can pass an empty string
+            //         [
+            //
+            //
+            //             {
+            //                 text: 'ну,пойду посижу', onPress: async () => {
+            //                     await this.Del_user_change()
+            //                 },
+            //
+            //
+            //             }
+            //         ],
+            //         {cancelable: false},
+            //     );
+
+
+            // }
 
         }
     };
@@ -662,7 +713,7 @@ export default class Chatting extends React.Component {
         let message = item.message; //сообшение
         let user_id = item.user_id; //id пользователя
         let system = item.system;
-        let user_type = item.user_type;
+
 
         // if (this.props.nic === user_id && user_type === TYPE_BANNED) {
         //

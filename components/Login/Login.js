@@ -16,6 +16,7 @@ import request_login from '../../actions/fetch_login'
 import request_LAST_ROOM from "../../actions/fetch_last_room";
 import request_MY_NICKNAME from "../../actions/fetch_my_nickname";
 import request_ENTRY_USER_ROOM from "../../actions/fetch_entry_user";
+import request_IMEI from "../../actions/request_IMEI";
 
 const DEFAULT_SIZE_MESSAGE = 14;
 const DEFAULT_AVATAR_SIZE = 30;
@@ -108,15 +109,17 @@ export default class Login extends React.Component {
         let LoginLength = this.state.username.length;
         let PasswordLength = this.state.password.length;
 
+
         if (LoginLength >= 3 || PasswordLength >= 3) {
-
-
-            this._storeData();
             request_READ_PHONE_STATE();
+            const imei = await request_IMEI();
+
+           await this._storeData();
+
 
             this.setState({isLoading: !this.state.isLoading});
 
-            const login = await request_login(this.state.username.trim(), this.state.password.trim(), this.state.Imei);
+            const login = await request_login(this.state.username.trim(), this.state.password.trim(), imei);
 
 
             this.setState({isLoading: !this.state.isLoading, validator: login['auth']});
@@ -130,14 +133,15 @@ export default class Login extends React.Component {
 
             else {
 
-                let nicks = login['nic'];
-                let nic = (nicks['$oid']);
                 const {navigator} = this.props;
-                const last_rooms = await request_LAST_ROOM(nic);
-                await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
-                const Nick_chats = await request_MY_NICKNAME(nic);
-
+                let nic = login['nic'];
                 try {
+
+                // const last_rooms = await request_LAST_ROOM(nic);
+                // await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
+                // const Nick_chats = await request_MY_NICKNAME(nic);
+
+
                     navigator.reset('Rooms', {name: nic, category_update: '-1'}, {animation: 'right'});
 
                     // navigator.push('Chatting', { Переход сразц в комнату(доделатьб)
@@ -207,6 +211,7 @@ export default class Login extends React.Component {
 
 
         return <View style={styles.container}>
+
 
 
             <ImageBackground source={{uri: 'default_background'}} style={{width: '100%', height: '100%'}}>

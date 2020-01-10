@@ -4,9 +4,10 @@ import {
     View
 } from 'react-native';
 import React from "react";
-import {Body, Button, Header, Icon, Left, Title} from "native-base";
+import {Body, Button, Header,  Left, Title} from "native-base";
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
+import Icon from "react-native-vector-icons/AntDesign";
 
 export class PHOTO_VIEWER extends React.Component {
 
@@ -37,7 +38,8 @@ export class PHOTO_VIEWER extends React.Component {
                         }>
                     <Icon
                         style={{color: 'white'}}
-                        name="ios-arrow-back"/>
+                        size={25}
+                        name="arrowleft"/>
                 </Button>
 
             </Left>

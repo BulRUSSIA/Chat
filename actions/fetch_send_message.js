@@ -5,8 +5,8 @@ async function request_SEND_MESSAGES(nic,msg,place,attachments)  {
 
     const url = address + `/sending/messages/room`;
 
-    try {
- await fetch(url, {
+    // try {
+let response = await fetch(url, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -20,29 +20,42 @@ async function request_SEND_MESSAGES(nic,msg,place,attachments)  {
             Place:place,
             attachments:attachments,
         }),
-    }).then((response) => {
 
-
-       if (!response.ok) {
-
-
-          (Alert.alert('Предупреждение','не флуди черт'))
-       }
-
-
-
-     }).done();
-
-
-
-
-
+    });
+    if (!response.ok) {
+        Alert.alert('Предупреждение','Нельзя так часто отправлять сообщение ' + "("+ msg+ ")")
 
     }
+    else {
 
-    catch (e) {
-       console.log(e)
+        let json = await response.json();
+
+
+        return json;
     }
+    //}
+    //  .then ( (respons e )=>{1
+    //
+    //
+    //    if (!response.ok) {
+    //
+    //
+    //       (Alert.alert('Предупреждение','не флуди черт'))
+    //    }
+    //
+    //
+    //
+    //
+    //
+    //  }).then((response) => response.json());
+    //
+    //
+    //
+    // }
+    //
+    // catch (e) {
+    //    console.log(e)
+    // }
 }
 
 export default request_SEND_MESSAGES

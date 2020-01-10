@@ -8,10 +8,11 @@ import {
     Body,
     Title,
     Button,
-    Icon,
+
     Left,
 
 } from 'native-base';
+import Icon from "react-native-vector-icons/AntDesign";
 
 import {ImageBackground} from 'react-native'
 import CardsBalance from "./CardsBalance";
@@ -234,7 +235,7 @@ export default class ChatPortal extends React.Component {
 
                             <Icon
                                 style={{color: 'white'}}
-                                name="ios-arrow-back"/>
+                                name="arrowleft"/>
                         </Button>
 
                     </Left>
