@@ -60,13 +60,11 @@ export class Pattern_message1 extends React.Component {
         });
     };
 
+    get_avatar = ()=>{
 
-    render() {
-        console.log('pattern - 1');
-        return (
+        if (this.props.avatars.length>1) {
 
-
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(191,191,191,0.49)',maxWidth:'99%'}}>
+            return (
 
                 <FastImage source={{uri: this.props.avatars}} style={{
                     width: this.props.size_av,
@@ -78,6 +76,22 @@ export class Pattern_message1 extends React.Component {
 
                 }}
                            resizeMode={FastImage.resizeMode.contain}/>
+
+
+            )
+        }
+
+    };
+
+
+    render() {
+        console.log('pattern - 1');
+        return (
+
+
+            <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'rgba(191,191,191,0.49)',maxWidth:'99%'}}>
+                {this.get_avatar()}
+
                 <TouchableOpacity style={{flex: 1, width: '100%', height: '100%'}}
                                   onPress={() => this.props.Action_Nick(this.props.user, this.props.user_id)}>
                 <Text style={{

@@ -6,7 +6,7 @@ import {
     Text, TextInput, TouchableOpacity,
     View,
     Alert, ImageBackground
-    , ActivityIndicator,
+    , ActivityIndicator, ScrollView,
 } from "react-native";
 import React from "react";
 import request_READ_PHONE_STATE from '../../actions/request_phone_state'
@@ -78,26 +78,43 @@ export default class Login extends React.Component {
             console.log(e)
 
 
-            // Error retrieving data
         }
 
 
         try {
 
-            const backgr = await AsyncStorage.getItem('background_fon');
-            const size_msg = await AsyncStorage.getItem('size_message');
-            const size_av = await AsyncStorage.getItem('size_avatar');
-            const size_rooms = await AsyncStorage.getItem('size_rooms');
-            console.log('get key async');
-            console.log(backgr,size_msg,size_av,size_rooms)
+            await this.setting_getter()
 
         } catch (e) {
 
-            await AsyncStorage.setItem('background_fon', 'default_background');
-            await AsyncStorage.setItem('size_message', DEFAULT_SIZE_MESSAGE.toString());
-            await AsyncStorage.setItem('size_avatar', DEFAULT_AVATAR_SIZE.toString());
-            await AsyncStorage.setItem('size_rooms', DEFAULT_ROOMS_SIZE.toString());
+
         }
+    };
+
+    setting_getter = async () => {
+
+        const backgr = await AsyncStorage.getItem('background_fon');
+        const size_msg = await AsyncStorage.getItem('size_message');
+        const size_av = await AsyncStorage.getItem('size_avatar');
+        const size_rooms = await AsyncStorage.getItem('size_rooms');
+
+        if (backgr == null && size_msg == null && size_av == null && size_rooms == null) {
+
+
+            await this.setting_setter()
+
+        }
+
+    };
+
+    setting_setter = async () => {
+
+        await AsyncStorage.setItem('background_fon', 'default_background');
+        await AsyncStorage.setItem('size_message', DEFAULT_SIZE_MESSAGE.toString());
+        await AsyncStorage.setItem('size_avatar', DEFAULT_AVATAR_SIZE.toString());
+        await AsyncStorage.setItem('size_rooms', DEFAULT_ROOMS_SIZE.toString());
+
+
     };
 
 
@@ -114,7 +131,7 @@ export default class Login extends React.Component {
             request_READ_PHONE_STATE();
             const imei = await request_IMEI();
 
-           await this._storeData();
+            await this._storeData();
 
 
             this.setState({isLoading: !this.state.isLoading});
@@ -129,17 +146,15 @@ export default class Login extends React.Component {
 
                 Alert.alert('Ошибка', 'Данные введены неверно!');
 
-            }
-
-            else {
+            } else {
 
                 const {navigator} = this.props;
                 let nic = login['nic'];
                 try {
 
-                // const last_rooms = await request_LAST_ROOM(nic);
-                // await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
-                // const Nick_chats = await request_MY_NICKNAME(nic);
+                    // const last_rooms = await request_LAST_ROOM(nic);
+                    // await request_ENTRY_USER_ROOM(last_rooms['last_room'], nic);
+                    // const Nick_chats = await request_MY_NICKNAME(nic);
 
 
                     navigator.reset('Rooms', {name: nic, category_update: '-1'}, {animation: 'right'});
@@ -158,9 +173,7 @@ export default class Login extends React.Component {
                 }
 
             }
-        }
-
-         else {
+        } else {
 
 
             Alert.alert('Airchat', 'Логин или Пароль,должен содержать более 3 символов')
@@ -184,20 +197,23 @@ export default class Login extends React.Component {
 
 
                 <View
-                    style={{backgroundColor: '#ffffff',position:'absolute',
-                        width:'100%',
-                        height:80,
+                    style={{
+                        backgroundColor: 'rgb(255,255,255)', position: 'absolute',
+                        width: '100%',
+                        height: 60,
                         left: 0,
                         right: 0,
                         top: 0,
                         bottom: 0,
-                       borderRadius: 10,}}>
+
+                    }}>
                     <Text style={{
                         fontSize: 18,
-                        fontWeight: 'bold',
-                        textAlign:'center',
+
+                        textAlign: 'center',
+                        color:'red'
                     }}>Выполняется вход в чат...</Text>
-                    <ActivityIndicator size="large" color="#6aaabb"
+                    <ActivityIndicator size="large" color="#FFFFFF"
                                        animating={this.state.isLoading}/>
                 </View>
 
@@ -214,8 +230,9 @@ export default class Login extends React.Component {
 
 
 
+
             <ImageBackground source={{uri: 'default_background'}} style={{width: '100%', height: '100%'}}>
-                <View style={{marginBottom: '40%'}}>
+                <View style={{marginBottom: '20%'}}>
                     <Text style={{fontSize: 40, textAlign: 'center'}}>Airchat</Text>
                 </View>
                 <View style={{marginBottom: '10%'}}>
@@ -286,9 +303,11 @@ export default class Login extends React.Component {
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+
         backgroundColor: 'rgb(32, 53, 70)',
         justifyContent: 'center',
+        flex:1
+
 
 
     },

@@ -11,9 +11,13 @@ async function request_GET_MESSAGES(user_id,room) {
         let response = await fetch(url);
         let responseJsonData = await response.json();
         let userdate = JSON.parse(JSON.stringify(responseJsonData));
-        if (userdate.length>20) {
+
+
+        if (userdate.length>=1) {
             return userdate;
         }
+
+
 
         return false
     } catch (e) {

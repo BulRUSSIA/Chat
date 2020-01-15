@@ -1,11 +1,11 @@
 import {Dimensions, TouchableOpacity, View} from "react-native";
 import React from "react";
-import emoticons_value from "../const/Flat_Emoji_Value";
+import stickers_pack_1 from "../const/Stickers";
 import FastImage from "react-native-fast-image";
 import {OptimizedFlatList} from "react-native-optimized-flatlist";
 
 const {width,height} = Dimensions.get('window');
-export class Flatlist_smiles_chatting extends React.Component {
+export class Flatlist_Stickers extends React.Component {
 
 
     render() {
@@ -19,16 +19,16 @@ export class Flatlist_smiles_chatting extends React.Component {
 
 
                 numColumns={10}
-                data={emoticons_value}
+                data={stickers_pack_1}
 
 
                 renderItem={(({item}) =>
 
                         <TouchableOpacity onPress={() => this.props.screenProps.add_emoji(item.value)}>
-                            <View style={{flex: 1, flexDirection: 'column', margin: 5}}>
+                            <View style={{flex: 1, flexDirection: 'column', margin: 10}}>
 
-                                <FastImage style={{width: width*0.06, height: height*0.06, marginTop: '1%'}}
-                                           source={item.url}
+                                <FastImage style={{width: width*0.1, height: height*0.1, marginTop: '1%'}}
+                                           source={{uri:item.url}}
                                            resizeMode={FastImage.resizeMode.contain}
 
                                 />

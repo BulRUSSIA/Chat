@@ -1,18 +1,12 @@
-const menuitem = [{title: 'личные сообщения', show: 'always',icon: require('../Image/email.png')},
+const menuitem = [
 
 
-    {title: 'Чаттеры', show: 'never'},
+    'Чаттеры',
+    'Сменить комнату',
+    'Мой профиль',
+    'Чат портал',
+    'Выход',
 
-
-    {title: 'Сменить комнату', show: 'never'},
-
-    {title: 'Мой профиль', show: 'never'},
-
-    {title: 'Чат портал', show: 'never'},
-
-    {title: 'Выход', show: 'never'},
-
-    {title: 'Прикрепить изображение', show: 'always',icon: require('../Image/attach_file_white_192x192.png')},
 
 
 ];

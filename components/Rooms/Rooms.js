@@ -321,7 +321,7 @@ export default class Rooms extends React.Component {
     room_view = (name, category, count) => {
         return (
             <ListItem
-                      onPress={() => this.Get_room(name, category, count)}>
+                onPress={() => this.Get_room(name, category, count)}>
                 <Thumbnail source={{uri: 'room_arrow'}}
                            style={{
                                width: this.state.size_rooms * 2.5,
@@ -350,93 +350,101 @@ export default class Rooms extends React.Component {
 
     };
 
+    category_view = (name, parent, id) => {
+
+        return (
+
+            <ListItem style={{width: '100%'}}
+                      onPress={() => this.Get_category(name, parent, id)}>
+                <Thumbnail source={{uri: 'go_folder'}} style={{
+                    width: this.state.size_rooms * 2.5,
+                    height: this.state.size_rooms * 2.5,
+                    resizeMode: 'contain'
+                }}/>
+                <Body>
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
+                        {name}
+
+
+                    </Text>
+                </Body>
+
+
+            </ListItem>
+        )
+
+
+    };
+
 
     _renderItem = ({item}) => {
 
-        if (item.parent) {
+        let mask = item.mask;
+
+        switch (this.state.type_user) {
+
+            case TYPE_ADMIN:
+
+                if (item.parent){
+
+                    return this.category_view(item.name, item.parent, item._id.$oid)
+                }
+
+                return this.room_view(item.name, item.category, item.count);
 
 
-            if (this.state.type_user !== TYPE_BANNED) {
+            case TYPE_MODERATOR:
 
+                let moder = ((mask & TYPE_MODERATOR) === TYPE_MODERATOR);
 
-                return (
+                if (moder) {
 
-                    <ListItem style={{width: '100%'}}
-                              onPress={() => this.Get_category(item.name, item.parent, item._id.$oid)}>
-                        <Thumbnail source={{uri: 'go_folder'}} style={{
-                            width: this.state.size_rooms * 2.5,
-                            height: this.state.size_rooms * 2.5,
-                            resizeMode: 'contain'
-                        }}/>
-                        <Body>
-                            <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
-                                {item.name}
+                    if (item.parent) {
 
-
-                            </Text>
-                        </Body>
-
-
-                    </ListItem>
-                )
-            }
-        }
-
-        if (this.state.type_user === TYPE_ADMIN) {
-
-            return this.room_view(item.name, item.category, item.count)
-
-        }
-
-        if (this.state.type_user === TYPE_USER) {
-
-            let mask = item.mask;
-            switch (mask) {
-                case TYPE_BANNED + TYPE_ADMIN:
-                    break;
-                case TYPE_BANNED + TYPE_ADMIN + TYPE_INVISIBLE:
-                    break;
-                case TYPE_MODERATOR + TYPE_ADMIN:
-                    break;
-                case TYPE_ADMIN:
-                    break;
-                default:
+                        return this.category_view(item.name, item.parent, item._id.$oid)
+                    }
 
                     return this.room_view(item.name, item.category, item.count)
-            }
-        } else if (this.state.type_user === TYPE_BANNED) {
+                }
+                break;
 
-            let mask = item.mask;
-            switch (mask) {
-
-                case TYPE_BANNED + TYPE_ADMIN:
-
-                    return this.room_view(item.name, item.category, item.count);
-
-
-                case TYPE_BANNED + TYPE_ADMIN + TYPE_MODERATOR:
-
-                    return this.room_view(item.name, item.category, item.count)
-            }
-        } else if (this.state.type_user === TYPE_MODERATOR) {
-
-            let mask = item.mask;
-            switch (mask) {
-                case TYPE_USER + TYPE_INVISIBLE + TYPE_BANNED + TYPE_ADMIN:
-                    return null;
-                case TYPE_ADMIN:
-                    return null;
-                case TYPE_ADMIN + TYPE_BANNED:
-                    return null;
-                case TYPE_ADMIN + TYPE_INVISIBLE:
-                    return null;
-                default:
+            case TYPE_BANNED:
+                let banned = ((mask & TYPE_BANNED) === TYPE_BANNED);
+                if (banned) {
 
 
                     return this.room_view(item.name, item.category, item.count)
-            }
+                }
+                break;
+
+            case TYPE_USER:
+                let user = ((mask & TYPE_USER) === TYPE_USER);
+                if (user) {
+                    if (item.parent) {
+
+                        return this.category_view(item.name, item.parent, item._id.$oid)
+                    }
+
+                    return this.room_view(item.name, item.category, item.count)
+                }
+                break;
+
+            case TYPE_INVISIBLE:
+                let invisible = ((mask & TYPE_INVISIBLE) === TYPE_INVISIBLE);
+                if (invisible) {
+                    if (item.parent) {
+
+                        return this.category_view(item.name, item.parent, item._id.$oid)
+                    }
+
+                    return this.room_view(item.name, item.category, item.count)
+                }
+                break;
+
 
         }
+
+
     };
 
     Get_category = async (name, parent, category_id) => {
@@ -485,6 +493,7 @@ export default class Rooms extends React.Component {
             category_update: this.state.category_update,
             count: this.props.count,
             parent: this.state.parent,
+
 
 
         });

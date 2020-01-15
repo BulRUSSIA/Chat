@@ -226,14 +226,13 @@ export default class ChatPortal extends React.Component {
                 >
                     <Left style={{flex: 1}}>
                         <Button transparent
-                                onPress={() => navigator.pop({
-                                    room: this.props.room,
-                                    nic: this.props.nic,
-                                    chat_name: this.props.chat_name,
-                                })}>
+                                onPress={() => navigator.pop(
+
+                                )}>
 
 
                             <Icon
+                                size={25}
                                 style={{color: 'white'}}
                                 name="arrowleft"/>
                         </Button>

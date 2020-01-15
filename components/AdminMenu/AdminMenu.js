@@ -102,7 +102,7 @@ export default class NavigationAdmin extends React.Component {
                         <Button transparent
 
                                 onPress={() => navigator.pop()}>
-                            <Icon
+                            <Icon style={{color:'white'}}
                                 size={25}
                                 name="arrowleft"/>
                         </Button>

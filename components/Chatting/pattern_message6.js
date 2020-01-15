@@ -50,13 +50,12 @@ export class Pattern_message6 extends React.Component {
     };
 
 
-    render() {
+    get_avatar=()=>{
 
+        if(this.props.avatars.length>1) {
 
-        return (
+            return (
 
-
-            <View style={{flex: 1, flexDirection: 'row',}}>
 
                 <FastImage source={{uri: this.props.avatars}} style={{
                     width: this.props.size_av,
@@ -65,6 +64,21 @@ export class Pattern_message6 extends React.Component {
                 }}
                            resizeMode={FastImage.resizeMode.contain}
                 />
+
+            )
+        }
+    };
+
+
+    render() {
+
+
+        return (
+
+
+            <View style={{flex: 1, flexDirection: 'row',}}>
+
+                {this.get_avatar()}
 
                 <TouchableOpacity style={{flex: 1, width: '85%', height: '100%'}}
                                   onPress={() => this.props.Action_Nick(this.props.user, this.props.user_id)}>

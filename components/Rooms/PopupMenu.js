@@ -3,7 +3,7 @@ import {View,TouchableOpacity,UIManager,findNodeHandle} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 25;
 
 class PopupMenu extends React.Component {
     handleShowPopupError = () => {
@@ -25,7 +25,7 @@ class PopupMenu extends React.Component {
         return (
             <View>
 
-                <TouchableOpacity onPress={this.handleMenuPress} style={{alignSelf:'center',backgroundColor:'transparent',paddingLeft:15,paddingRight:15}}>
+                <TouchableOpacity onPress={this.handleMenuPress} style={{paddingRight:'6%',marginLeft:'6%'}}>
                     <Icon
                         name="md-more"
                         size={ICON_SIZE}

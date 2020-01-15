@@ -209,6 +209,8 @@ export default class Profile extends React.Component {
             gift_view: url,
             gift_id: gift,
             gift_description: description,
+            user_id:this.state.user_id,
+            my_id:this.state.from_id
 
         });
 
@@ -336,6 +338,7 @@ export default class Profile extends React.Component {
                     <GiftList
                         gifts_list={this.state.gifts_list}
                         delete_gift={this.delete_gift}
+
 
                     />
                     <NavigationApp

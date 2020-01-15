@@ -10,7 +10,7 @@ import Private from "./components/Private/Private";
 import Private_List from "./components/Private_List/Private_List";
 import {Profile_redactor} from "./components/Profile_redactor/Profile_redactor";
 import Profile_Redactor_New from "./components/Profile_redactor/Profile_Redactor_New";
-
+import NoticeScreen from './components/NoticeScreen/NoticeScreen';
 import ChatPortal from "./components/ChatPortal/ChatPortal";
 import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
@@ -54,7 +54,8 @@ export default class chat extends React.Component {
                     ScreenAvatarList,
                     Settings,
                     ScreenWeddings,
-                    NavigationSuperAdmin
+                    NavigationSuperAdmin,
+                    NoticeScreen
                 }}
 
                 animations='faded'

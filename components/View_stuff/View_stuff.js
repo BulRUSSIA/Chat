@@ -89,6 +89,8 @@ export default class View_stuff extends React.Component {
 
 
     render() {
+        const my_id = this.props.my_id;
+        const user_id = this.props.user_id;
         console.log(this.state.gifts_description);
 
         return (
@@ -115,12 +117,12 @@ export default class View_stuff extends React.Component {
                         </Text>
                     </View>
 
+                    { my_id === user_id &&
+                        <TouchableOpacity onPress={this.delete_gift}>
+                            <Image source={require('../Image/delete.png')} style={styles.imageViewAvatars_stuff}/>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity onPress={this.delete_gift}>
-                        <Image source={require('../Image/delete.png')} style={styles.imageViewAvatars_stuff}/>
-                    </TouchableOpacity>
-
-
+                    }
 
 
                 </View>

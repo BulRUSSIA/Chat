@@ -18,7 +18,7 @@ export class Attachments_preview extends React.Component {
 
 
         return   (
-        <View style={{backgroundColor: '#505279'}}>
+        <View style={{backgroundColor: '#ffffff'}}>
             <TouchableOpacity onPress={()=>{this.props.close_attach()}}>
                 <Image
                     source={require('../Image/android-delete-icon-14.jpg')}

@@ -7,7 +7,7 @@ async  function request_login(login,password,imei) {
 
 
         let token = await FireSingleTon.fetchToken();
-       const response =  await fetch(address + `/authChat/${login}/${password}/${imei}/${token}`);
+       const response =  await fetch(address + `/authChatApp/${login}/${password}/${imei}/${token}`);
        let responseJsonData = await response.json();
 
 

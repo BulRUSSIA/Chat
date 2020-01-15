@@ -223,7 +223,7 @@ export default class Private extends React.Component {
     };
 
     add_emoji = async (emoji) => {              //add emoji to text
-        await await this.setState({text: this.state.text + emoji});
+        await  this.setState({text: this.state.text + emoji});
     };
 
 
