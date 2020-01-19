@@ -5,7 +5,7 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-    Keyboard, ActivityIndicator, Dimensions, AsyncStorage, KeyboardAvoidingView
+    Keyboard, ActivityIndicator, Text, Dimensions, AsyncStorage, KeyboardAvoidingView
 } from 'react-native';
 
 import menu_moderator from '../const/menu_moderator'
@@ -40,9 +40,8 @@ import FastImage from "react-native-fast-image";
 import request_GET_NOTICE from "../../actions/fetch_get_notice";
 import NavigationApp from "./NavigationSmiles";
 import firebase from "react-native-firebase";
-import FireSingleTon from "../../FireSingleTon";
-import request_GET_MESSAGES from "../../actions/fetch_get_messages";
-import message_api from "../const/object_message";
+import type {Notification, NotificationOpen} from 'react-native-firebase';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -78,24 +77,24 @@ export default class Chatting extends React.Component {
             background_image: 'default_background',
             editable: true,
             update_msg_bool: true,
-            extra_data_bool:false,
-           data:{
-               "_id": {"$oid": "5e1eb2cf0a975a5421793e21"},
-               "message": 'Загружаю сообщения...',
-               "type": 1,
-               "place": this.props.room,
-               "system": false,
-               "createdAt": {"$date": new Date()},
-               "user_id": this.props.nic,
-               "user": this.props.chat_name,
-               "key": "5e1eb2cf0a975a5421793e21",
-               "_class": "#c60915",
-               "readed": true,
-               "user_type": 1,
-               "attachments": [],
-               "avatars": false,
-               "hideNic": false
-           }
+            extra_data_bool: false,
+            data: {
+                "_id": {"$oid": "5e1eb2cf0a975a5421793e21"},
+                "message": 'Загружаю сообщения...',
+                "type": 1,
+                "place": this.props.room,
+                "system": false,
+                "createdAt": {"$date": new Date()},
+                "user_id": this.props.nic,
+                "user": this.props.chat_name,
+                "key": "5e1eb2cf0a975a5421793e21",
+                "_class": "#c60915",
+                "readed": true,
+                "user_type": 1,
+                "attachments": [],
+                "avatars": false,
+                "hideNic": false
+            }
 
         };
 
@@ -222,7 +221,7 @@ export default class Chatting extends React.Component {
                     private_room: get_private,
                     private_chatter: this.state.user_now,
                     private_data: get_private_data,
-                });
+                }, {animation: 'right'});
 
                 break;
 
@@ -238,7 +237,7 @@ export default class Chatting extends React.Component {
                     user_id: this.state.user_id,
                     from_id: this.props.nic,
                     go_private: this.Action_nick_selected,
-                });
+                }, {animation: 'right'});
         }
 
 
@@ -251,7 +250,9 @@ export default class Chatting extends React.Component {
 
 
     componentWillUnmount() {
-
+        this.notificationDisplayedListener();
+        this.notificationListener();
+        this.notificationOpenedListener();
 
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
 
@@ -259,54 +260,51 @@ export default class Chatting extends React.Component {
     };
 
 
-
-
     componentDidMount = async () => {
 
 
         await this._retrieveData_Settings();
 
-        if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) { //проверяем тип пользователя если админ или мд открыть меню суперпользователя
+        if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) {
 
-            this.setState({action_nick: list_moder, item_menu: menu_moderator,data:message})
+            //проверяем тип пользователя если админ или мд открыть меню суперпользователя
+            console.log(' i am admin  ');
+            this.setState({action_nick: list_moder, item_menu: menu_moderator})
 
+        }
+
+
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+
+        });
+
+        this.notificationListener = firebase.notifications().onNotification((notification) => {
+            const body = notification['body'];
+            this.setState({new_pm: !this.state.new_pm});
+        });
+
+// App (in background) was opened by a notification
+        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notification = notificationOpen.notification;
+            console.log('63' + notification)
+
+        });
+
+// App was opened by a notification
+        const notificationOpen = await firebase.notifications().getInitialNotification();
+        if (notificationOpen) {
+            // Get the action triggered by the notification being opened
+            const action = notificationOpen.action;
+            // Get information about the notification that was opened
+            const notification = notificationOpen.notification;
+            console.log('45' + notification)
         }
 
 
-            const granted =  firebase.messaging().hasPermission();
-            if (granted) {
-
-                await FireSingleTon.fetchToken();
-
-            } else {
-                await FireSingleTon.askPermission();
-
-            let notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
-
-            });
-
-            let notificationListener = firebase.notifications().onNotification((notification) => {
-                const body = notification['body'];
-                props.change_pm_state();
-            });
-
-            let notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-
-                const action = notificationOpen.action;
-                // Get information about the notification that was opened
-                const notification = notificationOpen.notification;
-
-            });
-
-
-            const notificationOpen = await firebase.notifications().getInitialNotification();
-            if (notificationOpen) {
-                const action = notificationOpen.action;
-                const notification = notificationOpen.notification;
-            }
-
-        }
-        await this.update_one_msg()
     };
 
 
@@ -322,25 +320,10 @@ export default class Chatting extends React.Component {
         switch (position) {
 
 
-            case 6: // личные сообшения
-
-                navigator.push('Private_List', {
-
-                    nic: this.props.nic,
-                    chat_name: this.props.chat_name,
-                    select: this.onActionSelected.bind(this),
-
-
-                });
-
-                this.setState({new_pm: false});
-                break;
-
-
             case 0:
-
+                this.setState({isVisibleList: !this.state.isVisibleList});
                 const usr_list_vw = await fetch_users_in_room(this.props.room); //пользователи в комнате
-                this.setState({isVisibleList: !this.state.isVisibleList, users: usr_list_vw});
+                this.setState({users: usr_list_vw});
                 break;
 
 
@@ -391,7 +374,7 @@ export default class Chatting extends React.Component {
                     photo: this.state.photo,
                     sex: this.state.sex,
                     bday: this.state.bday,
-                });
+                }, {animation: 'right'});
                 break;
 
 
@@ -407,7 +390,7 @@ export default class Chatting extends React.Component {
                     Change_User_id: this.Change_User_id,
 
 
-                });
+                }, {animation: 'right'});
 
                 break;
 
@@ -421,21 +404,6 @@ export default class Chatting extends React.Component {
                 break;
 
 
-            case 7: // прикрепить изображение
-
-                if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) {
-                    await this.handleChoosePhoto();
-                } else {
-
-                    Alert.alert('Ошибка', 'Не хватает прав доступа')
-
-
-                }
-
-
-                break;
-
-
             case 5: //админ меню
 
                 navigator.push('NavigationAdmin', {
@@ -443,7 +411,36 @@ export default class Chatting extends React.Component {
                     nic: this.props.nic,
                     Change_User_id: this.Change_User_id,
                     go_private: this.Action_nick_selected,
-                });
+                }, {animation: 'right'});
+                break;
+
+            case 6: // личные сообшения
+
+                navigator.push('Private_List', {
+
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    select: this.onActionSelected.bind(this),
+
+
+                }, {animation: 'right'});
+
+                this.setState({new_pm: false});
+                break;
+
+            case 7: // прикрепить изображение
+
+                if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) {
+
+                    await this.handleChoosePhoto();
+                }
+
+                else {
+
+                    Alert.alert('Ошибка', 'Не хватает прав доступа')
+                }
+
+
                 break;
 
 
@@ -478,7 +475,6 @@ export default class Chatting extends React.Component {
         this.setState({photo_attachments: false,})
 
     };
-
 
 
     ShowSmiles = async () => { // логика отображения смайлов true/1 false1
@@ -562,6 +558,7 @@ export default class Chatting extends React.Component {
     };
 
     send_msg = async () => {
+
         if (this.state.photo_attachments) {
 
             await Keyboard.dismiss();
@@ -572,10 +569,7 @@ export default class Chatting extends React.Component {
             });
 
 
-        }
-
-
-        else {
+        } else {
 
             await Keyboard.dismiss();
 
@@ -584,17 +578,15 @@ export default class Chatting extends React.Component {
             let validate_send = res['send'];
             if (!validate_send) {
 
-                Alert.alert('Ошибка', 'Невозможно отправить сообщение!')
+                Alert.alert('Ошибка', 'Невозможно отправить сообщение')
 
             }
 
-             const msg = message_api({room_now:this.state.room_now,nic:this.props.nic,user:this.props.chat_name,message:this.state.text});
-            console.log('msg:',msg);
-             this.setState({
-                text: '',data:msg,extra_data_bool:!this.state.extra_data_bool,
+            this.setState({
+                text: ''
             });
 
-                                }
+        }
     };
 
     Show_notice = async () => {
@@ -605,17 +597,16 @@ export default class Chatting extends React.Component {
 
             let readed = res['readed'];
 
-            if (!readed && text.length>5) {
+            if (!readed && text.length > 5) {
                 await request_DELETE_USER_ROOM(this.state.room_now, this.props.nic);
                 this.componentWillUnmount();
                 const {navigator} = this.props;
                 navigator.push('NoticeScreen', {notice_text: text, go_room: this.Del_user_change})
 
             }
-        }
-        catch (e) {
+        } catch (e) {
 
-            console.log(e,'Shownotice')
+            console.log(e, 'Shownotice')
 
         }
         {
@@ -782,18 +773,30 @@ export default class Chatting extends React.Component {
                                       users={this.state.users}
                                       item_menu={this.state.item_menu}
 
-                                      room={this.props.room}
+                                      room_name={this.props.room_name}
                     />
 
                     {
-                        new_pm && <FastImage source={{uri:'linerun'}}
-                                             style={{
-                                                 width: 40,
-                                                 height: 50,
-                                                 marginLeft: width / 1.12,
-                                                 paddingBottom: '2%'
-                                             }}
-                        />
+                        new_pm &&
+
+                        <View style={{backgroundColor: 'white', flexDirection: 'column', borderRadius: 14}}>
+                            <Text style={{marginLeft: width / 2.5, color: 'red', fontSize: 16, fontWeight: 'bold'}}>
+                                вам почта
+
+                            </Text>
+
+                            <FastImage source={{uri: 'newpm'}}
+                                       style={{
+                                           width: width * 0.09,
+                                           height: height * 0.09,
+                                           marginLeft: width / 2.25
+
+
+                                       }}
+
+                                       resizeMode={FastImage.resizeMode.contain}
+                            />
+                        </View>
                     }
 
 
@@ -819,7 +822,7 @@ export default class Chatting extends React.Component {
                             change_pm_state={this.change_pm}
                             user={this.props.chat_name}
                             obj_msg={this.state.data}
-                            extra={this.state.extra_data_bool}
+                            // extra={this.state.extra_data_bool}
 
                         />
 
@@ -827,11 +830,11 @@ export default class Chatting extends React.Component {
                         <TextInput_Chatting
                             key_color='#FFFFFF'
                             show={this.ShowSmiles}
-                            add_text={this.add_text}
                             send_msg={this.send_msg}
                             text={this.state.text}
                             active={this.state.ShowSmiles}
                             editable_key={this.state.editable}
+                            add_text={this.add_text}
 
 
                         />

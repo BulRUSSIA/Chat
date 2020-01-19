@@ -6,19 +6,11 @@ const {height, width} = Dimensions.get('window');
 
 
 export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
-    renderSeparator = () => (
-        <View
-            style={{
-                backgroundColor: '#9fbed5',
-                height: 0.5
 
-            }}
-        />
-    );
     render() {
 
 
-        return (<View style={{backgroundColor:'#676998'}}>
+        return (<View style={{backgroundColor:'#ffffff'}}>
             <Modal
 
 
@@ -28,7 +20,7 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                 onRequestClose={this.props.Change_Visible_List}
             >
                 <TouchableOpacity
-                    style={styles.modalbackground}
+                    style={{flex:2,backgroundColor:'rgba(8,31,32,0.49)'}}
                     activeOpacity={1}
                     onPressOut={this.props.Change_Visible_List}
                 >
@@ -36,20 +28,20 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                     <TouchableWithoutFeedback>
 
                         <View style={{
-                            flex: 0,
-                            borderColor:'#494b6c',
+                            flex: 1,
+                            borderColor:'#ffffff',
                             borderWidth:3,
                             marginLeft:width/2,
-                            marginBottom:'1.5%',
 
+                            borderRadius: 8,
                             backgroundColor:'rgb(255,255,255)',
                             flexDirection: 'column',
                             justifyContent: 'center',
                         }}>
                             <View style={{
 
-                                width:200,
-                                height:height/1.267}}>
+                                width:width*0.5,
+                                height:height*0.97}}>
 
                                     <FlatList
                                         style={{borderRadius: 14,height:40}}

@@ -4,11 +4,11 @@ import React from "react";
 
 import styles from "../../styles";
 
-const {height} = Dimensions.get('window');
+const {height,width} = Dimensions.get('window');
 
 export class Modal_Chatting_Action_Flatlist extends React.Component {
 
-    renderSeparator = () => (
+    renderSeparator =  () => (
         <View
             style={{
                 backgroundColor: '#042441',
@@ -23,8 +23,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
     render() {
 
 
-        return (<View style={{backgroundColor: '#010101'}}>
-                <Modal
+        return (                <Modal style={{flex:1}}
 
                     transparent={true}
                     visible={this.props.isVisible}
@@ -39,25 +38,34 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
                         <TouchableWithoutFeedback>
 
                             <View style={{
-                                flex: 0,
 
-                                backgroundColor: '#010101',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
+                                alignItems: 'center',
+                                marginTop:height*0.2
+
+
                             }}>
+
                                 <View style={{
 
-                                    width: 200,
-                                    height: height / 2.7
+                                    width: width / 1.2,
+                                    height: height / 2.2,
+                                    backgroundColor: '#ffffff',
+                                    paddingLeft: '5%',
+                                    paddingRight: '5%',
+                                    borderRadius: 7,
+                                    paddingTop: '5%',
                                 }}>
 
 
-                                    <Text style={{
-                                        backgroundColor: 'rgba(76,78,113,0.96)',
-                                        color: 'white',
+                                <Text style={{
+
+                                        color: '#010101',
                                         fontSize: 18,
                                         textAlign: 'center',
-                                        fontWeight: 'bold'
+                                        fontWeight: 'bold',
+
                                     }}>
                                         {this.props.user_now}
                                     </Text>
@@ -68,7 +76,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
                                         extraData={this.props}
 
 
-                                        ItemSeparatorComponent={this.renderSeparator}
+                                        // ItemSeparatorComponent={this.renderSeparator}
                                         renderItem={(({item}) =>
 
                                                 <TouchableOpacity onPress={() => this.props.action_selected(item)}>
@@ -95,9 +103,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
                                         keyExtractor={(item, index) => index.toString()}
 
                                     />
-                                    <Text style={{backgroundColor: 'rgba(76,78,113,0.96)', color: 'white'}}>
 
-                                    </Text>
 
                                 </View>
                             </View>
@@ -106,7 +112,7 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
 
                     </TouchableOpacity>
                 </Modal>
-            </View>
+
 
 
         )

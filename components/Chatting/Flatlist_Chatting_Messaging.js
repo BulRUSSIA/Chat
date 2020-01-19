@@ -6,11 +6,8 @@ import request_GET_MESSAGES from "../../actions/fetch_get_messages";
 function Flatlist_Chatting_Messaging (props) {
 
     let msg = props.obj_msg;
+
     const [Fetchmessage, updateMessage] = useState([msg]);
-
-
-
-
 
     useEffect(() => {
 

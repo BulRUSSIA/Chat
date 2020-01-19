@@ -32,8 +32,8 @@ export default class Header_rooms extends React.Component {
 
         return (
 
-            <Header style={{backgroundColor: '#3c3e5a',}}
-                    androidStatusBarColor="#3c3e5a"
+            <Header style={{backgroundColor: '#0D5E96'}}
+                    androidStatusBarColor="#0D5E96"
 
             >
                 <Left style={{flex: 1}}>

@@ -263,6 +263,7 @@ export default class Profile extends React.Component {
                 <ImageBackground
                     style={{resizeMode: 'contain',height:'100%',width:'100%'}}
                     source={{uri:'default_background'}}>
+            {/*<View style={{width:'100%',height:'100%',backgroundColor:'#ffffff'}}>*/}
 
                     <HeaderBar
                         backs={this.backs}
@@ -294,7 +295,7 @@ export default class Profile extends React.Component {
 
                             onPress={() => this.props.go_private('Написать Личное')}
                             style={{
-                                backgroundColor: 'rgba(32,108,134,0.78)', flex: 1, borderRadius: 14,
+                                flex: 1, borderRadius: 14,
 
 
                                 padding: 15,
@@ -305,15 +306,15 @@ export default class Profile extends React.Component {
 
                         >
                             <Text style={{
-                                color: 'white',
+                                color: '#41a1fa',
                                 textAlign: 'center',
                                 fontWeight: 'bold',
                                 fontSize: 14,
-                            }}>Написать</Text>
+                            }}>НАПИСАТЬ</Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity style={{
-                            backgroundColor: 'rgba(33,108,134,0.78)', flex: 1, borderRadius: 14, marginLeft: 3,
+                           flex: 1, borderRadius: 14, marginLeft: 3,
 
 
                             padding: 14,
@@ -324,11 +325,11 @@ export default class Profile extends React.Component {
 
                         >
                             <Text style={{
-                                color: 'white',
+                                color: '#41a1fa',
                                 textAlign: 'center',
                                 fontWeight: 'bold',
-                                fontSize: 15,
-                            }}>Добавить в друзья</Text>
+                                fontSize: 14,
+                            }}>ДОБАВИТЬ В ДРУЗЬЯ</Text>
 
                         </TouchableOpacity>
 
@@ -355,7 +356,7 @@ export default class Profile extends React.Component {
 
                 </ImageBackground>
 
-
+            {/*</View>*/}
             </View>
 
         )

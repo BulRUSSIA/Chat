@@ -12,20 +12,22 @@ const styles = StyleSheet.create({
     },
     modalbackground: {
         flex: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(45,101,127,0.37)',
-        height:'50%'
+
+
+
+        backgroundColor: 'rgba(0,0,0,0.45)',
+
 
     },
 
 
     modalbackground_info: {
-        flex: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(45,101,127,0.37)',
-        height:'50%'
+        flex: 5,
+        backgroundColor:'rgba(1,1,1,0)',
+        borderRadius:12,
+
+
+
 
     },
 
@@ -160,12 +162,13 @@ const styles = StyleSheet.create({
     },
 
     Profile_List_text: {
+        color: '#3b84d7',
+        textAlign: 'center',
+        marginTop:'5%',
+        marginLeft:'5%',
+
         fontSize: 15,
-        fontWeight:'bold',
-        color:'rgba(255,255,255,0.89)',
-        alignSelf: 'center',
-        marginLeft:'1%',
-        paddingBottom:'1%'
+
 
 
 
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight:'bold',
 
-        color: '#ffffff',
+        color: '#000000',
 
 
 
@@ -223,12 +226,14 @@ const styles = StyleSheet.create({
 
     },
     action_profile: {
-        fontSize: 25,
+        fontSize: 20,
         flex: 1,
-        color: '#ffffff',
-        textAlign: 'center',
+        color: '#000000',
+        marginTop:'10%',
+        marginLeft:'5%',
+
         justifyContent:'center',
-        backgroundColor:'rgba(143,151,215,0.49)',
+
 
 
     },

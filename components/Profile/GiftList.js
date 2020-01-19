@@ -32,9 +32,8 @@ export default class GiftList extends React.Component {
 
             return (
 
-                <View style={{backgroundColor: 'rgba(53,133,180,0.73)', marginTop: 5}}>
-                    <Text style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 15, color: 'black'}}>
-                        Подарки
+                <View style={{backgroundColor: 'rgba(35,173,238,0.18)', marginTop: 5}}>
+                    <Text style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 15, color: 'black'}}>Подарки
                     </Text>
                     <OptimizedFlatList style={{
                         marginLeft: 30,

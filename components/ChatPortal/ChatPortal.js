@@ -220,8 +220,8 @@ export default class ChatPortal extends React.Component {
         const {navigator} = this.props;
         return (
             <Container>
-                <Header style={{backgroundColor: '#353751',}}
-                        androidStatusBarColor="#3c3e5a"
+                <Header style={{backgroundColor: '#0D5E96',}}
+                        androidStatusBarColor="#0D5E96"
 
                 >
                     <Left style={{flex: 1}}>

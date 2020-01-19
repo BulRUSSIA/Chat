@@ -100,7 +100,7 @@ export default class View_stuff extends React.Component {
             >
 
 
-                <View style={{width: '100%', height: '100%',backgroundColor:'#27293b'}}>
+                <View style={{width: '100%', height: '100%',backgroundColor:'#ffffff'}}>
 
 
                  <HeaderBar

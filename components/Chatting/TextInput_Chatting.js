@@ -29,7 +29,7 @@ export class TextInput_Chatting extends React.Component {
             height:height*0.135,
             justifyContent: 'space-between',
             paddingHorizontal: width*0.05,
-             backgroundColor:this.props.key_color,
+            backgroundColor:this.props.key_color,
         }}>
 
             <TouchableOpacity

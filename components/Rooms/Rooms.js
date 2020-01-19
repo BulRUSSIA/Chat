@@ -318,17 +318,17 @@ export default class Rooms extends React.Component {
     );
 
 
-    room_view = (name, category, count) => {
+    room_view = (name, category, count,id) => {
         return (
             <ListItem
-                onPress={() => this.Get_room(name, category, count)}>
+                onPress={() => this.Get_room(name, category, count, id)}>
                 <Thumbnail source={{uri: 'room_arrow'}}
                            style={{
                                width: this.state.size_rooms * 2.5,
                                height: this.state.size_rooms * 2.5
                            }}/>
                 <Body>
-                    <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms,fontWeight:'bold'}}>
                         {name}
 
 
@@ -362,7 +362,7 @@ export default class Rooms extends React.Component {
                     resizeMode: 'contain'
                 }}/>
                 <Body>
-                    <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms,fontWeight:'bold'}}>
                         {name}
 
 
@@ -390,7 +390,7 @@ export default class Rooms extends React.Component {
                     return this.category_view(item.name, item.parent, item._id.$oid)
                 }
 
-                return this.room_view(item.name, item.category, item.count);
+                return this.room_view(item.name, item.category, item.count,item._id.$oid);
 
 
             case TYPE_MODERATOR:
@@ -404,7 +404,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count)
+                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
                 }
                 break;
 
@@ -413,7 +413,7 @@ export default class Rooms extends React.Component {
                 if (banned) {
 
 
-                    return this.room_view(item.name, item.category, item.count)
+                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
                 }
                 break;
 
@@ -425,7 +425,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count)
+                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
                 }
                 break;
 
@@ -437,7 +437,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count)
+                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
                 }
                 break;
 
@@ -471,21 +471,24 @@ export default class Rooms extends React.Component {
     };
 
 
-    Get_room = async (event) => {
+    Get_room = async (name, category, count, id) => {
 
 
+
+        console.log('room_id=:' + id);
         const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
 
         const a = this.props.name;
-        await request_ENTRY_USER_ROOM(event, a);
+        await request_ENTRY_USER_ROOM(name, a);
 
 
         const {navigator} = this.props;
         navigator.reset('Chatting', {
 
             nic: this.props.name,
-            room: event,
+            room: id,
+            room_name:name,
             category_name_toolbar: this.state.category_name_toolbar,
             chat_name: Nick_chats[0],
             type_user: Nick_chats[1],
@@ -560,7 +563,7 @@ export default class Rooms extends React.Component {
                         sep={this.renderSeparator_1}
                     />
 
-                    <Footer_rooms/>
+                    {/*<Footer_rooms/>*/}
                 </ImageBackground>
             </Container>
 

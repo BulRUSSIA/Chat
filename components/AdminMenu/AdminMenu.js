@@ -94,8 +94,8 @@ export default class NavigationAdmin extends React.Component {
 
 
             <Container>
-                <Header style={{backgroundColor: '#3c3e5a',}}
-                        androidStatusBarColor="#3c3e5a"
+                <Header style={{backgroundColor: '#0D5E96',}}
+                        androidStatusBarColor="#0D5E96"
                 >
 
                     <Left style={{flex: 1}}>
@@ -126,7 +126,7 @@ export default class NavigationAdmin extends React.Component {
                         Go_Profile:this.Go_Profile,
 
                     }}
-                    style={{backgroundColor: '#3c3e5a'}}>
+                    style={{backgroundColor: '#0D5E96'}}>
                 </NavigationApp>
             </Container>
 

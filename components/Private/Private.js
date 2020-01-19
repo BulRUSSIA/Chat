@@ -1,5 +1,14 @@
 import React from 'react';
-import {ActivityIndicator, Alert, Dimensions, Image, Keyboard, TouchableOpacity, View} from 'react-native';
+import {
+    ActivityIndicator,
+    Alert,
+    Dimensions,
+    Image,
+    Keyboard,
+    KeyboardAvoidingView,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import private_menu from '../const/private_menu'
 import styles from '../../styles'
 import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
@@ -15,8 +24,9 @@ import {TextInput_Chatting} from "../Chatting/TextInput_Chatting";
 import {Flatlist_smiles_chatting} from "../Chatting/Flatlist_smiles_chatting";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "../Chatting/Attachments_preview";
+import NavigationApp from "../Chatting/NavigationSmiles";
 
-const screenWidth = Math.round(Dimensions.get('window').width);
+const {width,height} = Dimensions.get('window');
 
 
 export default class Private extends React.Component {
@@ -392,7 +402,7 @@ export default class Private extends React.Component {
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
-                    marginRight: screenWidth / 2,
+                    marginRight: width / 2,
                     backgroundColor: 'rgba(53,55,81,0.94)',
                     marginTop: '2%',
                     marginBottom: '2%',
@@ -429,7 +439,7 @@ export default class Private extends React.Component {
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
-                    marginLeft: screenWidth / 2,
+                    marginLeft: width / 2,
                     backgroundColor: 'rgba(37,86,110,0.9)',
                     marginTop: '2%',
                     marginBottom: '2%',
@@ -474,6 +484,7 @@ export default class Private extends React.Component {
     };
 
     render() {
+        const Smiles = this.state.ShowSmiles;
 
 
         return (
@@ -484,8 +495,8 @@ export default class Private extends React.Component {
 
 
 
-                <Header style={{backgroundColor: '#3c3e5a',}}
-                        androidStatusBarColor="#3c3e5a"
+                <Header style={{backgroundColor: '#0D5E96',}}
+                        androidStatusBarColor="#0D5E96"
                         onActionSelected={this.onActionSelected.bind(this)}
                         actions={this.state.item_menu}
                 >
@@ -540,7 +551,25 @@ export default class Private extends React.Component {
 
                 />
 
-                {this.ListSmileAction()}
+                {Smiles &&
+
+
+                <View style={{
+                    width: width, height: height * 0.5,
+
+                    backgroundColor: '#6d6d6d',
+                }}>
+                    <NavigationApp
+                        screenProps={{
+                            add_emoji: this.add_emoji
+
+                        }}
+
+
+                    />
+                </View>
+
+                }
 
 
 

@@ -49,8 +49,8 @@ export default class ScreenWeddings extends React.Component {
                     style={{resizeMode: 'contain',height:'100%',width:'100%'}}
                     source={{uri:'default_background'}}>
                 <Header
-                    style={{backgroundColor: '#3c3e5a',}}
-                    androidStatusBarColor="#3c3e5a"
+                    style={{backgroundColor: '#0D5E96',}}
+                    androidStatusBarColor="#0D5E96"
                 >
 
                     <Left style={{flex: 1}}>

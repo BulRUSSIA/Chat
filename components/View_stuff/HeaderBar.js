@@ -9,8 +9,8 @@ export default class HeaderBar extends React.Component {
     render() {
 
         return(
-            <Header    style={{backgroundColor:'#2e3044'}}
-                    androidStatusBarColor="#2e3044">
+            <Header    style={{backgroundColor:'#0D5E96'}}
+                    androidStatusBarColor="#0D5E96">
 
 
                 <Left style={{flex: 1}}>

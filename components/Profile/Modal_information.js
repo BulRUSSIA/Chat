@@ -4,7 +4,7 @@ import {
     Text,
 
     View,
-    Modal, TouchableOpacity, ImageBackground, TouchableWithoutFeedback,
+    Modal, TouchableOpacity, TouchableWithoutFeedback,Dimensions
 
 } from "react-native";
 
@@ -12,15 +12,21 @@ import React from "react";
 
 import styles from "../../styles";
 import {OptimizedFlatList} from "react-native-optimized-flatlist";
-
+const {width,height} = Dimensions.get('window');
 
 export class Modal_information extends React.Component {
     parsedText = (sex, firstName, lastName, about, city, bday, ) => {
 
         let array = [];
-        if (sex.length>=1){
+        try {
+            if (sex.length >= 1) {
 
-            array.push('Пол:'+ sex)
+                array.push('Пол:' + sex)
+
+            }
+        }
+        catch (e) {
+            array.push('Пол:Неопределен')
 
         }
 
@@ -61,7 +67,7 @@ export class Modal_information extends React.Component {
 
         catch (e) {
 
-            array.push('Дата Рождения:2019');
+            array.push('Дата Рождения:2200');
  console.log(e)
         }
 
@@ -79,7 +85,7 @@ export class Modal_information extends React.Component {
 
                             key={index.toString()}
                             style={{
-                            fontSize: 16, color: 'rgba(56,142,216,0.88)', marginTop: 5,
+                            fontSize: 16, color: 'rgba(0,0,0,0.91)', marginTop: 5,
 
                         }}>
                             {elem + '\n'}
@@ -99,7 +105,7 @@ export class Modal_information extends React.Component {
     render() {
 
 
-        return (<View>
+        return (<View style={{flex:1}}>
                 <Modal
 
                     transparent={true}
@@ -112,18 +118,13 @@ export class Modal_information extends React.Component {
                         onPressOut={this.props.visible_action}
                     >
                         <TouchableWithoutFeedback>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center'}}>
+
                             <View style={{
+                                backgroundColor:'#ffffff',
 
-                                width:200,
-                                height:'48%'}}>
+                                width:width,
+                                height:height/4.5}}>
 
-                                <ImageBackground source={{uri:'default_background'}}
-                                                 style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
 
                     <OptimizedFlatList
 
@@ -139,9 +140,10 @@ export class Modal_information extends React.Component {
 
                                 <View style={{
 
-                                    marginLeft: 1,
+                                    marginLeft: 2,
                                     marginRight: 1,
                                     marginBottom: 5,
+                                    backgroundColor:'#ffffff'
 
 
                                 }}>
@@ -163,9 +165,9 @@ export class Modal_information extends React.Component {
                         keyExtractor={(item, index) => index.toString()}
                     />
 
-                                </ImageBackground>
+
                             </View>
-                        </View>
+
                         </TouchableWithoutFeedback>
                     </TouchableOpacity>
                 </Modal>

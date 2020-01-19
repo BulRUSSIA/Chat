@@ -53,7 +53,7 @@ export default class CardsService extends React.Component {
                         </Text >
                         </View>
                         <View style={{flex:1,flexDirection:'row'}}>
-                            <FastImage source={{uri:'linerun'}}
+                            <FastImage source={{uri:'newpm'}}
                                    style={{height: 40, width: 40}}/>
                         <Text style={{fontWeight:'bold',fontSize:22,color:'#010101'}}>
                             {'\t'}    Заказать бегущую строку

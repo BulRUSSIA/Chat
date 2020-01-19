@@ -3,17 +3,25 @@ import styles from "../../styles";
 import React from "react";
 import FastImage from "react-native-fast-image";
 const list = [{
-    action: 'Сделать подарок',
+    action: 'СДЕЛАТЬ ПОДАРОК',
     icon: require('../Image/Shopping-Gift-icon.png'),
     event:1
-}, {action: 'Подарить аватар',  icon: require('../Image/strawberry-128.png'),event:2}, {
-    action: 'Подарить авторитет',event:3,
+}, {action: 'ПОДАРИТЬ АВАТАР',  icon: require('../Image/strawberry-128.png'),event:2}, {
+    action: 'ПОДАРИТЬ АВТОРИТЕТ',event:3,
     icon: require('../Image/PinClipart.com_death-star-clipart_4889685.webp')
 
-}, {action: 'Вступить в брак',event:4,  icon: require('../Image/wedding-rings-icon-9.webp')}];
+}, {action: 'ВСТУПИТЬ В БРАК',event:4,  icon: require('../Image/wedding-rings-icon-9.webp')}];
 export default class ActionsList extends React.Component {
 
+    renderSeparator = () => (
+        <View
+            style={{
+                backgroundColor: '#0D5E96',
+                height: 1
 
+            }}
+        />
+    );
 
     render() {
 
@@ -23,6 +31,7 @@ export default class ActionsList extends React.Component {
 
                   data={list}
                   extraData={this.props}
+                  ItemSeparatorComponent={this.renderSeparator}
 
 
                   renderItem={(({item}) =>
@@ -31,7 +40,7 @@ export default class ActionsList extends React.Component {
                           //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
 <TouchableOpacity onPress={()=> this.props.screenProps.Event_gift_handler(item.event)}>
                           <View style={{
-                              flex: 1, flexDirection: 'row', paddingTop: 6,backgroundColor:'rgb(170,170,170)',marginTop:5,
+                              flex: 1, flexDirection: 'row', paddingTop: 6,marginTop:5,
                           }}>
 
                               <FastImage source={item.icon} style={styles.imageViewProfile_icon}

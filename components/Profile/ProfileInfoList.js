@@ -36,7 +36,7 @@ export default class ProfileInfoList extends React.Component {
 
                         }}>
 
-                            <View style={{flex: 1, flexDirection: 'row', backgroundColor:'rgba(10,0,14,0.26)'}}>
+                            <View style={{flex: 1, flexDirection: 'row', backgroundColor:'rgba(46,53,255,0.1)'}}>
 
                                 <FastImage source={({uri: item.photo})} style={styles.imageAvatarProfile}
 
