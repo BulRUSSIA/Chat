@@ -33,9 +33,10 @@ async function SEND_PHOTO_request(photo) {
     });
 
     let responseJsonData = await a.json();
-    let attach = responseJsonData['attach'] ;
-    console.log('my attach' + attach);
-    return attach
+    let attach = responseJsonData['attach'];
+    let name = responseJsonData['name'];
+    console.log('my attach' + attach +'name' + name);
+    return [attach,name]
 
 }
 

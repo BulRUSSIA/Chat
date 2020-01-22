@@ -41,6 +41,8 @@ import request_GET_NOTICE from "../../actions/fetch_get_notice";
 import NavigationApp from "./NavigationSmiles";
 import firebase from "react-native-firebase";
 import type {Notification, NotificationOpen} from 'react-native-firebase';
+import AudioExample from "./AudioRecorder";
+import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
 
 
 const {width, height} = Dimensions.get('window');
@@ -76,6 +78,8 @@ export default class Chatting extends React.Component {
             size_msg: 25,
             background_image: 'default_background',
             editable: true,
+            name_attachments:'',
+            audio_preview:false,
             update_msg_bool: true,
             extra_data_bool: false,
             data: {
@@ -155,6 +159,12 @@ export default class Chatting extends React.Component {
 
             photo_attachments: attach,
         });
+    };
+
+    listening_sound = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
+        const {navigator} = this.props;
+        console.log('auido file',attach);
+        await navigator.push('PlayerScreen', {title:'Аудио', filepath:attach});
     };
 
     Action_Nick = async (user, user_id) => { ///Окно что сделать с чаттером передается его ник и его mongoID
@@ -395,11 +405,11 @@ export default class Chatting extends React.Component {
                 break;
 
 
-            case 4: //выход
+            case 4: // выход
 
 
-                navigator.reset('Login');
-                await this.Del_user_change();
+                navigator.reset('AudioExample');
+
                 this.componentWillUnmount();
                 break;
 
@@ -477,6 +487,9 @@ export default class Chatting extends React.Component {
     };
 
 
+
+
+
     ShowSmiles = async () => { // логика отображения смайлов true/1 false1
 
 
@@ -493,8 +506,17 @@ export default class Chatting extends React.Component {
     send_photo = async () => {  //отправляем фото в mongoDb
         this.setState({modal_indicator: true});
         const attach = await SEND_PHOTO_request(this.state.photo_attachments);
-        this.setState({attachments: attach});
+        console.log(this.state.photo_attachments);
+        this.setState({attachments: attach[0]});
         this.setState({modal_indicator: false});
+
+
+    };
+
+    send_audio_file = async (audio) => {  //отправляем фото в mongoDb
+
+        const attach = await SEND_AUDIO_request(audio);
+        this.setState({attachments: attach[0],text:attach[1]});
 
 
     };
@@ -583,7 +605,7 @@ export default class Chatting extends React.Component {
             }
 
             this.setState({
-                text: ''
+                text: '',attachments: []
             });
 
         }
@@ -616,11 +638,12 @@ export default class Chatting extends React.Component {
     };
 
 
-    _renderItem = ({item}) => { //render листа с чат сообщениями
+    _renderItem = ({item}) => { //render листа с чат сообще ниями
         let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
         let name_notice = item.message.startsWith('Пользователь ' + this.props.chat_name); //если начало сообщения начинается с вашего ника(для проверки нотайс)
         let server = item.user; //имя пользователя
         let attch = item.attachments;//аттач-
+        let attch_name = item.name_attachments;
         let _class = item._class;//цвет ника и сообщения0!
         let avatars = item.avatars;//аватарка
         let message = item.message; //сообшение
@@ -681,7 +704,9 @@ export default class Chatting extends React.Component {
                     avatars={avatars}
                     message={message}
                     attachments={attch}
+                    name={attch_name}
                     view_attach={this.View_full_photo}
+                    listening_sound={this.listening_sound}
                     user={server}
                 />
             )
@@ -749,13 +774,18 @@ export default class Chatting extends React.Component {
 
 
     };
+audio_screen = async ()=>{
 
+    this.setState({audio_preview:!this.state.audio_preview})
+};
 
     render() {
         const Smiles = this.state.ShowSmiles;
         const new_pm = this.state.new_pm;
         const indicator = this.state.modal_indicator;
         const attachments = this.state.photo_attachments;
+        const attachments_audio = this.state.audio_preview;
+
 
         return (
 
@@ -826,7 +856,15 @@ export default class Chatting extends React.Component {
 
                         />
 
+                        {
+                            attachments &&
+                            <Attachments_preview
+                                photo={this.state.photo_attachments}
+                                close_attach={this.close_attach}
 
+                            />
+
+                        }
                         <TextInput_Chatting
                             key_color='#FFFFFF'
                             show={this.ShowSmiles}
@@ -835,6 +873,7 @@ export default class Chatting extends React.Component {
                             active={this.state.ShowSmiles}
                             editable_key={this.state.editable}
                             add_text={this.add_text}
+                            send_audio_screen={this.audio_screen}
 
 
                         />
@@ -861,11 +900,13 @@ export default class Chatting extends React.Component {
                     </KeyboardAvoidingView>
 
 
+
+
                     {
-                        attachments &&
-                        <Attachments_preview
-                            photo={this.state.photo_attachments}
-                            close_attach={this.close_attach}
+                        attachments_audio &&
+                        <AudioExample
+
+                            send_audio_file={this.send_audio_file}
 
                         />
 

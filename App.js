@@ -15,12 +15,12 @@ import ChatPortal from "./components/ChatPortal/ChatPortal";
 import {PHOTO_VIEWER} from "./components/PHOTO_VIEWER";
 import NavigationAdmin from "./components/AdminMenu/AdminMenu";
 import NavigationSuperAdmin from "./components/SuperAdminMenu/SuperAdminMenu";
-
+import AudioExample from './components/Chatting/AudioRecorder'
 import {PhotosAll} from "./components/Profile/PhotosAll";
 import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
 import ScreenWeddings from "./components/ChatPortal/ScreenWeddings";
 import Settings from "./components/Settings/Settings";
-
+import PlayerScreen from 'react-native-sound-playerview'
 export default class chat extends React.Component {
 
     constructor(props) {
@@ -37,6 +37,7 @@ export default class chat extends React.Component {
             <Navigator
                 initialStack={[{screen: 'Login', transitionProps: {animation: 'fade'}}]}
                 screens={{
+                    PlayerScreen,
                     Login,
                     Profile_Redactor_New,
                     Chatting,
@@ -55,7 +56,8 @@ export default class chat extends React.Component {
                     Settings,
                     ScreenWeddings,
                     NavigationSuperAdmin,
-                    NoticeScreen
+                    NoticeScreen,
+
                 }}
 
                 animations='faded'

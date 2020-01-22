@@ -91,7 +91,9 @@ export class TextInput_Chatting extends React.Component {
             />
 
             <TouchableOpacity
+                onLongPress={this.props.send_audio_screen}
                 onPress={this.props.send_msg}
+
 
 
                 style={{

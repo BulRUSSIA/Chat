@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
 
         width: '80%',
         height:200,
-        borderWidth:12,
+        borderWidth:2,
         borderColor:'#1e4457',
 
 
