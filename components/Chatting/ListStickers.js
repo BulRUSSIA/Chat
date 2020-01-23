@@ -11,7 +11,7 @@ export class Flatlist_Stickers extends React.Component {
     render() {
 
 
-        return   <View style={{backgroundColor: '#6d6d6d', alignItems: 'center'}}
+        return   <View style={{backgroundColor: '#2f2f2f', alignItems: 'center'}}
 
 
         >
@@ -25,7 +25,7 @@ export class Flatlist_Stickers extends React.Component {
                 renderItem={(({item}) =>
 
                         <TouchableOpacity onPress={() => this.props.screenProps.add_emoji(item.value)}>
-                            <View style={{flex: 1, flexDirection: 'column', margin: 10}}>
+                            <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
 
                                 <FastImage style={{width: width*0.1, height: height*0.1, marginTop: '1%'}}
                                            source={{uri:item.url}}

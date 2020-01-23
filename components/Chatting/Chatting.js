@@ -7,7 +7,6 @@ import {
     Alert,
     Keyboard, ActivityIndicator, Text, Dimensions, AsyncStorage, KeyboardAvoidingView
 } from 'react-native';
-
 import menu_moderator from '../const/menu_moderator'
 import list_moder from '../const/list_moder'
 import list_user from '../const/list_user'
@@ -20,7 +19,6 @@ import {Modal_Chatting_ListUsers_Flatlist} from "./Modal_Chatting_ListUsers_Flat
 import {Modal_Chatting_Action_Flatlist} from "./Modal_Chatting_Action_Flatlist";
 import {TextInput_Chatting} from "./TextInput_Chatting";
 import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
-import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import fetch_users_in_room from "../../actions/fetch_users_in_room";
 import request_DELETE_USER_ROOM from "../../actions/fetch_delete_user";
@@ -30,7 +28,6 @@ import {Pattern_message3} from "./pattern_message3";
 import {Pattern_message4} from "./pattern_message4";
 import {Pattern_message5} from "./pattern_message5";
 import {Pattern_message6} from "./pattern_message6";
-import {Alert_Action} from "../Alert_Action";
 import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_moderator";
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
@@ -43,6 +40,7 @@ import firebase from "react-native-firebase";
 import type {Notification, NotificationOpen} from 'react-native-firebase';
 import AudioExample from "./AudioRecorder";
 import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
+import request_GET_MESSAGES from "../../actions/fetch_get_messages";
 
 
 const {width, height} = Dimensions.get('window');
@@ -65,7 +63,7 @@ export default class Chatting extends React.Component {
             type_user: null,
             isVisible: false,
             isVisibleList: false,
-            showAlert: false,
+            // showAlert: false,
             animating: false,
             photo_attachments: false,
             attachments: [], // Not для ba ck-a
@@ -78,8 +76,8 @@ export default class Chatting extends React.Component {
             size_msg: 25,
             background_image: 'default_background',
             editable: true,
-            name_attachments:'',
-            audio_preview:false,
+            name_attachments: '',
+            audio_preview: false,
             update_msg_bool: true,
             extra_data_bool: false,
             data: {
@@ -163,8 +161,8 @@ export default class Chatting extends React.Component {
 
     listening_sound = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {navigator} = this.props;
-        console.log('auido file',attach);
-        await navigator.push('PlayerScreen', {title:'Аудио', filepath:attach});
+        console.log('auido file', attach);
+        await navigator.push('PlayerScreen', {title: 'Аудио', filepath: attach});
     };
 
     Action_Nick = async (user, user_id) => { ///Окно что сделать с чаттером передается его ник и его mongoID
@@ -221,7 +219,7 @@ export default class Chatting extends React.Component {
             case 'Написать Личное':
                 this.setState({isVisible: false});
                 const get_private = await request_GET_PRIVATE_ROOM(this.props.nic, this.state.user_id);
-                const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
+                const get_private_data = await request_GET_MESSAGES(this.props.nic, get_private);
 
                 navigator.push('Private', {
                     profile_user: this.state.user_now,
@@ -408,7 +406,7 @@ export default class Chatting extends React.Component {
             case 4: // выход
 
 
-                navigator.reset('AudioExample');
+                navigator.reset('Login');
 
                 this.componentWillUnmount();
                 break;
@@ -443,9 +441,7 @@ export default class Chatting extends React.Component {
                 if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) {
 
                     await this.handleChoosePhoto();
-                }
-
-                else {
+                } else {
 
                     Alert.alert('Ошибка', 'Не хватает прав доступа')
                 }
@@ -487,9 +483,6 @@ export default class Chatting extends React.Component {
     };
 
 
-
-
-
     ShowSmiles = async () => { // логика отображения смайлов true/1 false1
 
 
@@ -516,45 +509,9 @@ export default class Chatting extends React.Component {
     send_audio_file = async (audio) => {  //отправляем фото в mongoDb
 
         const attach = await SEND_AUDIO_request(audio);
-        this.setState({attachments: attach[0],text:attach[1]});
+        this.setState({attachments: attach[0], text: attach[1]});
 
 
-    };
-
-    showAlert = () => {
-
-        this.setState({
-            showAlert: true
-        });
-    };
-
-    showPrivate = async () => {
-        const get_private_data = await request_GET_MESSAGES_PRIVATE(get_private);
-        const {navigator} = this.props;
-        navigator.push('Private', {
-                profile_user: this.state.user_now,
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                private_room: this.state.chatid,
-                private_chatter: this.state.user_now,
-                private_data: get_private_data,
-
-
-            },
-            {duration: 300, animation: 'left'});
-
-        this.setState({
-            showAlert: false
-        });
-
-
-    };
-
-    hideAlert = () => {
-        this.setState({
-            showAlert: false
-        });
     };
 
 
@@ -585,7 +542,7 @@ export default class Chatting extends React.Component {
 
             await Keyboard.dismiss();
             await this.send_photo();
-            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments);
+            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments, 1);
             await this.setState({
                 text: '', attachments: [], photo_attachments: false
             });
@@ -595,7 +552,7 @@ export default class Chatting extends React.Component {
 
             await Keyboard.dismiss();
 
-            const res = await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments);
+            const res = await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments, 1);
 
             let validate_send = res['send'];
             if (!validate_send) {
@@ -605,7 +562,7 @@ export default class Chatting extends React.Component {
             }
 
             this.setState({
-                text: '',attachments: []
+                text: '', attachments: []
             });
 
         }
@@ -774,10 +731,10 @@ export default class Chatting extends React.Component {
 
 
     };
-audio_screen = async ()=>{
+    audio_screen = async () => {
 
-    this.setState({audio_preview:!this.state.audio_preview})
-};
+        this.setState({audio_preview: !this.state.audio_preview, attachments: []})
+    };
 
     render() {
         const Smiles = this.state.ShowSmiles;
@@ -861,6 +818,7 @@ audio_screen = async ()=>{
                             <Attachments_preview
                                 photo={this.state.photo_attachments}
                                 close_attach={this.close_attach}
+                                color="#FFFFFF"
 
                             />
 
@@ -882,7 +840,7 @@ audio_screen = async ()=>{
 
 
                         <View style={{
-                            width: width, height: height * 0.5,
+                            width: width, height: height * 0.35,
 
                             backgroundColor: '#6d6d6d',
                         }}>
@@ -900,8 +858,6 @@ audio_screen = async ()=>{
                     </KeyboardAvoidingView>
 
 
-
-
                     {
                         attachments_audio &&
                         <AudioExample
@@ -912,13 +868,7 @@ audio_screen = async ()=>{
 
                     }
 
-                    <Alert_Action
-                        showAlert={this.state.showAlert}
-                        hideAlert={this.hideAlert}
-                        showPrivate={this.showPrivate}
 
-
-                    />
                     <Modal_Chatting_ListUsers_Flatlist
 
 

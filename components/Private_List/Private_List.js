@@ -7,12 +7,13 @@ import {
 } from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
-import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
 import styles from './styles'
 import request_DELETE_PERSONALROOMS_ALL from "../../actions/fetch_delete_personalrooms_all";
 import {Private_List_flatlist} from "./Private_List_flatlist";
 import {Header_private_list} from "./Header_private_list";
 import request_GET_PRIVATE_LIST from "../../actions/fetch_private_list";
+import request_GET_MESSAGES from "../../actions/fetch_get_messages";
+
 const menuitem = [{title: 'Удалить все чаты', show: 'never', eventkey: 1},];
 
 
@@ -26,7 +27,7 @@ export default class Private_List extends React.Component {
             DataSource: [],
             item_menu: menuitem,
             selected: undefined,
-            animating:false,
+            animating: false,
 
 
         };
@@ -34,40 +35,41 @@ export default class Private_List extends React.Component {
 
     }
 
-    componentDidMount= async ()=> {
+
+    Update_list =async ()=>{
+
         const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
-        this.setState({DataSource:get_list})
+        this.setState({DataSource: get_list})
 
 
 
     };
 
-
-    onValueChange = async (value: string) => {
-
-
-        if (value === 'key1') {
-
-            await request_DELETE_PERSONALROOMS_ALL(this.props.nic);
-            this.props.select(0);
-            this.componentWillUnmount();
+    componentDidMount = async () => {
+     await this.Update_list()
 
 
-        }
     };
 
 
-    onActionSelected = async (position) => {
+    onValueChange = async (select) => {
 
 
-        if (position === 0) {
-            console.log("loыl");
+        switch (select) {
+            case 0:
+                await request_DELETE_PERSONALROOMS_ALL(this.props.nic);
+                await this.Update_list();
+                break;
+
+            case 1:
+                break;
 
 
         }
 
 
     };
+
 
     componentWillUnmount() {
 
@@ -84,12 +86,12 @@ export default class Private_List extends React.Component {
 
 
     Get_Chat = async (event, chatter) => {
-        this.setState({animating:true});
-        const get_private = await request_GET_MESSAGES_PRIVATE(event);
-        this.setState({animating:false});
+        this.setState({animating: true});
+        const get_private = await request_GET_MESSAGES(this.props.nic,event);
+        this.setState({animating: false});
         const {navigator} = this.props;
 
-        await    navigator.push('Private',{
+        await navigator.push('Private', {
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -102,13 +104,10 @@ export default class Private_List extends React.Component {
         });
 
 
-
     };
 
 
-    back =  () => {
-
-
+    back = () => {
 
 
         const {navigator} = this.props;
@@ -118,20 +117,14 @@ export default class Private_List extends React.Component {
     };
 
 
-
-
-
-
-
-
     render() {
         if (this.state.animating) {
 
             return (
 
-                <View style={{flex:1,backgroundColor:'#3c3e5a'}}>
+                <View style={{flex: 1, backgroundColor: '#3c3e5a'}}>
                     <ActivityIndicator
-                        style={{marginTop:'50%'}}
+                        style={{marginTop: '50%'}}
                         size="large" color="#3E8CB4"
                         animating={this.state.animating}/>
                 </View>
@@ -146,32 +139,23 @@ export default class Private_List extends React.Component {
 
             <View style={styles.container1}>
                 <ImageBackground
-                    style={{resizeMode: 'contain',height:'100%',width:'100%'}}
-                    source={{uri:'default_background'}}>
+                    style={{resizeMode: 'contain', height: '100%', width: '100%'}}
+                    source={{uri: 'default_background'}}>
 
-                <Header_private_list
+                    <Header_private_list
+                        back={this.back}
+                        onActionSelected={this.onValueChange}
 
-                    item_menu={this.state.item_menu}
-                    onValueChange={this.onValueChange}
-                    selectedValue={this.state.selected}
-                    back={this.back}
-                    onActionSelected={this.onActionSelected}
-
-                />
+                    />
 
 
-
-                <Private_List_flatlist
-
-
-                    DataSource={this.state.DataSource}
-                    get_chat={this.Get_Chat}
+                    <Private_List_flatlist
+                        DataSource={this.state.DataSource}
+                        get_chat={this.Get_Chat}
+                    />
 
 
-                />
-
-
-</ImageBackground>
+                </ImageBackground>
 
 
             </View>

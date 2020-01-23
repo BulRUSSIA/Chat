@@ -1,7 +1,8 @@
-
+import action_private_list from '../const/private_list_actions'
 import React from "react";
 import {Body, Button, Header, Left, Picker, Right,  Title} from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
+import PopupMenu from "../Rooms/PopupMenu";
 
 
 export class Header_private_list extends React.Component {
@@ -12,8 +13,7 @@ export class Header_private_list extends React.Component {
 
         return      <Header style={{backgroundColor: '#0D5E96',}}
                             androidStatusBarColor="#0D5E96"
-                            onActionSelected={this.props.onActionSelected.bind(this)}
-                            actions={this.props.item_menu}
+
                            >
 
             <Left style={{flex: 1}}>
@@ -32,25 +32,13 @@ export class Header_private_list extends React.Component {
             </Body>
 
             <Right>
+                <PopupMenu
 
 
-                <Picker
-                    mode="dropdown"
-                    iosIcon={<Icon name="Stop"/>}
-
-
-                    placeholderStyle={{color: "#bfc6ea"}}
-                    placeholderIconColor="#ffffff"
-                    style={{color: 'white'}}
-                    selectedValue={this.props.selected}
-                    onValueChange={this.props.onValueChange.bind(this)}
-                >
-
-                    <Picker.Item label="Платные опции" value="key0"/>
-                    <Picker.Item label="Удалить диалоги" value="key1"/>
-                </Picker>
+                    actions={action_private_list}
+                    onPress={(e, i) => this.props.onActionSelected(i)}
+                />
             </Right>
-
 
         </Header>
     }

@@ -60,7 +60,7 @@ function Flatlist_Chatting_Messaging (props) {
                     );
                 }
                 updateMessage(messages);
-            }, 3000);
+            }, 1000);
             return () => clearInterval(id);
         }
 
@@ -75,7 +75,7 @@ function Flatlist_Chatting_Messaging (props) {
     return (
         <FlatList inverted={true}
 
-                      maxToRenderPerBatch={60}
+                      maxToRenderPerBatch={30}
                       updateCellsBatchingPeriod={300}
                       data={Fetchmessage}
                       extraData={msg}

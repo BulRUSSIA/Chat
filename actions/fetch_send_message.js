@@ -1,7 +1,7 @@
 import {address} from "../config_connect";
 import {Alert} from "react-native";
 
-async function request_SEND_MESSAGES(nic,msg,place,attachments)  {
+async function request_SEND_MESSAGES(nic,msg,place,attachments,type)  {
 
     const url = address + `/sending/messages/room`;
 
@@ -19,6 +19,7 @@ let response = await fetch(url, {
             Msg: msg,
             Place:place,
             attachments:attachments,
+            type:type
         }),
 
     });

@@ -11,7 +11,7 @@ export class Flatlist_smiles_chatting extends React.Component {
     render() {
 
 
-        return   <View style={{backgroundColor: '#6d6d6d', alignItems: 'center'}}
+        return   <View style={{backgroundColor: '#2f2f2f', alignItems: 'center',}}
 
 
         >
@@ -27,7 +27,7 @@ export class Flatlist_smiles_chatting extends React.Component {
                         <TouchableOpacity onPress={() => this.props.screenProps.add_emoji(item.value)}>
                             <View style={{flex: 1, flexDirection: 'column', margin: 5}}>
 
-                                <FastImage style={{width: width*0.06, height: height*0.06, marginTop: '1%'}}
+                                <FastImage style={{width: width*0.06, height: height*0.06,}}
                                            source={item.url}
                                            resizeMode={FastImage.resizeMode.contain}
 

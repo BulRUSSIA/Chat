@@ -46,11 +46,11 @@ const AppNavigator = createMaterialTopTabNavigator(
                 fontSize: 0,
                 fontWeight:'bold',
             },
-            activeTintColor: 'rgba(109,109,109,0.91)',
+            activeTintColor: '#2f2f2f',
             showIcon: true,
 
             style: {
-                backgroundColor:'rgba(109,109,109,0.26)'
+                backgroundColor:'#2f2f2f'
             }
         },
 

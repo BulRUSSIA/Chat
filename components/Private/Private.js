@@ -1,32 +1,32 @@
 import React from 'react';
 import {
     ActivityIndicator,
-    Alert,
-    Dimensions,
+    Alert, CheckBox,
+    Dimensions, FlatList,
     Image,
     Keyboard,
-    KeyboardAvoidingView,
-    TouchableOpacity,
+    Modal, TextInput, TouchableOpacity,
     View
 } from 'react-native';
 import private_menu from '../const/private_menu'
 import styles from '../../styles'
-import request_GET_MESSAGES_PRIVATE from "../../actions/fetch_private_message";
-import request_SEND_MESSAGES_PRIVATE from "../../actions/fetch_send_private";
 import ImagePicker from "react-native-image-picker";
-import {Body, Button, Header,  Left, Text, Title,} from 'native-base';
+import {Body, Button, Header, Left, Right, Text, Title,} from 'native-base';
 import Icon from "react-native-vector-icons/AntDesign";
-
-import {Private_action_picker} from "./Private_action_picker";
+import PRIVATE_ACTIONS from '../const/PRIVATE_ACTIONS'
 import {Private_Flatlist} from "./Private_Flatlist";
 import emoticons from "../const/EmojiObject";
 import {TextInput_Chatting} from "../Chatting/TextInput_Chatting";
-import {Flatlist_smiles_chatting} from "../Chatting/Flatlist_smiles_chatting";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "../Chatting/Attachments_preview";
 import NavigationApp from "../Chatting/NavigationSmiles";
+import PopupMenu from "../Rooms/PopupMenu";
+import request_GET_MESSAGES from "../../actions/fetch_get_messages";
+import request_SEND_MESSAGES from "../../actions/fetch_send_message";
+import AudioExample from "../Chatting/AudioRecorder";
+import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
 
-const {width,height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 
 export default class Private extends React.Component {
@@ -53,9 +53,10 @@ export default class Private extends React.Component {
             showEmojiPicker: false,
             selected: undefined,
             photo: null,
-            attachments: 'Not',
+            attachments: [],
             ShowSmiles: false,
             modal_indicator: false,
+            audio_preview: false,
 
 
         };
@@ -64,23 +65,10 @@ export default class Private extends React.Component {
     }
 
 
-    onValueChange = async (value: string) => {
-        this.setState({
-            selected: value
-        });
-
-
-        if (value === 'key0') {
-            await this.handleChoosePhoto()
-
-        }
-
-    };
-
     update_msg = async () => {
 
 
-        const message = await request_GET_MESSAGES_PRIVATE(this.state.room);
+        const message = await request_GET_MESSAGES(this.props.nic, this.state.room);
         this.setState({
                 private: message,
 
@@ -100,50 +88,40 @@ export default class Private extends React.Component {
     componentDidMount = () => {
 
 
-        this.interval = setInterval(() => this.update_msg(), 7000);
+        this.interval = setInterval(() => this.update_msg(), 2000);
 
 
     };
 
-
-    handleBackButton = () => {
-
-
-        return true
-
-    };
 
     onActionSelected = async (position) => {
 
 
-        if (position === 1) {
-            console.log("I am in 1");
+        const {navigator} = this.props;
 
 
-        }
+        switch (position) {
 
-        if (position === 2) {
+            case 0:
+                await this.handleChoosePhoto();
+                break;
 
-            console.log("I am in 2");
-        }
-        if (position === 3) {
-
-
-            const {navigator} = this.props;
-
-            navigator.pop({
-                room: this.props.room,
-                nic: this.props.nic,
-                chat_name: this.props.chat_name,
-                DataSource: this.props.list_data,
+            case 1:
+                break;
 
 
-            });
+            case 3:
+                navigator.pop({
+                    room: this.props.room,
+                    nic: this.props.nic,
+                    chat_name: this.props.chat_name,
+                    DataSource: this.props.list_data,
 
-            console.log(this.props.nic + 'my nick to ls');
+
+                });
 
 
-            this.componentWillUnmount();
+                this.componentWillUnmount();
 
 
         }
@@ -153,6 +131,7 @@ export default class Private extends React.Component {
         const options = {
             noData: true,
         };
+
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri) {
                 this.setState({photo_attachments: response});
@@ -182,6 +161,7 @@ export default class Private extends React.Component {
 
             return (
                 <Attachments_preview
+                    color='#3C3E5A'
                     photo={this.state.photo_attachments}
                     close_attach={this.close_attach}
 
@@ -194,7 +174,7 @@ export default class Private extends React.Component {
     send_photo = async () => {
         this.setState({modal_indicator: true});
         const attach = await SEND_PHOTO_request(this.state.photo_attachments);
-        this.setState({attachments: attach});
+        this.setState({attachments: attach[0]});
         this.setState({modal_indicator: false});
 
 
@@ -203,26 +183,35 @@ export default class Private extends React.Component {
     send_msg = async () => {
 
         if (this.state.photo_attachments) {
+
             await Keyboard.dismiss();
             await this.send_photo();
-            //    if (this.state.text !=='') {
-            await request_SEND_MESSAGES_PRIVATE(this.props.nic, 'Вложения', this.state.room, this.state.attachments);
-
+            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.state.room, this.state.attachments, 2);
             await this.setState({
-                text: '', attachments: 'Not', photo_attachments: false
+                text: '', attachments: [], photo_attachments: false
             });
-            await this.update_msg();
+
+
         } else {
 
             await Keyboard.dismiss();
-            await request_SEND_MESSAGES_PRIVATE(this.props.nic, this.state.text, this.state.room, this.state.attachments);
-            await this.setState({
-                text: '',
-            });
-            await this.update_msg();
-        }
 
+            const res = await request_SEND_MESSAGES(this.props.nic, this.state.text, this.state.room, this.state.attachments, 2);
+
+            let validate_send = res['send'];
+            if (!validate_send) {
+
+                Alert.alert('Ошибка', 'Невозможно отправить сообщение')
+
+            }
+
+            this.setState({
+                text: '', attachments: []
+            });
+
+        }
     };
+
 
     add_text = async (text) => {
 
@@ -232,8 +221,8 @@ export default class Private extends React.Component {
 
     };
 
-    add_emoji = async (emoji) => {              //add emoji to text
-        await  this.setState({text: this.state.text + emoji});
+    add_emoji = async (emoji) => {              //add emoji to  text
+        await this.setState({text: this.state.text + emoji});
     };
 
 
@@ -241,7 +230,7 @@ export default class Private extends React.Component {
 
         const {navigator} = this.props;
 
-        await navigator.push('PHOTO_VIEWER',{
+        await navigator.push('PHOTO_VIEWER', {
             room: this.props.room,
             nic: this.props.nic,
             chat_name: this.props.chat_name,
@@ -254,6 +243,92 @@ export default class Private extends React.Component {
 
     };
 
+
+    Modal_Activity = () => {
+
+        if (this.state.modal_indicator) {
+
+            return (
+
+
+                <ActivityIndicator
+                    size='large'
+                    animating={this.state.modal_indicator}/>
+
+
+            )
+        }
+
+    };
+
+    ParsedText = (text, user) => {
+
+        return text.split(/([\u00a9|\u00ae[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
+            if (!elem) return null;
+            if ((emoticons[elem]))
+                return (
+
+                    <Image style={{width: 20, height: 20,}}
+                           source={emoticons[elem]}/>
+
+
+                );
+            else {
+
+                if (user === this.props.private_chatter) {
+                    return (
+
+                        <Text style={styles.private2}
+
+
+                        >{elem}</Text>
+
+
+                    )
+
+                }
+
+                return (
+
+                    <Text style={styles.private1}
+
+
+                    >{elem}</Text>
+
+                )
+
+
+            }
+
+
+        });
+    };
+    audio_screen = async () => {
+
+        this.setState({audio_preview: !this.state.audio_preview,attachments:[]})
+    };
+
+
+    choice_type_attach = (attach, user, attach_name) => {
+
+
+        switch (attach_name) {
+
+            case 0:
+                return this.attachments_sound_view(attach,user);
+
+            case 1:
+                return this.attachments_view(attach, user);
+
+        }
+
+    };
+
+    listening_sound = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
+        const {navigator} = this.props;
+        console.log('auido file', attach);
+        await navigator.push('PlayerScreen', {title: 'Аудио', filepath: attach});
+    };
     attachments_view = (attach, username) => {
 
 
@@ -302,98 +377,77 @@ export default class Private extends React.Component {
         }
     };
 
-
-    ListSmileAction = () => {
-
-
-        if (this.state.ShowSmiles) {
-            Keyboard.dismiss();
-
-            return (
+    attachments_sound_view = (attach, username) => {
 
 
-                <Flatlist_smiles_chatting
-
-                    add_emoji={this.add_emoji}
-
-
-                />
+        let me = this.props.chat_name;
+        if (attach.length > 1) {
+            console.log('me:' + me);
 
 
-            )
+            if (me === username) {
 
-
-        }
-
-
-    };
-    ParsedText = (text, user) => {
-
-        return text.split(/([\u00a9|\u00ae[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
-            if (!elem) return null;
-            if ((emoticons[elem]))
                 return (
+                    <TouchableOpacity onPress={() => this.listening_sound(attach)}>
 
-                    <Image style={{ width: 20, height: 20,}}
-                           source={emoticons[elem]}/>
+                        <View style={{
+
+
+                            alignItems: 'center',
+                        }}>
+
+                            <Text style={{fontSize:25,color:'#ffffff',fontWeight:'bold'}}>
+                                Аудио файл
+                            </Text>
+
+                        </View>
+                    </TouchableOpacity>
 
 
                 );
-            else {
-
-                if (user === this.props.private_chatter) {
-                    return (
-
-                        <Text style={styles.private2}
-
-
-                        >{elem}</Text>
-
-
-                    )
-
-                }
+            } else {
 
                 return (
+                    <TouchableOpacity onPress={() => this.listening_sound(attach)}>
 
-                    <Text style={styles.private1}
+                        <View style={{
 
 
-                    >{elem}</Text>
+                            alignItems: 'center',
+                        }}>
 
-                )
+                            <Text style={{fontSize:25,color:'#ffffff',fontWeight:'bold'}}>
+                                Аудио файл
+                            </Text>
+
+                        </View>
+                    </TouchableOpacity>
+
+
+                );
 
 
             }
 
 
-        });
-    };
-
-    Modal_Activity = () => {
-
-        if (this.state.modal_indicator) {
-
-            return (
-
-
-                <ActivityIndicator
-                    size='large'
-                    animating={this.state.modal_indicator}/>
-
-
-            )
         }
-
     };
 
-    _renderItem = ({item}) => {
+
+    _renderItem = ({item}) => { //render листа с чат сообще ниями
+
+        let user = item.user; //имя пользователя
+        let attch = item.attachments;//аттач-
+        let attch_name = item.name_attachments;
+
+        let message = item.message; //сообшение
+        let user_id = item.user_id; //id поль зователя
 
 
-        let user = this.props.private_chatter;
+        let user_privete = this.props.private_chatter;
 
 
-        if (item.user === user) {
+        if (item.user === user_privete) {
 
 
             return (
@@ -421,7 +475,7 @@ export default class Private extends React.Component {
                             {this.ParsedText(item.message, item.user)}
 
                         </Text>
-                        {this.attachments_view(item.attachments, item.user)}
+                        {this.choice_type_attach(attch, user, attch_name)}
                     </View>
 
 
@@ -450,7 +504,7 @@ export default class Private extends React.Component {
                 }}>
                     <View style={{position: 'relative'}}>
                         <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
-                        <Text style={{color: 'rgba(37,86,110,0.96)',paddingBottom:'5%',marginTop:'1%'}}
+                        <Text style={{color: 'rgba(37,86,110,0.96)', paddingBottom: '5%', marginTop: '1%'}}
 
                         >
 
@@ -459,7 +513,7 @@ export default class Private extends React.Component {
 
 
                         </Text>
-                        {this.attachments_view(item.attachments, item.user)}
+                        {this.choice_type_attach(attch, user, attch_name)}
                     </View>
 
 
@@ -482,23 +536,28 @@ export default class Private extends React.Component {
         });
 
     };
+    send_audio_file = async (audio) => {  //отправляем фото в  mong oDb
+
+        const attach = await SEND_AUDIO_request(audio);
+        this.setState({attachments: attach[0], text: attach[1]});
+
+
+    };
 
     render() {
         const Smiles = this.state.ShowSmiles;
-
+        const attachments_audio = this.state.audio_preview;
 
         return (
 
-            <View style={{backgroundColor: '#21212f',flex:1}}
+            <View style={{backgroundColor: '#21212f', flex: 1}}
 
             >
 
 
-
                 <Header style={{backgroundColor: '#0D5E96',}}
                         androidStatusBarColor="#0D5E96"
-                        onActionSelected={this.onActionSelected.bind(this)}
-                        actions={this.state.item_menu}
+
                 >
 
                     <Left style={{flex: 1}}>
@@ -516,18 +575,18 @@ export default class Private extends React.Component {
 
                         <Title>{this.props.private_chatter}</Title>
                     </Body>
+                    <Right>
 
-                    <Private_action_picker
-                        selected={this.state.selected}
-                        change={this.onValueChange.bind(this)}
+                        <PopupMenu
 
 
-                    />
-
+                            actions={PRIVATE_ACTIONS}
+                            onPress={(e, i) => this.onActionSelected(i)}
+                        />
+                    </Right>
 
                 </Header>
                 {this.Modal_Activity()}
-
 
                 <Private_Flatlist
 
@@ -540,6 +599,46 @@ export default class Private extends React.Component {
                 {this.view()}
 
 
+
+                {
+                    attachments_audio &&
+
+                        <View style={{
+
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+
+
+                        }}>
+
+                            <View style={{
+                                width: width,
+                                height: height / 6,
+                                backgroundColor: '#3C3E5A',
+                                paddingLeft: '5%',
+                                paddingRight: '5%',
+                                borderRadius: 4,
+
+                            }}>
+
+                                <AudioExample
+
+                                              send_audio_file={this.send_audio_file}
+
+                                />
+
+
+
+
+                            </View>
+                        </View>
+
+
+
+
+                }
+
                 <TextInput_Chatting
                     key_color='#3C3E5A'
                     show={this.ShowSmiles}
@@ -547,15 +646,17 @@ export default class Private extends React.Component {
                     send_msg={this.send_msg}
                     text={this.state.text}
                     active={this.state.ShowSmiles}
+                    send_audio_screen={this.audio_screen}
 
 
                 />
+
 
                 {Smiles &&
 
 
                 <View style={{
-                    width: width, height: height * 0.5,
+                    width: width, height: height * 0.4,
 
                     backgroundColor: '#6d6d6d',
                 }}>
@@ -570,6 +671,7 @@ export default class Private extends React.Component {
                 </View>
 
                 }
+
 
 
 

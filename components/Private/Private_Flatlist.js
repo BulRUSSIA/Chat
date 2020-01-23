@@ -13,11 +13,7 @@ export class Private_Flatlist extends React.Component {
 
                          extraData={this.props}
                          data={this.props.private}
-
-
                          renderItem={this.props.render}
-
-
                          keyExtractor={(item, index) => index.toString()}
 
 
