@@ -54,7 +54,7 @@ export default class InvisibleList extends React.Component {
 
     Unbanned_action = async (user_id, id_banner, name_admin, id_document) => {
 
-        Alert.alert("Пользователь успешно разбанен!", "Вы так добры по отношению к людям :)");
+        Alert.alert("Невидимка пользователя успешно снята!", "Вы так добры по отношению к людям :)");
 
         await request_UNBAN_USER(user_id, id_banner, name_admin, id_document);
 
@@ -118,7 +118,7 @@ export default class InvisibleList extends React.Component {
                                   renderItem={(({item}) =>
 
                                           <TouchableOpacity
-                                              onPress={() => this.Unban_window(item.user_id, this.props.screenProps.nic, 'NoneRes', '1233', item.nic)}>
+                                              onPress={() => this.Unban_window(item.id, this.props.screenProps.nic, 'NoneRes', '1233', item.nic)}>
                                               <View style={{
                                                   flex: 1, flexDirection: 'row',
                                               }}>

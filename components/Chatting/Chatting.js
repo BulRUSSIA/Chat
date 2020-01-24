@@ -41,6 +41,8 @@ import type {Notification, NotificationOpen} from 'react-native-firebase';
 import AudioExample from "./AudioRecorder";
 import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
+import request_ADD_INVISIBLE from "../../actions/fetch_add_invisible";
+import Toast from "react-native-whc-toast";
 
 
 const {width, height} = Dimensions.get('window');
@@ -192,26 +194,36 @@ export default class Chatting extends React.Component {
 
                 await this.Change_Visible_Action();
                 await request_SEND_BANNED_ACTION(0.089, this.state.user_id, this.props.nic);
+                this.refs.toast.show('Пользователь забанен');
                 break;
 
             case 'Бан 15 минут' :
 
                 await this.Change_Visible_Action();
                 await request_SEND_BANNED_ACTION(0.25, this.state.user_id, this.props.nic);
+                this.refs.toast.show('Пользователь забанен');
                 break;
 
             case 'Бан 60 минут':
 
                 await this.Change_Visible_Action();
                 await request_SEND_BANNED_ACTION(1, this.state.user_id, this.props.nic);
+                this.refs.toast.show('Пользователь забанен');
                 break;
 
             case 'Бан 120 минут':
 
                 await this.Change_Visible_Action();
                 await request_SEND_BANNED_ACTION(2, this.state.user_id, this.props.nic);
+                this.refs.toast.show('Пользователь забанен');
                 break;
+            case 'Невидимка':
 
+                await this.Change_Visible_Action();
+                await request_ADD_INVISIBLE(this.state.user_id, this.props.nic);
+                this.refs.toast.show('Невидимка установлена');
+
+                break;
             case 'Ответить':
                 this.setState({isVisible: !this.state.isVisible, text: this.state.user_now + ', '});
                 break;
@@ -518,7 +530,7 @@ export default class Chatting extends React.Component {
     Del_user_change = async () => {
 
         this.setState({update_msg_bool: !this.state.update_msg_bool});
-        await request_DELETE_USER_ROOM(this.state.room_now, this.props.nic);
+        // await request_DELETE_USER_ROOM(this.state.room_now, this.props.nic);
 
 
         const {navigator} = this.props;
@@ -823,6 +835,13 @@ export default class Chatting extends React.Component {
                             />
 
                         }
+                        <View >
+
+                            <Toast ref="toast"
+                            style={{borderRadius: 14}}
+
+                            />
+                        </View>
                         <TextInput_Chatting
                             key_color='#FFFFFF'
                             show={this.ShowSmiles}

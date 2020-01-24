@@ -19,7 +19,8 @@ let response = await fetch(url, {
             Msg: msg,
             Place:place,
             attachments:attachments,
-            type:type
+            type:type,
+
         }),
 
     });

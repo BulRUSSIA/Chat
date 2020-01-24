@@ -3,12 +3,12 @@ import {address} from "../config_connect";
 function request_DELETE_GIFT(gift)  {
 
 
-    const url = address + `/delete/avatar/${gift}`;
+    const url = address + `/delete/gift/${gift}`;
 
 
 
     try {
-        fetch(url);
+      return   fetch(url);
     } catch (e) {
         console.log(e)
     }

@@ -1,11 +1,11 @@
 import React from 'react';
 import {
     ActivityIndicator,
-    Alert, CheckBox,
-    Dimensions, FlatList,
+    Alert,
+    Dimensions,
     Image,
     Keyboard,
-    Modal, TextInput, TouchableOpacity,
+   TouchableOpacity,
     View
 } from 'react-native';
 import private_menu from '../const/private_menu'
@@ -181,6 +181,7 @@ export default class Private extends React.Component {
     };
 
     send_msg = async () => {
+
 
         if (this.state.photo_attachments) {
 

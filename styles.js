@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         flex: 1,
         color: '#000000',
-        marginTop:'10%',
+        marginTop:'5%',
         marginLeft:'5%',
 
         justifyContent:'center',
