@@ -9,7 +9,7 @@ async function request_MY_NICKNAME(nick)  {
         .then((response) => response.json())
         .then( async (responseJson) => {
             console.log(responseJson);
-            return [(responseJson['Nickname']),(responseJson['type'])];
+            return [(responseJson['Nickname']),(responseJson['type']),(responseJson['color']),(responseJson['avatar'])];
 
         })
 

@@ -490,6 +490,8 @@ export default class Rooms extends React.Component {
             room: id,
             room_name:name,
             category_name_toolbar: this.state.category_name_toolbar,
+            nic_color:Nick_chats[2],
+            nic_avatar:Nick_chats[3],
             chat_name: Nick_chats[0],
             type_user: Nick_chats[1],
             item_menu: this.state.item_menu,

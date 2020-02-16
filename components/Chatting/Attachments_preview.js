@@ -26,7 +26,7 @@ export class Attachments_preview extends React.Component {
             </TouchableOpacity>
             <Image
                 source={{uri: this.props.photo.uri}}
-                style={{width: 60, height: 60, marginLeft: '5%',marginBottom:10 }}
+                style={{width: 60, height: 60, marginLeft: '5%',marginBottom:30 }}
             />
         </View>
 

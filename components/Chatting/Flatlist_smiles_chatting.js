@@ -1,20 +1,18 @@
-import {Dimensions, TouchableOpacity, View} from "react-native";
+import {Dimensions, ScrollView,TouchableOpacity, View} from "react-native";
 import React from "react";
 import emoticons_value from "../const/Flat_Emoji_Value";
 import FastImage from "react-native-fast-image";
 import {OptimizedFlatList} from "react-native-optimized-flatlist";
 
-const {width,height} = Dimensions.get('window');
+const {width,height} = Dimensions.get('window') ;
 export class Flatlist_smiles_chatting extends React.Component {
 
 
     render() {
 
 
-        return   <View style={{backgroundColor: '#2f2f2f', alignItems: 'center',}}
+        return   <ScrollView contentContainerStyle={[{alignItems:'center',paddingBottom:15}]}>
 
-
-        >
             <OptimizedFlatList
 
 
@@ -25,7 +23,7 @@ export class Flatlist_smiles_chatting extends React.Component {
                 renderItem={(({item}) =>
 
                         <TouchableOpacity onPress={() => this.props.screenProps.add_emoji(item.value)}>
-                            <View style={{flex: 1, flexDirection: 'column', margin: 5}}>
+                            <View style={{flex:1, flexDirection: 'column', margin: 5}}>
 
                                 <FastImage style={{width: width*0.06, height: height*0.06,}}
                                            source={item.url}
@@ -44,8 +42,8 @@ export class Flatlist_smiles_chatting extends React.Component {
 
 
             />
-        </View>
 
+        </ScrollView>
 
 
 

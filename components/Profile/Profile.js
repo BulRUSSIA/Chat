@@ -58,7 +58,6 @@ export default class Profile extends React.Component {
     componentDidMount = async () => {
 
         const profile_info = await request_GET_PROFILE(this.state.user_id);
-        console.log(profile_info);
         const gifts = await request_GET_GIFTS(this.props.user_id);
         const photos_list = await request_GET_USER_PHOTO(this.props.user_id);
         this.setState({

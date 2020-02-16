@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
         flex: 2,
 
 
-
         backgroundColor: 'rgba(0,0,0,0.45)',
 
 
@@ -23,10 +22,8 @@ const styles = StyleSheet.create({
 
     modalbackground_info: {
         flex: 5,
-        backgroundColor:'rgba(1,1,1,0)',
-        borderRadius:12,
-
-
+        backgroundColor: 'rgba(1,1,1,0)',
+        borderRadius: 12,
 
 
     },
@@ -36,8 +33,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(45,101,127,0.37)',
-        height:'80%',
-        width:'80%',
+        height: '80%',
+        width: '80%',
 
     },
     container_pofile: {
@@ -79,15 +76,8 @@ const styles = StyleSheet.create({
     },
     prices: {
         fontSize: 18,
-        paddingBottom:'3%',
-        marginTop:'2%'
-
-
-
-
-
-
-
+        paddingBottom: '3%',
+        marginTop: '2%'
 
 
     },
@@ -129,7 +119,7 @@ const styles = StyleSheet.create({
     Profile_Toolbar_text_down: {
         fontSize: 20,
         flex: 1,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: '#efefef',
         marginLeft: 0,
 
@@ -141,7 +131,7 @@ const styles = StyleSheet.create({
     Profile_redactor_Toolbar_text_down: {
         fontSize: 20,
         flex: 1,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: '#efefef',
         marginLeft: 0,
 
@@ -153,10 +143,9 @@ const styles = StyleSheet.create({
     Profile_redactor_Toolbar_text_down_right: {
         fontSize: 19,
 
-        fontWeight:'bold',
+        fontWeight: 'bold',
         color: '#efefef',
         paddingBottom: 2,
-
 
 
     },
@@ -164,13 +153,10 @@ const styles = StyleSheet.create({
     Profile_List_text: {
         color: '#3b84d7',
         textAlign: 'center',
-        marginTop:'5%',
-        marginLeft:'5%',
+        marginTop: '5%',
+        marginLeft: '5%',
 
         fontSize: 15,
-
-
-
 
 
     },
@@ -183,9 +169,7 @@ const styles = StyleSheet.create({
 
         backgroundColor: 'rgba(106,168,180,0.26)',
 
-        textAlign:'center',
-
-
+        textAlign: 'center',
 
 
     },
@@ -195,22 +179,18 @@ const styles = StyleSheet.create({
 
         color: '#efefef',
 
-        marginLeft:40,
-
-
-
+        marginLeft: 40,
 
 
     },
     Gift_Description: {
         fontSize: 16,
-        fontWeight:'bold',
+        fontWeight: 'bold',
 
         color: '#000000',
 
 
-
-        textAlign:'center'
+        textAlign: 'center'
 
 
     },
@@ -229,11 +209,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         flex: 1,
         color: '#000000',
-        marginTop:'5%',
-        marginLeft:'5%',
+        marginTop: '5%',
+        marginLeft: '5%',
 
-        justifyContent:'center',
-
+        justifyContent: 'center',
 
 
     },
@@ -269,13 +248,12 @@ const styles = StyleSheet.create({
 
         width: 50,
         height: 50,
-        left:3,
-        alignSelf:'center',
+        left: 3,
+        alignSelf: 'center',
 
         borderRadius: 7,
         marginLeft: 0,
         resizeMode: 'contain',
-
 
 
     },
@@ -288,8 +266,6 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         marginLeft: 0,
         resizeMode: 'contain',
-
-
 
 
     },
@@ -312,12 +288,11 @@ const styles = StyleSheet.create({
 
         width: 30,
         height: 30,
-        marginLeft:4,
-        marginBottom:4,
+        marginLeft: 4,
+        marginBottom: 4,
 
 
         resizeMode: 'contain',
-
 
 
     },
@@ -325,12 +300,10 @@ const styles = StyleSheet.create({
 
         width: 40,
         height: 40,
-        marginTop:20,
-        marginBottom:10,
-       // backgroundColor:'#E8F6FF',
-        alignSelf:'center',
-
-
+        marginTop: 20,
+        marginBottom: 10,
+        // backgroundColor:'#E8F6FF',
+        alignSelf: 'center',
 
 
         resizeMode: 'contain',
@@ -345,13 +318,11 @@ const styles = StyleSheet.create({
         height: 82,
 
 
-        marginLeft:10,
-        marginBottom:'0.47%',
-
+        marginLeft: 10,
+        marginBottom: '0.47%',
 
 
         borderRadius: 400 / 2,
-
 
 
     },
@@ -359,15 +330,13 @@ const styles = StyleSheet.create({
 
         width: 45,
         height: 45,
-        marginRight:'2%',
-        marginLeft:'2%',
-        marginTop:'2%',
-        marginBottom:'2%',
-
+        marginRight: '2%',
+        marginLeft: '2%',
+        marginTop: '2%',
+        marginBottom: '2%',
 
 
         borderRadius: 400 / 2,
-
 
 
     },
@@ -378,13 +347,11 @@ const styles = StyleSheet.create({
 
 
         resizeMode: 'contain',
-        position:'absolute',
-        marginTop:12,
-        marginLeft:4,
+        position: 'absolute',
+        marginTop: 12,
+        marginLeft: 4,
 
-        paddingTop:5,
-
-
+        paddingTop: 5,
 
 
     },
@@ -434,37 +401,30 @@ const styles = StyleSheet.create({
 
 
         margin: 1,
-        borderRadius:14,
-        alignItems:'center',
+        borderRadius: 14,
+        alignItems: 'center',
 
-        flex:2,
+        flex: 2,
 
 
         resizeMode: 'contain',
-
-
 
 
     },
 
     imageAttachRoom: {
 
-        width: '80%',
-        height:200,
-        borderWidth:2,
-        borderColor:'#1e4457',
 
-
-
-
-        borderRadius:14,
-        resizeMode: "contain",
-
-
-
+        height: 150,
+        width:200,
+        borderWidth: 1,
         flex:1,
-
-
+        flexDirection:'column',
+        borderColor: '#1e4457',
+        marginTop: '15%',
+        marginRight:'5%',
+        borderRadius: 14,
+        resizeMode: "contain",
 
 
 
@@ -478,11 +438,10 @@ const styles = StyleSheet.create({
 
         marginTop: 20,
         margin: 1,
-        alignItems:'center',
+        alignItems: 'center',
 
         resizeMode: 'contain',
         alignContent: 'stretch',
-
 
 
     },
@@ -494,24 +453,20 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 17,
         flex: 1,
-        fontWeight:'bold',
+        fontWeight: 'bold',
         paddingLeft: 90,
         alignSelf: 'center',
-        paddingBottom:7,
+        paddingBottom: 7,
 
 
     },
     symbols: {
 
         fontSize: 18,
-       flex:3,
+        flex: 3,
 
-        paddingLeft:'3%',
-        paddingRight:'3%',
-
-
-
-
+        paddingLeft: '3%',
+        paddingRight: '3%',
 
 
     },
@@ -519,12 +474,7 @@ const styles = StyleSheet.create({
     emoji: {
 
 
-
-
-
-
-        flex:1,
-
+        flex: 1,
 
 
     },
@@ -557,7 +507,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
 
 
-
     },
 
     persdif: {
@@ -569,54 +518,48 @@ const styles = StyleSheet.create({
     containerToolbar: {
 
 
-
-
         flexDirection: 'column',
         height: 50,
         width: "100%",
 
 
-        backgroundColor:'#3c3e5a',
+        backgroundColor: '#3c3e5a',
 
     },
 
     containerToolbarProfile: {
 
 
-
         flexDirection: 'column',
         height: 50,
         width: "100%",
 
 
-        backgroundColor:'#3c3e5a',
+        backgroundColor: '#3c3e5a',
 
     },
 
     containerToolbarProfile1: {
 
 
-
         flexDirection: 'column',
         height: 25,
         width: "100%",
 
 
-        backgroundColor:'#3c3e5a',
+        backgroundColor: '#3c3e5a',
 
     },
     containerToolbarRedactor1: {
 
 
-
         flexDirection: 'column',
         height: 25,
         width: "100%",
-        marginTop:22,
+        marginTop: 22,
 
 
-
-        backgroundColor:'#3c3e5a',
+        backgroundColor: '#3c3e5a',
 
     },
     containerToolbarProfile_down: {
@@ -624,7 +567,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         height: 25,
         width: "100%",
-        marginTop:372,
+        marginTop: 372,
 
 
         backgroundColor: '#06b3e9',
@@ -681,30 +624,28 @@ const styles = StyleSheet.create({
         margin: 10,
         color: '#2a68ff',
         padding: 10,
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
 
     nick: {
         fontSize: 20,
         textAlign: 'center',
 
-        backgroundColor:'#7cffb2',
-        fontWeight:'bold',
+        backgroundColor: '#7cffb2',
+        fontWeight: 'bold',
 
         color: '#121212',
 
     },
 
     TextInput_Redactor: {
-        marginTop:15,
+        marginTop: 15,
         borderRadius: 6,
         borderWidth: 1,
         borderColor: 'gray',
         width: '100%',
-        backgroundColor:'rgba(184,205,238,0.47)'
+        backgroundColor: 'rgba(184,205,238,0.47)'
     },
-
-
 
 
 });

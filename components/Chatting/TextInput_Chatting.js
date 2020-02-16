@@ -1,13 +1,9 @@
 import {
 
-
     TextInput,
     Dimensions,
     TouchableOpacity,
     View,
-
-
-
 } from "react-native";
 
 import React from "react";
@@ -26,10 +22,13 @@ export class TextInput_Chatting extends React.Component {
         return <View style={{
 
             flexDirection: 'row',
-            height:height*0.135,
+
+
+            height: height * 0.135,
+
             justifyContent: 'space-between',
-            paddingHorizontal: width*0.05,
-            backgroundColor:this.props.key_color,
+            paddingHorizontal: width * 0.05,
+            backgroundColor: this.props.key_color,
         }}>
 
             <TouchableOpacity
@@ -46,13 +45,12 @@ export class TextInput_Chatting extends React.Component {
                 style={{
 
 
-
                     backgroundColor: this.props.key_color,
                 }}>
 
                 <FastImage
                     style={{
-                        marginTop:height*0.02,
+                        marginTop: height * 0.02,
                         width: width * 0.06,
                         height: height * 0.06,
 
@@ -70,7 +68,7 @@ export class TextInput_Chatting extends React.Component {
                     backgroundColor: this.props.key_color,
                     fontSize: 16,
                     height: height * 0.1,
-                    color: "#169dd2",
+                    color: "#000000",
                     width: width * 0.62,
 
 
@@ -81,8 +79,8 @@ export class TextInput_Chatting extends React.Component {
                 placeholder='Сообщение'
                 autoCorrect={true}
                 multiline={true}
-                ref={(input)=> this.secondTextInput = input}
-                onChangeText={(text) => this.props.add_text(text) }
+                ref={(input) => this.secondTextInput = input}
+                onChangeText={(text) => this.props.add_text(text)}
                 value={this.props.text}
                 maxLength={120}
                 selectionColor='#169dd2'
@@ -93,7 +91,6 @@ export class TextInput_Chatting extends React.Component {
             <TouchableOpacity
                 onLongPress={this.props.send_audio_screen}
                 onPress={this.props.send_msg}
-
 
 
                 style={{
@@ -109,7 +106,7 @@ export class TextInput_Chatting extends React.Component {
             >
 
                 <FastImage
-                    style={{height: height * 0.06,  width: width * 0.06,marginTop:height*0.02}}
+                    style={{height: height * 0.06, width: width * 0.06, marginTop: height * 0.02}}
                     source={require('../Image/send_button.webp')}
                     resizeMode={FastImage.resizeMode.contain}/>
             </TouchableOpacity>

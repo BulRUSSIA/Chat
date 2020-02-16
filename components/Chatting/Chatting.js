@@ -5,29 +5,21 @@ import {
     BackHandler,
     ImageBackground,
     Alert,
-    Keyboard, ActivityIndicator, Text, Dimensions, AsyncStorage, KeyboardAvoidingView
+    ActivityIndicator, Text, Dimensions, AsyncStorage
 } from 'react-native';
 import menu_moderator from '../const/menu_moderator'
 import list_moder from '../const/list_moder'
 import list_user from '../const/list_user'
 import menusmiles from '../const/smiles'
 import menuitem from '../const/menu'
-import {Pattern_message1} from "./pattern_message1";
 import {Toolbar_Chatting} from "./Toolbar_Chatting";
 import Flatlist_Chatting_Messaging from "./Flatlist_Chatting_Messaging";
 import {Modal_Chatting_ListUsers_Flatlist} from "./Modal_Chatting_ListUsers_Flatlist";
 import {Modal_Chatting_Action_Flatlist} from "./Modal_Chatting_Action_Flatlist";
-import {TextInput_Chatting} from "./TextInput_Chatting";
 import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
 import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import fetch_users_in_room from "../../actions/fetch_users_in_room";
 import request_DELETE_USER_ROOM from "../../actions/fetch_delete_user";
-import request_SEND_MESSAGES from "../../actions/fetch_send_message";
-import {Pattern_message2} from "./pattern_message2";
-import {Pattern_message3} from "./pattern_message3";
-import {Pattern_message4} from "./pattern_message4";
-import {Pattern_message5} from "./pattern_message5";
-import {Pattern_message6} from "./pattern_message6";
 import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_moderator";
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
@@ -35,9 +27,8 @@ import {Attachments_preview} from "./Attachments_preview";
 import {TYPE_MODERATOR, TYPE_ADMIN} from "../const/const type_user_chats";
 import FastImage from "react-native-fast-image";
 import request_GET_NOTICE from "../../actions/fetch_get_notice";
-import NavigationApp from "./NavigationSmiles";
 import firebase from "react-native-firebase";
-import type {Notification, NotificationOpen} from 'react-native-firebase';
+import type {Notification, NotificationOpen } from 'react-native-firebase';
 import AudioExample from "./AudioRecorder";
 import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
@@ -59,49 +50,24 @@ export default class Chatting extends React.Component {
             users: [],
             item_menu: menuitem,
             item_smiles: menusmiles,
-            text: '',
             action_nick: list_user,
             user_now: '',
             type_user: null,
             isVisible: false,
             isVisibleList: false,
-            // showAlert: false,
             animating: false,
             photo_attachments: false,
-            attachments: [], // Not для ba ck-a
+            attachments: [],
             modal_indicator: false,
             room_now: this.props.room,
             user_id: '',
-            ShowSmiles: false,
             new_pm: false,
-            size_av: 18,
-            size_msg: 25,
             background_image: 'default_background',
-            editable: true,
             name_attachments: '',
             audio_preview: false,
-            update_msg_bool: true,
-            extra_data_bool: false,
-            data: {
-                "_id": {"$oid": "5e1eb2cf0a975a5421793e21"},
-                "message": 'Загружаю сообщения...',
-                "type": 1,
-                "place": this.props.room,
-                "system": false,
-                "createdAt": {"$date": new Date()},
-                "user_id": this.props.nic,
-                "user": this.props.chat_name,
-                "key": "5e1eb2cf0a975a5421793e21",
-                "_class": "#c60915",
-                "readed": true,
-                "user_type": 1,
-                "attachments": [],
-                "avatars": false,
-                "hideNic": false
-            }
-
-        };
-
+            nic_color:this.props.nic_color,
+            nic_avatar:this.props.nic_avatar,
+        }
 
     }
 
@@ -109,14 +75,8 @@ export default class Chatting extends React.Component {
         try {
 
 
-            const size_av = await AsyncStorage.getItem('size_avatar');
-            const size_msg = await AsyncStorage.getItem('size_message');
             const background_image = await AsyncStorage.getItem('background_fon');
-
-            // We have data!!
             this.setState({
-                size_av: Number(size_av),
-                size_msg: Number(size_msg),
                 background_image: background_image,
             });
 
@@ -126,23 +86,6 @@ export default class Chatting extends React.Component {
         }
     };
 
-
-    add_text = async (text) => { // add text to textinput
-
-
-        await this.setState({text: text});
-
-
-    };
-
-    change_pm = async () => {
-        this.setState({new_pm: !this.state.new_pm})
-
-    };
-
-    add_emoji = (emoji) => {              //add emoji to text
-        this.setState({text: this.state.text + emoji});
-    };
 
 
     Change_Visible_List = async () => {
@@ -225,7 +168,7 @@ export default class Chatting extends React.Component {
 
                 break;
             case 'Ответить':
-                this.setState({isVisible: !this.state.isVisible, text: this.state.user_now + ', '});
+                this.setState({isVisible: !this.state.isVisible});
                 break;
 
             case 'Написать Личное':
@@ -472,11 +415,11 @@ export default class Chatting extends React.Component {
         const options = {
             noData: true,
         };
-        ImagePicker.launchImageLibrary(options, response => {
+        ImagePicker.launchImageLibrary(options, async response  => {
             if (response.uri) {
                 this.setState({photo_attachments: response});
                 Alert.alert("фото успешно загружено!", "\nЖмите кнопку отправить");
-
+                await this.send_photo();
                 this.componentWillUnmount();
 
 
@@ -484,36 +427,27 @@ export default class Chatting extends React.Component {
 
 
         });
+
         await this.componentDidMount()
 
     };
 
-    close_attach = () => {        //закрыть превью attachmentsa
+    close_attach = () => {        //закрыть превью  attachmentsa
 
         this.setState({photo_attachments: false,})
 
     };
 
 
-    ShowSmiles = async () => { // логика отображения смайлов true/1 false1
-
-
-        await this.setState({
-
-
-            ShowSmiles: !this.state.ShowSmiles,
-            editable: !this.state.editable
-        });
-
-    };
 
 
     send_photo = async () => {  //отправляем фото в mongoDb
         this.setState({modal_indicator: true});
         const attach = await SEND_PHOTO_request(this.state.photo_attachments);
-        console.log(this.state.photo_attachments);
+        console.log(this.state.attachments);
         this.setState({attachments: attach[0]});
         this.setState({modal_indicator: false});
+
 
 
     };
@@ -548,37 +482,7 @@ export default class Chatting extends React.Component {
 
     };
 
-    send_msg = async () => {
 
-        if (this.state.photo_attachments) {
-
-            await Keyboard.dismiss();
-            await this.send_photo();
-            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.props.room, this.state.attachments, 1);
-            await this.setState({
-                text: '', attachments: [], photo_attachments: false
-            });
-
-
-        } else {
-
-            await Keyboard.dismiss();
-
-            const res = await request_SEND_MESSAGES(this.props.nic, this.state.text, this.props.room, this.state.attachments, 1);
-
-            let validate_send = res['send'];
-            if (!validate_send) {
-
-                Alert.alert('Ошибка', 'Невозможно отправить сообщение')
-
-            }
-
-            this.setState({
-                text: '', attachments: []
-            });
-
-        }
-    };
 
     Show_notice = async () => {
 
@@ -607,149 +511,12 @@ export default class Chatting extends React.Component {
     };
 
 
-    _renderItem = ({item}) => { //render листа с чат сообще ниями
-        let name = item.message.startsWith(this.props.chat_name + ','); //если начало сообщения начинается с вашего ника(для проверки)
-        let name_notice = item.message.startsWith('Пользователь ' + this.props.chat_name); //если начало сообщения начинается с вашего ника(для проверки нотайс)
-        let server = item.user; //имя пользователя
-        let attch = item.attachments;//аттач-
-        let attch_name = item.name_attachments;
-        let _class = item._class;//цвет ника и сообщения0!
-        let avatars = item.avatars;//аватарка
-        let message = item.message; //сообшение
-        let user_id = item.user_id; //id пользователя
-        let system = item.system;
-
-
-        if (name) {
-
-
-            return (
-                <Pattern_message1
-
-                    Action_Nick={this.Action_Nick}
-                    user={server}
-                    _class={_class}
-                    avatars={avatars}
-                    message={message}
-                    size_msg={this.state.size_msg}
-                    size_av={this.state.size_av}
-                    user_id={user_id}
-                />
-            )
-
-        } else if (name_notice && system) {
-
-            (async () => {
-                try {
-
-                    await this.Show_notice()
-                } catch (err) {
-                    console.log(err);
-                }
-            })();
-
-
-        } else if (system) {
-
-            return (
-                <Pattern_message2
-
-                    Action_Nick={this.Action_Nick}
-                    user={server}
-                    message={message}
-                    size_msg={this.state.size_msg}
-
-
-                />
-            )
-
-        } else if (attch.length > 5) {
-            return (
-                <Pattern_message3
-
-                    size_msg={this.state.size_msg}
-                    size_av={this.state.size_av}
-                    _class={_class}
-                    avatars={avatars}
-                    message={message}
-                    attachments={attch}
-                    name={attch_name}
-                    view_attach={this.View_full_photo}
-                    listening_sound={this.listening_sound}
-                    user={server}
-                />
-            )
-
-        } else if (item.hideNic) {
-            return (
-
-                <Pattern_message4
-
-                    Action_Nick={this.Action_Nick}
-                    user={server}
-                    _class={_class}
-                    message={message}
-                    size_msg={this.state.size_msg}
-
-
-                />
-
-
-            )
-
-        } else if (!item.avatars) {
-
-
-            return (
-
-
-                <Pattern_message5
-                    user_id={user_id}
-                    Action_Nick={this.Action_Nick}
-                    user={server}
-                    _class={_class}
-                    message={message}
-                    size_msg={this.state.size_msg}
-
-
-                />
-
-
-            )
-
-        } else {
-
-            return (
-
-
-                <Pattern_message6
-                    user_id={user_id}
-                    Action_Nick={this.Action_Nick}
-                    user={server}
-                    _class={_class}
-                    avatars={avatars}
-                    message={message}
-                    size_msg={this.state.size_msg}
-                    size_av={this.state.size_av}
-
-
-                />
-
-
-            )
-
-
-        }
-
-
-    };
     audio_screen = async () => {
 
         this.setState({audio_preview: !this.state.audio_preview, attachments: []})
     };
 
     render() {
-        const Smiles = this.state.ShowSmiles;
         const new_pm = this.state.new_pm;
         const indicator = this.state.modal_indicator;
         const attachments = this.state.photo_attachments;
@@ -803,25 +570,23 @@ export default class Chatting extends React.Component {
                         size='large'
                         animating={this.state.modal_indicator}/>}
 
-                    <KeyboardAvoidingView
-                        behavior='padding'
 
 
-                        style={{flex: 1}}>
 
 
                         <Flatlist_Chatting_Messaging
-                            render={this._renderItem}
+
                             nic={this.props.nic}
                             room_now={this.state.room_now}
-                            Del_user_change={this.Del_user_change}
-                            showLoading={this.state.update_msg_bool}
-                            unmount_comp={this.componentWillUnmount}
-                            onActionSelected={this.onActionSelected}
-                            change_pm_state={this.change_pm}
-                            user={this.props.chat_name}
-                            obj_msg={this.state.data}
-                            // extra={this.state.extra_data_bool}
+                            add_text={this.add_text}
+                            actions_profile={this.Action_Nick}
+                            chat_name={this.props.chat_name}
+                            avatar={this.state.nic_avatar}
+                            color={this.state.nic_color}
+                            send_audio_screen={this.audio_screen}
+                            attachments_url={this.state.attachments}
+                            View_full_photo={this.View_full_photo}
+
 
                         />
 
@@ -842,40 +607,6 @@ export default class Chatting extends React.Component {
 
                             />
                         </View>
-                        <TextInput_Chatting
-                            key_color='#FFFFFF'
-                            show={this.ShowSmiles}
-                            send_msg={this.send_msg}
-                            text={this.state.text}
-                            active={this.state.ShowSmiles}
-                            editable_key={this.state.editable}
-                            add_text={this.add_text}
-                            send_audio_screen={this.audio_screen}
-
-
-                        />
-
-                        {Smiles &&
-
-
-                        <View style={{
-                            width: width, height: height * 0.35,
-
-                            backgroundColor: '#6d6d6d',
-                        }}>
-                            <NavigationApp
-                                screenProps={{
-                                    add_emoji: this.add_emoji
-
-                                }}
-
-
-                            />
-                        </View>
-
-                        }
-                    </KeyboardAvoidingView>
-
 
                     {
                         attachments_audio &&

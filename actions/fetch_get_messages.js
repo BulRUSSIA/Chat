@@ -13,13 +13,14 @@ async function request_GET_MESSAGES(user_id,room) {
         let userdate = JSON.parse(JSON.stringify(responseJsonData));
 
 
-        if (userdate.length>=1) {
-            return userdate;
+        if (userdate['get'] === 'banned') {
+
+            return false
         }
 
 
 
-        return false
+        return userdate
     } catch (e) {
         console.log(e)
     }

@@ -35,12 +35,15 @@ const AppNavigator = createMaterialTopTabNavigator(
         }),
         tabBarOptions: {
             indicatorStyle:{
-                color:'white'
+                color:'white',
+
 
 
             },
             tabStyle: {
                 height: 30,
+
+
             },
             labelStyle: {
                 fontSize: 0,
@@ -50,7 +53,8 @@ const AppNavigator = createMaterialTopTabNavigator(
             showIcon: true,
 
             style: {
-                backgroundColor:'#2f2f2f'
+                backgroundColor:'#2f2f2f',
+
             }
         },
 
