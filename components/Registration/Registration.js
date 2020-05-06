@@ -9,7 +9,7 @@ import {
 import React from "react";
 import colors from "../const/colors";
 import menusmiles from '../const/colors_id'
-import {address} from "../ChatPortal/config_connect";
+import {address} from "../../config_connect";
 import {Button, Header, Left,Body,Title,Right} from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 

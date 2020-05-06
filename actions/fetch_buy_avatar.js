@@ -1,4 +1,4 @@
-import {address} from "../components/ChatPortal/config_connect";
+import {address} from "../config_connect";
 
 async function request_BUY_AVATAR(user_id,price,avatar_id)  {
 

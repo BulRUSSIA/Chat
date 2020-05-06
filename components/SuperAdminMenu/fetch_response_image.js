@@ -1,4 +1,4 @@
-import {address} from '../ChatPortal/config_connect'
+import {address} from '../../config_connect'
 
 async function  createFormData(creator,name,price,photo) {
     const data = new FormData();

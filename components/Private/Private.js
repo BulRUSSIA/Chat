@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import FastImage from "react-native-fast-image";
-import {address, address_attach} from "../ChatPortal/config_connect";
+import {address, address_attach} from "../../config_connect";
 import emoticons from "../const/EmojiObject";
 import styles from "../../styles";
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview'

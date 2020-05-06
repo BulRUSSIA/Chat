@@ -1,4 +1,4 @@
-import {address} from "../components/ChatPortal/config_connect";
+import {address} from "../config_connect";
 
 function request_DELETE_GIFT(gift)  {
 

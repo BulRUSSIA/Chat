@@ -1,4 +1,4 @@
-import {address} from '../ChatPortal/config_connect'
+import {address} from '../../config_connect'
 
 async function request_EDIT_AVATAR(creator,name,price,avatar_id)  {
 

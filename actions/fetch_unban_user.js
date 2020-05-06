@@ -1,4 +1,4 @@
-import {address} from "../components/ChatPortal/config_connect";
+import {address} from "../config_connect";
 
 async function request_UNBAN_USER(user_id,banner_id,name_admin,id_document)  {
 

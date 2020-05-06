@@ -1,4 +1,4 @@
-import {address} from "../components/ChatPortal/config_connect";
+import {address} from "../config_connect";
 
 async function request_SEND_BANNED_ACTION(hour,user_id,moder_id)  {
      console.log('bannned now');

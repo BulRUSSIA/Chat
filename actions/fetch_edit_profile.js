@@ -1,4 +1,4 @@
-import {address} from "../components/ChatPortal/config_connect";
+import {address} from "../config_connect";
 
 
 async function request_EDIT_PROFILE(user_id,bday,firstName,lastName,city,email,sex,color,about)  {

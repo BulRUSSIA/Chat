@@ -1,4 +1,4 @@
-import {address} from './config_connect'
+import {address} from '../../config_connect'
 
 async function request_START_LINE(message)  {
 
