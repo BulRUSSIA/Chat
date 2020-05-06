@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 import {Alert} from "react-native";
 
 async function request_SEND_MESSAGES(nic,msg,place,attachments,type)  {

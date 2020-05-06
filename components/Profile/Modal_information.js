@@ -1,176 +1,171 @@
 import {
-
-
     Text,
-
-    View,
-    Modal, TouchableOpacity, TouchableWithoutFeedback,Dimensions
+    View,Dimensions
 
 } from "react-native";
-
 import React from "react";
-
-import styles from "../../styles";
-import {OptimizedFlatList} from "react-native-optimized-flatlist";
-const {width,height} = Dimensions.get('window');
-
+let winSize = Dimensions.get('window');
 export class Modal_information extends React.Component {
-    parsedText = (sex, firstName, lastName, about, city, bday, ) => {
 
-        let array = [];
-        try {
-            if (sex.length >= 1) {
+    get_zags_name = () =>{
+        let zags = this.props.zagsName;
+        console.log('zags:',zags);
 
-                array.push('Пол:' + sex)
+        if ((zags!==null)) {
 
-            }
-        }
-        catch (e) {
-            array.push('Пол:Неопределен')
+            return ( <View >
+                <Text style={{
+                    color: '#010101', fontWeight: '400',
+                    fontSize: 40/winSize.scale,
+                    fontFamily: 'sans-serif-light'
+                }}>БРАК:
 
-        }
+                <Text style={{color:this.props.colorzags,fontWeight:'bold',  fontSize: 40/winSize.scale,}}>{zags}</Text>
+                </Text>
+            </View>)
 
-        if (firstName.length>=1){
-            array.push('Имя:'+ firstName)
-
-
-        }
-
-        if (lastName.length>=1){
-
-            array.push('Фамилия:'+ lastName)
-
-        }
-
-        if(about.length>=1){
-
-            array.push('Информация о себе:'+ about)
 
 
         }
-
-        if(city.length>=1) {
-
-
-            array.push('Город:'+city)
-
-        }
-        try {
-            if(bday.length>=1){
-
-                array.push('Дата Рождения:' + bday)
-
-
-            }
-
-        }
-
-        catch (e) {
-
-            array.push('Дата Рождения:2200');
- console.log(e)
-        }
-
-
-
-
-
-        return array.map((elem,index) => {
-            if (!elem) return null;
-
-                return (
-                    <View >
-
-                        <Text
-
-                            key={index.toString()}
-                            style={{
-                            fontSize: 16, color: 'rgba(0,0,0,0.91)', marginTop: 5,
-
-                        }}>
-                            {elem + '\n'}
-                        </Text>
-                    </View>
-
-
-                );
-
-
-        });
-
-
-    };
+}
 
 
     render() {
 
 
-        return (<View style={{flex:1}}>
-                <Modal
+        return (<View style={{flex: 1,}}>
 
-                    transparent={true}
-                    visible={this.props.visible}
-                    onRequestClose={this.props.visible_action}
-                >
-                    <TouchableOpacity
-                        style={styles.modalbackground_info}
-                        activeOpacity={1}
-                        onPressOut={this.props.visible_action}
-                    >
-                        <TouchableWithoutFeedback>
+                {this.props.user_info.map(function (item) {
 
-                            <View style={{
-                                backgroundColor:'#ffffff',
+                    return (<View style={{flexDirection: 'column'}}>
 
-                                width:width,
-                                height:height/4.5}}>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+                                ИМЯ:
+                            </Text>
+
+                            {item.firstName}
+
+                        </Text>
+
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                ФАМИЛИЯ:
+                            </Text>
+                            {item.lastName}</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                ПОЛ:
+                            </Text>
+
+                            {item.sex}</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                ДЕНЬ РОЖДЕНИЯ:
+                            </Text>
 
 
-                    <OptimizedFlatList
+                            {item.bday}</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
 
-                        data={this.props.user_info}
-                        extraData={this.props}
+                                ГОРОД:
+                            </Text>
+
+                            {item.city}</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                О СЕБЕ:
+                            </Text>
+
+                            {item.about}</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                РЕЙТИНГ:
+                            </Text>
+
+                            0</Text>
+                        <Text style={{
+                            color: '#3862c0', fontWeight: '400',
+                            fontSize: 40/winSize.scale,
+                            fontFamily: 'sans-serif-light',
+                        }}>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40/winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>
+
+                                АНТИРЕЙТИНГ:
+                            </Text>
+
+                            0</Text>
 
 
-                        renderItem={(({item}) =>
-
-
-                                //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-
-
-                                <View style={{
-
-                                    marginLeft: 2,
-                                    marginRight: 1,
-                                    marginBottom: 5,
-                                    backgroundColor:'#ffffff'
-
-
-                                }}>
-
-
-
-                                    {this.parsedText(item.sex, item.firstName, item.lastName, item.about, item.city, item.bday)}
-                                    </View>
-
-
-
-
-
-
-
-                        )
-                        }
-
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-
-
-                            </View>
-
-                        </TouchableWithoutFeedback>
-                    </TouchableOpacity>
-                </Modal>
+                    </View>)
+                })}
+            {this.get_zags_name()}
             </View>
 
 
@@ -178,88 +173,3 @@ export class Modal_information extends React.Component {
 
     }
 }
-//render() {
-//
-//
-//     return (<View>
-//             <Modal
-//
-//                 transparent={true}
-//                 visible={this.props.isVisible}
-//                 onRequestClose={this.props.visible}
-//             >
-//                 <TouchableOpacity
-//                     style={styles.modalbackground}
-//                     activeOpacity={1}
-//                     onPressOut={this.props.visible}
-//                 >
-//
-//                     <TouchableWithoutFeedback>
-//
-//                         <View style={{
-//                             flex: 1,
-//                             flexDirection: 'column',
-//                             justifyContent: 'center',
-//                             alignItems: 'center'}}>
-//                             <View style={{
-//
-//                                 width:200,
-//                                 height:'48%'}}>
-//
-//                                 <ImageBackground source={require('../Image/action_backgroud.webp')}
-//                                                  style={{position:'absolute',top:0,bottom:0,left:0,right:0}}>
-//                                     <Text style={styles.nick}>
-//                                         {this.props.user_now}
-//                                     </Text>
-//                                     <FlatList
-//
-//
-//                                         data={this.props.action_nick}
-//                                         extraData={this.props}
-//
-//
-//                                         ItemSeparatorComponent={this.renderSeparator}
-//                                         renderItem={(({item}) =>
-//
-//                                                 <TouchableOpacity onPress={() => this.props.action_selected(item)}>
-//                                                     <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
-//
-//
-//                                                         <View style={{
-//                                                             flex: 1, flexDirection: 'row', flexWrap: 'wrap',
-//                                                         }}>
-//
-//
-//                                                             <Text style={styles.action_profile}>
-//                                                                 {item}
-//                                                             </Text>
-//                                                         </View>
-//
-//
-//                                                     </View>
-//                                                 </TouchableOpacity>
-//                                         )
-//                                         }
-//
-//
-//                                         keyExtractor={(item, index) => index.toString()}
-//
-//                                     />
-//                                     <Text style={styles.nick}>
-//
-//                                     </Text>
-//                                 </ImageBackground>
-//                             </View>
-//                         </View>
-//
-//                     </TouchableWithoutFeedback>
-//
-//                 </TouchableOpacity>
-//             </Modal>
-//         </View>
-//
-//
-//     )
-//
-// }
-// }

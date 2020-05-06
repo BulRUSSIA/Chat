@@ -6,13 +6,11 @@ import {
     Text,
 
 } from "native-base";
-import { View,  TouchableOpacity} from "react-native";
+import {View, TouchableOpacity} from "react-native";
 import React from "react";
 import FastImage from "react-native-fast-image";
 
 export default class CardsService extends React.Component {
-
-
 
 
     render() {
@@ -21,10 +19,10 @@ export default class CardsService extends React.Component {
         return (
 
             <CardItem cardBody
-                      style={{marginTop: '0.1%',backgroundColor: 'rgba(46,48,68,0)'}}>
+                      style={{marginTop: '0.1%', backgroundColor: 'rgba(46,48,68,0)'}}>
 
                 <View
-                                 style={{height: 250, width: null, flex: 1}}>
+                    style={{height: 250, width: null, flex: 1}}>
 
                     <Body style={{alignItems: 'center', backgroundColor: 'rgba(46,93,133,0.37)'}}>
                         <Text style={{color: '#ff0112', fontWeight: 'bold'}}>Сервисы</Text>
@@ -34,31 +32,35 @@ export default class CardsService extends React.Component {
 
                     <Container style={{backgroundColor: 'rgba(46,48,68,0)', flex: 7}}>
 
-<View style={{flex:1,flexDirection:'row'}}>
-    <FastImage source={{uri:'avatar'}}
-                     style={{height: 40, width: 40}}/>
-    <TouchableOpacity onPress={this.props.GetAvatarList}>
-                    <Text style={{fontWeight:'bold',fontSize:22,color:'#010101'}}>
-                        {'\t'}   Купить аватар
-                    </Text>
-    </TouchableOpacity>
-</View>
-
-                        <View style={{flex:1,flexDirection:'row'}}>
-                            <FastImage source={{uri:'avtoritet'}}
-
-                                   style={{height: 38, width: 38}}/>
-                        <Text style={{fontWeight:'bold',fontSize:22,color:'#010101'}}>
-                            {'\t\t\t'} Купить авторитет
-                        </Text >
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            <FastImage source={{uri: 'people_private'}}
+                                       style={{height: 40, width: 40}}/>
+                            <TouchableOpacity onPress={this.props.GetAvatarList}>
+                                <Text style={{fontWeight: 'bold', fontSize: 22, color: '#010101'}}>
+                                    {'\t'} Купить аватар
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-                        <View style={{flex:1,flexDirection:'row'}}>
-                            <FastImage source={{uri:'newpm'}}
-                                   style={{height: 40, width: 40}}/>
-                        <Text style={{fontWeight:'bold',fontSize:22,color:'#010101'}}>
-                            {'\t'}    Заказать бегущую строку
-                        </Text>
+
+                        <View style={{flex: 1, flexDirection: 'row'}}>
+                            <FastImage source={{uri: 'avtoritet'}}
+
+                                       style={{height: 38, width: 38}}/>
+                            <Text style={{fontWeight: 'bold', fontSize: 22, color: '#010101'}}>
+                                {'\t\t\t'} Купить авторитет
+                            </Text>
                         </View>
+                        <TouchableOpacity onPress={this.props.select_modal_run_line}>
+
+                            <View style={{flex: 0, flexDirection: 'row'}}>
+                                <FastImage source={{uri: 'newpm'}}
+                                           style={{height: 40, width: 40}}/>
+                                <Text style={{fontWeight: 'bold', fontSize: 22, color: '#010101'}}>
+                                    {'\t'} Заказать бегущую строку
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+
                     </Container>
                 </View>
 

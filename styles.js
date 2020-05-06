@@ -1,5 +1,5 @@
-import {StyleSheet} from "react-native";
-
+import {StyleSheet,Dimensions} from "react-native";
+let winSize = Dimensions.get('window');
 const styles = StyleSheet.create({
 
 
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         flex: 2,
 
 
-        backgroundColor: 'rgba(0,0,0,0.45)',
+
 
 
     },
@@ -151,12 +151,9 @@ const styles = StyleSheet.create({
     },
 
     Profile_List_text: {
-        color: '#3b84d7',
+        color: '#000000',
         textAlign: 'center',
-        marginTop: '5%',
-        marginLeft: '5%',
-
-        fontSize: 15,
+        fontSize: 35/winSize.scale,
 
 
     },
@@ -206,13 +203,13 @@ const styles = StyleSheet.create({
 
     },
     action_profile: {
-        fontSize: 20,
+        fontSize: 40/winSize.scale,
         flex: 1,
-        color: '#000000',
-        marginTop: '5%',
-        marginLeft: '5%',
+        color: '#2b49d0',
+        textAlign:'center',
+        marginTop:15/winSize.scale,
 
-        justifyContent: 'center',
+
 
 
     },
@@ -223,8 +220,7 @@ const styles = StyleSheet.create({
     },
 
     prices1: {
-        fontSize: 50,
-        flex: 1,
+        fontSize: 25,
         color: 'transparent',
         marginLeft: 0,
         padding: 1
@@ -246,13 +242,9 @@ const styles = StyleSheet.create({
     },
     imageViewProfile_icon: {
 
-        width: 50,
-        height: 50,
-        left: 3,
-        alignSelf: 'center',
-
-        borderRadius: 7,
-        marginLeft: 0,
+        width: 20,
+        height: 20,
+        alignItems:'center',
         resizeMode: 'contain',
 
 
@@ -314,12 +306,12 @@ const styles = StyleSheet.create({
 
     imageAvatarProfile: {
 
-        width: 82,
-        height: 82,
+        width: 40,
+        height: 40,
 
 
         marginLeft: 10,
-        marginBottom: '0.47%',
+        marginRight:10,
 
 
         borderRadius: 400 / 2,

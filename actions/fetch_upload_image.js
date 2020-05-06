@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 
 
@@ -8,8 +8,6 @@ async function  createFormData(photo) {
     data.append("photo", {
 
         name: photo.fileName,
-
-
         type: photo.type,
         uri:
             Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
@@ -21,10 +19,7 @@ async function  createFormData(photo) {
 async function SEND_PHOTO_request(photo) {
    const a =  await fetch(address + `/uploads`, {
         headers: {
-
             'Content-Type': 'multipart/form-data',
-
-
         },
         method: "POST",
 

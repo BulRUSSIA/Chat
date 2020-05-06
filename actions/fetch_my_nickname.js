@@ -1,5 +1,5 @@
 import {Alert} from "react-native";
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 async function request_MY_NICKNAME(nick)  {
 

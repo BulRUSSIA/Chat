@@ -9,8 +9,8 @@ import {
 import React from "react";
 import colors from "../const/colors";
 import menusmiles from '../const/colors_id'
-import {address} from "../../config_connect";
-import {Button, Header, Left} from "native-base";
+import {address} from "../ChatPortal/config_connect";
+import {Button, Header, Left,Body,Title,Right} from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default class Registration extends React.Component {
@@ -133,40 +133,59 @@ export default class Registration extends React.Component {
 
 
         return <SafeAreaView style={styles.container}>
-            <Header style={{backgroundColor: '#3c3e5a',}}
-                    androidStatusBarColor="#3c3e5a"
+            <Header        style={{backgroundColor: '#FFFFFF',}}
+                     androidStatusBarColor="#A9A9A9"
 
             >
                 <Left style={{flex: 1}}>
                     <Button transparent
 
                             onPress={this.get_login}>
-                        <Icon style={{color:'white'}}
+                        <Icon style={{color:'black'}}
                               size={25}
 
                               name="arrowleft"/>
                     </Button>
                 </Left>
+                <Body>
+                    <Title style={{color:'black'}}>
+                        Регистрация
+
+                    </Title>
+                </Body>
+                <Right/>
             </Header>
 
 
-            <ImageBackground source={{uri: 'default_background'}} style={{width: '100%', height: '100%'}}>
+            <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
 
 
             <View style={styles.logoContainer}>
-                <Text style={styles.labelText}>Регистрация</Text>
+                <Text style={{fontSize:14,textAlign:'center',marginBottom:10,color:'red'}}
+
+                >Для регистрации необходимо заполнить все поля.{'\n'}
+                Минимальная длина логина и ника - 3 cимвола{'\n'}
+                Максимальная длина логина и ника - 16 cимволов{'\n'}
+
+                </Text>
 
 
                 <View style={styles.logoContainer}>
+                    <Text style={{fontSize:18}}
+
+                    >Логин:</Text>
                     <TextInput style={styles.input}
-                               placeholder="Логин"
+
                                placeholderTextColor='#010101'
                                onChangeText={(username) => this.setState({username})}
                                value={this.state.username}
                                maxLength={16}
                     />
+                    <Text style={{fontSize:18}}
+
+                    >Пароль:</Text>
                     <TextInput style={styles.input}
-                               placeholder="Пароль"
+
                                placeholderTextColor='#010101'
                                returnKeyType='go'
                                secureTextEntry
@@ -176,9 +195,11 @@ export default class Registration extends React.Component {
                                maxLength={16}
 
                     />
+                    <Text style={{fontSize:18}}
 
+                    >Ник:</Text>
                     <TextInput style={styles.input}
-                               placeholder="Ник"
+
                                placeholderTextColor='#010101'
                                returnKeyType='go'
 
@@ -214,7 +235,7 @@ export default class Registration extends React.Component {
                         <TouchableOpacity style={styles.buttonText1} onPress={this.Registration} >
                             <Text style={styles.buttonContainer}>
 
-                                Зарегистрироваться</Text>
+                                ЗАРЕГИСТРИРОВАТЬСЯ</Text>
 
                         </TouchableOpacity>
 
@@ -239,7 +260,8 @@ export default class Registration extends React.Component {
 
                     <FlatList inverted
 
-
+                              maxRows={4}
+                              maxColumns={4}
                               data={this.state.sm}
                               extraData={this.state}
 
@@ -249,7 +271,13 @@ export default class Registration extends React.Component {
 
                                       //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
 
-                                      <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+                                      <View style={{   flex: 1,
+                                          flexDirection: 'column',
+                                          margin: 1,
+                                          bottom: 0,
+                                          top: 0,
+                                          right: 0,
+                                          left: 0}}>
 
 
                                           <TouchableOpacity onPress={(event)=>this.close_color(item.clr,item.rclr)}>
@@ -295,7 +323,6 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         alignItems: 'center',
-        justifyContent: 'center',
         flex: 1
     },
     logo: {
@@ -321,14 +348,14 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        width: 200,
-        backgroundColor: 'rgba(17,149,233,0.2)',
-        color: '#1195e9',
-        marginBottom: 20,
+        width: 270,
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        marginBottom: 6,
         paddingHorizontal: 10,
-        borderRadius :12,
-        borderWidth: 2,
-        borderColor: '#010101'
+
+        borderColor: '#707070',
+        borderWidth: 1,
     },
 
     color: {
@@ -342,15 +369,19 @@ const styles = StyleSheet.create({
 
     },
     buttonContainer: {
-        backgroundColor: '#177d7e',
-        paddingVertical: 8,
-        height: 40,
-        width: 200,
-        color: '#FFF',
         textAlign: 'center',
-        fontSize: 18,
+        color: '#000000',
+        fontSize: 15,
+        marginLeft: '4%',
+        marginRight: '4%',
+        borderWidth:0.1,
         paddingHorizontal: 10,
-        borderRadius:14
+        backgroundColor: '#ffffff',
+        marginTop:0.1,
+        borderRadius:0.5,
+        borderColor:'#010101',
+        paddingTop: 10,
+        paddingBottom: 10,
     },
     buttonText: {
         textAlign: 'center',

@@ -1,10 +1,9 @@
-import {FlatList, Image,  TouchableOpacity, View} from "react-native";
-
+import {FlatList, Image, TouchableOpacity, Dimensions,View} from "react-native";
+import moment from 'moment';
 import React from "react";
-import {Text} from "native-base";
-import styles from './styles'
-import FastImage from "react-native-fast-image";
-
+import {Text,Badge} from "native-base";
+const {width,height} = Dimensions.get('window');
+const WinSize = Dimensions.get('window');
 
 export class Private_List_flatlist extends React.Component {
 
@@ -21,22 +20,52 @@ export class Private_List_flatlist extends React.Component {
             }}
         />
     );
-    render() {
-
-        if (this.props.DataSource.length < 1) {
-
-            return (
-
-                <FastImage source={{uri: 'image_exist'}} style={{width:60,height:60,alignSelf:'center',marginTop:100
 
 
+    UnReadedorRead = (readed,last_msg)=>{
 
-                }}/>
+        if (!readed) {
+            return (<View style={{flex:1,marginTop:2}}>
+                    <Badge>
+                    <Text style={{
+                        color: '#FFFFFF',
+                        fontSize: 30/WinSize.scale,
+                      fontWeight:'bold',
+                        textAlign: 'center',
 
+                    }}>1</Text>
+                    </Badge>
+                <Text style={{  fontSize: 30/WinSize.scale,
+                flex: 1,
+                color: 'rgba(43,87,125,0.98)',
+                fontWeight:'bold',
+                marginTop: 25,
+                textAlign: 'left',}}>
+
+                {last_msg}
+
+
+            </Text>
+
+                </View>
             )
+        }
+
+        return (<Text style={{ fontSize: 14,
+            flex: 1,
+            color: 'rgba(55,121,169,0.98)',
+            marginTop: 25,
+            textAlign: 'left',}}>
+
+            {last_msg}
 
 
-        } else {
+        </Text>)
+
+    };
+
+
+    render() {
 
 
             return <FlatList
@@ -50,35 +79,45 @@ export class Private_List_flatlist extends React.Component {
 
 
                         <TouchableOpacity
-                            onPress={() => this.props.get_chat(item.Chat_id, item.Private_Chatters)}>
+                            onPress={() => this.props.get_chat(item.room_id, item.private_nick)}>
                             <View style={{
                                 flexDirection: 'row',
                                 flex: 1,
-                                backgroundColor: 'rgba(76,78,113,0)',
+                                height:152/WinSize.scale,
                                 marginTop: 5,
-                                borderRadius: 14
+
                             }}>
 
-                                <Image source={require('../Image/people_private.png')}
-                                       style={styles.imageView}/>
+                                <Image source={{uri:'newpm'}}
+                                       style={{  width: 125/WinSize.scale,
+                                           height: 125/WinSize.scale,
+                                           flex:0,
+                                           paddingBottom: 1,
+
+                                           borderRadius: 7,}}/>
 
 
-                                <Text style={styles.rooms}>
-                                    {item.Private_Chatters}
+                                <Text style={{fontSize: 35/WinSize.scale,
+                                    flex: 1,
+                                    color: 'rgba(1,1,1,0.98)',
+                                    marginTop: 2,
+                                    fontWeight: 'bold'}}>
+                                    {item.private_nick}
 
 
                                 </Text>
-                                <Text style={styles.time_msg}>
-
-                                    {item.last_data}
 
 
-                                </Text>
+                                    {this.UnReadedorRead(item.readed,item.last_msg)}
 
 
-                                <Text style={styles.time}>
+                                <Text style={{ fontSize: 20/WinSize.scale,
+                                    flex: 1,
+                                    color: 'rgba(216,17,34,0.98)',
+                                    marginRight: 2,
+                                    marginTop: 2}}>
 
-                                    {item.last_msg}
+                                    {moment(item.last_time).format('YYYY-MM-DD HH:mm:ss')}
 
 
                                 </Text>
@@ -96,5 +135,5 @@ export class Private_List_flatlist extends React.Component {
 
             />
         }
-    }
+
 }

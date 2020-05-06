@@ -4,7 +4,7 @@ import {
     Image,
     Text,
     View,
-
+    ImageBackground,
 
     Alert, TouchableOpacity, BackHandler
 } from 'react-native';
@@ -45,7 +45,7 @@ export default class View_stuff extends React.Component {
         await this.pushing();
         console.log(this.state.gifts_id);
         const delete_gift = await request_DELETE_GIFT(this.state.gifts_id);
-        Alert.alert('Подарок успешно удален!!!');
+        Alert.alert('Удаление','подарок успешно удален');
 
 
 
@@ -100,10 +100,11 @@ export default class View_stuff extends React.Component {
             >
 
 
-                <View style={{width: '100%', height: '100%',backgroundColor:'#ffffff'}}>
+                <ImageBackground source={{uri:'background_airwaychat'}} style={{width: '100%', height: '100%',backgroundColor:'#ffffff'}}>
 
 
-                 <HeaderBar
+                 <HeaderBar   style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                              androidStatusBarColor="#010101"
                  pushing={this.pushing}
                  />
 
@@ -125,7 +126,7 @@ export default class View_stuff extends React.Component {
                     }
 
 
-                </View>
+                </ImageBackground>
 
             </View>
         )

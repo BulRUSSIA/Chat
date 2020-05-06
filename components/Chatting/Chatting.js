@@ -17,16 +17,12 @@ import Flatlist_Chatting_Messaging from "./Flatlist_Chatting_Messaging";
 import {Modal_Chatting_ListUsers_Flatlist} from "./Modal_Chatting_ListUsers_Flatlist";
 import {Modal_Chatting_Action_Flatlist} from "./Modal_Chatting_Action_Flatlist";
 import request_GET_PRIVATE_ROOM from "../../actions/fetch_create_private";
-import request_GET_PROFILE from "../../actions/fetch_profile_info";
-import fetch_users_in_room from "../../actions/fetch_users_in_room";
-import request_DELETE_USER_ROOM from "../../actions/fetch_delete_user";
 import request_SEND_BANNED_ACTION from "../../actions/fetch_banned_action_moderator";
 import ImagePicker from "react-native-image-picker";
 import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import {Attachments_preview} from "./Attachments_preview";
 import {TYPE_MODERATOR, TYPE_ADMIN} from "../const/const type_user_chats";
 import FastImage from "react-native-fast-image";
-import request_GET_NOTICE from "../../actions/fetch_get_notice";
 import firebase from "react-native-firebase";
 import type {Notification, NotificationOpen } from 'react-native-firebase';
 import AudioExample from "./AudioRecorder";
@@ -34,6 +30,7 @@ import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
 import request_GET_MESSAGES from "../../actions/fetch_get_messages";
 import request_ADD_INVISIBLE from "../../actions/fetch_add_invisible";
 import Toast from "react-native-whc-toast";
+import fetch_users_in_room from "../../actions/fetch_users_in_room";
 
 
 const {width, height} = Dimensions.get('window');
@@ -167,9 +164,7 @@ export default class Chatting extends React.Component {
                 this.refs.toast.show('Невидимка установлена');
 
                 break;
-            case 'Ответить':
-                this.setState({isVisible: !this.state.isVisible});
-                break;
+
 
             case 'Написать Личное':
                 this.setState({isVisible: false});
@@ -184,7 +179,8 @@ export default class Chatting extends React.Component {
                     private_room: get_private,
                     private_chatter: this.state.user_now,
                     private_data: get_private_data,
-                }, {animation: 'right'});
+                    update_list_pm:this.handleBackButton, //для заглушки
+                }, {animation: 'right',duration:450});
 
                 break;
 
@@ -200,7 +196,7 @@ export default class Chatting extends React.Component {
                     user_id: this.state.user_id,
                     from_id: this.props.nic,
                     go_private: this.Action_nick_selected,
-                }, {animation: 'right'});
+                }, {animation: 'right',duration:450});
         }
 
 
@@ -216,30 +212,19 @@ export default class Chatting extends React.Component {
         this.notificationDisplayedListener();
         this.notificationListener();
         this.notificationOpenedListener();
-
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-
-
     };
 
-
     componentDidMount = async () => {
-
-
         await this._retrieveData_Settings();
-
         if (this.props.type_user === TYPE_ADMIN || this.props.type_user === TYPE_MODERATOR) {
-
             //проверяем тип пользователя если админ или мд открыть меню суперпользователя
             console.log(' i am admin  ');
             this.setState({action_nick: list_moder, item_menu: menu_moderator})
-
         }
-
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
         this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
-
         });
 
         this.notificationListener = firebase.notifications().onNotification((notification) => {
@@ -254,9 +239,7 @@ export default class Chatting extends React.Component {
             // Get information about the notification that was opened
             const notification = notificationOpen.notification;
             console.log('63' + notification)
-
         });
-
 // App was opened by a notification
         const notificationOpen = await firebase.notifications().getInitialNotification();
         if (notificationOpen) {
@@ -270,12 +253,8 @@ export default class Chatting extends React.Component {
 
     };
 
-
     handleBackButton = () => {
-
-
         return true
-
     };
 
     onActionSelected = async (position) => { //меню чата , передаем позицию item из массива с меню
@@ -303,41 +282,12 @@ export default class Chatting extends React.Component {
             case 2: //профиль
 
 
-                const profile_info = await request_GET_PROFILE(this.props.nic);
-                const a = profile_info.data;
-
-                for (let i = 0; i < a.length; i++) {
-                    let obj = a[i];
-
-                    this.setState({
-                        firstName: obj.firstName,
-                        lastName: obj.lastName,
-                        city: obj.city,
-                        about: obj.about,
-                        color: obj.color,
-                        photo: obj.photo,
-                        sex: obj.sex,
-                        balace: obj.balace,
-                        bday: obj.bday,
-
-                    });
-                }
 
                 navigator.push('Profile_Redactor_New', {
 
-                    room: this.props.room,
-                    nic: this.props.nic,
-                    chat_name: this.props.chat_name,
-                    user_data: profile_info,
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    city: this.state.city,
-                    about: this.state.about,
-                    color: this.state.color,
-                    photo: this.state.photo,
-                    sex: this.state.sex,
-                    bday: this.state.bday,
-                }, {animation: 'right'});
+                   nic_id:this.props.nic
+                }, {animation: 'right',duration:450});
+
                 break;
 
 
@@ -353,7 +303,7 @@ export default class Chatting extends React.Component {
                     Change_User_id: this.Change_User_id,
 
 
-                }, {animation: 'right'});
+                }, {animation: 'right',duration:450});
 
                 break;
 
@@ -386,7 +336,7 @@ export default class Chatting extends React.Component {
                     select: this.onActionSelected.bind(this),
 
 
-                }, {animation: 'right'});
+                }, {animation: 'right',duration:450});
 
                 this.setState({new_pm: false});
                 break;
@@ -434,7 +384,7 @@ export default class Chatting extends React.Component {
 
     close_attach = () => {        //закрыть превью  attachmentsa
 
-        this.setState({photo_attachments: false,})
+        this.setState({photo_attachments: false,attachments:[]})
 
     };
 
@@ -483,32 +433,6 @@ export default class Chatting extends React.Component {
     };
 
 
-
-    Show_notice = async () => {
-
-        const res = await request_GET_NOTICE(this.props.nic);
-        try {
-            let text = res['notice'];
-
-            let readed = res['readed'];
-
-            if (!readed && text.length > 5) {
-                await request_DELETE_USER_ROOM(this.state.room_now, this.props.nic);
-                this.componentWillUnmount();
-                const {navigator} = this.props;
-                navigator.push('NoticeScreen', {notice_text: text, go_room: this.Del_user_change})
-
-            }
-        } catch (e) {
-
-            console.log(e, 'Shownotice')
-
-        }
-        {
-
-        }
-
-    };
 
 
     audio_screen = async () => {
@@ -586,7 +510,7 @@ export default class Chatting extends React.Component {
                             send_audio_screen={this.audio_screen}
                             attachments_url={this.state.attachments}
                             View_full_photo={this.View_full_photo}
-
+                            close_attach={this.close_attach}
 
                         />
 

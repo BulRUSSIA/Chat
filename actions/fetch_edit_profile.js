@@ -1,23 +1,43 @@
-import {address} from "../config_connect";
-
-async function request_EDIT_PROFILE(nic,bday,firstName,lastName,city,email,sex,color,about)  {
+import {address} from "../components/ChatPortal/config_connect";
 
 
-    const url = address + `/edit/profile/${nic}/${bday}/${firstName}/${lastName}/${city}/${email}/${sex}/${color}/${about}`;
-    console.log(nic);
-    console.log(bday);
-    console.log(firstName);
-    console.log(lastName);
-    console.log(city);
-    console.log(email);
-    console.log(sex);
-    console.log(color);
-    console.log(about);
+async function request_EDIT_PROFILE(user_id,bday,firstName,lastName,city,email,sex,color,about)  {
 
-
+    const url = address + `/edit/profile/`;
     try {
-    await    fetch(url);
-    } catch (e) {
+        const data = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+
+                'Content-Encoding': 'utf-8',
+            },
+            body: JSON.stringify({
+                user_id:user_id,
+                bday:bday,
+                firstName:firstName,
+                lastName:lastName,
+                city:city,
+                email:email,
+                sex:sex,
+                color:color,
+                about:about
+
+
+
+            }),
+        });
+
+        let responseJsonData = await data.json();
+        console.log(responseJsonData);
+
+        return responseJsonData;
+
+
+    }
+
+    catch (e) {
         console.log(e)
     }
 }

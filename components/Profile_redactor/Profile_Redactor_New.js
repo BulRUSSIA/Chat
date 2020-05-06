@@ -1,363 +1,196 @@
-import {Alert, Animated, CheckBox, FlatList, ImageBackground, ScrollView, Text, TextInput, View,} from "react-native";
-
+import {
+    ImageBackground, Alert, ScrollView
+} from "react-native";
 import React from "react";
-import colors from "../const/colors";
-import menusmiles from '../const/colors_id'
-import request_EDIT_PROFILE from "../../actions/fetch_edit_profile";
-import request_EDIT_NICK from "../../actions/fetch_edit_nick";
 import Toolbar_redactor from "./Toolbar_redactor";
-import ChangeColor from "./ChangeColor";
-import ModalColor from "./ModalColor";
+import request_GET_PROFILE from "../../actions/fetch_profile_info";
+import {TextInputView} from "./TextInputView"
+import DateTimePicker from "./DateTimePicker";
+import request_EDIT_PROFILE from "../../actions/fetch_edit_profile";
 
-const checkbox = [{
-     checked: false, id: 0, name: 'Пользователь',type:1},
-    {checked: false, id: 1, name: 'Администратор',type:2},
-    {checked: false, id: 2, name: 'Невидимка',type:16},
-    {checked: false, id: 3, name: 'Забаненный',type:8},
-    {checked: false, id: 4, name: 'Модератор',type:4
-
-    }];
+const pre_data =
+    {
+        data: [{
+            "nic": "Загрузка данных...",
+            "photo": 'image_exist'
+        }]
+    };
 export default class Profile_redactor_New extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isDateTimePickerVisible: false,
-            bday: '',
-            enabled: false,
-            isVisible: false,
-            isVisibleColor: false,
-            nic: this.props.chat_name,
-            user_info: this.props.user_data.data,
-            firstName: this.props.firstName,
-            lastName: this.props.lastName,
-            city: this.props.city,
-            about: this.props.about,
-            color: this.props.color,
-            photo: this.props.photo,
-            sex: this.props.sex,
-            sm: menusmiles,
-            clr: '#010101',
-            item_smiles: colors,
-            type:null,
-            list: checkbox,
-
+            user_info: pre_data,
+            showPicker: false,
+            sex: null,
+            bday: null,
+            firstName: null,
+            lastName: null,
+            nic: null,
+            email: null,
+            photo: null,
+            city: null,
+            color: null,
+            about: null,
 
         };
-        this.animatedVal = new Animated.Value(-350);
 
 
     }
 
-    SerializeSex = () => {
+    Change_date_selector = (field, item) => {
 
-        switch (this.state.sex) {
+        switch (field) {
 
-            case 'Мужской':
-                this.setState({sex: 1});
+
+            case "nic":
+
+                this.setState({nic: item});
                 break;
-            case 'Женский':
-                this.setState({sex: 2});
-                console.log(this.state.sex + 'state')
+            case "firstName":
+
+                this.setState({firstName: item});
                 break;
-            case 'Не определен':
-                this.setState({sex: 3});
+            case "lastName":
+
+                this.setState({lastName: item});
+                break;
+            case "sex":
+
+                this.setState({sex: item});
+                break;
+            case "color":
+
+                this.setState({color: item});
                 break;
 
+            case "city":
 
+                this.setState({city: item});
+                break;
+
+            case "about":
+
+                this.setState({about: item});
+                break;
         }
 
 
     };
 
 
-
-
-
-
-
-
-
-
-    Change_color = () => {
-
-        Animated.timing(                  // Animate over time
-            this.animatedVal,            // The animated value to drive
-            {
-                toValue: 50,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-
-            }
-        ).start();
-
-    };
-
-    close_color = (evt, clr) => {
-
-
-        this.setState({color: evt, clr: clr, isVisibleColor: !this.state.isVisibleColor});
-        Alert.alert('Цвет успешно выбран!')
+    componentDidMount = async () => {
+        const profile_info = await request_GET_PROFILE(this.props.nic_id);
+        let a = profile_info.data;
+        this.setState({user_info: a});
+        for (let i = 0; i < a.length; i++) {
+            let obj = a[i];
+            this.setState({
+                sex: obj.sex,
+                bday: obj.bday,
+                firstName: obj.firstName,
+                lastName: obj.lastName,
+                nic: obj.nic,
+                about: obj.about,
+                email: obj.email,
+                photo: obj.photo,
+                city: obj.city,
+                color: obj.color,
+            })
+        }
 
 
     };
+//todo НЕКОРРЕКТНО СОХРАНЯЕТ ДАННЫЕ ПРОБЛЕМА В ЦВЕТЕ ВОЗРАСТЕ И ТД БЭК ТАК ЖЕ ПРОВЕРИТЬ
+    save_and_pop = async () => {
 
-    showDateTimePicker = () => {
-        this.setState({isDateTimePickerVisible: true});
-    };
+        console.log('save_and_pop');
 
-    hideDateTimePicker = () => {
-        this.setState({isDateTimePickerVisible: false});
-    };
+        await request_EDIT_PROFILE(this.props.nic_id,
+            this.state.bday,
+            this.state.firstName,
+            this.state.lastName,
+            this.state.city,
+            this.state.email,
+            this.state.sex,
+            this.state.color,
+            this.state.about);
 
-    handleDatePicked = date => {
-        this.setState({bday: date});
-        console.log(date);
-        this.hideDateTimePicker();
-    };
+        Alert.alert("Готово!", "данные успешно сохранены");
 
-
-    hideModal = () => {
-        this.setState({enabled: !this.state.enabled});
-    };
-
-    hideModalNick = () => {
-
-        this.setState({isVisible: !this.state.isVisible});
-
-    };
-
-    ChangeBirthdayState = (itemValue, itemIndex) => {
-
-        this.setState({language: itemValue, sex: itemValue})
+        this.Get_pop();
 
 
     };
-
-    ChangeNickModal = (nic) => {
-
-        this.setState({nic: nic})
-
-
-    };
-
 
     Get_pop = () => {
+        const {navigator} = this.props;
+        navigator.pop();
+    };
+
+    showDatePicker = () => {
+        this.setState({showPicker: true});
+    };
+
+    hideDatePicker = () => {
+        this.setState({showPicker: false});
+    };
+    handleConfirmPicker = (date) => {
+        this.setState({bday: date});
+        console.log('date bday:', date);
+        this.hideDatePicker();
+    };
+
+
+    my_photo = async () => {
 
         const {navigator} = this.props;
-        navigator.pop({
-
-            room: this.props.room,
-            nic: this.props.nic,
-            chat_name: this.props.chat_name,
+        navigator.push('PhotosAll', {
+            get_pop: this.Get_pop, nic_id: this.props.nic_id
         });
-
-
-    };
-
-    Change_color = () => {
-
-        this.setState({isVisibleColor: !this.state.isVisibleColor})
-    };
-    hideColorModalMenu = () => {
-
-        this.setState({isVisible: !this.state.isVisible});
-
-
-    };
-    checkThisBox = (itemID) => {
-        let list = this.state.list;
-        list.checked = false;
-        list[itemID].checked = !list[itemID].checked;
-
-        this.setState({list: list,type:list[itemID].type});
-        console.log('User-type-',this.state.list)
 
     };
 
     render() {
 
 
-        return (<ImageBackground source={{uri: 'default_background'}}
+        return (<ImageBackground source={{uri: 'background_airwaychat'}}
                                  style={{width: '100%', height: '100%'}}>
                 <Toolbar_redactor
                     backs={this.Get_pop}
+                    save_change={this.save_and_pop.bind(this)}
                 />
                 <ScrollView>
 
+                    <TextInputView
 
-                    <ChangeColor
-                        Change_color={this.Change_color}
-                        clr={this.state.clr}
+                        sex={this.state.sex}
+                        bday={this.state.bday}
+                        firstName={this.state.firstName}
+                        lastName={this.state.lastName}
+                        nic={this.state.nic}
+                        email={this.state.email}
                         photo={this.state.photo}
-                        chat_name={this.props.chat_name}
-
-
-                    />
-
-                    <View style={{backgroundColor: 'rgba(216,216,216,0.47)'}}>
-
-
-                        <Text style={{color: 'black', marginLeft: '8%',}}>Имя,Фамилия</Text>
-                        <TextInput style={{
-                            borderRadius: 13,
-                            borderColor: '#f61800',
-                            borderWidth: 1,
-                            marginTop: 10,
-                            marginLeft: '8%',
-                            marginRight: '8%'
-
-                        }}
-
-                                   placeholderTextColor="#5C6A6E"
-                                   placeholder='Имя'
-                                   keyboardType='default'
-                                   multiline={true}
-                                   maxLength={16}/>
-                        <TextInput style={{
-                            borderRadius: 13,
-                            borderColor: '#f61800',
-                            borderWidth: 1,
-                            marginTop: 10,
-                            marginLeft: '8%',
-                            marginRight: '8%'
-
-                        }}
-
-                                   placeholderTextColor="#5C6A6E"
-                                   placeholder='фамилия'
-                                   keyboardType='default'
-                                   multiline={true}
-                                   maxLength={16}/>
-                    </View>
-                    <View style={{
-                        backgroundColor: 'rgba(175,175,175,0.06)',
-                        marginTop: '2%',
-                        borderRadius: 14,
-                        borderWidth: 1,
-                        borderColor: 'rgba(17,149,233,1)',
-                        marginLeft: '2%',
-                        marginRight: '2%',
-                        paddingBottom: '5%'
-
-                    }}>
-                        <Text style={{color: 'black', marginLeft: '8%',}}>Немного о себе</Text>
-
-                        <TextInput style={{
-                            borderRadius: 13,
-                            borderColor: '#f61800',
-                            borderWidth: 1,
-                            marginTop: 10,
-                            marginLeft: '8%',
-                            marginRight: '8%'
-
-                        }}
-
-                                   onChangeText={() => this.setState({enabled: true})}
-                                   value={this.state.sex}
-
-
-                                   placeholderTextColor="#5C6A6E"
-                                   placeholder='Пол'
-                                   keyboardType='default'
-
-                                   maxLength={12}/>
-
-
-                        <TextInput style={{
-                            borderRadius: 13,
-                            borderColor: '#f61800',
-                            borderWidth: 1,
-                            marginTop: 10,
-                            marginLeft: '8%',
-                            marginRight: '8%'
-
-                        }}
-
-                                   placeholderTextColor="#5C6A6E"
-                                   placeholder='Город'
-                                   keyboardType='default'
-                                   multiline={true}
-                                   maxLength={19}/>
-                        <TextInput style={{
-                            borderRadius: 13,
-                            borderColor: '#f61800',
-                            borderWidth: 1,
-                            marginTop: 10,
-                            marginLeft: '8%',
-                            marginRight: '8%'
-
-                        }}
-
-                                   placeholderTextColor="#5C6A6E"
-                                   placeholder='О себе'
-                                   keyboardType='default'
-                                   multiline={true}
-                                   maxLength={120}/>
-                    </View>
-
-                    <View style={{
-                        backgroundColor: 'rgba(175,175,175,0.06)',
-                        marginTop: '2%',
-                        borderRadius: 14,
-                        borderWidth: 1,
-                        borderColor: 'rgba(17,149,233,1)',
-                        marginLeft: '2%',
-                        marginRight: '2%',
-                        paddingBottom: '5%',
-                        paddingTop: '2%',
-                        marginBottom:'2%'
-
-                    }}>
-                        <Text style={{color: 'black', marginLeft: '8%',}}>Группа</Text>
-                        <FlatList
-
-
-                            data={this.state.list}
-                            extraData={this.state}
-
-
-                            renderItem={(({item}) =>
-
-
-                                    <View style={{flexDirection: 'row', flex: 1}}>
-
-                                        <CheckBox
-                                            value={this.state.list[item.id].checked}
-                                            disabled={item[1]}
-                                            onValueChange={() => this.checkThisBox(item.id)}
-                                        />
-
-                                        <Text style={{marginTop: 5}}> {item.name}</Text>
-
-
-                                    </View>
-                            )
-                            }
-
-
-                            keyExtractor={(item, index) => index.toString()
-
-                            }
-
-
-                        />
-
-                    </View>
-
-                    <ModalColor
-                        hideColorModalMenu={this.hideColorModalMenu}
-                        isVisibleColor={this.state.isVisibleColor}
-                        sm={this.state.sm}
-                        close_color={this.close_color}
+                        city={this.state.city}
+                        color={this.state.color}
+                        about={this.state.about}
+                        my_photo={this.my_photo}
+                        showDatePicker={this.showDatePicker.bind(this)}
+                        selector_data={this.Change_date_selector.bind(this)}
 
                     />
 
+                    <DateTimePicker
 
-                    <View>
+                        handleConfirm={this.handleConfirmPicker.bind(this)}
+                        hideDatePicker={this.hideDatePicker.bind(this)}
+                        isDatePickerVisible={this.state.showPicker}
+                        Change_date_selector={this.Change_date_selector}
 
+                    />
 
-                    </View>
                 </ScrollView>
+
             </ImageBackground>
 
         )

@@ -19,10 +19,11 @@ export default class ListRooms extends React.Component {
                 extraData={this.props}
 
 
-                // ItemSeparatorComponen-t={this.props.sep}
+                ItemSeparatorComponent={this.props.sep}
 
 
                 renderItem={this.props._renderItem}
+
 
 
                 keyExtractor={(item, index) => index.toString()}

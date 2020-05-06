@@ -1,8 +1,8 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
-async function request_GET_USER_PHOTO(nick)  {
+async function request_GET_USER_PHOTO(id)  {
 
-    const url = address +`/users/photos/${nick}`;
+    const url = address +`/users/photos/${id}`;
 
 
     try {

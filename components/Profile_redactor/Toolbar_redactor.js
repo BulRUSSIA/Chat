@@ -1,6 +1,8 @@
-
+import Icon from "react-native-vector-icons/AntDesign";
+import {TouchableOpacity} from "react-native";
 import React from "react";
-import {Body, Button, Icon, Left, Right, Title,Header} from "native-base";
+import {Body, Button,  Left, Right, Title,Header} from "native-base";
+import FastImage from "react-native-fast-image";
 export default class Toolbar_redactor extends React.Component {
 
 
@@ -8,8 +10,8 @@ export default class Toolbar_redactor extends React.Component {
 
         return (
             <Header
-                style={{backgroundColor: '#0D5E96',}}
-                androidStatusBarColor="#0D5E96">
+                style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                androidStatusBarColor="#A9A9A9">
 
 
                 <Left style={{flex: 1}}>
@@ -17,16 +19,25 @@ export default class Toolbar_redactor extends React.Component {
 
                             onPress={this.props.backs}>
                         <Icon
-                            style={{color: 'white'}}
-                            name="ios-arrow-back"/>
+                            size={25}
+                            style={{color: 'black'}}
+                            name="arrowleft"/>
                     </Button>
 
                 </Left>
                 <Body>
-                    <Title>Профиль</Title>
+                    <Title style={{color:'black',fontWeight: '200',fontSize:16,width:150}}>Мой профиль</Title>
                 </Body>
                 <Right/>
 
+                <Body>
+                    <TouchableOpacity onPress={()=>this.props.save_change()}>
+                    <FastImage
+                        style={{width:20,height:20,alignSelf:'center'}}
+                        source={{uri:'save'}}/>
+                    </TouchableOpacity>
+                </Body>
+                <Right/>
 
             </Header>
         )

@@ -67,10 +67,9 @@ export default class NavigationAdmin extends React.Component {
             return (
 <TouchableOpacity onPress={()=> this.Go_Admin()}>
 
-    <Image
-        source={require('../Image/Users-Moderator-icon.png')}
-        style={{width: 20, height: 20}}/>
-
+    <Icon
+        size={20}
+        name="github"/>
 </TouchableOpacity>
 
             )
@@ -78,8 +77,6 @@ export default class NavigationAdmin extends React.Component {
         }
 
     };
-
-
 
     render() {
 

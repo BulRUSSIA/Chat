@@ -11,24 +11,25 @@ export class Header_private_list extends React.Component {
     render() {
 
 
-        return      <Header style={{backgroundColor: '#0D5E96',}}
-                            androidStatusBarColor="#0D5E96"
+        return      <Header style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                            androidStatusBarColor="#A9A9A9"
 
-                           >
+
+        >
 
             <Left style={{flex: 1}}>
                 <Button transparent
 
                         onPress={this.props.back}>
                     <Icon
-                        style={{color: 'white'}}
+                        style={{color: 'black'}}
                         size={25}
                         name="arrowleft"/>
                 </Button>
 
             </Left>
             <Body>
-                <Title>Приват</Title>
+                <Title style={{color:'black'}}>Приват</Title>
             </Body>
 
             <Right>

@@ -23,7 +23,7 @@ import {StyleSheet} from "react-native";
     time: {
         fontSize: 10,
         flex: 1,
-        color: 'rgba(65,157,216,0.98)',
+        color: 'rgba(216,17,34,0.98)',
         marginRight: 2,
         marginTop: 2
 
@@ -32,7 +32,7 @@ import {StyleSheet} from "react-native";
     time_msg: {
         fontSize: 14,
         flex: 1,
-        color: 'rgba(46,93,133,0.98)',
+        color: 'rgba(54,121,169,0.98)',
 
         marginTop: 25,
         textAlign: 'left',
@@ -55,8 +55,9 @@ import {StyleSheet} from "react-native";
     },
     imageView: {
 
-        width: 25,
-        height: 25,
+        width: 12,
+        height: 35,
+        flex:1,
         paddingBottom: 1,
         marginBottom: 12,
         marginTop: 25,

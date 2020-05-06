@@ -1,8 +1,9 @@
 import {Dimensions, FlatList,ImageBackground ,ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React from "react";
-import {Body, Button, CardItem, Header, Icon, Left, Title} from "native-base";
+import {Body, Button, CardItem, Container, Header, Left, Title} from "native-base";
 import FastImage from "react-native-fast-image";
 import {OptimizedFlatList} from "react-native-optimized-flatlist";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const {height, width} = Dimensions.get('window');
 
@@ -47,11 +48,11 @@ export default class ScreenWeddings extends React.Component {
             <View style={{justifyContent: 'center', backgroundColor: 'rgba(41,84,120,0.95)',}}>
                 <ImageBackground
                     style={{resizeMode: 'contain',height:'100%',width:'100%'}}
-                    source={{uri:'default_background'}}>
-                <Header
-                    style={{backgroundColor: '#0D5E96',}}
-                    androidStatusBarColor="#0D5E96"
-                >
+                    source={{uri:'background_airwaychat'}}>
+                    <Header style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                            androidStatusBarColor="#A9A9A9"
+
+                    >
 
                     <Left style={{flex: 1}}>
                         <Button transparent
@@ -63,13 +64,14 @@ export default class ScreenWeddings extends React.Component {
 
                                 }>
                             <Icon
-                                style={{color: 'white'}}
-                                name="ios-arrow-back"/>
+                                size={width*0.070}
+                                style={{color: 'black'}}
+                                name="arrowleft"/>
                         </Button>
 
                     </Left>
                     <Body style={{flex: 2}}>
-                        <Title style={{alignItems: 'center'}}>Все бракосочетания</Title>
+                        <Title style={{alignItems: 'center',color:'black'}}>Все бракосочетания</Title>
                     </Body>
 
 

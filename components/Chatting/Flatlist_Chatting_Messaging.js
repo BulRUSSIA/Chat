@@ -3,23 +3,22 @@ import {
     Text,
     View,
     KeyboardAvoidingView,
-    ScrollView,
+    Alert,
     TouchableOpacity,
-    Keyboard, Image, AsyncStorage, Dimensions, FlatList,
+    Keyboard, Image, AsyncStorage, Dimensions
 } from 'react-native';
-import ReversedFlatList from 'react-native-reversed-flat-list';
 import SocketIOClient from 'socket.io-client';
 import {TextInput_Chatting} from "./TextInput_Chatting";
 import FastImage from "react-native-fast-image";
-import {address, address_attach} from "../../config_connect";
+import {address, address_attach} from "../ChatPortal/config_connect";
 import emoticons from "../const/EmojiObject";
-import NavigationApp from "./NavigationSmiles";
-import SEND_PHOTO_request from "../../actions/fetch_upload_image";
 import styles from "../../styles";
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview'
-
+import {Modal_Chatting_Smiles} from "./Modal_Chatting_Smiles";
+import {Attachments_preview} from "./Attachments_preview";
+import TextTicker from 'react-native-text-ticker'
 const {width, height} = Dimensions.get('window');
-
+const Winlayout = Dimensions.get('window');
 const ViewTypes = {
     FULL: 0,
 
@@ -32,7 +31,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
         super(props);
 
         let dataProvider = new DataProvider(() => {
-            return false;
+            return true;
         });
 
         this.state = {
@@ -44,6 +43,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             hideNic: false,
             itemsCount: -20,
             readed: false,
+            isVisible: false,
             active: false,
             color: this.props.color,
             avatar: this.props.avatar,
@@ -54,7 +54,8 @@ export default class Flatlist_Chatting_Messaging extends Component {
             size_av: 18,
             size_msg: 25,
             chatMessages: [],
-            list: dataProvider
+            list: dataProvider,
+            marque_text:'',
 
 
         };
@@ -63,14 +64,14 @@ export default class Flatlist_Chatting_Messaging extends Component {
         this._layoutProvider = new LayoutProvider(
             index => {
 
+
                 return ViewTypes.FULL;
 
             },
             (type, dim) => {
 
-                dim.width = width * 0.95;
-                dim.height = 55;
-
+                dim.width = width * 1;
+                dim.height = this.state.size_msg*this.state.size_av*0.2/Winlayout.scale
 
 
             }
@@ -110,7 +111,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
 
         return {
             room: this.state.room,
-            user: this.state.user,
+            user: this.props.nic,
             message: this.state.message,
             system: this.state.system,
             hideNic: this.state.hideNic,
@@ -119,12 +120,17 @@ export default class Flatlist_Chatting_Messaging extends Component {
             nic: this.props.chat_name,
             color: this.state.color,
             avatar: this.state.avatar,
-            createdAt: new Date()
+            createdAt: new Date(),
+            type:1,
         }
 
 
     }
 
+    smiles_visible_state = () => {
+        this.setState({isVisible: !this.state.isVisible, ShowSmiles: !this.state.ShowSmiles,})
+
+    };
     socket_con = () => {
         this.socket.on('connect', () => {
             this.socket.emit('joined', this.message_object());
@@ -146,11 +152,11 @@ export default class Flatlist_Chatting_Messaging extends Component {
     };
 
     componentDidMount = async () => {
-
+        console.log('chaaaaaaaaaaaat_name',this.props.chat_name);
 
         await this._retrieveData_Settings();
 
-       this.socket = SocketIOClient(`${address}/chat`, {
+        this.socket = SocketIOClient(`${address}/chat`, {
             jsonp: false,
             reconnection: true,
             reconnectionDelay: 100,
@@ -164,7 +170,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
         this.socket.on('last_message', (data) => {
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    this.state.chatMessages.concat(data)
+                    this.state.chatMessages.concat(data).reverse()
                 ),
                 chatMessages: this.state.chatMessages.concat(data),
             });
@@ -173,22 +179,30 @@ export default class Flatlist_Chatting_Messaging extends Component {
         this.socket.on('status', (data) => {
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    this.state.chatMessages.concat(data)
+                    this.state.chatMessages.concat(data).reverse()
                 ),
                 chatMessages: this.state.chatMessages.concat(data),
             });
         });
 
-      await  this.socket.on("message", msg => {
+
+
+        await this.socket.on("message", msg => {
+
 
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    this.state.chatMessages.concat(msg)
+                    // this.reverse(this.state.chatMessages.concat(msg))
+                    this.state.chatMessages.concat(msg).reverse()
                 ),
                 chatMessages: this.state.chatMessages.concat(msg),
             });
 
 
+        });
+
+        this.socket.on('run_text', (data) => {
+            this.setState({marque_text:data});
         });
 
     };
@@ -203,8 +217,15 @@ export default class Flatlist_Chatting_Messaging extends Component {
             message: ''
 
         });
+        if (this.props.attachments_url.length > 0) {
+            this.props.close_attach()
+
+
+        }
+
 
     };
+
 
     ParsedText = (text, color) => {
         return text.split(/([\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map((elem, index) => {
@@ -215,7 +236,8 @@ export default class Flatlist_Chatting_Messaging extends Component {
                         width: this.state.size_msg,
                         height: this.state.size_msg,
                         marginTop: '2%',
-                        paddingBottom: '1%'
+                        paddingBottom: '1%',
+                        resizeMode:'contain'
                     }} source={emoticons[elem]}
                            key={index * 2}
                     />
@@ -226,8 +248,10 @@ export default class Flatlist_Chatting_Messaging extends Component {
                     <Text
                         key={index * 7}
                         style={{
+                            fontWeight: '200',
                             fontSize: this.state.size_msg,
                             flex: 1,
+
                             color: color
                         }}>{elem}
                     </Text>
@@ -239,12 +263,17 @@ export default class Flatlist_Chatting_Messaging extends Component {
         });
     };
 
+
     add_emoji = (emoji) => {              //add emoji  to te xt
-        this.setState({message: this.state.message + emoji});
+        this.setState({
+            message: this.state.message + emoji,
+            isVisible: !this.state.isVisible,
+            ShowSmiles: !this.state.ShowSmiles,
+        });
     };
 
 
-    ShowSmiles = async () => { // логика отображения  смайл   ов    t rue/  1 fal se1
+    ShowSmiles = async () => { // логика отображения  смайл   ов    t rue/  1 fal se1 scaleY: -1
 
 
         await this.setState({
@@ -252,23 +281,42 @@ export default class Flatlist_Chatting_Messaging extends Component {
 
             ShowSmiles: !this.state.ShowSmiles,
             editable_txt_smiles: !this.state.editable_txt_smiles,
-            active: !this.state.active
+            active: !this.state.active,
+            isVisible: !this.state.isVisible,
 
         });
 
     };
-    _rowRender = (type, data) => {
-        return (<View style={{flexDirection: 'row', flex: 1, scaleY: -1}}>
-                {/*<Text>{data}</Text>*/}
 
+    action_profile = async (nic,id)=> {
+
+      await  this.props.actions_profile(nic,id);
+        this.setState({message:nic+','})
+
+
+
+    };
+
+
+    _rowRender = (type, data) => {
+        let background = 'rgba(1,1,1,0)';
+        let name = data.message.startsWith(this.props.chat_name + ',');
+        if (name) {
+
+            background = 'rgba(114,177,238,0.31)'
+
+        }
+
+
+
+
+        return (<View style={{flexDirection: 'row',backgroundColor:background, flex: 1, transform: [{scaleY: -1}]}}>
                 {data.avatar && <FastImage source={{uri: data.avatar}} style={{
                     width: this.state.size_av,
                     height: this.state.size_av,
                     borderRadius: 7,
                     marginLeft: 0,
-
                 }} resizeMode={FastImage.resizeMode.contain}/>}
-
                 {data.hideNic &&
                 <Text style={{
                     fontSize: this.state.size_msg,
@@ -277,14 +325,19 @@ export default class Flatlist_Chatting_Messaging extends Component {
                     fontWeight: 'bold'
                 }}>
                     {data.nic + '\t'} {data.message}
-
                 </Text>}
                 {!data.hideNic &&
 
 
                 <TouchableOpacity style={{flex: 1}}
-                                  onPress={() => this.props.actions_profile(data.nic, data.user)}>
-                    <Text style={{fontSize: this.state.size_msg, marginTop: '2%', color: data.color}}>
+                                  onPress={() => this.action_profile(data.nic, data.user)}>
+                    <Text style={{
+                        fontSize: this.state.size_msg,
+                        marginTop: '2%',
+                        color: data.color,
+                        fontWeight: '200',
+
+                    }}>
                         {data.nic}:
                         {this.ParsedText(data.message, data.color)}
                     </Text>
@@ -301,6 +354,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
                         marginTop: '5%',
                         alignSelf: 'center',
                         marginBottom: '5%',
+
                     }}
                     onPress={() => this.props.View_full_photo(`${address_attach}${data.attachments[0]}`)}>
                     <FastImage source={{uri: `${address_attach}${data.attachments[0]}`}}
@@ -319,6 +373,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
     render() {
 
         const Smiles = this.state.ShowSmiles;
+        const running_line = this.state.marque_text;
         return (
 
 
@@ -327,22 +382,32 @@ export default class Flatlist_Chatting_Messaging extends Component {
                 style={{flex: 1}}
                 behavior="padding">
 
-                <View style={{width: '100%', height: height, flex: 1}}>
+                <View style={{width: '100%', height: height/6, flex: 1}}>
 
+                    {running_line.length>1 &&
+                        <TouchableOpacity onLongPress={()=>this.setState({marque_text:''},Alert.alert('Бегущая строка','глаза устали?'))}>
+                    <TextTicker
+                        style={{ fontSize:20,backgroundColor:'white' }}
 
+                        scrollSpeed={100}
+
+                    >
+                        {this.state.marque_text}
+                    </TextTicker>
+                        </TouchableOpacity>
+                    }
                     <RecyclerListView
                         style={{transform: [{scaleY: -1}]}}
                         dataProvider={this.state.list}
                         layoutProvider={this._layoutProvider}
                         rowRenderer={this._rowRender}
-                        renderAheadOffset={true}
-                        forceNonDeterministicRendering={true}
-                        removeClippedSubviews={true}
+                        // forceNonDeterministicRendering={true}
+
                     />
 
 
                     <TextInput_Chatting
-                        key_color='#FFFFFF'
+                        key_color='#ffffff'
                         show={this.ShowSmiles}
                         send_msg={this.submitChatMessage}
                         text={this.state.message}
@@ -355,19 +420,12 @@ export default class Flatlist_Chatting_Messaging extends Component {
                     {Smiles &&
 
 
-                    <View style={{
-                        width: '100%', height: height * 0.4,
+                    <Modal_Chatting_Smiles
+                        add_emoji={this.add_emoji}
+                        visible={this.smiles_visible_state}
+                        isVisible={this.state.isVisible}
+                    />
 
-                        backgroundColor: '#232323',
-                    }}>
-                        <NavigationApp
-                            screenProps={{
-                                add_emoji: this.add_emoji
-                            }}
-
-
-                        />
-                    </View>
 
                     }
 
@@ -377,4 +435,6 @@ export default class Flatlist_Chatting_Messaging extends Component {
         );
 
     }
+
+
 }

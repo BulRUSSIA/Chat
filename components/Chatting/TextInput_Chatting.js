@@ -23,14 +23,41 @@ export class TextInput_Chatting extends React.Component {
 
             flexDirection: 'row',
 
-
-            height: height * 0.135,
-
-            justifyContent: 'space-between',
+            borderColor:'#868686',
+            borderWidth:2,
+            height: height * 0.12,
             paddingHorizontal: width * 0.05,
             backgroundColor: this.props.key_color,
         }}>
 
+
+
+            <TextInput
+
+
+                style={{
+
+
+                    fontSize: 16,
+                    height: height * 0.08,
+                    color: "#000000",
+                    width: width * 0.8,
+
+
+                }}
+
+                placeholderTextColor="#6D6D6D"
+                placeholder='Сообщение'
+                autoCorrect={true}
+                multiline={false}
+                ref={(input) => this.secondTextInput = input}
+                onChangeText={(text) => this.props.add_text(text)}
+                value={this.props.text}
+                maxLength={120}
+
+                onSubmitEditing={this.props.send_msg}
+
+            />
             <TouchableOpacity
                 onPress={() => {
                     {
@@ -50,66 +77,39 @@ export class TextInput_Chatting extends React.Component {
 
                 <FastImage
                     style={{
-                        marginTop: height * 0.02,
+
                         width: width * 0.06,
                         height: height * 0.06,
+                        marginTop:'5%',
+                        marginLeft:'10%',
 
                         backgroundColor: this.props.key_color
                     }}
-                    source={this.props.active === false ? smile_image : keyboard_image}
+                    source={smile_image}
                     resizeMode={FastImage.resizeMode.contain}/>
             </TouchableOpacity>
-
-            <TextInput
-
-
-                style={{
-
-                    backgroundColor: this.props.key_color,
-                    fontSize: 16,
-                    height: height * 0.1,
-                    color: "#000000",
-                    width: width * 0.62,
+            {/*<TouchableOpacity*/}
+            {/*    onLongPress={this.props.send_audio_screen}*/}
+            {/*    onPress={this.props.send_msg}*/}
 
 
-                }}
-
-                underlineColorAndroid="#169dd2"
-                placeholderTextColor="#6D6D6D"
-                placeholder='Сообщение'
-                autoCorrect={true}
-                multiline={true}
-                ref={(input) => this.secondTextInput = input}
-                onChangeText={(text) => this.props.add_text(text)}
-                value={this.props.text}
-                maxLength={120}
-                selectionColor='#169dd2'
-                editable={this.props.editable_key}
-
-            />
-
-            <TouchableOpacity
-                onLongPress={this.props.send_audio_screen}
-                onPress={this.props.send_msg}
+            {/*    style={{*/}
 
 
-                style={{
+            {/*        marginLeft: 1,*/}
+            {/*        marginRight: width * 0.04,*/}
+            {/*        backgroundColor: this.props.key_color,*/}
 
 
-                    marginLeft: 1,
-                    marginRight: width * 0.04,
-                    backgroundColor: this.props.key_color,
+            {/*    }}*/}
 
+            {/*>*/}
 
-                }}
-
-            >
-
-                <FastImage
-                    style={{height: height * 0.06, width: width * 0.06, marginTop: height * 0.02}}
-                    source={require('../Image/send_button.webp')}
-                    resizeMode={FastImage.resizeMode.contain}/>
-            </TouchableOpacity>
+            {/*    <FastImage*/}
+            {/*        style={{height: height * 0.06, width: width * 0.06, marginTop: height * 0.02}}*/}
+            {/*        source={require('../Image/send_button.webp')}*/}
+            {/*        resizeMode={FastImage.resizeMode.contain}/>*/}
+            {/*</TouchableOpacity>*/}
 
         </View>
     }

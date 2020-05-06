@@ -1,7 +1,6 @@
 import {BackHandler, View, Alert, ImageBackground, AsyncStorage, Dimensions} from "react-native";
 import React from "react";
 import Chatting from '../../components/Chatting/Chatting'
-import request_ENTRY_USER_ROOM from '../../actions/fetch_entry_user'
 import request_MY_NICKNAME from '../../actions/fetch_my_nickname'
 import request_GET_ROOMS from "../../actions/fetch_get_rooms";
 import {
@@ -14,7 +13,6 @@ import {
     Right
 } from 'native-base';
 import ListRooms from "./ListRooms";
-import Footer_rooms from "./Footer_rooms";
 import Header_rooms from "./Header_rooms";
 import request_all_users from "../../actions/fetch_all_users";
 import ModalRoomsActions from "./ModalRoomsActions";
@@ -23,6 +21,7 @@ import request_DELETE_CATEGORIES from "../../actions/fetch_delete_category";
 import request_CREATE_CATEGORIES from "../../actions/fetch_create_category";
 import request_CREATE_ROOM from "../../actions/fetch_create_room";
 import {TYPE_ADMIN, TYPE_BANNED, TYPE_INVISIBLE, TYPE_MODERATOR, TYPE_USER} from "../const/const type_user_chats";
+import FastImage from "react-native-fast-image";
 
 const {width} = Dimensions.get('window');
 const checkbox = [{checked: false, id: 0, name: 'Пользователь', disable_item: false, mask: 1},
@@ -309,8 +308,8 @@ export default class Rooms extends React.Component {
 
                 height: 1,
 
-                width: '100%',
-                backgroundColor: '#aaaaaa',
+                width: width,
+                backgroundColor: '#000000',
 
 
             }}
@@ -318,17 +317,18 @@ export default class Rooms extends React.Component {
     );
 
 
-    room_view = (name, category, count,id) => {
+    room_view = (name, category, count, id) => {
         return (
             <ListItem
                 onPress={() => this.Get_room(name, category, count, id)}>
-                <Thumbnail source={{uri: 'room_arrow'}}
+                <FastImage source={{uri: 'rooms'}}
                            style={{
-                               width: this.state.size_rooms * 2.5,
-                               height: this.state.size_rooms * 2.5
+                               width: this.state.size_rooms * 1.5,
+                               height: this.state.size_rooms * 1.5,
+                               resizeMode: 'contain',
                            }}/>
                 <Body>
-                    <Text style={{color: 'black', fontSize: this.state.size_rooms,fontWeight:'bold'}}>
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms,}}>
                         {name}
 
 
@@ -340,8 +340,8 @@ export default class Rooms extends React.Component {
                         color: '#ff361c',
                         fontSize: this.state.size_rooms,
                         textAlign: 'center',
-                        fontWeight: 'bold'
-                    }}>{count}</Text>
+
+                    }}>({count})</Text>
 
                 </Right>
 
@@ -356,23 +356,19 @@ export default class Rooms extends React.Component {
 
             <ListItem style={{width: '100%'}}
                       onPress={() => this.Get_category(name, parent, id)}>
-                <Thumbnail source={{uri: 'go_folder'}} style={{
-                    width: this.state.size_rooms * 2.5,
-                    height: this.state.size_rooms * 2.5,
+                <FastImage source={{uri: 'categories'}} style={{
+                    width: this.state.size_rooms * 1.8,
+                    height: this.state.size_rooms * 1.8,
                     resizeMode: 'contain'
                 }}/>
                 <Body>
-                    <Text style={{color: 'black', fontSize: this.state.size_rooms,fontWeight:'bold'}}>
+                    <Text style={{color: 'black', fontSize: this.state.size_rooms}}>
                         {name}
-
-
                     </Text>
                 </Body>
 
-
             </ListItem>
         )
-
 
     };
 
@@ -385,12 +381,12 @@ export default class Rooms extends React.Component {
 
             case TYPE_ADMIN:
 
-                if (item.parent){
+                if (item.parent) {
 
                     return this.category_view(item.name, item.parent, item._id.$oid)
                 }
 
-                return this.room_view(item.name, item.category, item.count,item._id.$oid);
+                return this.room_view(item.name, item.category, item.count, item._id.$oid);
 
 
             case TYPE_MODERATOR:
@@ -404,7 +400,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
+                    return this.room_view(item.name, item.category, item.count, item._id.$oid)
                 }
                 break;
 
@@ -413,7 +409,7 @@ export default class Rooms extends React.Component {
                 if (banned) {
 
 
-                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
+                    return this.room_view(item.name, item.category, item.count, item._id.$oid)
                 }
                 break;
 
@@ -425,7 +421,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
+                    return this.room_view(item.name, item.category, item.count, item._id.$oid)
                 }
                 break;
 
@@ -437,7 +433,7 @@ export default class Rooms extends React.Component {
                         return this.category_view(item.name, item.parent, item._id.$oid)
                     }
 
-                    return this.room_view(item.name, item.category, item.count,item._id.$oid)
+                    return this.room_view(item.name, item.category, item.count, item._id.$oid)
                 }
                 break;
 
@@ -474,13 +470,11 @@ export default class Rooms extends React.Component {
     Get_room = async (name, category, count, id) => {
 
 
-
         console.log('room_id=:' + id);
         const Nick_chats = await request_MY_NICKNAME(this.props.name);
 
 
-        const a = this.props.name;
-        await request_ENTRY_USER_ROOM(name, a);
+
 
 
         const {navigator} = this.props;
@@ -488,17 +482,16 @@ export default class Rooms extends React.Component {
 
             nic: this.props.name,
             room: id,
-            room_name:name,
+            room_name: name,
             category_name_toolbar: this.state.category_name_toolbar,
-            nic_color:Nick_chats[2],
-            nic_avatar:Nick_chats[3],
+            nic_color: Nick_chats[2],
+            nic_avatar: Nick_chats[3],
             chat_name: Nick_chats[0],
             type_user: Nick_chats[1],
             item_menu: this.state.item_menu,
             category_update: this.state.category_update,
             count: this.props.count,
             parent: this.state.parent,
-
 
 
         });
@@ -532,7 +525,7 @@ export default class Rooms extends React.Component {
             <Container style={{backgroundColor: '#3c3e5e',}}>
                 <ImageBackground
                     style={{resizeMode: 'contain', height: '100%', width: '100%'}}
-                    source={{uri: 'default_background'}}>
+                    source={{uri: 'background_airwaychat'}}>
 
                     <Header_rooms
                         back_room={this.back_room}
@@ -542,6 +535,16 @@ export default class Rooms extends React.Component {
                         type_user={this.state.type_user}
 
                     />
+                    <Text style={{
+                        textAlign: 'center',
+                        backgroundColor: '#ffffff',
+                        borderRadius: 12,
+                        paddingBottom: '2%',
+                        paddingTop: '2%',
+                        marginTop: '1%',
+                        marginLeft: '2%',
+                        marginRight: '2%'
+                    }}>Выберите комнату</Text>
                     <ModalRoomsActions
                         hideRoomsMenu={this.hideRoomsMenu}
                         list_checkbox={this.state.list}

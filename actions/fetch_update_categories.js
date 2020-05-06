@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 async function request_UPDATE_CATEGORIES(admin_id,change_name,category_id,mask)  {
 

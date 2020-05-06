@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 import FireSingleTon from "../FireSingleTon";
 
 async  function request_login(login,password,imei) {

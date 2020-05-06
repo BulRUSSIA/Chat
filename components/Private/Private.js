@@ -1,686 +1,465 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
-    ActivityIndicator,
+    Text,
+    View,
+    KeyboardAvoidingView,
+    ImageBackground,
     Alert,
-    Dimensions,
-    Image,
-    Keyboard,
-   TouchableOpacity,
-    View
+    TouchableOpacity,
+    Keyboard, Image, AsyncStorage, Dimensions
 } from 'react-native';
-import private_menu from '../const/private_menu'
-import styles from '../../styles'
-import ImagePicker from "react-native-image-picker";
-import {Body, Button, Header, Left, Right, Text, Title,} from 'native-base';
-import Icon from "react-native-vector-icons/AntDesign";
-import PRIVATE_ACTIONS from '../const/PRIVATE_ACTIONS'
-import {Private_Flatlist} from "./Private_Flatlist";
+import SocketIOClient from 'socket.io-client';
+import FastImage from "react-native-fast-image";
+import {address, address_attach} from "../ChatPortal/config_connect";
 import emoticons from "../const/EmojiObject";
+import styles from "../../styles";
+import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview'
 import {TextInput_Chatting} from "../Chatting/TextInput_Chatting";
-import SEND_PHOTO_request from "../../actions/fetch_upload_image";
-import {Attachments_preview} from "../Chatting/Attachments_preview";
-import NavigationApp from "../Chatting/NavigationSmiles";
+import {Modal_Chatting_Smiles} from "../Chatting/Modal_Chatting_Smiles";
+import {Body, Button, Header, Left, Right, Title} from "native-base";
+import Icon from "react-native-vector-icons/AntDesign";
 import PopupMenu from "../Rooms/PopupMenu";
-import request_GET_MESSAGES from "../../actions/fetch_get_messages";
-import request_SEND_MESSAGES from "../../actions/fetch_send_message";
-import AudioExample from "../Chatting/AudioRecorder";
-import SEND_AUDIO_request from "../../actions/fetch_upload_audio";
+import action_private_list from "../const/private_list_actions";
+import moment from 'moment';
+import PRIVATE_ACTIONS from "../const/PRIVATE_ACTIONS";
+import request_DELETE_PERSONALROOMS_ALL from "../../actions/fetch_delete_personalrooms_all";
 
 const {width, height} = Dimensions.get('window');
+const Winlayout = Dimensions.get('window');
+const ViewTypes = {
+    FULL: 0,
 
+};
 
-export default class Private extends React.Component {
-
+export default class Private extends Component {
 
     constructor(props) {
+
         super(props);
 
+        let dataProvider = new DataProvider(() => {
+            return true;
+        });
 
         this.state = {
-            color: [],
 
             room: this.props.private_room,
-            private: this.props.private_data,
-            private_chatter: this.props.private_chatter,
-            users: [],
-            item_menu: private_menu,
-            text: '',
-            smiles: '',
-            msg: '',
-            pr_inf: '',
-            selectedEmoji: '',
-            modalVisible: false,
-            showEmojiPicker: false,
-            selected: undefined,
-            photo: null,
-            attachments: [],
+            user: this.props.nic,
+            message: '',
+            system: false,
+            hideNic: false,
+            itemsCount: -20,
+            readed: false,
+            isVisible: false,
+            active: false,
+            color: '#010101',
+            avatar: false,
             ShowSmiles: false,
-            modal_indicator: false,
-            audio_preview: false,
+            isFetching: false,
+            editable_txt_smiles: true,
+            photo_attachments: false,
+            size_av: 18,
+            size_msg: 25,
+            chatMessages: [],
+            list: dataProvider,
+            marque_text: '',
 
 
         };
 
 
-    }
+        this._layoutProvider = new LayoutProvider(
+            index => {
 
 
-    update_msg = async () => {
+                return ViewTypes.FULL;
 
+            },
+            (type, dim) => {
 
-        const message = await request_GET_MESSAGES(this.props.nic, this.state.room);
-        this.setState({
-                private: message,
+                dim.width = width * 1;
+                dim.height = this.state.size_msg * this.state.size_av * 0.2 / Winlayout.scale
 
 
             }
         );
+    }
+
+
+    _retrieveData_Settings = async () => {
+        try {
+
+
+            const size_av = await AsyncStorage.getItem('size_avatar');
+            const size_msg = await AsyncStorage.getItem('size_message');
+
+
+            // We have d ata!!
+            this.setState({
+                size_av: Number(size_av),
+                size_msg: Number(size_msg),
+
+            });
+
+
+        } catch (error) {
+            console.log('error -asyncstore', error)
+        }
+    };
+    add_text = async (text) => { // a dd   tex t  to      t e           xti   n  p  u t
+
+
+        await this.setState({message: text});
 
 
     };
+
+    message_object() {
+
+        return {
+            room: this.state.room,
+            user: this.state.user,
+            message: this.state.message,
+            system: this.state.system,
+            hideNic: this.state.hideNic,
+            attachments: [],
+            readed: this.state.readed,
+            nic: this.props.chat_name,
+            color: this.state.color,
+            avatar: this.state.avatar,
+            createdAt: new Date(),
+            type: 2,
+        }
+
+
+    }
+
+    smiles_visible_state = () => {
+        this.setState({isVisible: !this.state.isVisible, ShowSmiles: !this.state.ShowSmiles,})
+
+    };
+    socket_con = () => {
+        this.socket.on('connect', () => {
+            this.socket.emit('joined', this.message_object());
+
+        });
+
+
+    };
+
 
     componentWillUnmount() {
 
-        clearInterval(this.interval);
-        console.log('i am unmount chatting')
-    }
+        this.socket.on('disconnect', () => {
+            this.socket.emit('disconnected', this.message_object());
+        });
 
-    componentDidMount = () => {
+        this.socket.close()
+
+    };
+
+    componentDidMount = async () => {
+
+        await this._retrieveData_Settings();
+
+        this.socket = SocketIOClient(`${address}/chat`, {
+            jsonp: false,
+            reconnection: true,
+            reconnectionDelay: 100,
+            reconnectionAttempts: 100,
+            pingTimeout: 300,
+            transport: ['websocket'],
+            query: 'b64=1'
+        });
+        this.socket_con();
+        await this.socket.on("message", msg => {
+
+            console.log('MESSSAGE_RPIVATE:', msg);
+            this.setState({
+                list: this.state.list.cloneWithRows(
+                    // this.reverse(this.state.chatMessages.concat(msg))
+                    this.state.chatMessages.concat(msg).reverse()
+                ),
+                chatMessages: this.state.chatMessages.concat(msg),
+            });
+        });
 
 
-        this.interval = setInterval(() => this.update_msg(), 2000);
+        this.socket.on('last_message', (data) => {
+            this.setState({
+                list: this.state.list.cloneWithRows(
+                    this.state.chatMessages.concat(data).reverse()
+                ),
+                chatMessages: this.state.chatMessages.concat(data),
+            });
+        });
 
 
     };
 
-
-    onActionSelected = async (position) => {
-
-
-        const {navigator} = this.props;
+    onValueChange = async (select) => {
 
 
-        switch (position) {
-
+        switch (select) {
             case 0:
-                await this.handleChoosePhoto();
+                alert('фото');
                 break;
 
             case 1:
                 break;
 
 
-            case 3:
-                navigator.pop({
-                    room: this.props.room,
-                    nic: this.props.nic,
-                    chat_name: this.props.chat_name,
-                    DataSource: this.props.list_data,
-
-
-                });
-
-
-                this.componentWillUnmount();
-
-
         }
+
+
     };
 
-    handleChoosePhoto = () => {
-        const options = {
-            noData: true,
-        };
-
-        ImagePicker.launchImageLibrary(options, response => {
-            if (response.uri) {
-                this.setState({photo_attachments: response});
-                Alert.alert("фото успешно загружено!", "\nЖмите кнопку отправить");
-
-                this.componentWillUnmount();
-
-                this.componentDidMount()
+    submitChatMessage = async () => {
+        await Keyboard.dismiss();
+        const message = await this.message_object();
 
 
-            }
-
+        await this.socket.emit('text', message);
+        this.setState({
+            message: ''
 
         });
-
-
-    };
-    close_attach = () => {
-
-        this.setState({photo_attachments: false,})
-
-    };
-
-    view = () => {
-
-        if (this.state.photo_attachments) {
-
-            return (
-                <Attachments_preview
-                    color='#3C3E5A'
-                    photo={this.state.photo_attachments}
-                    close_attach={this.close_attach}
-
-                />
-            )
-        }
-    };
-
-
-    send_photo = async () => {
-        this.setState({modal_indicator: true});
-        const attach = await SEND_PHOTO_request(this.state.photo_attachments);
-        this.setState({attachments: attach[0]});
-        this.setState({modal_indicator: false});
-
-
-    };
-
-    send_msg = async () => {
-
-
-        if (this.state.photo_attachments) {
-
-            await Keyboard.dismiss();
-            await this.send_photo();
-            await request_SEND_MESSAGES(this.props.nic, 'Вложения', this.state.room, this.state.attachments, 2);
-            await this.setState({
-                text: '', attachments: [], photo_attachments: false
-            });
-
-
-        } else {
-
-            await Keyboard.dismiss();
-
-            const res = await request_SEND_MESSAGES(this.props.nic, this.state.text, this.state.room, this.state.attachments, 2);
-
-            let validate_send = res['send'];
-            if (!validate_send) {
-
-                Alert.alert('Ошибка', 'Невозможно отправить сообщение')
-
-            }
-
-            this.setState({
-                text: '', attachments: []
-            });
-
-        }
-    };
-
-
-    add_text = async (text) => {
-
-
-        await this.setState({text: text})
-
-
-    };
-
-    add_emoji = async (emoji) => {              //add emoji to  text
-        await this.setState({text: this.state.text + emoji});
-    };
-
-
-    View_full_photo = async (attach) => {
-
-        const {navigator} = this.props;
-
-        await navigator.push('PHOTO_VIEWER', {
-            room: this.props.room,
-            nic: this.props.nic,
-            chat_name: this.props.chat_name,
-            photo_attachments: attach,
-            private_room: this.props.private_room,
-            private_chatter: this.props.private_chatter,
-            private_data: this.props.private_data,
-        });
+        // if (this.props.attachments_url.length > 0) {
+        //     this.props.close_attach()
+        //
+        //
+        // }
 
 
     };
 
 
-    Modal_Activity = () => {
-
-        if (this.state.modal_indicator) {
-
-            return (
-
-
-                <ActivityIndicator
-                    size='large'
-                    animating={this.state.modal_indicator}/>
-
-
-            )
-        }
-
-    };
-
-    ParsedText = (text, user) => {
-
-        return text.split(/([\u00a9|\u00ae[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map(elem => {
+    ParsedText = (text, color) => {
+        return text.split(/([\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]])/g).map((elem, index) => {
             if (!elem) return null;
             if ((emoticons[elem]))
                 return (
-
-                    <Image style={{width: 20, height: 20,}}
-                           source={emoticons[elem]}/>
-
-
+                    <Image style={{
+                        width: this.state.size_msg,
+                        height: this.state.size_msg,
+                        resizeMode: 'contain'
+                    }} source={emoticons[elem]}
+                           key={index * 2}
+                    />
                 );
             else {
 
-                if (user === this.props.private_chatter) {
-                    return (
-
-                        <Text style={styles.private2}
-
-
-                        >{elem}</Text>
-
-
-                    )
-
-                }
-
                 return (
-
-                    <Text style={styles.private1}
-
-
-                    >{elem}</Text>
+                    <Text
+                        key={index * 7}
+                        style={{
+                            fontSize: this.state.size_msg,
+                            flex: 1,
+                            color: color,
+                        }}>{elem}
+                    </Text>
 
                 )
-
-
             }
 
 
         });
     };
-    audio_screen = async () => {
 
-        this.setState({audio_preview: !this.state.audio_preview,attachments:[]})
+
+    add_emoji = (emoji) => {              //add emoji  to te xt
+        this.setState({
+            message: this.state.message + emoji,
+            isVisible: !this.state.isVisible,
+            ShowSmiles: !this.state.ShowSmiles,
+        });
     };
 
 
-    choice_type_attach = (attach, user, attach_name) => {
+    ShowSmiles = async () => { // логика отображения  смайл   ов    t rue/  1 fal se1 scaleY: -1
 
 
-        switch (attach_name) {
+        await this.setState({
 
-            case 0:
-                return this.attachments_sound_view(attach,user);
 
-            case 1:
-                return this.attachments_view(attach, user);
+            ShowSmiles: !this.state.ShowSmiles,
+            editable_txt_smiles: !this.state.editable_txt_smiles,
+            active: !this.state.active,
+            isVisible: !this.state.isVisible,
+
+        });
+
+    };
+
+    action_profile = async (nic, id) => {
+
+        await this.props.actions_profile(nic, id);
+        this.setState({message: nic + ','})
+
+
+    };
+
+
+    _rowRender = (type, data) => {
+        let background = 'rgb(184,196,203)';
+        let marginleft = 1;
+        let marginright = width / 2;
+        let color = '#252525';
+        if (data.user === this.props.nic) {
+
+            background = 'rgb(87,120,116)';
+            marginleft = width / 2;
+            marginright = 1;
+            color = 'white';
 
         }
 
-    };
 
-    listening_sound = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
-        const {navigator} = this.props;
-        console.log('auido file', attach);
-        await navigator.push('PlayerScreen', {title: 'Аудио', filepath: attach});
-    };
-    attachments_view = (attach, username) => {
-
-
-        let me = this.props.chat_name;
-        if (attach.length > 1) {
-            console.log('me:' + me);
-
-
-            if (me === username) {
-
-                return (
-                    <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
-
-                        <View style={{
-
-
-                            alignItems: 'center',
-                        }}>
-                            <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
-
-                        </View>
-                    </TouchableOpacity>
-
-
-                );
-            } else {
-
-                return (
-                    <TouchableOpacity onPress={() => this.View_full_photo(attach)}>
-
-                        <View style={{
-
-                            alignItems: 'center',
-                        }}>
-                            <Image source={{uri: attach}} style={styles.imageAttachPrivate}/>
-                        </View>
-                    </TouchableOpacity>
-
-
-                );
-
-
-            }
-
-
-        }
-    };
-
-    attachments_sound_view = (attach, username) => {
-
-
-        let me = this.props.chat_name;
-        if (attach.length > 1) {
-            console.log('me:' + me);
-
-
-            if (me === username) {
-
-                return (
-                    <TouchableOpacity onPress={() => this.listening_sound(attach)}>
-
-                        <View style={{
-
-
-                            alignItems: 'center',
-                        }}>
-
-                            <Text style={{fontSize:25,color:'#ffffff',fontWeight:'bold'}}>
-                                Аудио файл
-                            </Text>
-
-                        </View>
-                    </TouchableOpacity>
-
-
-                );
-            } else {
-
-                return (
-                    <TouchableOpacity onPress={() => this.listening_sound(attach)}>
-
-                        <View style={{
-
-
-                            alignItems: 'center',
-                        }}>
-
-                            <Text style={{fontSize:25,color:'#ffffff',fontWeight:'bold'}}>
-                                Аудио файл
-                            </Text>
-
-                        </View>
-                    </TouchableOpacity>
-
-
-                );
-
-
-            }
-
-
-        }
-    };
-
-
-    _renderItem = ({item}) => { //render листа с чат сообще ниями
-
-        let user = item.user; //имя пользователя
-        let attch = item.attachments;//аттач-
-        let attch_name = item.name_attachments;
-
-        let message = item.message; //сообшение
-        let user_id = item.user_id; //id поль зователя
-
-
-        let user_privete = this.props.private_chatter;
-
-
-        if (item.user === user_privete) {
-
-
-            return (
+        return (<View style={{flexDirection: 'row', flex: 1, transform: [{scaleY: -1}]}}>
 
 
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
-                    marginRight: width / 2,
-                    backgroundColor: 'rgba(53,55,81,0.94)',
-                    marginTop: '2%',
-                    marginBottom: '2%',
-                    marginLeft: '2%',
+                    marginLeft: marginleft,
+                    marginRight: marginright,
+                    backgroundColor: background,
                     borderRadius: 14,
-                    paddingLeft: '2%',
-                    paddingBottom: '1%'
-                }}>
-                    <View style={{position: 'relative'}}>
-                        <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
-                        <Text style={{color: '#3e5d84'}}
-
-                        >
-
-
-                            {this.ParsedText(item.message, item.user)}
-
-                        </Text>
-                        {this.choice_type_attach(attch, user, attch_name)}
-                    </View>
-
-
-                </View>
-
-
-            )
-
-
-        } else {
-
-            return (
-
-
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    marginLeft: width / 2,
-                    backgroundColor: 'rgba(37,86,110,0.9)',
                     marginTop: '2%',
-                    marginBottom: '2%',
-                    marginRight: '2%',
-                    borderRadius: 14,
                     paddingLeft: '2%',
-                    paddingBottom: '1%'
+                    marginBottom: '2%'
                 }}>
+
                     <View style={{position: 'relative'}}>
-                        <Text style={{justifyContent: 'center', color: 'white'}}>  {item.createdAt}</Text>
+                        <Text style={{
+                            justifyContent: 'center',
+                            color: color
+                        }}> {moment(data.createdAt).format('YYYY-MM-DD HH:mm:ss')}</Text>
                         <Text style={{color: 'rgba(37,86,110,0.96)', paddingBottom: '5%', marginTop: '1%'}}
 
                         >
 
 
-                            {this.ParsedText(item.message, item.user)}
+                            {this.ParsedText(data.message, color)}
 
 
                         </Text>
-                        {this.choice_type_attach(attch, user, attch_name)}
+
                     </View>
 
 
                 </View>
 
 
-            )
+                {data.attachments.length > 0 &&
+
+                <FastImage source={{uri: `${address_attach}${data.attachments[0]}`}}
+                           style={styles.imageAttachRoom}/>
 
 
-        }
+                }
+
+            </View>
+
+        )
+
+
     };
 
-    ShowSmiles = () => {
-
-
-        this.setState({
-
-
-            ShowSmiles: !this.state.ShowSmiles
-        });
-
-    };
-    send_audio_file = async (audio) => {  //отправляем фото в  mong oDb
-
-        const attach = await SEND_AUDIO_request(audio);
-        this.setState({attachments: attach[0], text: attach[1]});
-
+    pop_router = () => {
+        const {navigator} = this.props;
+        navigator.pop({nic: this.state.user});
+        this.props.update_list_pm();
 
     };
 
     render() {
+
+
         const Smiles = this.state.ShowSmiles;
-        const attachments_audio = this.state.audio_preview;
 
         return (
 
-            <View style={{backgroundColor: '#21212f', flex: 1}}
 
+            <ImageBackground
+                style={{width: '100%', height: '100%'}}
+
+                source={{uri: 'background_airwaychat'}}
             >
+                <Header style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                        androidStatusBarColor="#A9A9A9"
 
-
-                <Header style={{backgroundColor: '#0D5E96',}}
-                        androidStatusBarColor="#0D5E96"
 
                 >
 
                     <Left style={{flex: 1}}>
                         <Button transparent
 
-                                onPress={() => this.onActionSelected(3)}>
+                                onPress={() => this.pop_router()}>
                             <Icon
-                                style={{color: 'white'}}
+                                style={{color: 'black'}}
                                 size={25}
                                 name="arrowleft"/>
                         </Button>
 
                     </Left>
                     <Body>
-
-                        <Title>{this.props.private_chatter}</Title>
+                        <Title style={{color: 'black'}}>Приват</Title>
                     </Body>
-                    <Right>
 
+                    <Right>
                         <PopupMenu
 
 
                             actions={PRIVATE_ACTIONS}
-                            onPress={(e, i) => this.onActionSelected(i)}
+                            onPress={(e, i) => this.onValueChange(i)}
                         />
                     </Right>
 
                 </Header>
-                {this.Modal_Activity()}
-
-                <Private_Flatlist
-
-                    private={this.state.private}
-                    render={this._renderItem}
+                <View style={{width: '100%', height: height / 6, flex: 1}}>
 
 
-                />
-
-                {this.view()}
-
-
-
-                {
-                    attachments_audio &&
-
-                        <View style={{
-
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-
-
-                        }}>
-
-                            <View style={{
-                                width: width,
-                                height: height / 6,
-                                backgroundColor: '#3C3E5A',
-                                paddingLeft: '5%',
-                                paddingRight: '5%',
-                                borderRadius: 4,
-
-                            }}>
-
-                                <AudioExample
-
-                                              send_audio_file={this.send_audio_file}
-
-                                />
-
-
-
-
-                            </View>
-                        </View>
-
-
-
-
-                }
-
-                <TextInput_Chatting
-                    key_color='#3C3E5A'
-                    show={this.ShowSmiles}
-                    add_text={this.add_text}
-                    send_msg={this.send_msg}
-                    text={this.state.text}
-                    active={this.state.ShowSmiles}
-                    send_audio_screen={this.audio_screen}
-
-
-                />
-
-
-                {Smiles &&
-
-
-                <View style={{
-                    width: width, height: height * 0.4,
-
-                    backgroundColor: '#6d6d6d',
-                }}>
-                    <NavigationApp
-                        screenProps={{
-                            add_emoji: this.add_emoji
-
-                        }}
-
+                    <RecyclerListView
+                        style={{transform: [{scaleY: -1}]}}
+                        dataProvider={this.state.list}
+                        layoutProvider={this._layoutProvider}
+                        rowRenderer={this._rowRender}
+                        forceNonDeterministicRendering={true}
 
                     />
+
+
+                    <TextInput_Chatting
+                        key_color='#ffffff'
+                        show={this.ShowSmiles}
+                        send_msg={this.submitChatMessage}
+                        text={this.state.message}
+                        active={this.state.active}
+                        editable_key={this.state.editable_txt_smiles}
+                        add_text={this.add_text}
+                        send_audio_screen={this.props.audio_screen}
+                    />
+
+                    {Smiles &&
+
+
+                    <Modal_Chatting_Smiles
+                        add_emoji={this.add_emoji}
+                        visible={this.smiles_visible_state}
+                        isVisible={this.state.isVisible}
+                    />
+
+
+                    }
+
                 </View>
+            </ImageBackground>
 
-                }
-
-
-
-
-            </View>
 
         );
 
-
     }
-}
 
+
+}

@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 async function request_DELETE_ZAGS_REQUEST(user_request,user_from)  {
 

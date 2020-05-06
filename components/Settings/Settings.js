@@ -5,13 +5,15 @@ import {
     StyleSheet,
     TouchableWithoutFeedback,
     View,ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    ImageBackground,
 
 } from "react-native";
 import React from "react";
 import Slider from '@react-native-community/slider';
 import {OptimizedFlatList} from "react-native-optimized-flatlist";
 import FastImage from "react-native-fast-image";
+import {Header} from "native-base";
 
 const background_fon = [{
 
@@ -99,72 +101,119 @@ export default class Settings extends React.Component {
     render() {
 
 
-        return     <ScrollView>
+        return      <ImageBackground style={{width:'100%',height:'100%'}} source={{uri:'background_airwaychat'}}>
+
+
+
+
 
 
         <View style={styles.container}>
 
 
             <Text style={{
-                fontSize: 26,
-                textAlign: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                backgroundColor: '#3E9496',
-                marginBottom: 20
+                fontSize: 18,
+                marginLeft:15,
+                marginRight:15,
+                color: 'black',
+                textAlign:'center',
+                paddingBottom:10,
+                borderRadius:8,
+                backgroundColor: '#ffffff'
+
             }}>
 
                 Настройки</Text>
 
 
-            <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+            <Text style={{fontSize: 16,   marginLeft:15,  color: 'black'}}>
                 Размер текста
             </Text>
             <Slider
-                style={{width: 300, height: 80, alignSelf: 'center'}}
+                style={{width: 300, height: 40, alignSelf: 'center'}}
                 minimumValue={10}
                 maximumValue={24}
                 step={1}
                 value={this.state.size_message}
                 onValueChange={(sliderValue) => this.setState({size_message: sliderValue})}
-                minimumTrackTintColor="#2ABB28"
+                thumbTintColor="#010101"
+                minimumTrackTintColor="#010101"
                 maximumTrackTintColor="#000000"
             />
+            <View
+                style={{
+                    borderBottomColor: '#d4d4d4',
+                    borderBottomWidth: 1.5,
+                    marginLeft:15,
+                    marginRight:15,
+                }}
+            />
 
-            <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+            <View
+                style={{
+                    borderBottomColor: '#3862c0',
+                    borderBottomWidth: 1,
+                    marginLeft:15,
+                    marginRight:15,
+                }}
+            />
+
+            <Text style={{fontSize: 16,   marginLeft:15,  color: 'black', fontWeight: '600',}}>
                 Размер аватарок
             </Text>
             <Slider
-            style={{width: 300, height: 80, alignSelf: 'center'}}
+            style={{width: 300, height: 40, alignSelf: 'center'}}
             minimumValue={2}
             maximumValue={60}
             value={this.state.size_avatar}
             step={2}
             onValueChange={(sliderValue) => this.setState({size_avatar: sliderValue})}
-            minimumTrackTintColor="#2ABB28"
+            thumbTintColor="#010101"
+            minimumTrackTintColor="#010101"
             maximumTrackTintColor="#000000"
         />
-            <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+            <View
+                style={{
+                    borderBottomColor: '#3862c0',
+                    borderBottomWidth: 1,
+                    marginLeft:15,
+                    marginRight:15,
+                }}
+            />
+
+            <Text style={{fontSize: 16,   marginLeft:15,  color: 'black', fontWeight: '600',}}>
                 Размер текста в списке комнат
             </Text>
             <Slider
-                style={{width: 300, height: 80, alignSelf: 'center'}}
+                style={{width: 300, height: 40, alignSelf: 'center'}}
                 minimumValue={10}
                 maximumValue={26}
                 value={this.state.size_rooms}
                 step={2}
                 onValueChange={(sliderValue) => this.setState({size_rooms: sliderValue})}
-                minimumTrackTintColor="#2ABB28"
+                thumbTintColor="#010101"
+                minimumTrackTintColor="#010101"
                 maximumTrackTintColor="#000000"
             />
-            <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+            <View
+                style={{
+                    borderBottomColor: '#3862c0',
+                    borderBottomWidth: 1,
+                    marginLeft:15,
+                    marginRight:15,
+                }}
+            />
+
+            <Text style={{fontSize: 16,   marginLeft:15,  color: 'black', fontWeight: '600',}}>
                 Выбор фона
             </Text>
-            <View style={{backgroundColor: 'rgba(43,80,116,0.27)', paddingTop: '2%', paddingBottom: '2%'}}>
+            <View>
                 <OptimizedFlatList style={{
-                    marginLeft: 30,
-                    marginRight: 30,
-
+                    marginLeft: 35,
+                    marginRight: 35,
+                    backgroundColor:'#a9a9a9',
+                    borderRadius:5,
+                    marginBottom:5,
                     alignSelf: 'center'
                 }}
                                    horizontal
@@ -192,56 +241,73 @@ export default class Settings extends React.Component {
 
 
                 />
-                <Text style={{fontSize: 16, textAlign: 'center', color: 'white', fontWeight: 'bold',}}>
+                <View
+                    style={{
+                        borderBottomColor: '#3862c0',
+                        borderBottomWidth: 1,
+                        marginLeft:15,
+                        marginRight:15,
+                    }}
+                />
+
+                <Text style={{fontSize: 16, marginLeft:15,alignSelf:'center' }}>
                     Ваш выбор
                 </Text>
                 <FastImage
 
                     source={{uri: this.state.choice_background}}
-                    style={{width: 70, height: 70, alignSelf: 'center'}}
+                    style={{width: 70, height: 70,alignSelf:'center',  backgroundColor:'#a9a9a9',}}
                     resizeMode="cover"
+                />
+                <View
+                    style={{
+                        borderBottomColor: '#3862c0',
+                        borderBottomWidth: 2,
+                        marginTop:15,
+                        marginLeft:15,
+                        marginRight:15,
+                    }}
                 />
             </View>
 
             <TouchableOpacity onPress={() => this._storeData()} style={styles.buttonText1}>
                 <Text style={styles.buttonText}>
 
-                    Cохранить</Text>
+                    CОХРАНИТЬ</Text>
 
             </TouchableOpacity>
 
         </View>
-    </ScrollView>
+        </ImageBackground>
+
 
     }
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'rgb(38,73,92)',
 
 
     },
 
     buttonText: {
         textAlign: 'center',
-        color: '#ffffff',
-        fontWeight: 'bold',
-        fontSize: 18,
+        color: '#000000',
+        fontSize: 15,
         marginBottom: 20,
         paddingHorizontal: 10,
-        backgroundColor: '#3e9496',
+        backgroundColor: '#ffffff',
         paddingLeft: 30,
         paddingRight: 30,
         paddingTop: 10,
         paddingBottom: 10,
-        borderRadius: 14,
+        borderRadius: 6,
     },
 
 
     buttonText1: {
         textAlign: 'center',
-        color: '#FFF',
+        color: '#000000',
         fontWeight: 'bold',
         fontSize: 18,
         marginTop: '20%',

@@ -27,7 +27,7 @@ export default class Private_List extends React.Component {
             DataSource: [],
             item_menu: menuitem,
             selected: undefined,
-            animating: false,
+            animating: true,
 
 
         };
@@ -35,11 +35,29 @@ export default class Private_List extends React.Component {
 
     }
 
+    Sort_Date_Pm = async () =>{ //sort data_time pm list
 
-    Update_list =async ()=>{
+        let array = this.state.DataSource;
+
+        if (array!==undefined) {
+
+            array.sort(function compare(a, b) {
+                let dateA = new Date(a.last_time);
+                let dateB = new Date(b.last_time);
+                return dateB - dateA;
+            });
+        }
+       this.setState({DataSource:array})
+
+    };
+
+
+    Update_list =async ()=>{ //update data
 
         const get_list = await request_GET_PRIVATE_LIST(this.props.nic);
-        this.setState({DataSource: get_list})
+        console.log('updating_private_list:',this.props.nic);
+        this.setState({DataSource: get_list,animating:false});
+         await this.Sort_Date_Pm()
 
 
 
@@ -98,7 +116,8 @@ export default class Private_List extends React.Component {
             private_room: event,
             private_chatter: chatter,
             private_data: get_private,
-            list_data: this.state.DataSource
+            list_data: this.state.DataSource,
+            update_list_pm:this.Update_list,
 
 
         });
@@ -122,13 +141,23 @@ export default class Private_List extends React.Component {
 
             return (
 
-                <View style={{flex: 1, backgroundColor: '#3c3e5a'}}>
+
+                    <View style={styles.container1}>
+                        <ImageBackground
+                            style={{resizeMode: 'contain', height: '100%', width: '100%'}}
+                            source={{uri: 'background_airwaychat'}}>
+
+                            <Header_private_list
+                                back={this.back}
+                                onActionSelected={this.onValueChange}
+
+                            />
                     <ActivityIndicator
                         style={{marginTop: '50%'}}
                         size="large" color="#3E8CB4"
                         animating={this.state.animating}/>
-                </View>
-
+                        </ImageBackground>
+                    </View>
             )
 
 
@@ -140,7 +169,7 @@ export default class Private_List extends React.Component {
             <View style={styles.container1}>
                 <ImageBackground
                     style={{resizeMode: 'contain', height: '100%', width: '100%'}}
-                    source={{uri: 'default_background'}}>
+                    source={{uri: 'background_airwaychat'}}>
 
                     <Header_private_list
                         back={this.back}

@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 async function request_GET_GiftsList()  {
 
@@ -8,7 +8,7 @@ async function request_GET_GiftsList()  {
     try {
         let response = await fetch(url);
         let responseJsonData = await response.json();
-        let user_now = responseJsonData.data;
+        let user_now = responseJsonData;
 
         return user_now
 

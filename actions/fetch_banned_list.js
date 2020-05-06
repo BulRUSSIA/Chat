@@ -1,4 +1,4 @@
-import {address} from "../config_connect";
+import {address} from "../components/ChatPortal/config_connect";
 
 async function fetch_REQUEST_BANNED_LIST()  {
 

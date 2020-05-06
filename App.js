@@ -8,7 +8,6 @@ import Profile from "./components/Profile/Profile";
 import View_stuff from "./components/View_stuff/View_stuff";
 import Private from "./components/Private/Private";
 import Private_List from "./components/Private_List/Private_List";
-import {Profile_redactor} from "./components/Profile_redactor/Profile_redactor";
 import Profile_Redactor_New from "./components/Profile_redactor/Profile_Redactor_New";
 import NoticeScreen from './components/NoticeScreen/NoticeScreen';
 import ChatPortal from "./components/ChatPortal/ChatPortal";
@@ -21,6 +20,7 @@ import {ScreenAvatarList} from "./components/ChatPortal/ScreenAvatarList";
 import ScreenWeddings from "./components/ChatPortal/ScreenWeddings";
 import Settings from "./components/Settings/Settings";
 import PlayerScreen from 'react-native-sound-playerview'
+import {Photo_without_redactor} from "./components/Profile/Photo_without_redactor";
 export default class chat extends React.Component {
 
     constructor(props) {
@@ -47,11 +47,11 @@ export default class chat extends React.Component {
                     View_stuff,
                     Private,
                     Private_List,
-                    Profile_redactor,
                     ChatPortal,
                     PHOTO_VIEWER,
                     NavigationAdmin,
                     PhotosAll,
+                    Photo_without_redactor,
                     ScreenAvatarList,
                     Settings,
                     ScreenWeddings,

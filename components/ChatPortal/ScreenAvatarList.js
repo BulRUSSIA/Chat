@@ -1,9 +1,10 @@
-import {Alert, Dimensions,ImageBackground, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Dimensions,ImageBackground,ActivityIndicator, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import React from "react";
-import {Body, Button, Header, Icon, Left, Title} from "native-base";
+import {Body, Button, Header, Left, Title} from "native-base";
 import request_BUY_AVATAR from "../../actions/fetch_buy_avatar";
 import request_GET_AvatarList from "../../actions/fetch_Avatar_List";
 import FastImage from "react-native-fast-image";
+import Icon from "react-native-vector-icons/AntDesign";
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
@@ -13,6 +14,7 @@ export class ScreenAvatarList extends React.Component {
         super(props);
         this.state = {
             avatars_list: [],
+            loaded:true
 
         }
 
@@ -22,7 +24,7 @@ export class ScreenAvatarList extends React.Component {
     componentDidMount = async () => {
 
         const avatars_list = await request_GET_AvatarList();
-        this.setState({avatars_list: avatars_list})
+        this.setState({avatars_list: avatars_list,loaded:false})
     };
 
     BuyAvatar = async (avatar_id, price) => {
@@ -73,37 +75,71 @@ export class ScreenAvatarList extends React.Component {
     render() {
 
         const {navigator} = this.props;
+        const loaded = this.state.loaded;
+
+        if (loaded) {
+            return (
+                <View>
+                <Header
+                    style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                    androidStatusBarColor="#A9A9A9">
+
+
+                    <Left style={{flex: 1}}>
+                        <Button transparent
+
+                                onPress={()=>navigator.pop()}>
+                            <Icon
+                                size={25}
+                                style={{color: 'black'}}
+                                name="arrowleft"/>
+                        </Button>
+
+                    </Left>
+                    <Body style={{flex: 2}}>
+                        <Title style={{alignItems: 'center',color:'black'}}>Аватарки</Title>
+                    </Body>
+
+
+                </Header>
+
+                    <ActivityIndicator
+                        size="large"
+                        color="#0000ff"
+                    />
+                </View>
+
+            )
+
+
+        }
 
 
         return (
             <ScrollView>
                 <ImageBackground
                     style={{resizeMode: 'contain',height:'100%',width:'100%'}}
-                    source={{uri:'default_background'}}>
+                    source={{uri:'background_airwaychat'}}>
                 <View>
 
                     <Header
-                        style={{backgroundColor: '#0D5E96',}}
-                        androidStatusBarColor="#0D5E96"
-                    >
+                        style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                        androidStatusBarColor="#A9A9A9">
+
 
                         <Left style={{flex: 1}}>
                             <Button transparent
 
-                                    onPress={() => {
-                                        navigator.pop()
-                                    }
-
-
-                                    }>
+                                    onPress={()=>navigator.pop()}>
                                 <Icon
-                                    style={{color: 'white'}}
-                                    name="ios-arrow-back"/>
+                                    size={25}
+                                    style={{color: 'black'}}
+                                    name="arrowleft"/>
                             </Button>
 
                         </Left>
                         <Body style={{flex: 2}}>
-                            <Title style={{alignItems: 'center'}}>Аватарки</Title>
+                            <Title style={{alignItems: 'center',color:'black'}}>Аватарки</Title>
                         </Body>
 
 

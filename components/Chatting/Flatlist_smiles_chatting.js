@@ -16,7 +16,7 @@ export class Flatlist_smiles_chatting extends React.Component {
             <OptimizedFlatList
 
 
-                numColumns={10}
+                numColumns={3}
                 data={emoticons_value}
 
 
@@ -25,7 +25,7 @@ export class Flatlist_smiles_chatting extends React.Component {
                         <TouchableOpacity onPress={() => this.props.screenProps.add_emoji(item.value)}>
                             <View style={{flex:1, flexDirection: 'column', margin: 5}}>
 
-                                <FastImage style={{width: width*0.06, height: height*0.06,}}
+                                <FastImage style={{width: width*0.08, height: height*0.08,}}
                                            source={item.url}
                                            resizeMode={FastImage.resizeMode.contain}
 

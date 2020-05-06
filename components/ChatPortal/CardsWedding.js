@@ -60,7 +60,7 @@ export default class CardsWedding extends React.Component {
             return (<Text style={{
                 color: 'red',
                 flex: 0,
-                backgroundColor: 'rgba(75,163,226,0.66)',
+                backgroundColor: 'rgba(53,109,154,0.46)',
                 width: '100%',
                 textAlign: 'center',
                 marginTop: '1%',
@@ -169,7 +169,7 @@ export default class CardsWedding extends React.Component {
                                                                </View>
                                                                <View style={{alignSelf:'center',marginLeft:'7%',marginRight:'7%'}}>
                                                                <FastImage
-                                                               source={{uri: 'weddings_ring'}}
+                                                               source={{uri: 'people_private'}}
                                                                style={{
                                                                width: 25,
                                                                height: 25,
