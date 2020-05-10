@@ -1,175 +1,136 @@
 import {
     Text,
-    View,Dimensions
+    View, Dimensions
 
 } from "react-native";
 import React from "react";
+
 let winSize = Dimensions.get('window');
+
 export class Modal_information extends React.Component {
 
-    get_zags_name = () =>{
-        let zags = this.props.zagsName;
-        console.log('zags:',zags);
-
-        if ((zags!==null)) {
-
-            return ( <View >
-                <Text style={{
-                    color: '#010101', fontWeight: '400',
-                    fontSize: 40/winSize.scale,
-                    fontFamily: 'sans-serif-light'
-                }}>БРАК:
-
-                <Text style={{color:this.props.colorzags,fontWeight:'bold',  fontSize: 40/winSize.scale,}}>{zags}</Text>
-                </Text>
-            </View>)
-
-
-
-        }
-}
-
-
     render() {
-
-
-        return (<View style={{flex: 1,}}>
-
-                {this.props.user_info.map(function (item) {
-
-                    return (<View style={{flexDirection: 'column'}}>
-
-                        <Text style={{
+        return (
+            <View>
+                {this.props.user_info.map((item) => {
+                    if ((item.zags !== null)) {
+                        return (<View>
+                            <Text style={{
+                                color: '#010101', fontWeight: '400',
+                                fontSize: 40 / winSize.scale,
+                                fontFamily: 'sans-serif-light'
+                            }}>БРАК:
+                                <Text style={{
+                                    color: this.props.colorzags,
+                                    fontWeight: 'bold',
+                                    fontSize: 40 / winSize.scale,
+                                }}>{item.zags}</Text>
+                            </Text>
+                        </View>)
+                    }
+                    else if (item.firstName !== null) {
+                        return (<Text style={{
                             color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
+                            fontSize: 40 / winSize.scale,
                             fontFamily: 'sans-serif-light',
                         }}>
                             <Text style={{
                                 color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
+                                fontSize: 40 / winSize.scale,
                                 fontFamily: 'sans-serif-light'
                             }}>
                                 ИМЯ:
                             </Text>
-
                             {item.firstName}
 
-                        </Text>
-
-                        <Text style={{
+                        </Text>)
+                    }
+                    else if ((item.lastName !== null)) {
+                        return (<Text style={{
                             color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
+                            fontSize: 40 / winSize.scale,
                             fontFamily: 'sans-serif-light',
                         }}>
                             <Text style={{
                                 color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
+                                fontSize: 40 / winSize.scale,
                                 fontFamily: 'sans-serif-light'
                             }}>
-
                                 ФАМИЛИЯ:
                             </Text>
-                            {item.lastName}</Text>
-                        <Text style={{
+                            {item.lastName}</Text>)
+                    }
+                    else if (item.sex !== null) {
+                        return (<Text style={{
                             color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
+                            fontSize: 40 / winSize.scale,
                             fontFamily: 'sans-serif-light',
                         }}>
                             <Text style={{
                                 color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
+                                fontSize: 40 / winSize.scale,
                                 fontFamily: 'sans-serif-light'
                             }}>
-
                                 ПОЛ:
                             </Text>
-
-                            {item.sex}</Text>
-                        <Text style={{
+                            {item.sex}</Text>)
+                    }
+                    else if ((item.bday !== null)) {
+                        return (<Text style={{
                             color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
+                            fontSize: 40 / winSize.scale,
                             fontFamily: 'sans-serif-light',
                         }}>
                             <Text style={{
                                 color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
+                                fontSize: 40 / winSize.scale,
                                 fontFamily: 'sans-serif-light'
                             }}>
-
                                 ДЕНЬ РОЖДЕНИЯ:
                             </Text>
-
-
-                            {item.bday}</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
+                            {item.bday}</Text>)
+                    }
+                    else if (item.city !== null) {
+                        return (
                             <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
+                                color: '#3862c0', fontWeight: '400',
+                                fontSize: 40 / winSize.scale,
+                                fontFamily: 'sans-serif-light',
                             }}>
+                                <Text style={{
+                                    color: '#010101', fontWeight: '400',
+                                    fontSize: 40 / winSize.scale,
+                                    fontFamily: 'sans-serif-light'
+                                }}>
+                                    ГОРОД:
+                                </Text>
+                                {item.city}</Text>)
+                    }
 
-                                ГОРОД:
-                            </Text>
-
-                            {item.city}</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
+                    else if (item.about !== null) {
+                        return (
                             <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
+                                color: '#3862c0', fontWeight: '400',
+                                fontSize: 40 / winSize.scale,
+                                fontFamily: 'sans-serif-light',
                             }}>
+                                <Text style={{
+                                    color: '#010101', fontWeight: '400',
+                                    fontSize: 40 / winSize.scale,
+                                    fontFamily: 'sans-serif-light'
+                                }}>
 
-                                О СЕБЕ:
-                            </Text>
+                                    О СЕБЕ:
+                                </Text>
+                                {item.about}
+                            </Text>)
 
-                            {item.about}</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
-                            <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
-                            }}>
-
-                                РЕЙТИНГ:
-                            </Text>
-
-                            0</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
-                            <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
-                            }}>
-
-                                АНТИРЕЙТИНГ:
-                            </Text>
-
-                            0</Text>
+                    }
+                })
 
 
-                    </View>)
-                })}
-            {this.get_zags_name()}
+                }
             </View>
-
-
         )
-
     }
 }

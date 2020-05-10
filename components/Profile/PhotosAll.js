@@ -1,6 +1,6 @@
 import {
 
-    View, TouchableOpacity, Text, ImageBackground, Dimensions, Alert
+    View, TouchableOpacity, Text, ImageBackground, Dimensions, Alert, ActivityIndicator
 } from 'react-native';
 import React from "react";
 import {OptimizedFlatList} from 'react-native-optimized-flatlist'
@@ -16,6 +16,7 @@ import UPLOAD_PROFILE_PHOTO_request from "../Profile_redactor/fetch_upload_image
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
 import request_DELETE_PHOTO from "../Profile_redactor/fetch_delete_photo";
 import request_SET_AVATAR_PHOTO from "../Profile_redactor/fetch_set_avatar_photo";
+import Toast from "react-native-whc-toast";
 
 export class PhotosAll extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export class PhotosAll extends React.Component {
             isFetching: false,
             end: 0,
             isVisible: false,
+            indicator:false,
             photo: 'ic_portrait_deep_orange_700_48dp',
             upload_photo: '',
             description: '',
@@ -99,14 +101,16 @@ export class PhotosAll extends React.Component {
                 {
                     text: 'Удалить фото', onPress: async () => {
                         await request_DELETE_PHOTO(id_photo);
-                        await this.fetch_list()
+                        await this.fetch_list();
+                        this.refs.toast.show('фотография успешно удалена');
                     }
                 },
 
                 {
                     text: 'Установить на профиль', onPress: async () => {
                         await request_SET_AVATAR_PHOTO(this.props.nic_id, id_photo);
-                        await this.fetch_list()
+                        await this.fetch_list();
+                        this.refs.toast.show('Аватарка профиля установлена');
                     }
                 },
             ],
@@ -125,9 +129,9 @@ export class PhotosAll extends React.Component {
         });
     };
     send_responsible_photo = async () => {
-
+        this.setState({indicator:true});
         await request_ADD_PHOTO(this.props.nic_id, false, this.state.description,this.state.upload_photo);
-        this.setState({isVisible: false});
+        this.setState({isVisible: false,indicator:false});
         await this.fetch_list()
 
     };
@@ -212,6 +216,49 @@ export class PhotosAll extends React.Component {
 
 
         else {
+
+            if (this.state.indicator) {
+
+                return (
+                    <View>
+                        <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
+                            <Header
+                                style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
+                                androidStatusBarColor="#A9A9A9">
+
+
+                                <Left style={{flex: 1}}>
+                                    <Button transparent
+
+                                            onPress={this.props.get_pop}>
+                                        <Icon
+                                            size={25}
+                                            style={{color: 'black'}}
+                                            name="arrowleft"/>
+                                    </Button>
+
+                                </Left>
+                                <Body>
+                                    <Title style={{
+                                        color: 'black',
+                                        fontWeight: '200',
+                                        fontSize: 16,
+                                        width: 150
+                                    }}>Идет загрузка...</Title>
+                                </Body>
+
+
+                            </Header>
+                    <ActivityIndicator
+                        size="large"
+                        color="#254C6B"
+                    />
+                        </ImageBackground>
+                    </View>
+                )
+
+            }
+
 
 
             return (
@@ -300,6 +347,13 @@ export class PhotosAll extends React.Component {
 
 
                         />
+                        <View>
+
+                            <Toast ref="toast"
+                                   style={{borderRadius: 14}}
+
+                            />
+                        </View>
 
                         <Modal_add_photo
                             change_description={this.change_description}

@@ -10,9 +10,9 @@ async function request_GET_PROFILE(nic) {
 
         const response = await fetch(url);
         const responseJsonData = await response.json();
-        const data = JSON.parse(JSON.stringify(responseJsonData));
+        console.log('resp js',responseJsonData)
 
-        return data;
+        return responseJsonData;
     } catch (e) {
         console.log(e)
     }

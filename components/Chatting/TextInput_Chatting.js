@@ -53,7 +53,7 @@ export class TextInput_Chatting extends React.Component {
                 ref={(input) => this.secondTextInput = input}
                 onChangeText={(text) => this.props.add_text(text)}
                 value={this.props.text}
-                maxLength={120}
+                maxLength={90}
 
                 onSubmitEditing={this.props.send_msg}
 

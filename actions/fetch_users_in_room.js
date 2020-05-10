@@ -8,7 +8,7 @@ async function fetch_users_in_room(room)  {
     try {
         let response = await fetch(url);
         let responseJsonData = await response.json();
-        let user_now = responseJsonData.data;
+        let user_now = responseJsonData;
 
         return user_now
     } catch (e) {

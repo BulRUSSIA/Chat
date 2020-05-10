@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import {View} from "react-native";
 import FastImage from "react-native-fast-image";
 import styles from "../../styles";
+import {address_photo} from "../../config_connect";
 
 export default class HeaderBar extends React.Component {
 
@@ -34,11 +35,12 @@ export default class HeaderBar extends React.Component {
                     {this.props.user_info.map(function(item){
 
                         return (<View style={{ flexDirection: 'row'}}>
-                            <FastImage source={({uri: item.photo})} style={styles.imageAvatarProfile}
+
+                            <FastImage source={({uri: address_photo + item.photo})} style={styles.imageAvatarProfile}
 
                             />
 
-                        <Title style={{color:item.color,  fontWeight: '200',
+                        <Title style={{color:"#"+((item.color)>>>0).toString(16).slice(-6),  fontWeight: '200',
                             fontFamily: 'sans-serif-light',}}> {item.nic} </Title>
                         </View>)
                     })}

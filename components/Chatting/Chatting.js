@@ -262,14 +262,10 @@ export default class Chatting extends React.Component {
         switch (position) {
 
 
-            case 0:
-                this.setState({isVisibleList: !this.state.isVisibleList});
-                const usr_list_vw = await fetch_users_in_room(this.props.room); //пользователи в комнате
-                this.setState({users: usr_list_vw});
-                break;
 
 
-            case 1: //сменить комнату
+
+            case 0: //сменить комнату
 
 
                 await this.Del_user_change();
@@ -279,7 +275,7 @@ export default class Chatting extends React.Component {
                 break;
 
 
-            case 2: //профиль
+            case 1: //профиль
 
 
 
@@ -291,7 +287,7 @@ export default class Chatting extends React.Component {
                 break;
 
 
-            case  3: //чат портал
+            case  2: //чат портал
 
 
                 navigator.push('ChatPortal', {
@@ -308,7 +304,7 @@ export default class Chatting extends React.Component {
                 break;
 
 
-            case 4: // выход
+            case 3: // выход
 
 
                 navigator.reset('Login');
@@ -316,8 +312,24 @@ export default class Chatting extends React.Component {
                 this.componentWillUnmount();
                 break;
 
+            case 5: // личные сообшения
 
-            case 5: //админ меню
+                Alert.alert('Ошибка',"раздел в разработке");
+
+                // navigator.push('Private_List', {
+                //
+                //     nic: this.props.nic,
+                //     chat_name: this.props.chat_name,
+                //     select: this.onActionSelected.bind(this),
+                //
+                //
+                // }, {animation: 'right',duration:450});
+                //
+                // this.setState({new_pm: false});
+                break;
+
+
+            case 4: //админ меню
 
                 navigator.push('NavigationAdmin', {
                     type_user: this.props.type_user,
@@ -327,19 +339,13 @@ export default class Chatting extends React.Component {
                 }, {animation: 'right'});
                 break;
 
-            case 6: // личные сообшения
 
-                navigator.push('Private_List', {
-
-                    nic: this.props.nic,
-                    chat_name: this.props.chat_name,
-                    select: this.onActionSelected.bind(this),
-
-
-                }, {animation: 'right',duration:450});
-
-                this.setState({new_pm: false});
+            case 6:
+                this.setState({isVisibleList: !this.state.isVisibleList});
+                const usr_list_vw = await fetch_users_in_room(this.props.room); //пользователи в комнате
+                this.setState({users: usr_list_vw});
                 break;
+
 
             case 7: // прикрепить изображение
 

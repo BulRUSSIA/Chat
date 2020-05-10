@@ -8,7 +8,6 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
 
     render() {
         const user_list = this.props.users;
-        console.log(user_list)
         return (<View style={{backgroundColor: '#242424'}}>
                 <Modal
 
@@ -43,21 +42,20 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                                         extraData={this.props}
                                         renderItem={(({item}) =>
                                                 <TouchableOpacity
-                                                    onPress={() => this.props.action_nick(item.user, item.user_id)}>
+                                                    onPress={() => this.props.action_nick(item.nic, item.id)}>
                                                     <View style={{
                                                         flex: 1, flexDirection: 'row',
                                                     }}>
                                                         <Text style={{
                                                             fontSize: 35 / Winsize.scale,
                                                             flex: 1,
-
-                                                            color: '#010101', // item.color,
+                                                            color: "#"+((item.color)>>>0).toString(16).slice(-6),
                                                             marginLeft: 0,
                                                             padding: 6,
                                                             borderRadius: 4,
                                                             fontWeight: 'bold'
                                                         }}>
-                                                            {item.user}
+                                                            {item.nic}
                                                         </Text>
                                                     </View>
                                                 </TouchableOpacity>

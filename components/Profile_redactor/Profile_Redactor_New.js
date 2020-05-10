@@ -81,7 +81,7 @@ export default class Profile_redactor_New extends React.Component {
 
     componentDidMount = async () => {
         const profile_info = await request_GET_PROFILE(this.props.nic_id);
-        let a = profile_info.data;
+        let a = profile_info;
         this.setState({user_info: a});
         for (let i = 0; i < a.length; i++) {
             let obj = a[i];

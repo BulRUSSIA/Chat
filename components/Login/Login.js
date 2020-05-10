@@ -95,6 +95,7 @@ export default class Login extends React.Component {
                 return Alert.alert('Необходимо разрешить доступ к телефону')
 
             }
+
             await this._storeData();
             this.setState({isLoading: !this.state.isLoading});
             const login = await request_login(this.state.username.trim(),this.state.password.trim(), imei);

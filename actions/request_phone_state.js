@@ -12,14 +12,14 @@ import {PermissionsAndroid,Alert} from 'react-native';
                 'title': 'Пожалуйсте включите доступ к устройству!',
                 'message': 'Данное приложение очень нуждается в этом. '
             }
-        )
+        );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 
             Alert.alert("Права предоставлены");
         }
         else {
 
-          
+
 
         }
     } catch (err) {

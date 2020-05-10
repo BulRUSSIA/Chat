@@ -131,7 +131,7 @@ export default class Settings extends React.Component {
             </Text>
             <Slider
                 style={{width: 300, height: 40, alignSelf: 'center'}}
-                minimumValue={10}
+                minimumValue={14}
                 maximumValue={24}
                 step={1}
                 value={this.state.size_message}
@@ -163,7 +163,7 @@ export default class Settings extends React.Component {
             </Text>
             <Slider
             style={{width: 300, height: 40, alignSelf: 'center'}}
-            minimumValue={2}
+            minimumValue={30}
             maximumValue={60}
             value={this.state.size_avatar}
             step={2}

@@ -25,7 +25,7 @@ export class Toolbar_Chatting extends React.Component {
         >
             <TouchableNativeFeedback
                 background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}
-                onPress={() => this.props.select(1)}>
+                onPress={() => this.props.select(0)}>
             <Left style={{flex: 1,}}>
 
                     <Icon style={{color: 'black'}}
@@ -58,7 +58,7 @@ export class Toolbar_Chatting extends React.Component {
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                     background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}
-                        onPress={() => this.props.select(6)}
+                        onPress={() => this.props.select(5)}
 
                 >
 
@@ -73,7 +73,7 @@ export class Toolbar_Chatting extends React.Component {
                 </TouchableNativeFeedback>
                 <TouchableNativeFeedback
                     background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}
-                        onPress={() => this.props.select(0)}
+                        onPress={() => this.props.select(6)}
 
                 >
 

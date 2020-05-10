@@ -5,7 +5,6 @@ import {
     Alert, ImageBackground, Text, ScrollView, TouchableOpacity, Dimensions
 } from 'react-native';
 import FastImage from "react-native-fast-image";
-
 import Chatting from '../../components/Chatting/Chatting'
 import styles from '../../styles'
 import GiftList from "./GiftList";
@@ -23,12 +22,11 @@ import SingleTonUpdatePortal from "../ChatPortal/SingleTonUpdatePortal";
 
 const {width, height} = Dimensions.get('window');
 const pre_data =
-    {
-        data: [{
+    [{
             "nic": "Загрузка данных...",
             "photo": 'image_exist'
-        }]
-    };
+
+    }];
 
 
 export default class Profile extends React.Component {
@@ -61,16 +59,16 @@ export default class Profile extends React.Component {
     componentDidMount = async () => {
 
         const profile_info = await request_GET_PROFILE(this.state.user_id);
-        const gifts = await request_GET_GIFTS(this.props.user_id);
-        const photos_list = await request_GET_USER_PHOTO(this.props.user_id);
-        const data_user = await SingleTonUpdatePortal.PortalUpdates(this.props.user_id);
+        const gifts = await request_GET_GIFTS(this.state.user_id);
+        const photos_list = await request_GET_USER_PHOTO(this.state.user_id);
+        // const data_user = await SingleTonUpdatePortal.PortalUpdates(this.state.user_id);
         this.setState({
 
             user_info: profile_info,
             gifts_list: gifts,
             photos_list: photos_list,
-            zags: data_user[1],
-            colorzags: data_user[5]
+            zags: "asdas",
+            colorzags: "#010101"
 
 
         })
@@ -177,9 +175,9 @@ export default class Profile extends React.Component {
         switch (event) {
 
             case(0):
-                console.log('private');
-                await this.props.go_private('Написать Личное');
-
+                // console.log('private');
+                // await this.props.go_private('Написать Личное');
+                Alert.alert('Ошибка', 'раздел в разработке');
                 break;
             case(1):
                 console.log('gift');
@@ -290,11 +288,10 @@ export default class Profile extends React.Component {
                 <ImageBackground
                     style={{resizeMode: 'contain', height: '100%', width: '100%'}}
                     source={{uri: 'background_airwaychat'}}>
-                    {/*<View style={{width:'100%',height:'100%',backgroundColor:'#ffffff'}}>*/}
 
                     <HeaderBar
                         backs={this.backs}
-                        user_info={this.state.user_info.data}
+                        user_info={this.state.user_info}
                         visible={this.state.visible}
                         visible_action={this.visible_action}
                     />
@@ -316,7 +313,7 @@ export default class Profile extends React.Component {
                         <View style={{flex: 1, flexDirection: 'column', padding: 5, marginleft: 2}}>
 
                             <Modal_information
-                                user_info={this.state.user_info.data}
+                                user_info={this.state.user_info}
                                 zagsName={this.state.zags}
                                 colorzags={this.state.colorzags}
                             />
@@ -383,7 +380,6 @@ export default class Profile extends React.Component {
 
                 </ImageBackground>
 
-                {/*</View>*/}
             </View>
 
         )
@@ -393,15 +389,3 @@ export default class Profile extends React.Component {
 }
 
 
-//<View>
-//     //<ActionsList
-// //       profile_info={this.state.profile_info}
-
-// //    />
-//</View>
-
-//  <PhotosList
-//                             photos_list={this.state.photos_list}
-//                             View_full_photo={this.View_full_photo}
-//                             View_all_photo={this.View_all_photo}
-//                         />

@@ -15,8 +15,8 @@ import emoticons from "../const/EmojiObject";
 import styles from "../../styles";
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview'
 import {Modal_Chatting_Smiles} from "./Modal_Chatting_Smiles";
+import {Attachments_preview} from "./Attachments_preview";
 import TextTicker from 'react-native-text-ticker'
-
 const {width, height} = Dimensions.get('window');
 const Winlayout = Dimensions.get('window');
 const ViewTypes = {
@@ -55,7 +55,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             size_msg: 25,
             chatMessages: [],
             list: dataProvider,
-            marque_text: '',
+            marque_text:'',
 
 
         };
@@ -71,7 +71,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             (type, dim) => {
 
                 dim.width = width * 1;
-                dim.height = this.state.size_msg * this.state.size_av * 0.2 / Winlayout.scale
+                dim.height = this.state.size_msg*this.state.size_av*0.2/Winlayout.scale
 
 
             }
@@ -101,7 +101,6 @@ export default class Flatlist_Chatting_Messaging extends Component {
     };
     add_text = async (text) => { // a dd   tex t  to      t e           xti   n  p  u t
 
-
         await this.setState({message: text});
 
 
@@ -121,7 +120,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             color: this.state.color,
             avatar: this.state.avatar,
             createdAt: new Date(),
-            type: 1,
+            type:1,
         }
 
 
@@ -152,7 +151,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
     };
 
     componentDidMount = async () => {
-        console.log('chaaaaaaaaaaaat_name', this.props.chat_name);
+        console.log('chaaaaaaaaaaaat_name',this.props.chat_name);
 
         await this._retrieveData_Settings();
 
@@ -186,11 +185,13 @@ export default class Flatlist_Chatting_Messaging extends Component {
         });
 
 
+
         await this.socket.on("message", msg => {
 
 
             this.setState({
                 list: this.state.list.cloneWithRows(
+                    // this.reverse(this.state.chatMessages.concat(msg))
                     this.state.chatMessages.concat(msg).reverse()
                 ),
                 chatMessages: this.state.chatMessages.concat(msg),
@@ -200,7 +201,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
         });
 
         this.socket.on('run_text', (data) => {
-            this.setState({marque_text: data});
+            this.setState({marque_text:data});
         });
 
     };
@@ -235,7 +236,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
                         height: this.state.size_msg,
                         marginTop: '2%',
                         paddingBottom: '1%',
-                        resizeMode: 'contain'
+                        resizeMode:'contain'
                     }} source={emoticons[elem]}
                            key={index * 2}
                     />
@@ -250,7 +251,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
                             fontSize: this.state.size_msg,
                             flex: 1,
 
-                            color: color
+                            color: "#"+((color)>>>0).toString(16).slice(-6)
                         }}>{elem}
                     </Text>
 
@@ -286,10 +287,11 @@ export default class Flatlist_Chatting_Messaging extends Component {
 
     };
 
-    action_profile = async (nic, id) => {
+    action_profile = async (nic,id)=> {
 
-        await this.props.actions_profile(nic, id);
-        this.setState({message: nic + ','})
+        await  this.props.actions_profile(nic,id);
+        this.setState({message:nic+','})
+
 
 
     };
@@ -305,7 +307,9 @@ export default class Flatlist_Chatting_Messaging extends Component {
         }
 
 
-        return (<View style={{flexDirection: 'row', backgroundColor: background, flex: 1, transform: [{scaleY: -1}]}}>
+
+
+        return (<View style={{flexDirection: 'row',backgroundColor:background, flex: 1, transform: [{scaleY: -1}]}}>
                 {data.avatar && <FastImage source={{uri: data.avatar}} style={{
                     width: this.state.size_av,
                     height: this.state.size_av,
@@ -323,12 +327,13 @@ export default class Flatlist_Chatting_Messaging extends Component {
                 </Text>}
                 {!data.hideNic &&
 
+
                 <TouchableOpacity style={{flex: 1}}
                                   onPress={() => this.action_profile(data.nic, data.user)}>
                     <Text style={{
                         fontSize: this.state.size_msg,
                         marginTop: '2%',
-                        color: data.color,
+                        color: "#"+((data.color)>>>0).toString(16).slice(-6),
                         fontWeight: '200',
 
                     }}>
@@ -348,14 +353,20 @@ export default class Flatlist_Chatting_Messaging extends Component {
                         marginTop: '5%',
                         alignSelf: 'center',
                         marginBottom: '5%',
+
                     }}
                     onPress={() => this.props.View_full_photo(`${address_attach}${data.attachments[0]}`)}>
                     <FastImage source={{uri: `${address_attach}${data.attachments[0]}`}}
                                style={styles.imageAttachRoom}/>
                 </TouchableOpacity>
+
                 }
+
             </View>
+
         )
+
+
     };
 
     render() {
@@ -370,13 +381,12 @@ export default class Flatlist_Chatting_Messaging extends Component {
                 style={{flex: 1}}
                 behavior="padding">
 
-                <View style={{width: '100%', height: height / 6, flex: 1}}>
+                <View style={{width: '100%', height: height/6, flex: 1}}>
 
-                    {running_line.length > 1 &&
-                    <TouchableOpacity
-                        onLongPress={() => this.setState({marque_text: ''}, Alert.alert('Бегущая строка', 'глаза устали?'))}>
+                    {running_line.length>1 &&
+                    <TouchableOpacity onLongPress={()=>this.setState({marque_text:''},Alert.alert('Бегущая строка','отключена'))}>
                         <TextTicker
-                            style={{fontSize: 20, backgroundColor: 'white'}}
+                            style={{ fontSize:20,backgroundColor:'white' }}
 
                             scrollSpeed={100}
 
