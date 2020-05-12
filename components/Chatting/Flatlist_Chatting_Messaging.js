@@ -160,7 +160,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             reconnection: true,
             reconnectionDelay: 100,
             reconnectionAttempts: 100,
-            pingTimeout: 300,
+            pingTimeout: 3000,
             transport: ['websocket'],
             query: 'b64=1'
         });
@@ -202,6 +202,16 @@ export default class Flatlist_Chatting_Messaging extends Component {
 
         this.socket.on('run_text', (data) => {
             this.setState({marque_text:data});
+        });
+
+        this.socket.on('update_nic', (data) => {
+            this.setState({color:data['color']});
+
+        });
+
+        this.socket.on('update_avatar', (data) => {
+            this.setState({avatar:data['avatarLink']});
+
         });
 
     };

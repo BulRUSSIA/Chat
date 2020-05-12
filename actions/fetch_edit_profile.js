@@ -2,7 +2,7 @@ import {address} from "../config_connect";
 
 
 async function request_EDIT_PROFILE(user_id,bday,firstName,lastName,city,email,sex,color,about)  {
-
+    console.log(bday,firstName,lastName,city,email,sex,color,about)
     const url = address + `/edit/profile/`;
     try {
         const data = await fetch(url, {

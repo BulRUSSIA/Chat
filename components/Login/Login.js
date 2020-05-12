@@ -89,13 +89,13 @@ export default class Login extends React.Component {
         let LoginLength = this.state.username.length;
         let PasswordLength = this.state.password.length;
         if (LoginLength >= 3 || PasswordLength >= 3) {
-            request_READ_PHONE_STATE();
-            const imei = await request_IMEI();
-            if (!imei) {
-                return Alert.alert('Необходимо разрешить доступ к телефону')
-
-            }
-
+            // request_READ_PHONE_STATE();
+            // const imei = await request_IMEI();
+            // if (!imei) {
+            //     return Alert.alert('Необходимо разрешить доступ к телефону')
+            //
+            // }
+            let imei = 0;
             await this._storeData();
             this.setState({isLoading: !this.state.isLoading});
             const login = await request_login(this.state.username.trim(),this.state.password.trim(), imei);

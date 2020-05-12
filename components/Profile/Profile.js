@@ -23,8 +23,8 @@ import SingleTonUpdatePortal from "../ChatPortal/SingleTonUpdatePortal";
 const {width, height} = Dimensions.get('window');
 const pre_data =
     [{
-            "nic": "Загрузка данных...",
-            "photo": 'image_exist'
+        "nic": "Загрузка данных...",
+        "photo": 'image_exist'
 
     }];
 
@@ -193,8 +193,11 @@ export default class Profile extends React.Component {
                 Alert.alert('Ошибка', 'раздел в разработке');
                 break;
             case(4):
-
                 await this.BuyGift(null, '50', 'Запрос на Бракосочетание!', 'Вы уверены,что хотите вступить в брак с данным пользователем за\t', 1);
+                break;
+
+            case(5):
+                await this.my_photo();
                 break;
 
         }
@@ -276,11 +279,7 @@ export default class Profile extends React.Component {
     };
 
     render() {
-        let list_long = this.state.photos_list;
-
-
         return (
-
             <View style={styles.container_pofile}
 
             >
@@ -296,8 +295,25 @@ export default class Profile extends React.Component {
                         visible_action={this.visible_action}
                     />
 
-                    <View>
 
+
+
+<ScrollView>
+                        <Modal_information
+                            user_info={this.state.user_info}
+                            zagsName={this.state.zags}
+                            colorzags={this.state.colorzags}
+
+                        />
+
+
+
+
+                        <GiftList
+                            gifts_list={this.state.gifts_list}
+                            delete_gift={this.delete_gift}
+
+                        />
 
                         <GiftsList_action
                             visible_send_gift={this.state.visible_send_gift}
@@ -308,76 +324,12 @@ export default class Profile extends React.Component {
                         />
 
 
-                    </View>
-
-                        <View style={{flex: 1, flexDirection: 'column', padding: 5, marginleft: 2}}>
-
-                            <Modal_information
-                                user_info={this.state.user_info}
-                                zagsName={this.state.zags}
-                                colorzags={this.state.colorzags}
-                            />
-
-
-                        </View>
-
-                    <View style={{
-                        maxheight: height / 10,
-                        width: width,
-                        backgroundColor: 'rgba(75,75,75,0.32)',
-                        position: 'absolute',
-                        marginTop: height / 2
-                    }}>
-                        <GiftList
-                            gifts_list={this.state.gifts_list}
-                            delete_gift={this.delete_gift}
-
-                        />
-                    </View>
-                    {list_long.length > 0 && <View style={{
-
-                        flexDirection: 'row',
-                        borderWidth: 1,
-                        borderColor: '#707070',
-                        paddingTop: 5,
-                        backgroundColor: 'white',
-                        borderRadius: 5,
-                        marginLeft: '1%',
-                        marginRight: '1%',
-                        marginBottom: 5,
-                        position: 'absolute',
-                        width: width * 0.975,
-                        top: height / 1.493,
-                        flex: 1
-
-
-                    }}>
-                        <TouchableOpacity onPress={() => this.my_photo()} style={{
-                            flexDirection: 'row',
-                            width: width * 0.95,
-                            textAlign: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <FastImage source={{uri: "add_photo"}} style={styles.imageViewProfile_icon}
-                                       resizeMode={FastImage.resizeMode.contain}/>
-                            <Text style={styles.Profile_List_text}
-                            >
-
-                                {'\t'}ФОТОГРАФИИ
-
-                            </Text>
-                        </TouchableOpacity>
-                    </View>}
 
                     <ActionsList
-
-
                         Event_gift_handler={this.Event_gift_handler}
-
-
+                        photos_list={this.state.photos_list}
                     />
-
-
+</ScrollView>
                 </ImageBackground>
 
             </View>

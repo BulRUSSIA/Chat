@@ -5,4 +5,7 @@ export const TYPE_SUPERBAN = 32;
 export const TYPE_DEVELOPER = 64;
 export const TYPE_BANNED = 8;
 export const TYPE_USER = 1;
+export const SEX_FEMALE = 2;
+export const SEX_MALE = 1;
+export const SEX_NOTHING = 0;
 

@@ -1,7 +1,7 @@
 import {
     Text,
     View,
-    TextInput,TouchableOpacity, Dimensions, Picker, FlatList,
+    TextInput, TouchableOpacity, Dimensions, Picker, FlatList, Alert
 } from "react-native";
 
 const {height, width} = Dimensions.get('window');
@@ -9,11 +9,64 @@ import React from "react";
 import colors from "../const/colors";
 import styles from "../../styles"
 import FastImage from "react-native-fast-image";
+import Modal_change_password from "./Modal_change_password";
+import Toast from "react-native-whc-toast";
+import set_new_password from "./fetch_function/change_password";
 
 export class TextInputView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isVisible: false,
+            old_password: null,
+            new_password: null,
+            repeat_password: null,
+        };
+    }
+
+    change_visible_password = () => {
+        this.setState({isVisible: !this.state.isVisible})
+    };
+
+    change_password_old = (password) => {
+        this.setState({old_password: password})
+    };
+
+    change_password_new = (password) => {
+        this.setState({new_password: password})
+    };
+
+    repeat_password_new = (password) => {
+        this.setState({repeat_password: password})
+    };
+
+    fetch_and_validate_password = async () => {
+        this.setState({isVisible: false});
+
+        if (this.state.new_password !== this.state.repeat_password) {
+            this.refs.toast.show("Пароли должны совпадать");
+        }
+
+        else if (this.state.new_password.length<3) {
+            this.refs.toast.show("Пароль должен содержать от 3 и более символов");
+
+            }
+         else {
+            let validate = await set_new_password(this.props.user_id,this.state.old_password,this.state.new_password);
+            console.log('vaodd',validate)
+            if (validate["status"]){
+               return  this.refs.toast.show("Пароль успешно сменен")
+            }
+             else {
+                 return this.refs.toast.show("Введен неверный пароль")
+            }
+
+        }
+
+    };
+
 
     render() {
-
         this.showDatePicker = this.props.showDatePicker;
         let bday = new Date(this.props.bday);
         let year = bday.getFullYear().toString();
@@ -99,7 +152,7 @@ export class TextInputView extends React.Component {
                         <Picker.Item label="Женский" value={2}/>
                         <Picker.Item label="Не определен" value={3}/>
                     </Picker>
-                    <Text style={{color: 'black', marginLeft: '6%',}}>Ваш цвет:</Text>
+                    <Text style={{color: 'black', marginLeft: '6%',}}>Выберите цвет:</Text>
                     <FlatList horizontal
                               style={{
 
@@ -109,35 +162,26 @@ export class TextInputView extends React.Component {
                               data={colors}
 
 
-                              renderItem={(({item, index}) =>
+                              renderItem={(({item}) =>
 
 
-                                      //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
+                                      <TouchableOpacity onPress={() => this.props.selector_data("color", item)}>
 
-                                      <View style={{
-                                          flex: 1,
-                                          flexDirection: 'column',
-                                          width: 30,
-                                          height: 35,
-                                          margin: 5,
+                                          <View style={{
+                                              flex: 1,
+                                              flexDirection: 'column',
+                                              width: 30,
+                                              height: 35,
+                                              margin: 5,
+                                          }}>
 
-
-                                      }}>
-
-
-                                          <Text
-                                              style={[styles.prices1, {backgroundColor: colors[index % colors.length]}]}
-                                              onChangeText={(color) => this.setState({color})}
-                                              value={item.clr}
-
-                                          >
-
-
-                                          </Text>
-
-
-                                      </View>
-                                  //
+                                              <Text
+                                                  style={[styles.prices1,
+                                                      {backgroundColor: "#" + ((item) >>> 0).toString(16).slice(-6),}]}
+                                              >
+                                              </Text>
+                                          </View>
+                                      </TouchableOpacity>
                               )
                               }
 
@@ -146,6 +190,14 @@ export class TextInputView extends React.Component {
 
 
                     />
+                    <Text
+                        style={[styles.prices1, {backgroundColor: "#" + ((this.props.color) >>> 0).toString(16).slice(-6)}]}
+
+
+                    >
+
+
+                    </Text>
                     <Text style={{color: 'black', marginLeft: '6%',}}>День Рождения:</Text>
 
                     <Text
@@ -158,14 +210,13 @@ export class TextInputView extends React.Component {
                             borderRadius: 4,
                             paddingBottom: 10,
                             paddingTop: 10,
-                            textAlign:'center',
+                            textAlign: 'center',
                             fontSize: 16,
                             color: '#3862c0',
                             fontWeight: 'bold'
                         }}>
                         {`${year}-${mounth}-${day}`}
                     </Text>
-
 
 
                     <Text style={{color: 'black', marginLeft: '6%',}}>Город:</Text>
@@ -201,14 +252,14 @@ export class TextInputView extends React.Component {
                                keyboardType='default'
                                multiline={true}
                                value={this.props.about}
-                               maxLength={16}/>
+                               maxLength={80}/>
 
                     <View style={{
                         flex: 1,
                         flexDirection: 'row',
                         borderWidth: 1,
                         borderColor: '#707070',
-                        marginTop: 20,
+                        marginTop: 10,
 
 
                         backgroundColor: 'white',
@@ -218,20 +269,66 @@ export class TextInputView extends React.Component {
                         marginLeft: '1%',
                         marginRight: '1%'
                     }}>
-<TouchableOpacity onPress={()=>this.props.my_photo()} style={{flexDirection:'row'}}>
-                        <FastImage source={{uri: "add_photo"}} style={styles.imageViewProfile_icon}
-                                   resizeMode={FastImage.resizeMode.contain}/>
-                        <Text style={styles.Profile_List_text}
-                        >
+                        <TouchableOpacity onPress={() => this.props.my_photo()} style={{flexDirection: 'row'}}>
+                            <FastImage source={{uri: "add_photo"}} style={styles.imageViewProfile_icon}
+                                       resizeMode={FastImage.resizeMode.contain}/>
+                            <Text style={styles.Profile_List_text}
+                            >
 
-                            {'\t'}Мои фото
+                                {'\t'}Мои фото
 
-                        </Text>
-</TouchableOpacity>
+                            </Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        borderWidth: 1,
+                        borderColor: '#707070',
+                        marginTop: 5,
+                        marginBottom: 5,
+
+
+                        backgroundColor: 'white',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 5,
+                        marginLeft: '1%',
+                        marginRight: '1%'
+                    }}>
+                        <TouchableOpacity onPress={() => this.change_visible_password()} style={{flexDirection: 'row'}}>
+                            <FastImage source={{uri: "change_password"}} style={styles.imageViewProfile_icon}
+                                       resizeMode={FastImage.resizeMode.contain}/>
+                            <Text style={styles.Profile_List_text}
+                            >
+
+                                {'\t'}сменить пароль
+
+                            </Text>
+                        </TouchableOpacity>
+
+                        <Modal_change_password
+                            isVisible={this.state.isVisible}
+                            change_visible_password={this.change_visible_password}
+                            change_password_old={this.change_password_old}
+                            change_password_new = {this.change_password_new}
+                            repeat_password_new={this.repeat_password_new}
+                            password_old={this.state.old_password}
+                            password_new={this.state.new_password}
+                            password_repeat={this.state.repeat_password}
+                            fetch_and_validate_password={this.fetch_and_validate_password}
+                        />
+
                     </View>
 
                 </View>
+                <Toast ref="toast"
+                       style={{borderRadius: 14}}
 
+                />
 
             </View>
 

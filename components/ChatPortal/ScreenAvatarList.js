@@ -64,7 +64,7 @@ export class ScreenAvatarList extends React.Component {
 
         } else {
 
-            Alert.alert("Недостаточно средств", "Пополните баланс!!!")
+            Alert.alert("Ошибка", "Не хватает средств")
 
 
         }

@@ -3,8 +3,17 @@ import styles from "../../styles";
 import React from "react";
 import FastImage from "react-native-fast-image";
 
-const list = [{
+const list = [
+
+    {
+        action: 'ФОТОГРАФИИ',
+        icon: {uri:"add_photo"},
+        event: 5
+    },
+
+    {
     action: 'НАПИСАТЬ ЛИЧНОЕ',
+        icon: {uri:"email"},
 
     event: 0
 }, {
@@ -21,19 +30,20 @@ export default class ActionsList extends React.Component {
 
 
     render() {
-
+        let action_list = list;
+        let photos = this.props.photos_list;
+        if (photos.length === 0) {
+            action_list = list.slice(1,6)
+        }
         return (
-            <FlatList style={{marginBottom: 5,position:'absolute',width:width*0.998,top:height/1.4}}
+            <FlatList style={{marginBottom: 5,width:width*0.998,top:5}}
 
 
-                      data={list}
+                      data={action_list}
                       extraData={this.props}
-
-
                       renderItem={(({item}) =>
 
 
-                              //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
                               <TouchableOpacity onPress={() => this.props.Event_gift_handler(item.event)}>
                                   <View style={{
                                       flex: 1,

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 
     },
     container_pofile: {
-
+        flex:1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#06b3e9',
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     },
 
     prices1: {
-        fontSize: 25,
+        fontSize: 20,
         color: 'transparent',
         marginLeft: 0,
         padding: 1

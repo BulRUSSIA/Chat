@@ -7,6 +7,7 @@ import request_GET_PROFILE from "../../actions/fetch_profile_info";
 import {TextInputView} from "./TextInputView"
 import DateTimePicker from "./DateTimePicker";
 import request_EDIT_PROFILE from "../../actions/fetch_edit_profile";
+import {sex_serializer} from "../utils/sex_serializer";
 
 const pre_data =
     {
@@ -58,6 +59,7 @@ export default class Profile_redactor_New extends React.Component {
             case "sex":
 
                 this.setState({sex: item});
+                console.log("sex",item);
                 break;
             case "color":
 
@@ -80,8 +82,8 @@ export default class Profile_redactor_New extends React.Component {
 
 
     componentDidMount = async () => {
-        const profile_info = await request_GET_PROFILE(this.props.nic_id);
-        let a = profile_info;
+
+        let a = await request_GET_PROFILE(this.props.nic_id);
         this.setState({user_info: a});
         for (let i = 0; i < a.length; i++) {
             let obj = a[i];
@@ -103,22 +105,18 @@ export default class Profile_redactor_New extends React.Component {
     };
 //todo НЕКОРРЕКТНО СОХРАНЯЕТ ДАННЫЕ ПРОБЛЕМА В ЦВЕТЕ ВОЗРАСТЕ И ТД БЭК ТАК ЖЕ ПРОВЕРИТЬ
     save_and_pop = async () => {
-
-        console.log('save_and_pop');
-
+        Alert.alert("", "данные успешно сохранены");
+        this.Get_pop();
         await request_EDIT_PROFILE(this.props.nic_id,
-            this.state.bday,
+            new Date(this.state.bday),
             this.state.firstName,
             this.state.lastName,
             this.state.city,
             this.state.email,
-            this.state.sex,
+            sex_serializer(this.state.sex),
             this.state.color,
             this.state.about);
 
-        Alert.alert("Готово!", "данные успешно сохранены");
-
-        this.Get_pop();
 
 
     };
@@ -163,7 +161,6 @@ export default class Profile_redactor_New extends React.Component {
                 <ScrollView>
 
                     <TextInputView
-
                         sex={this.state.sex}
                         bday={this.state.bday}
                         firstName={this.state.firstName}
@@ -175,6 +172,7 @@ export default class Profile_redactor_New extends React.Component {
                         color={this.state.color}
                         about={this.state.about}
                         my_photo={this.my_photo}
+                        user_id={this.props.nic_id}
                         showDatePicker={this.showDatePicker.bind(this)}
                         selector_data={this.Change_date_selector.bind(this)}
 
