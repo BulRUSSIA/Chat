@@ -42,20 +42,20 @@ export class Toolbar_Chatting extends React.Component {
 
             <Right style={{flex: 1, justifyContent: 'center', alignItems: 'center',marginLeft:width*0.1}}>
 
-                <TouchableNativeFeedback
-                    background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}
-                    onPress={() => this.props.select(7)}
+                {/*<TouchableNativeFeedback*/}
+                {/*    background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}*/}
+                {/*    onPress={() => this.props.select(7)}*/}
 
-                >
-                <FastImage source={{uri: 'attach'}} style={{
-                    width: width*0.09,
-                    height: height*0.09,
-                    right:width/10
+                {/*>*/}
+                {/*<FastImage source={{uri: 'attach'}} style={{*/}
+                {/*    width: width*0.09,*/}
+                {/*    height: height*0.09,*/}
+                {/*    right:width/10*/}
 
 
-                }}
-                           resizeMode={FastImage.resizeMode.contain}/>
-                </TouchableNativeFeedback>
+                {/*}}*/}
+                {/*           resizeMode={FastImage.resizeMode.contain}/>*/}
+                {/*</TouchableNativeFeedback>*/}
                 <TouchableNativeFeedback
                     background={TouchableNativeFeedback.Ripple('rgba(72,119,108,0.77)',true)}
                         onPress={() => this.props.select(5)}

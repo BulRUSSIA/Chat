@@ -12,20 +12,33 @@ import FastImage from "react-native-fast-image";
 import Modal_change_password from "./Modal_change_password";
 import Toast from "react-native-whc-toast";
 import set_new_password from "./fetch_function/change_password";
+import set_new_nickname from "./fetch_function/change_nickname";
+import Modal_change_nickname from "./Modal_change_nickname";
 
 export class TextInputView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isVisible: false,
+            isVisible_nic:false,
             old_password: null,
             new_password: null,
             repeat_password: null,
+            new_nic:null,
         };
     }
 
     change_visible_password = () => {
         this.setState({isVisible: !this.state.isVisible})
+    };
+
+    change_visible_nickname = () => {
+        this.setState({isVisible_nic: !this.state.isVisible_nic})
+    };
+
+    change_nickname_new = (nic)=> {
+      this.setState({new_nic:nic})
+
     };
 
     change_password_old = (password) => {
@@ -40,20 +53,27 @@ export class TextInputView extends React.Component {
         this.setState({repeat_password: password})
     };
 
+    fetch_and_validate_nickname = async ()=>{
+        this.setState({isVisible_nic: false});
+        let validate = await set_new_nickname(this.props.user_id,this.state.new_nic);
+        if (validate["status"]){
+            return  this.refs.toast.show("Ник успешно сменен")
+        }
+        else {
+            return this.refs.toast.show("Ник занят,либо содержит недопустимое значение")
+        }
+    };
+
     fetch_and_validate_password = async () => {
         this.setState({isVisible: false});
-
         if (this.state.new_password !== this.state.repeat_password) {
             this.refs.toast.show("Пароли должны совпадать");
         }
-
         else if (this.state.new_password.length<3) {
             this.refs.toast.show("Пароль должен содержать от 3 и более символов");
-
             }
          else {
             let validate = await set_new_password(this.props.user_id,this.state.old_password,this.state.new_password);
-            console.log('vaodd',validate)
             if (validate["status"]){
                return  this.refs.toast.show("Пароль успешно сменен")
             }
@@ -77,23 +97,7 @@ export class TextInputView extends React.Component {
 
 
                 <View style={{flexDirection: 'column'}}>
-                    <Text style={{color: 'black', marginLeft: '6%',}}>Ник:</Text>
-                    <TextInput style={{
-                        borderRadius: 4,
-                        borderColor: '#868686',
-                        borderWidth: 1,
-                        marginTop: 5,
-                        backgroundColor: '#ffffff',
-                        height: height / 17,
-                        marginLeft: '5%',
-                        marginRight: '5%'
-                    }}
-                               placeholderTextColor="#5C6A6E"
-                               keyboardType='default'
-                               onChangeText={(text) => this.props.selector_data("nic", text)}
-                               multiline={true}
-                               value={this.props.nic}
-                               maxLength={16}/>
+
 
                     <Text style={{color: 'black', marginLeft: '6%',}}>Имя:</Text>
                     <TextInput style={{
@@ -150,7 +154,7 @@ export class TextInputView extends React.Component {
                     >
                         <Picker.Item label="Мужской" value={1}/>
                         <Picker.Item label="Женский" value={2}/>
-                        <Picker.Item label="Не определен" value={3}/>
+                        <Picker.Item label="Не определен" value={0}/>
                     </Picker>
                     <Text style={{color: 'black', marginLeft: '6%',}}>Выберите цвет:</Text>
                     <FlatList horizontal
@@ -260,8 +264,6 @@ export class TextInputView extends React.Component {
                         borderWidth: 1,
                         borderColor: '#707070',
                         marginTop: 10,
-
-
                         backgroundColor: 'white',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -290,8 +292,6 @@ export class TextInputView extends React.Component {
                         borderColor: '#707070',
                         marginTop: 5,
                         marginBottom: 5,
-
-
                         backgroundColor: 'white',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -305,7 +305,7 @@ export class TextInputView extends React.Component {
                             <Text style={styles.Profile_List_text}
                             >
 
-                                {'\t'}сменить пароль
+                                {'\t'}Сменить пароль
 
                             </Text>
                         </TouchableOpacity>
@@ -321,6 +321,40 @@ export class TextInputView extends React.Component {
                             password_repeat={this.state.repeat_password}
                             fetch_and_validate_password={this.fetch_and_validate_password}
                         />
+
+                        <Modal_change_nickname
+                            isVisible_nic={this.state.isVisible_nic}
+                            change_visible_nickname={this.change_visible_nickname}
+                            fetch_and_validate_nickname={this.fetch_and_validate_nickname}
+                            new_nic = {this.state.new_nic}
+                            change_nickname_new={this.change_nickname_new}
+                        />
+
+                    </View>
+
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        borderWidth: 1,
+                        borderColor: '#707070',
+                        backgroundColor: 'white',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 5,
+                        marginLeft: '1%',
+                        marginRight: '1%'
+                    }}>
+                        <TouchableOpacity onPress={() => this.change_visible_nickname()} style={{flexDirection: 'row'}}>
+                            <FastImage source={{uri: "change_password"}} style={styles.imageViewProfile_icon}
+                                       resizeMode={FastImage.resizeMode.contain}/>
+                            <Text style={styles.Profile_List_text}
+                            >
+
+                                {'\t'}Cменить ник
+
+                            </Text>
+                        </TouchableOpacity>
+
 
                     </View>
 

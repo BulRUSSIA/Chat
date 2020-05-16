@@ -9,7 +9,6 @@ async function request_SEND_GIFT(user_id,from_id,gift_id,price)  {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-
                 'Content-Encoding': 'utf-8',
             },
             body: JSON.stringify({

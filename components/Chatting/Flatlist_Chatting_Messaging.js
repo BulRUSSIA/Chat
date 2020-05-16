@@ -39,6 +39,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             room: this.props.room_now,
             user: this.props.nic,
             message: '',
+            nic:this.props.chat_name,
             system: false,
             hideNic: false,
             itemsCount: -20,
@@ -116,7 +117,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             hideNic: this.state.hideNic,
             attachments: this.props.attachments_url,
             readed: this.state.readed,
-            nic: this.props.chat_name,
+            nic: this.state.nic,
             color: this.state.color,
             avatar: this.state.avatar,
             createdAt: new Date(),
@@ -191,7 +192,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
 
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    // this.reverse(this.state.chatMessages.concat(msg))
+
                     this.state.chatMessages.concat(msg).reverse()
                 ),
                 chatMessages: this.state.chatMessages.concat(msg),
@@ -205,13 +206,21 @@ export default class Flatlist_Chatting_Messaging extends Component {
         });
 
         this.socket.on('update_nic', (data) => {
-            this.setState({color:data['color']});
+            if (data['user'] === this.state.user) {
+                this.setState({color: data['color']});
+            }
+        });
 
+        this.socket.on('update_nickname', (data) => {
+            if (data['user'] === this.state.user) {
+                this.setState({nic: data['nic']});
+            }
         });
 
         this.socket.on('update_avatar', (data) => {
-            this.setState({avatar:data['avatarLink']});
-
+            if (data['user'] === this.state.user) {
+                this.setState({avatar: data['avatarLink']});
+            }
         });
 
     };

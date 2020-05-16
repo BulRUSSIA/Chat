@@ -131,54 +131,9 @@ export class Modal_information extends React.Component {
 
                                 О СЕБЕ:
                             </Text>
-
                             {item.about}</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
-                            <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
-                            }}>
 
-                                РЕЙТИНГ:
-                            </Text>
 
-                            0</Text>
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
-                            <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
-                            }}>
-
-                                АНТИРЕЙТИНГ:
-                            </Text>
-
-                            0</Text>
-
-                        <Text style={{
-                            color: '#3862c0', fontWeight: '400',
-                            fontSize: 40/winSize.scale,
-                            fontFamily: 'sans-serif-light',
-                        }}>
-                            <Text style={{
-                                color: '#010101', fontWeight: '400',
-                                fontSize: 40/winSize.scale,
-                                fontFamily: 'sans-serif-light'
-                            }}>
-
-                                БРАК:
-                            </Text>
-
-                            {item.zags}</Text>
                     </View>)
                 })}
                 {/*{this.get_zags_name()}*/}

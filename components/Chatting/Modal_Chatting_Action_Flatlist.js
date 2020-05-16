@@ -14,19 +14,16 @@ export class Modal_Chatting_Action_Flatlist extends React.Component {
 
                 backgroundColor: '#010101',
                 height:'1%'
-
-
-
             }}
         />
     );
 
     render() {
-        let modal_height =  height / 4.5;
+        let modal_height =  height / 3.5;
         let action_type = this.props.action_nick;
         if (action_type.length>3){
 
-            modal_height = height/2.9
+            modal_height = height/3.8
 
         }
 

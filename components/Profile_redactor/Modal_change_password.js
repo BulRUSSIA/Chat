@@ -1,15 +1,7 @@
 import Modal from "react-native-modal";
 import {Dimensions, Text, TextInput, TouchableNativeFeedback, View} from "react-native";
 import React from "react";
-import FastImage from "react-native-fast-image";
-import {
-
-    Button,
-
-
-} from 'native-base';
 const {height, width} = Dimensions.get('window');
-
 
 export default class Modal_change_password extends React.Component {
 

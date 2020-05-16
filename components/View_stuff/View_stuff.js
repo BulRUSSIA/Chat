@@ -32,6 +32,7 @@ export default class View_stuff extends React.Component {
 
             gifts_view: this.props.gift_view,
             gifts_id: this.props.gift_id,
+            gift_name:this.props.gift_name,
             DataSource: [],
             gifts_description: this.props.gift_description
 
@@ -111,7 +112,13 @@ export default class View_stuff extends React.Component {
 
                     <Image source={{uri: this.state.gifts_view}} style={styles.imageViewAvatars_stuff}/>
 
-
+                    <View>
+                        <Text style={{  fontSize: 14,
+                            color: '#6e7a81',
+                            textAlign: 'center'}}>
+                            {this.state.gift_name}
+                        </Text>
+                    </View>
                     <View>
                         <Text style={styles.Gift_Description}>
                             {this.state.gifts_description}

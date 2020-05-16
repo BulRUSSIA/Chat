@@ -6,7 +6,7 @@ export function sex_serializer(sex) {
             return SEX_FEMALE;
         case "мужской":
             return SEX_MALE;
-        case "не известно":
+        case "не определен":
             return SEX_NOTHING;
         default:
             return sex;

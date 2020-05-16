@@ -1,4 +1,4 @@
-import {address} from '../../config_connect'
+import {address} from '../../../config_connect'
 
 async function  createFormData(user_id,privated,description,photo) {
     const data = new FormData();

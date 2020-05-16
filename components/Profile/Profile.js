@@ -5,7 +5,7 @@ import {
     Alert, ImageBackground, Text, ScrollView, TouchableOpacity, Dimensions
 } from 'react-native';
 import FastImage from "react-native-fast-image";
-import Chatting from '../../components/Chatting/Chatting'
+import Chatting from '../Chatting/Chatting'
 import styles from '../../styles'
 import GiftList from "./GiftList";
 import GiftsList_action from "./GiftsList_action";
@@ -18,7 +18,11 @@ import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
 import request_ZAGS_REQUEST from "../../actions/fetch_zags_request";
 import {Modal_information} from "./Modal_information";
 import ActionsList from "./ActionsList";
-import SingleTonUpdatePortal from "../ChatPortal/SingleTonUpdatePortal";
+import SingleTonUpdatePortal from "../ChatPortal/utils/SingleTonUpdatePortal";
+import request_GET_AvatarList from "../../actions/fetch_Avatar_List";
+import Avatar_action from "./Avatar_action";
+import send_avatar from "./network/send_avatar";
+import Toast from "react-native-whc-toast";
 
 const {width, height} = Dimensions.get('window');
 const pre_data =
@@ -44,6 +48,7 @@ export default class Profile extends React.Component {
             photos_list: [],
             visible: false,
             visible_send_gift: false,
+            visible_send_avatar:false,
             avatars_list: [],
             user_id: this.props.user_id,
             from_id: this.props.from_id,
@@ -72,6 +77,37 @@ export default class Profile extends React.Component {
 
 
         })
+
+
+    };
+
+    BuyAvatar = async (avatar_id, price) => {
+        Alert.alert(
+            "Аватар",
+            "Вы уверены,что хотите отправить аватар данному пользователю за" + price + " руб?",
+            [
+
+                {
+                    text: 'Отмена',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK', onPress: async () => {
+                        let validate = await send_avatar(this.state.user_id,this.state.from_id,avatar_id);
+                        await this.Event_gift_handler(2);
+                        if (validate["status"]){
+                            this.refs.toast.show("Аватар успешно отправлен");
+                        }
+                       else {
+                            this.refs.toast.show("Произошла ошибка,проверьте баланс");
+
+                        }
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
 
 
     };
@@ -143,12 +179,10 @@ export default class Profile extends React.Component {
     Buy_confirm = async (gift_id, price) => {
 
         const buy = await request_SEND_GIFT(this.state.user_id, this.state.from_id, gift_id, price);
-
         let response = buy['Accept'];
         console.log(response);
 
         if (response === true) {
-
             Alert.alert("Подарок  успешно отправлен", "Пользователь получил ваш подарок!");
             const gifts = await request_GET_GIFTS(this.state.user_id);
             this.setState({gifts_list: gifts})
@@ -160,15 +194,14 @@ export default class Profile extends React.Component {
 
 
     Get_Gifts_List = async () => {
-
-        const avatars_list = await request_GET_GiftsList();
+        const gifts_list = await request_GET_GiftsList();
         this.setState({
-
-            avatars_list: avatars_list,
+            gifts_list: gifts_list,
             visible_send_gift: !this.state.visible_send_gift
         });
-
     };
+
+
 
     Event_gift_handler = async (event) => {
 
@@ -177,7 +210,7 @@ export default class Profile extends React.Component {
             case(0):
                 // console.log('private');
                 // await this.props.go_private('Написать Личное');
-                Alert.alert('Ошибка', 'раздел в разработке');
+                Alert.alert('Ошибка', 'раздел в раз11работке');
                 break;
             case(1):
                 console.log('gift');
@@ -185,8 +218,7 @@ export default class Profile extends React.Component {
 
                 break;
             case(2):
-                console.log('avaasitar');
-                Alert.alert('Ошибка', 'раздел в разработке');
+               this.setState({visible_send_avatar:!this.state.visible_send_avatar});
                 break;
             case(3):
                 console.log('avtoritet');
@@ -213,7 +245,7 @@ export default class Profile extends React.Component {
     };
 
 
-    delete_gift = (gift, url, description) => {
+    delete_gift = (gift, url, description,name) => {
 
 
         const {navigator} = this.props;
@@ -221,6 +253,7 @@ export default class Profile extends React.Component {
 
             gift_view: url,
             gift_id: gift,
+            gift_name:name,
             gift_description: description,
             user_id: this.state.user_id,
             my_id: this.state.from_id
@@ -281,9 +314,7 @@ export default class Profile extends React.Component {
     render() {
         return (
             <View style={styles.container_pofile}
-
             >
-
                 <ImageBackground
                     style={{resizeMode: 'contain', height: '100%', width: '100%'}}
                     source={{uri: 'background_airwaychat'}}>
@@ -294,41 +325,37 @@ export default class Profile extends React.Component {
                         visible={this.state.visible}
                         visible_action={this.visible_action}
                     />
-
-
-
-
 <ScrollView>
                         <Modal_information
                             user_info={this.state.user_info}
                             zagsName={this.state.zags}
                             colorzags={this.state.colorzags}
-
                         />
-
-
-
-
                         <GiftList
                             gifts_list={this.state.gifts_list}
                             delete_gift={this.delete_gift}
-
                         />
-
                         <GiftsList_action
                             visible_send_gift={this.state.visible_send_gift}
-                            avatars_list={this.state.avatars_list}
+                            avatars_list={this.state.gifts_list}
                             nic={this.props.nic}
                             Event_gift_handler={this.Event_gift_handler}
                             BuyGift={this.BuyGift}
                         />
-
-
+                        <Avatar_action
+                            visible_send_avatar={this.state.visible_send_avatar}
+                            Event_gift_handler={this.Event_gift_handler}
+                            buy_avatar={this.BuyAvatar}
+                        />
 
                     <ActionsList
                         Event_gift_handler={this.Event_gift_handler}
                         photos_list={this.state.photos_list}
                     />
+    <Toast ref="toast"
+           style={{borderRadius: 14}}
+
+    />
 </ScrollView>
                 </ImageBackground>
 

@@ -50,7 +50,7 @@ export default class GiftList extends React.Component {
 
 
                                       <TouchableOpacity
-                                          onPress={() => this.props.delete_gift(item.id, item.url, item.description)}>
+                                          onPress={() => this.props.delete_gift(item.id, item.url, item.description,item.name)}>
 
                                           <FastImage source={{uri: item.url}} style={{width:60/winSize.scale,height:60/winSize.scale,marginLeft:4,resizeMode: 'contain'}}
                                                      resizeMode={FastImage.resizeMode.contain}

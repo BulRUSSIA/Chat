@@ -1,19 +1,19 @@
-import {address} from '../../config_connect'
+import {address} from '../../../config_connect'
 
-async function request_DELETE_PHOTO(photo_id) {
+async function request_SET_AVATAR_PHOTO(user_id,photo_id)  {
 
-    const url = address + `/delete/photo/profile/`;
+    const url = address + `/set/photo/profile/`;
     try {
         const data = await fetch(url, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-
                 'Content-Encoding': 'utf-8',
             },
             body: JSON.stringify({
-                photo_id: photo_id, //так как массив из заявок на брак
+                user_id: user_id,
+                photo_id: photo_id
 
 
 
@@ -26,9 +26,11 @@ async function request_DELETE_PHOTO(photo_id) {
         return responseJsonData;
 
 
-    } catch (e) {
+    }
+
+    catch (e) {
         console.log(e)
     }
 }
 
-export default request_DELETE_PHOTO;
+export default request_SET_AVATAR_PHOTO;

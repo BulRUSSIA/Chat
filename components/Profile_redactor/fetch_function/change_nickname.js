@@ -1,9 +1,7 @@
 import {address} from "../../../config_connect";
 
-
-async function set_new_password(user_id,old_password,password)  {
-
-    const url = address + `/update/password/`;
+async function set_new_nickname(user_id,nic)  {
+    const url = address + `/update/nickname/`;
     try {
         const data = await fetch(url, {
             method: 'POST',
@@ -14,8 +12,7 @@ async function set_new_password(user_id,old_password,password)  {
             },
             body: JSON.stringify({
                 user_id: user_id,
-                old_password:old_password,
-                password:password,
+                nic:nic,
 
 
             }),
@@ -32,4 +29,4 @@ async function set_new_password(user_id,old_password,password)  {
     }
 }
 
-export default set_new_password;
+export default set_new_nickname;

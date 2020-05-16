@@ -7,8 +7,6 @@ import {
     Card,
     Body,
     Title,
-    Button,
-
     Left,
 
 } from 'native-base';
@@ -22,12 +20,14 @@ import request_ACCEPT_ZAGS_REQUEST from "../../actions/fetch_accept_zags_request
 import {Alert} from "react-native";
 import request_DECLINE_ZAGS_REQUEST from "../../actions/fetch_decline_zags_request";
 import request_DELETE_ZAGS_REQUEST from "../../actions/fetch_zags_delete";
-import SingleTonUpdatePortal from "./SingleTonUpdatePortal";
+import SingleTonUpdatePortal from "./utils/SingleTonUpdatePortal";
 import request_GET_WeddingList from "../../actions/fetch_wedding_list";
 import ScreenWeddings from "./ScreenWeddings";
 import Modal_running_line from "./Modal_running_line";
 import request_START_LINE from "./fetch_run_line_start";
-import CardsGame from "./CardsGame";
+import check_avatar from "./network/check_send_avatar";
+import ParseResponseAvatar from "./utils/ParseResponseAvatar";
+import consent_avatar from "./network/consent_avatar";
 
 
 export default class ChatPortal extends React.Component {
@@ -48,6 +48,8 @@ export default class ChatPortal extends React.Component {
             isVisible: false,
             run_line_text: '',
             loaded: true,
+            avatar_request:[],
+            consent_avatar:false,
 
         };
 
@@ -61,10 +63,46 @@ export default class ChatPortal extends React.Component {
 
     };
 
+    avatar_choice = async (avatar,sender) => {
+
+
+        Alert.alert(
+            'Аватар',
+            'Вы уверены,что хотите принять аватар?(Аватар будет присвоен после согласия)', // <- this part is optional, you can pass an empty string
+            [
+
+                {
+                    text: 'принять',
+                    onPress: async () => {
+
+                       this.setState({consent:true,avatar_request:false});
+                       await consent_avatar(this.props.nic,this.state.consent,avatar,sender)
+
+                    } ,
+                    style: 'cancel',
+                },
+                {
+                    text: 'отклонить',
+                    onPress: async () => {
+                        this.setState({consent:false,avatar_request:false});
+                        await consent_avatar(this.props.nic,this.state.consent,avatar,sender)
+                    },
+                    style: 'cancel',
+                }
+            ],
+            {cancelable: false},
+        );
+
+
+    };
+
+
 
     Update_Portal = async () => {
         const data_user = await SingleTonUpdatePortal.PortalUpdates(this.props.nic);
         const wedding_list = await request_GET_WeddingList();
+        const avatar_request = await check_avatar(this.props.nic);
+        const avatar_parse = await ParseResponseAvatar.parse_avatar_send(avatar_request);
         this.setState({
 
             zags: data_user[0],
@@ -72,6 +110,7 @@ export default class ChatPortal extends React.Component {
             zagsRequest: data_user[2],
             zagsRequestName: data_user[3],
             balace: data_user[4],
+            avatar_request:avatar_parse,
             wedding_list: wedding_list,
             loaded: false,
 
@@ -181,7 +220,7 @@ export default class ChatPortal extends React.Component {
 
         Alert.alert(
             '' + this.state.zagsName,
-            'Вы хотите удалить брак?', // <- this part is optional, you can pass an empty string
+            'Вы хотите удалить брак?',
             [
 
                 {
@@ -339,6 +378,8 @@ export default class ChatPortal extends React.Component {
                             <CardsService
                                 GetAvatarList={this.GetAvatarList}
                                 select_modal_run_line={this.select_modal_run_line}
+                                avatar_request={this.state.avatar_request}
+                                avatar_choice={this.avatar_choice}
 
                             />
 
@@ -349,7 +390,7 @@ export default class ChatPortal extends React.Component {
                                 start_line={this.start_line}
 
                             />
-                            {/*<CardsGame/>*/}
+
                         </ImageBackground>
                     </Card>
 

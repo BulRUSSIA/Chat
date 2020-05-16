@@ -183,13 +183,8 @@ const styles = StyleSheet.create({
     Gift_Description: {
         fontSize: 16,
         fontWeight: 'bold',
-
         color: '#000000',
-
-
         textAlign: 'center'
-
-
     },
 
     prices2: {

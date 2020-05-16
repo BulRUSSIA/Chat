@@ -12,6 +12,41 @@ import FastImage from "react-native-fast-image";
 
 export default class CardsService extends React.Component {
 
+    Avatar_action = () => {
+        const data = this.props.avatar_request;
+
+
+        if (data) {
+            let sender_nic = data["name_sender"];
+            let send_avatar = data["avatar_image"];
+            let sender_color = data["sender_color"];
+            let avatar_id = data["avatar_id"];
+            let sender_id = data["sender_id"];
+            return (
+                <TouchableOpacity style={{
+                    width: '100%',
+                    paddingTop: '2%',
+                    paddingBottom: '2%',
+                    backgroundColor: 'rgba(255,54,36,0.89)'
+                }} onPress={() => this.props.avatar_choice(avatar_id, sender_id)}>
+                    <Text style={{
+                        textAlign: 'center',
+                        color: 'white',
+                        flex: 0,
+                        backgroundColor: 'rgba(255,53,33,0.89)',
+                        fontWeight: 'bold'
+                    }}>Пользователь <Text
+                        style={{color: "#" + ((sender_color) >>> 0).toString(16).slice(-6)}}>{sender_nic}</Text> отправил
+                        вам аватар </Text>
+
+                    <FastImage source={{uri: send_avatar}}
+
+                               style={{height: 55, width: 55, alignSelf: 'center'}}/>
+
+                </TouchableOpacity>
+            )
+        }
+    };
 
     render() {
 
@@ -29,6 +64,7 @@ export default class CardsService extends React.Component {
 
 
                     </Body>
+                    {this.Avatar_action()}
 
                     <Container style={{backgroundColor: 'rgba(46,48,68,0)', flex: 7}}>
 

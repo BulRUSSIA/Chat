@@ -1,8 +1,9 @@
-import {address} from '../../config_connect'
+import {address} from "../../../config_connect";
 
-async function request_SET_AVATAR_PHOTO(user_id,photo_id)  {
 
-    const url = address + `/set/photo/profile/`;
+async function send_avatar(user,sender,avatar)  {
+
+    const url = address + `/avatar/send/`;
     try {
         const data = await fetch(url, {
             method: 'POST',
@@ -12,18 +13,14 @@ async function request_SET_AVATAR_PHOTO(user_id,photo_id)  {
                 'Content-Encoding': 'utf-8',
             },
             body: JSON.stringify({
-                user_id: user_id,
-                photo_id: photo_id
-
-
-
+                sender:sender,
+                user:user,
+                avatar:avatar
             }),
         });
 
-        let responseJsonData = await data.json();
 
-
-        return responseJsonData;
+        return await data.json();
 
 
     }
@@ -33,4 +30,4 @@ async function request_SET_AVATAR_PHOTO(user_id,photo_id)  {
     }
 }
 
-export default request_SET_AVATAR_PHOTO;
+export default send_avatar;

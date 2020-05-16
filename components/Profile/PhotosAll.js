@@ -11,11 +11,10 @@ import {Body, Button, Header, Left, Right, Title} from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 import Modal_add_photo from "../Modals/Modal_add_photo";
 import ImagePicker from "react-native-image-picker";
-import request_ADD_PHOTO from "../Profile_redactor/fetch_response_photos";
-import UPLOAD_PROFILE_PHOTO_request from "../Profile_redactor/fetch_upload_image_profile";
+import request_ADD_PHOTO from "../Profile_redactor/fetch_function/fetch_response_photos";
 import request_GET_USER_PHOTO from "../../actions/fetch_get_photo_user";
-import request_DELETE_PHOTO from "../Profile_redactor/fetch_delete_photo";
-import request_SET_AVATAR_PHOTO from "../Profile_redactor/fetch_set_avatar_photo";
+import request_DELETE_PHOTO from "../Profile_redactor/fetch_function/fetch_delete_photo";
+import request_SET_AVATAR_PHOTO from "../Profile_redactor/fetch_function/fetch_set_avatar_photo";
 import Toast from "react-native-whc-toast";
 
 export class PhotosAll extends React.Component {
@@ -38,9 +37,6 @@ export class PhotosAll extends React.Component {
     }
 
     convert_time = (timestamp) => {
-
-
-        console.log(typeof (timestamp));
         const times = new Date(timestamp);
         let year = times.getFullYear().toString();
         let mounth = times.getMonth().toString();
@@ -54,17 +50,14 @@ export class PhotosAll extends React.Component {
     };
 
     fetch_list = async () => {
-
         const photos_list = await request_GET_USER_PHOTO(this.props.nic_id);
         this.setState({photos_list: photos_list});
 
     };
 
     componentDidMount = async () => {
-
         await this.fetch_list()
     };
-
 
     handleChoosePhoto = async () => { //выбираем фото из памяти телефона
         const options = {
@@ -76,15 +69,9 @@ export class PhotosAll extends React.Component {
                 this.setState({photo: response.uri, upload_photo: response});
                 Alert.alert("Фото загружено");
                 this.componentWillUnmount();
-
-
             }
-
-
         });
-
         await this.componentDidMount()
-
     };
 
     selected_action_photo = async (id_photo) => {
@@ -92,7 +79,6 @@ export class PhotosAll extends React.Component {
             'ФОТО',
             "Выберите действие",
             [
-
                 {
                     text: 'Отмена',
                     onPress: () => console.log('Cancel Pressed'),
@@ -105,7 +91,6 @@ export class PhotosAll extends React.Component {
                         this.refs.toast.show('фотография успешно удалена');
                     }
                 },
-
                 {
                     text: 'Установить на профиль', onPress: async () => {
                         await request_SET_AVATAR_PHOTO(this.props.nic_id, id_photo);
@@ -124,7 +109,6 @@ export class PhotosAll extends React.Component {
     View_full_photo = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
         const {navigator} = this.props;
         await navigator.push('PHOTO_VIEWER', {
-
             photo_attachments: attach,
         });
     };
@@ -133,7 +117,6 @@ export class PhotosAll extends React.Component {
         await request_ADD_PHOTO(this.props.nic_id, false, this.state.description,this.state.upload_photo);
         this.setState({isVisible: false,indicator:false});
         await this.fetch_list()
-
     };
 
 
@@ -146,29 +129,22 @@ export class PhotosAll extends React.Component {
     };
 
     onRefresh = () => {
-
         this.setState({isFetching: true}, () => this.renderNewItem());
     };
 
     close_modal_add_photo = () => {
-
         this.setState({isVisible: false,})
 
     };
 
     change_description = (text) => {
-
         this.setState({description: text})
 
     };
 
     render() {
-
-
         if (this.state.photos_list.length < 1)
-
             return (
-
                 <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
                     <Header
                         style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
@@ -200,7 +176,6 @@ export class PhotosAll extends React.Component {
                     <Text style={{color: 'red', textAlign: 'center'}}>
                         Фотографии отсутствуют.
                         Вы можете их добавить воспользовавшись крестиком сверху.
-
                     </Text>
                     <Modal_add_photo
                         change_description={this.change_description}
@@ -209,34 +184,25 @@ export class PhotosAll extends React.Component {
                         isVisible={this.state.isVisible}
                         photo={this.state.photo}
                         handleChoosePhoto={this.handleChoosePhoto}
-
                     />
                 </ImageBackground>
             );
-
-
         else {
-
             if (this.state.indicator) {
-
                 return (
                     <View>
                         <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
                             <Header
                                 style={{backgroundColor: 'rgba(212,212,212,0.96)',}}
                                 androidStatusBarColor="#A9A9A9">
-
-
                                 <Left style={{flex: 1}}>
                                     <Button transparent
-
                                             onPress={this.props.get_pop}>
                                         <Icon
                                             size={25}
                                             style={{color: 'black'}}
                                             name="arrowleft"/>
                                     </Button>
-
                                 </Left>
                                 <Body>
                                     <Title style={{
@@ -246,8 +212,6 @@ export class PhotosAll extends React.Component {
                                         width: 150
                                     }}>Идет загрузка...</Title>
                                 </Body>
-
-
                             </Header>
                     <ActivityIndicator
                         size="large"

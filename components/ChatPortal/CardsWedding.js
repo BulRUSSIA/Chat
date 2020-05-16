@@ -17,7 +17,7 @@ export default class CardsWedding extends React.Component {
 
     Wedding_action = () => {
 
-        if (this.props.zags.length >= 1) {
+        if (this.props.zags != null) {
 
             return (
                 <TouchableOpacity style={{
@@ -38,7 +38,7 @@ export default class CardsWedding extends React.Component {
                 </TouchableOpacity>
             )
 
-        } else if (this.props.zagsRequest.length >= 1) {
+        } else if (this.props.zagsRequest != null && this.props.zagsRequest.length>0) {
 
             return (<TouchableOpacity style={{
                     width: '100%',
