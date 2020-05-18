@@ -11,7 +11,6 @@ export default class Header_rooms extends React.Component {
 
     check_permission_admin = ()=> {
 
-        console.log('typeeeeeeeeeeeeee',this.props.type_user);
 
         if (this.props.type_user===TYPE_ADMIN)
             return(

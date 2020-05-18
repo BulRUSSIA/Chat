@@ -72,7 +72,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             (type, dim) => {
 
                 dim.width = width * 1;
-                dim.height = this.state.size_msg*this.state.size_av*0.2/Winlayout.scale
+                dim.height = this.state.size_msg*this.state.size_av*0.3/Winlayout.scale
 
 
             }
@@ -170,7 +170,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
         this.socket.on('last_message', (data) => {
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    this.state.chatMessages.concat(data).reverse()
+                    this.state.chatMessages.concat(data).reverse().slice(0,20)
                 ),
                 chatMessages: this.state.chatMessages.concat(data),
             });
@@ -179,7 +179,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
         this.socket.on('status', (data) => {
             this.setState({
                 list: this.state.list.cloneWithRows(
-                    this.state.chatMessages.concat(data).reverse()
+                    this.state.chatMessages.concat(data).reverse().slice(0,20)
                 ),
                 chatMessages: this.state.chatMessages.concat(data),
             });
@@ -193,7 +193,7 @@ export default class Flatlist_Chatting_Messaging extends Component {
             this.setState({
                 list: this.state.list.cloneWithRows(
 
-                    this.state.chatMessages.concat(msg).reverse()
+                    this.state.chatMessages.concat(msg).reverse().slice(0,20)
                 ),
                 chatMessages: this.state.chatMessages.concat(msg),
             });

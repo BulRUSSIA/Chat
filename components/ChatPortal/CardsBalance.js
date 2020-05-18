@@ -17,7 +17,7 @@ export default class CardsBalance extends React.Component {
                     <Text style={{color: '#010101', alignSelf: 'center', fontSize: 20}}>Баланс чатлов</Text>
                     <Text
                         style={{fontSize: 50, color: 'black', alignSelf: 'center',textAlign:'center'}}>{this.props.balance_card}rur.</Text>
-                    <Text style={{color: '#c00c17', paddingTop: 20,textAlign:'center'}}>Для пополнения баланса переведите нужную сумму на Qiwi кошелек +79086354734(в комментарии укажите ваш логин в чате), зачисление происходит от 1м до 2ч</Text>
+                    <Text style={{color: '#c00c17', paddingTop: 20,textAlign:'center'}}>Для пополнения баланса переведите нужную сумму на Qiwi кошелек +79226075845(в комментарии укажите ваш логин в чате), зачисление происходит от 1м до 2ч</Text>
 
                 </Body>
             </CardItem>

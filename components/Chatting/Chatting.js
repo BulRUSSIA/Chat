@@ -58,6 +58,7 @@ export default class Chatting extends React.Component {
             modal_indicator: false,
             room_now: this.props.room,
             user_id: '',
+            text:'',
             new_pm: false,
             background_image: 'default_background',
             name_attachments: '',
@@ -91,6 +92,7 @@ export default class Chatting extends React.Component {
 
     Change_Visible_Action = async () => {
         await this.setState({isVisible: !this.state.isVisible});
+
     };
 
     View_full_photo = async (attach) => { //# переход на страницу просмотра фото целиком передаем туда attach с телефона
@@ -117,6 +119,13 @@ export default class Chatting extends React.Component {
         const {navigator} = this.props;
 
         switch (position) {
+
+            // case 'Ответить':
+            //     await this.Change_Visible_Action();
+            //     console.log('asdas')
+            //     this.setState({text:this.state.chat_name});
+            //     break;
+
 
             case 'Напугать':
 

@@ -23,6 +23,7 @@ import request_GET_AvatarList from "../../actions/fetch_Avatar_List";
 import Avatar_action from "./Avatar_action";
 import send_avatar from "./network/send_avatar";
 import Toast from "react-native-whc-toast";
+import send_friend from "./network/send_friend";
 
 const {width, height} = Dimensions.get('window');
 const pre_data =
@@ -45,6 +46,7 @@ export default class Profile extends React.Component {
             toolbar_text: 'Профиль',
             user_info: pre_data,
             gifts_list: [],
+            gifts_buy_list:[],
             photos_list: [],
             visible: false,
             visible_send_gift: false,
@@ -185,7 +187,7 @@ export default class Profile extends React.Component {
         if (response === true) {
             Alert.alert("Подарок  успешно отправлен", "Пользователь получил ваш подарок!");
             const gifts = await request_GET_GIFTS(this.state.user_id);
-            this.setState({gifts_list: gifts})
+            this.setState({gifts_list: gifts,})
         } else {
 
             Alert.alert("Ошибка", "Техническая ошибка,проверьте баланс,либо обратитесь к администратору")
@@ -196,7 +198,7 @@ export default class Profile extends React.Component {
     Get_Gifts_List = async () => {
         const gifts_list = await request_GET_GiftsList();
         this.setState({
-            gifts_list: gifts_list,
+            gifts_buy_list: gifts_list,
             visible_send_gift: !this.state.visible_send_gift
         });
     };
@@ -221,8 +223,8 @@ export default class Profile extends React.Component {
                this.setState({visible_send_avatar:!this.state.visible_send_avatar});
                 break;
             case(3):
-                console.log('avtoritet');
-                Alert.alert('Ошибка', 'раздел в разработке');
+               await send_friend(this.state.user_id, this.state.from_id);
+                Alert.alert('Друзья', 'пользователю отправлена заявка на дружбу');
                 break;
             case(4):
                 await this.BuyGift(null, '50', 'Запрос на Бракосочетание!', 'Вы уверены,что хотите вступить в брак с данным пользователем за\t', 1);
@@ -337,7 +339,7 @@ export default class Profile extends React.Component {
                         />
                         <GiftsList_action
                             visible_send_gift={this.state.visible_send_gift}
-                            avatars_list={this.state.gifts_list}
+                            avatars_list={this.state.gifts_buy_list}
                             nic={this.props.nic}
                             Event_gift_handler={this.Event_gift_handler}
                             BuyGift={this.BuyGift}

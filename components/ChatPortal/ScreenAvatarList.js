@@ -170,8 +170,8 @@ export class ScreenAvatarList extends React.Component {
                                       }}>
                                           <TouchableOpacity onPress={() => this.BuyAvatar(item.id, item.price)}>
                                               <FastImage source={{uri: item.url}} style={{
-                                                  width: (ITEM_WIDTH) / 11,
-                                                  height: (ITEM_HEIGHT / 14),
+                                                  width: (ITEM_WIDTH) / 9,
+                                                  height: (ITEM_HEIGHT / 12),
                                                   alignSelf: 'center'
                                               }}
                                                          resizeMode={FastImage.resizeMode.contain}

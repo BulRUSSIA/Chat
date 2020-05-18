@@ -11,7 +11,7 @@ export default class NewsList extends React.Component {
 
                 <ImageBackground source={require('../Image/whatsap.png')}
                                  style={{width: '100%', height: '100%'}}>
-                    <Text>Э Админы и Мд, охладите жопы, хватит гореть от каждой искры!</Text>
+                    <Text>CАЛАМ АЛЕЙКУМ БРАТЬЯ ЧЕЧЕНЦЫ!</Text>
                 </ImageBackground>
             </View>
         );

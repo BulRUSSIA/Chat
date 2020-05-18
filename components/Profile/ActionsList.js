@@ -21,10 +21,10 @@ const list = [
     icon: require('../Image/Shopping-Gift-icon.png'),
     event: 1
 }, {action: 'ПОДАРИТЬ АВАТАР', icon: require('../Image/strawberry-128.png'), event: 2},
-//     {
-//     action: 'ПОДАРИТЬ АВТОРИТЕТ', event: 3,
-//     icon: require('../Image/PinClipart.com_death-star-clipart_4889685.webp')
-// },
+    {
+    action: 'ДОБАВИТЬ В ДРУЗЬЯ', event: 3,
+    icon:  {uri:"people_private"},
+},
 
     {action: 'ВСТУПИТЬ В БРАК', event: 4, icon: require('../Image/wedding-rings-icon-9.webp')}];
 const {width,height} = Dimensions.get('window');

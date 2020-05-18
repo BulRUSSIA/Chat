@@ -1,16 +1,15 @@
 import {
 
     SafeAreaView,
-    StyleSheet,
+    StyleSheet,ScrollView,
     Text, TextInput, TouchableOpacity,
     View,
     Alert, Animated, FlatList, ImageBackground, AsyncStorage
 } from "react-native";
 import React from "react";
 import colors from "../const/colors";
-import menusmiles from '../const/colors_id'
 import {address} from "../../config_connect";
-import {Button, Header, Left,Body,Title,Right} from "native-base";
+import {Button, Header, Left, Body, Title, Right} from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export default class Registration extends React.Component {
@@ -22,133 +21,107 @@ export default class Registration extends React.Component {
             password: '',
             nick: '',
             validator: '',
-            color:'-16777216',
+            color: '-16777216',
             item_smiles: colors,
-            sm:menusmiles,
-            clr:'#010101'
+            sm: colors,
+            clr: '#010101'
 
 
         };
 
-        this.animatedVal = new Animated.Value(-350);
+
     }
 
 
     Registration = async () => {
 
-       try {
+        try {
 
 
-           let LoginLength = this.state.username.length;
-           let PasswordLength = this.state.password.length;
-           let Nick = this.state.nick.length;
+            let LoginLength = this.state.username.length;
+            let PasswordLength = this.state.password.length;
+            let Nick = this.state.nick.length;
 
-           if (LoginLength < 3 || PasswordLength < 3 || Nick < 3) {
+            if (LoginLength < 3 || PasswordLength < 3 || Nick < 3) {
 
-               Alert.alert('Airchat', 'Логин,Пароль и Ник,должен содержать более 3 символов')
-
-
-           } else {
-               let str = this.state.nick.trim();
-               let nick = str.replace(" ", "");
-               return await fetch(address + `/registration/${this.state.username}/${this.state.password}/${nick}/${this.state.color}`)
-
-                   .then((response) => response.json())
-                   .then(async (responseJson) => {
+                Alert.alert('Airchat', 'Логин,Пароль и Ник,должен содержать более 3 символов')
 
 
-                       console.log(responseJson['reg']);
-                       this.setState({validator: responseJson['reg']});
+            } else {
+                let str = this.state.nick;
+                let nick = str.replace(" ", "");
+                return await fetch(address + `/registration/${this.state.username}/${this.state.password}/${nick}/${this.state.color}`)
 
-                       if (this.state.validator === false) {
+                    .then((response) => response.json())
+                    .then(async (responseJson) => {
 
-                           Alert.alert('Данный ник или логин уже существует!')
-                       } else {
 
-                           const {navigator} = this.props;
-                           await AsyncStorage.setItem('log', this.state.username);
-                           await AsyncStorage.setItem('pass', this.state.password);
+                        console.log(responseJson['reg']);
+                        this.setState({validator: responseJson['reg']});
 
-                           navigator.reset('Login');
-                           Alert.alert('Вы успешно зарегистрировались!');
-                       }
-                   })
+                        if (this.state.validator === false) {
 
-                   .catch((e) => {
-                       (Alert.alert('Предупреждение', 'Cлишком много регистраций,попробуйте позже'))
-                   });
+                            Alert.alert('Данный ник или логин уже существует!')
+                        } else {
 
-           }
+                            const {navigator} = this.props;
+                            await AsyncStorage.setItem('log', this.state.username);
+                            await AsyncStorage.setItem('pass', this.state.password);
 
-       }
-       catch(e)
-        {
+                            navigator.reset('Login');
+                            Alert.alert('Вы успешно зарегистрировались!');
+                        }
+                    })
+
+                    .catch((e) => {
+                        (Alert.alert('Предупреждение', 'Cлишком много регистраций,попробуйте позже'))
+                    });
+
+            }
+
+        } catch (e) {
 
             (Alert.alert('Предупреждение', 'Cлишком много регистраций,попробуйте позже'))
         }
     };
 
 
-    Change_color = () => {
+    close_color = (color) => {
 
-        Animated.timing(                  // Animate over time
-            this.animatedVal,            // The animated value to drive
-            {
-                toValue: 50,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-
-            }
-        ).start();
-
-    };
-
-    close_color = (evt,clr) => {
-
-
-
-        Animated.timing(                  // Animate over t ime
-            this.animatedVal,            // The animated value to drive
-            {
-                toValue: -350,                   // Animate to opacity: 1 (opaque)
-                duration: 350,
-
-            }
-        ).start();
-
-        this.setState({color:evt,clr:clr});
+        this.setState({color: color});
         Alert.alert('Цвет успешно выбран!')
 
 
     };
 
-    get_login = ()=> {
+    get_login = () => {
 
-      const {navigator} = this.props;
-      navigator.pop()
+        const {navigator} = this.props;
+        navigator.pop()
 
     };
-
 
     render() {
 
 
-        return <SafeAreaView style={styles.container}>
-            <Header        style={{backgroundColor: '#FFFFFF',}}
-                     androidStatusBarColor="#A9A9A9"
+        return <View>
+            <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
+            <Header style={{backgroundColor: '#FFFFFF',}}
+                    androidStatusBarColor="#A9A9A9"
 
             >
                 <Left style={{flex: 1}}>
                     <Button transparent
 
                             onPress={this.get_login}>
-                        <Icon style={{color:'black'}}
+                        <Icon style={{color: 'black'}}
                               size={25}
 
                               name="arrowleft"/>
                     </Button>
                 </Left>
                 <Body>
-                    <Title style={{color:'black'}}>
+                    <Title style={{color: 'black'}}>
                         Регистрация
 
                     </Title>
@@ -156,180 +129,113 @@ export default class Registration extends React.Component {
                 <Right/>
             </Header>
 
+<ScrollView>
 
-            <ImageBackground source={{uri: 'background_airwaychat'}} style={{width: '100%', height: '100%'}}>
-
-
-            <View style={styles.logoContainer}>
-                <Text style={{fontSize:14,textAlign:'center',marginBottom:10,color:'red'}}
-
-                >Для регистрации необходимо заполнить все поля.{'\n'}
-                Минимальная длина логина и ника - 3 cимвола{'\n'}
-                Максимальная длина логина и ника - 16 cимволов{'\n'}
-
-                </Text>
 
 
                 <View style={styles.logoContainer}>
-                    <Text style={{fontSize:18}}
+                    <Text style={{fontSize: 14, textAlign: 'center', marginBottom: 10, color: 'red'}}
 
-                    >Логин:</Text>
-                    <TextInput style={styles.input}
+                    >Для регистрации необходимо заполнить все поля.{'\n'}
+                        Минимальная длина логина и ника - 3 cимвола{'\n'}
+                        Максимальная длина логина и ника - 16 cимволов{'\n'}
 
-                               placeholderTextColor='#010101'
-                               onChangeText={(username) => this.setState({username})}
-                               value={this.state.username}
-                               maxLength={16}
+                    </Text>
+
+
+                    <View style={styles.logoContainer}>
+                        <Text style={{fontSize: 18}}
+
+                        >Логин:</Text>
+                        <TextInput style={styles.input}
+
+                                   placeholderTextColor='#010101'
+                                   onChangeText={(username) => this.setState({username})}
+                                   value={this.state.username}
+                                   maxLength={16}
+                        />
+                        <Text style={{fontSize: 18}}
+
+                        >Пароль:</Text>
+                        <TextInput style={styles.input}
+
+                                   placeholderTextColor='#010101'
+                                   returnKeyType='go'
+                                   secureTextEntry
+                                   autoCorrect={false}
+                                   onChangeText={(password) => this.setState({password})}
+                                   value={this.state.password}
+                                   maxLength={16}
+
+                        />
+                        <Text style={{fontSize: 18}}
+
+                        >Ник:</Text>
+                        <TextInput style={styles.input}
+
+                                   placeholderTextColor='#010101'
+                                   returnKeyType='go'
+
+                                   autoCorrect={false}
+                                   onChangeText={(nick) => this.setState({nick})}
+                                   value={this.state.nick}
+                                   maxLength={16}
+
+                        />
+
+                    </View>
+                        <Text style={{color: 'black', marginLeft: '6%',}}>Выберите цвет</Text>
+                        <FlatList horizontal
+                                  style={{
+                                      marginRight: '6%', marginLeft: '6%'
+                                  }}
+                                  data={colors}
+                                  renderItem={(({item}) =>
+                                          <TouchableOpacity onPress={() => this.close_color(item)}>
+                                              <View style={{
+                                                  backgroundColor: "#" + ((item) >>> 0).toString(16).slice(-6),
+                                                  width: 35,
+                                                  height: 22,
+                                                  margin: 5,
+                                              }}>
+                                              </View>
+                                          </TouchableOpacity>
+                                  )
+                                  }
+                                  numColumns={1}
+                                  keyExtractor={(item, index) => index.toString()}
+                        />
+                    <View
+                        style={{flex:0,backgroundColor: "#" + ((this.state.color) >>> 0).toString(16).slice(-6),width:50,height:50}}
                     />
-                    <Text style={{fontSize:18}}
-
-                    >Пароль:</Text>
-                    <TextInput style={styles.input}
-
-                               placeholderTextColor='#010101'
-                               returnKeyType='go'
-                               secureTextEntry
-                               autoCorrect={false}
-                               onChangeText={(password) => this.setState({password})}
-                               value={this.state.password}
-                               maxLength={16}
-
-                    />
-                    <Text style={{fontSize:18}}
-
-                    >Ник:</Text>
-                    <TextInput style={styles.input}
-
-                               placeholderTextColor='#010101'
-                               returnKeyType='go'
-
-                               autoCorrect={false}
-                               onChangeText={(nick) => this.setState({nick})}
-                               value={this.state.nick}
-                               maxLength={16}
-
-                    />
-                    <TouchableOpacity style={{backgroundColor:this.state.clr,
-
-                        height: 40,
-                        width: 40,
 
 
-                        marginBottom: 20,
-                        paddingHorizontal: 10,
-                        borderRadius :14,
-
-                    }}
-
-                     onPress={this.Change_color}
-
-
-                    />
-
-                        <Text style={styles.buttonContainer1}>
-
-                            Цвет ника</Text>
-
-
-                    <View>
-                        <TouchableOpacity style={styles.buttonText1} onPress={this.Registration} >
+                        <TouchableOpacity style={styles.buttonText1} onPress={this.Registration}>
                             <Text style={styles.buttonContainer}>
-
                                 ЗАРЕГИСТРИРОВАТЬСЯ</Text>
-
                         </TouchableOpacity>
 
 
-                    </View>
+
                 </View>
 
-
-                <Animated.View style={{
-                    transform: [{translateY: this.animatedVal}],
-                    height: 220,
-                    width: 100,
-                    backgroundColor: '#e8f6ff',
-                    position: 'absolute',
-                    left: 140,
-                    top: 0,
-                    bottom: 30,
-                    right: 0,
-                    justifyContent: 'center'
-                }}>
-
-
-                    <FlatList inverted
-
-                              maxRows={4}
-                              maxColumns={4}
-                              data={this.state.sm}
-                              extraData={this.state}
-
-
-                              renderItem={(({item,index}) =>
-
-
-                                      //       <TouchableOpacity onPress={() => this.check_nick(item.user)}>
-
-                                      <View style={{   flex: 1,
-                                          flexDirection: 'column',
-                                          margin: 1,
-                                          bottom: 0,
-                                          top: 0,
-                                          right: 0,
-                                          left: 0}}>
-
-
-                                          <TouchableOpacity onPress={(event)=>this.close_color(item.clr,item.rclr)}>
-
-                                                  <Text style={[styles.prices1 ,{backgroundColor:colors[index % colors.length]}]}
-                                                        onChangeText={(color) => this.setState({color})}
-                                                        value={item.clr}
-
-                                                  >
-
-
-
-                                                  </Text>
-
-
-                                          </TouchableOpacity>
-
-                                      </View>
-                                  //
-                              )
-                              }
-
-                              numColumns={1}
-                              keyExtractor={(item, index) => index.toString()}
-
-
-                    />
-
-
-                </Animated.View>
-            </View>
+</ScrollView>
             </ImageBackground>
-
-        </SafeAreaView>
+        </View>
 
     }
 }
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'rgb(32, 53, 70)',
+
+
 
     },
     logoContainer: {
         alignItems: 'center',
-        flex: 1
+
     },
-    logo: {
-        width: 200,
-        height: 200,
-        top: 30
-    },
+
     title: {
         color: '#15a4f7',
         fontSize: 18,
@@ -351,35 +257,25 @@ const styles = StyleSheet.create({
         width: 270,
         backgroundColor: '#ffffff',
         color: '#000000',
-        marginBottom: 6,
+        marginBottom: 2,
         paddingHorizontal: 10,
-
         borderColor: '#707070',
         borderWidth: 1,
     },
 
-    color: {
-        height: 40,
-        width: 70,
-        backgroundColor: '#010101',
-        color: '#FFF',
-        marginBottom: 20,
-        paddingHorizontal: 10,
-        borderRadius:20,
 
-    },
     buttonContainer: {
         textAlign: 'center',
         color: '#000000',
         fontSize: 15,
         marginLeft: '4%',
         marginRight: '4%',
-        borderWidth:0.1,
+        borderWidth: 0.1,
         paddingHorizontal: 10,
         backgroundColor: '#ffffff',
-        marginTop:0.1,
-        borderRadius:0.5,
-        borderColor:'#010101',
+        marginTop: 0.1,
+        borderRadius: 0.5,
+        borderColor: '#010101',
         paddingTop: 10,
         paddingBottom: 10,
     },
@@ -397,9 +293,9 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontWeight: 'bold',
         fontSize: 18,
-        marginBottom: 0,
+        marginTop:20,
         paddingHorizontal: 10,
-        top: 60,
+
     },
     buttonText2: {
         textAlign: 'center',
@@ -408,13 +304,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 0,
         paddingHorizontal: 10,
-        bottom:20,
+        bottom: 20,
 
     },
     buttonContainer1: {
         fontSize: 18,
         color: '#010101',
-        borderRadius:400/2,
+        borderRadius: 400 / 2,
     },
     labelText: {
         textAlign: 'center',
@@ -423,9 +319,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
 
 
-
     },
-
 
 
     container1: {

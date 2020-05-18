@@ -1,2 +1,2 @@
-const list_user = ['Профиль','Написать Личное' , 'Добавить в друзья'];
+const list_user = ['Написать Личное','Профиль'];
 export default list_user

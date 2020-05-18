@@ -1,24 +1,16 @@
-import {Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
+import {Dimensions, FlatList, Modal, ImageBackground,Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import React from "react";
 import FastImage from "react-native-fast-image";
 import {address_photo} from "../../config_connect";
 import styles from "../../styles";
+import {Badge} from "native-base";
 
 const {height, width} = Dimensions.get('window');
 const Winsize = Dimensions.get('window');
 
-export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
-    _listEmptyComponent = () => {
-        return (
-            <View>
-                <Text style={{textAlign:'center',color:"red",fontSize: 14}}>
-                    пусто
-                </Text>
+export class ModalFriendsList extends React.Component {
 
-            </View>
 
-        )
-    };
     check_photo_avatar = (photo) => {
 
 
@@ -35,22 +27,50 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
             )
         }
     };
+
+    check_online = (online)=>{
+
+        if (online) {
+            return (
+
+                <Badge primary style={{backgroundColor: '#50d36e', width: 15,height:15}}/>
+
+
+            )
+        } else {
+            return (
+
+                <Badge primary style={{backgroundColor: '#c00c17', width: 15,height:15}}/>
+
+            )
+        }
+
+    };
+
+    _listEmptyComponent = () => {
+        return (
+            <View>
+                <Text style={{color:'red',textAlign: 'center',fontSize: 15}}>нет друзей</Text>
+            </View>
+        )
+
+    };
     render() {
         const user_list = this.props.users;
         return (
             <Modal
                 transparent={true}
                 animationType="fade"
-                visible={this.props.isVisibleList}
-                onRequestClose={this.props.Change_Visible_List}
+                visible={this.props.isVisibleFriend}
+                onRequestClose={this.props.visible_friends_list}
 
             >
 
 
                 <TouchableOpacity
-                    style={{ backgroundColor: 'rgba(22,22,22,0.72)',flex:1}}
+                    style={{backgroundColor:'rgba(140,140,140,0.37)',flex:1}}
                     activeOpacity={1}
-                    onPressOut={this.props.Change_Visible_List}
+                    onPressOut={this.props.visible_friends_list}
                 >
                     <View style={{alignItems:'center',justifyContent:'center',
                     }}>
@@ -59,33 +79,36 @@ export class Modal_Chatting_ListUsers_Flatlist extends React.Component {
                         <TouchableWithoutFeedback>
 
 
-                            <View style={{backgroundColor:'rgba(255,255,255,0.99)',width:width/1.4,marginTop:height/6,borderRadius:4,maxHeight:height/1.5}}>
+                            <View style={{backgroundColor:'rgba(255,255,255,0.99)',width:width/1.8,marginTop:height/5,borderRadius:9}}>
 
+                                <Text style={{fontWeight:'bold',textAlign: 'center',marginBottom:10}}>Друзья</Text>
 
                                 <FlatList
                                     data={user_list}
                                     extraData={this.props}
                                     ListEmptyComponent={this._listEmptyComponent}
                                     renderItem={(({item}) =>
-                                            <TouchableOpacity  onPress={()=>this.props.action_nick(item.nic,item.id)}>
+                                            <TouchableOpacity  onPress={()=>this.props.friends_action_list(item.nic,item.id)}>
 
                                                 <View style={{
-                                                    flexDirection:'row',flex:1,
+                                                    flexDirection:'row',flex:1
                                                 }}>
+
                                                     {this.check_photo_avatar(item.photo)}
 
-                                                    <View style={{justifyContent:'center',textAlign:'center',padding:10}}>
+                                                    <View style={{justifyContent:'center'}}>
                                                         <Text style={{
-                                                            fontSize: 50 / Winsize.scale,
+                                                            fontSize: 35 / Winsize.scale,
                                                             color: "#" + ((item.color) >>> 0).toString(16).slice(-6),
-                                                            fontWeight: 'bold',
-                                                            textAlign: 'center'
+                                                            fontWeight: 'bold'
                                                         }}>
                                                             {item.nic}
 
                                                         </Text>
                                                     </View>
-
+                                                    <View style={{justifyContent:'center',marginLeft: 'auto',marginRight:20}}>
+                                                        {this.check_online(item.online)}
+                                                    </View>
 
 
                                                 </View>

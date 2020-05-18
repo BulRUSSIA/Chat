@@ -198,10 +198,10 @@ const styles = StyleSheet.create({
 
     },
     action_profile: {
-        fontSize: 40/winSize.scale,
+        fontSize: 55/winSize.scale,
         flex: 1,
-        color: '#2b49d0',
-        textAlign:'center',
+        marginLeft:5,
+        color: '#000000',
         marginTop:15/winSize.scale,
 
 

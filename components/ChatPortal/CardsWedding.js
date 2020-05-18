@@ -1,8 +1,6 @@
 import {
     Body,
     CardItem,
-
-
     Text,
 
 } from "native-base";
@@ -38,7 +36,7 @@ export default class CardsWedding extends React.Component {
                 </TouchableOpacity>
             )
 
-        } else if (this.props.zagsRequest != null && this.props.zagsRequest.length>0) {
+        } else if (this.props.zagsRequest != null && this.props.zagsRequest.length > 0) {
 
             return (<TouchableOpacity style={{
                     width: '100%',
@@ -91,7 +89,6 @@ export default class CardsWedding extends React.Component {
     render() {
 
 
-
         return (
 
 
@@ -105,7 +102,7 @@ export default class CardsWedding extends React.Component {
                       }}>
 
                 <View
-                    style={{height: height / 1.5, width: null, flex: 1}}>
+                    style={{height: height / 3.2, width: null, flex: 1}}>
 
                     <Body style={{alignItems: 'center', backgroundColor: 'rgba(47,96,137,0.4)', flex: 0, width: width}}>
                         <Text style={{color: '#010101', fontWeight: 'bold',}}>Виртуальный ЗАГС</Text>
@@ -131,130 +128,153 @@ export default class CardsWedding extends React.Component {
                                            renderItem={(({item}) =>
 
 
-                                               <View
-                                                   style={{alignSelf: 'center', marginBottom: '10%', marginTop: '10%'}}>
-                                                   <View style={{flexDirection: 'row'}}>
+                                                   <View
+                                                       style={{
+                                                           alignSelf: 'center',
+                                                           marginBottom: '10%',
+                                                           marginTop: '10%'
+                                                       }}>
+                                                       <View style={{flexDirection: 'row'}}>
 
-                                                       <View style={{alignSelf: 'center'}}>
-
-
-
-                                                           <FastImage
-                                                               source={{uri: item.photo0}}
-                                                               style={{
-                                                                   width: 50,
-                                                                   height: 50,
-
-                                                                   borderRadius: 8,
-                                                                   alignSelf: 'center',
-
-                                                               }}>
+                                                           <View style={{alignSelf: 'center'}}>
 
 
-                                                           </FastImage>
-
-
-                                                           < TouchableOpacity
-                                                               onPress={() => this.props.Profile_screen(item.users[0], item.username0)}>
-                                                               <Text style={{
-                                                               textAlign: 'center',
-                                                               color: 'black',
-                                                               fontWeight: 'bold',
-                                                               maxWidth:'100%'
-                                                           }}>
-
-                                                           {item.username0}
-                                                               </Text>
-                                                               </TouchableOpacity>
-                                                               </View>
-                                                               <View style={{alignSelf:'center',marginLeft:'7%',marginRight:'7%'}}>
                                                                <FastImage
-                                                               source={{uri: 'people_private'}}
-                                                               style={{
-                                                               width: 25,
-                                                               height: 25,
-                                                               alignSelf:'center'
+                                                                   source={{uri: item.photo0}}
+                                                                   style={{
+                                                                       width: 50,
+                                                                       height: 50,
 
-                                                               }}>
+                                                                       borderRadius: 8,
+                                                                       alignSelf: 'center',
+
+                                                                   }}>
+
+
+                                                               </FastImage>
+
+
+                                                               < TouchableOpacity
+                                                                   onPress={() => this.props.Profile_screen(item.users[0], item.username0)}>
+                                                                   <Text style={{
+                                                                       textAlign: 'center',
+                                                                       color: 'black',
+                                                                       fontWeight: 'bold',
+                                                                       maxWidth: '100%'
+                                                                   }}>
+
+                                                                       {item.username0}
+                                                                   </Text>
+                                                               </TouchableOpacity>
+                                                           </View>
+                                                           <View style={{
+                                                               alignSelf: 'center',
+                                                               marginLeft: '7%',
+                                                               marginRight: '7%'
+                                                           }}>
+                                                               <FastImage
+                                                                   source={{uri: 'people_private'}}
+                                                                   style={{
+                                                                       width: 25,
+                                                                       height: 25,
+                                                                       alignSelf: 'center'
+
+                                                                   }}>
                                                                </FastImage>
                                                                <Text style={{
-                                                               textAlign: 'center',
-                                                               color: '#4ba3e2',
-                                                               fontSize: 15,
+                                                                   textAlign: 'center',
+                                                                   color: '#4ba3e2',
+                                                                   fontSize: 15,
 
                                                                }}>
 
-                                                               {this.convert_time(item.date.$date)}
+                                                                   {this.convert_time(item.date.$date)}
                                                                </Text>
-                                                               </View>
+                                                           </View>
 
 
-                                                               <View style={{alignSelf:'center'}}>
+                                                           <View style={{alignSelf: 'center'}}>
 
-                                                                   <FastImage
+                                                               <FastImage
 
-                                                                       source={{uri: item.photo1}}
-                                                                       style={{
-                                                                           width: 50,
-                                                                           height: 50,
+                                                                   source={{uri: item.photo1}}
+                                                                   style={{
+                                                                       width: 50,
+                                                                       height: 50,
 
-                                                                           borderRadius: 8,
-                                                                           alignSelf: 'center',
-                                                                       }}>
-                                                                   </FastImage>
+                                                                       borderRadius: 8,
+                                                                       alignSelf: 'center',
+                                                                   }}>
+                                                               </FastImage>
 
                                                                <TouchableOpacity
-                                                               onPress={() => this.props.Profile_screen(item.users[1], item.username1)}>
-                                                               <Text style={{
-                                                               textAlign: 'center',
-                                                               color: 'black',
-                                                               fontWeight: 'bold',
-                                                               maxWidth:'100%'
+                                                                   onPress={() => this.props.Profile_screen(item.users[1], item.username1)}>
+                                                                   <Text style={{
+                                                                       textAlign: 'center',
+                                                                       color: 'black',
+                                                                       fontWeight: 'bold',
+                                                                       maxWidth: '100%'
 
-                                                               }}>
+                                                                   }}>
 
-                                                               {item.username1}
-                                                               </Text>
+                                                                       {item.username1}
+                                                                   </Text>
                                                                </TouchableOpacity>
-                                                               </View>
+                                                           </View>
 
 
-                                                               </View>
+                                                       </View>
 
-                                                               </View>
-                                                               // </Body>
+                                                   </View>
+                                               // </Body>
 
-                                                               // </CardItem>
-
-
-                                                               )
-                                                               }
+                                               // </CardItem>
 
 
-                                                               keyExtractor={(item, index) => index.toString()}
+                                           )
+                                           }
 
 
-                                                               />
-
-                                                               </View>
+                                           keyExtractor={(item, index) => index.toString()}
 
 
+                        />
+
+                    </View>
 
 
-                                                               </View>
-                                                               <TouchableOpacity onPress={() => this.props.All_Weddings()}>
-                                                               <Text style={{textAlign: 'center',fontWeight:'bold',color:'white',paddingBottom:'5%',backgroundColor:'rgba(32,71,98,0.92)',paddingTop:'5%',width:width-10,borderColor:'white',borderWidth:2,marginBottom:10,borderRadius:12}}>
+                </View>
+                <TouchableOpacity onPress={() => this.props.All_Weddings()}>
+                    <TouchableOpacity style={{ textAlign: 'center',
+                        color: '#FFF',
+                        fontWeight: 'bold',
+                        fontSize: 18,
+                        marginTop:20,
+                        marginBottom:20,
+                        paddingHorizontal: 10,}} onPress={this.Registration}>
+                        <Text style={{textAlign: 'center',
+                            color: '#000000',
+                            fontSize: 15,
+                            marginLeft: '4%',
+                            marginRight: '4%',
+                            borderWidth: 0.1,
+                            paddingHorizontal: 10,
+                            backgroundColor: '#ffffff',
+                            marginTop: 0.1,
+                            borderRadius: 0.5,
+                            borderColor: '#010101',
+                            paddingTop: 10,
+                            paddingBottom: 10,}}>
+                            Все браки</Text>
+                    </TouchableOpacity>
 
-                                                               Все браки...
-                                                               </Text>
-
-                                                               </TouchableOpacity>
-                                                               </CardItem>
+                </TouchableOpacity>
+            </CardItem>
 
 
-                                                               );
-                                                               }
-                                                               }
+        );
+    }
+}
 
-                                                               //  style={{width: 40, height: 40,}}
-                                                               //   source={require('../Image/weddingProfile.png')}
+//  style={{width: 40, height: 40,}}
+//   source={require('../Image/weddingProfile.png')}

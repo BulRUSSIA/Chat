@@ -9,7 +9,7 @@ export default class GiftList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            itemsCount: 20,
+            itemsCount: 40,
             isFetching: false,
         };
     }

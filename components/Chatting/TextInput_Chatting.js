@@ -20,13 +20,17 @@ export class TextInput_Chatting extends React.Component {
 
 
         return <View style={{
-
+            //
             flexDirection: 'row',
 
-            borderColor:'#868686',
+            marginBottom:25,
+            marginTop:5,
+
+            //
+             borderColor:'#868686',
             borderWidth:2,
-            height: height * 0.12,
-            paddingHorizontal: width * 0.05,
+            // height: height * 0.12,
+            // paddingHorizontal: width * 0.05,
             backgroundColor: this.props.key_color,
         }}>
 
@@ -39,10 +43,10 @@ export class TextInput_Chatting extends React.Component {
 
 
                     fontSize: 16,
-                    height: height * 0.08,
+                    height: height/15,
                     color: "#000000",
-                    width: width * 0.8,
-
+                    width: width/1.2,
+                    maxWidth:width,
 
                 }}
 
@@ -71,8 +75,9 @@ export class TextInput_Chatting extends React.Component {
 
                 style={{
 
+                   justifyContent:'center',
+                    backgroundColor:'#ffffff',
 
-                    backgroundColor: this.props.key_color,
                 }}>
 
                 <FastImage
@@ -80,17 +85,16 @@ export class TextInput_Chatting extends React.Component {
 
                         width: width * 0.06,
                         height: height * 0.06,
-                        marginTop:'5%',
-                        marginLeft:'10%',
 
-                        backgroundColor: this.props.key_color
+
+                        backgroundColor: "#ffffff"
                     }}
                     source={smile_image}
                     resizeMode={FastImage.resizeMode.contain}/>
             </TouchableOpacity>
             {/*<TouchableOpacity*/}
-            {/*    onLongPress={this.props.send_audio_screen}*/}
-            {/*    onPress={this.props.send_msg}*/}
+            {/*    // onLongPress={this.props.send_audio_screen}*/}
+            {/*    // onPress={this.props.send_msg}*/}
 
 
             {/*    style={{*/}

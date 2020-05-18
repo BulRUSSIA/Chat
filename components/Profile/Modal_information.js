@@ -9,35 +9,14 @@ const {width,height} = Dimensions.get('window');
 
 export class Modal_information extends React.Component {
 
-    get_zags_name = () =>{
-        let zags = this.props.zagsName;
-        console.log('zags:',zags);
-
-        if ((zags!==null)) {
-
-            return ( <View >
-                <Text style={{
-                    color: '#010101', fontWeight: '400',
-                    fontSize: 40/winSize.scale,
-                    fontFamily: 'sans-serif-light'
-                }}>БРАК:
-
-                    <Text style={{color:this.props.colorzags,fontWeight:'bold',  fontSize: 40/winSize.scale,}}>{zags}</Text>
-                </Text>
-            </View>)
-
-
-
-        }
-    }
-
-
     render() {
 
 
         return (<View style={{flex: 1}}>
 
                 {this.props.user_info.map(function (item) {
+
+                    // console.log(item.zags.nic,"nic zafgs");
 
                     return (<View style={{flexDirection: 'column'}}>
 
@@ -133,10 +112,24 @@ export class Modal_information extends React.Component {
                             </Text>
                             {item.about}</Text>
 
+                        {/*<Text style={{*/}
+                        {/*    // color: "#"+((item.zags["color"])>>>0).toString(16).slice(-6), fontWeight: '400',*/}
+                        {/*    fontSize: 40/winSize.scale,*/}
+                        {/*    fontFamily: 'sans-serif-light',*/}
+                        {/*}}>*/}
+                        {/*    <Text style={{*/}
+                        {/*        color: '#010101', fontWeight: '400',*/}
+                        {/*        fontSize: 40/winSize.scale,*/}
+                        {/*        fontFamily: 'sans-serif-light'*/}
+                        {/*    }}>*/}
+                        {/*        БРАК:*/}
+                        {/*    </Text>*/}
+                        {/*    {item.zags}</Text>*/}
+
 
                     </View>)
                 })}
-                {/*{this.get_zags_name()}*/}
+
             </View>
 
 

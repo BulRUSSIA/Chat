@@ -4,9 +4,10 @@ import {address} from "../../../config_connect";
 async function check_avatar(user)  {
 
     const url = address + `/avatar/check/${user}`;
+    console.log(url);
     try {
         const data = await fetch(url);
-        return await data.json();
+        return  data.json();
 
 
     }

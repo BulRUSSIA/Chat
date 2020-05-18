@@ -28,6 +28,13 @@ import request_START_LINE from "./fetch_run_line_start";
 import check_avatar from "./network/check_send_avatar";
 import ParseResponseAvatar from "./utils/ParseResponseAvatar";
 import consent_avatar from "./network/consent_avatar";
+import CardsFriends from "./CardsFriends";
+import friend_req_list from "./network/friend_req_list";
+import {ModalFriendsRequest} from "./ModalFriendsRequest";
+import consent_friend from "./network/consent_friend";
+import {ModalFriendsList} from "./ModalFriendsList";
+import delete_friend from "./network/friend_delete";
+import get_friends_list from "./network/friends_list";
 
 
 export default class ChatPortal extends React.Component {
@@ -50,6 +57,11 @@ export default class ChatPortal extends React.Component {
             loaded: true,
             avatar_request:[],
             consent_avatar:false,
+            consent_friend:false,
+            friends_req_list:[],
+            friends_list:[],
+            isVisibleList:false,
+            isVisibleFriend:false,
 
         };
 
@@ -63,6 +75,16 @@ export default class ChatPortal extends React.Component {
 
     };
 
+    visible_friends_req_list = ()=> {
+
+        this.setState({isVisibleList:!this.state.isVisibleList})
+
+    };
+    visible_friends_list = ()=> {
+
+        this.setState({isVisibleFriend:!this.state.isVisibleFriend})
+
+    };
     avatar_choice = async (avatar,sender) => {
 
 
@@ -102,16 +124,20 @@ export default class ChatPortal extends React.Component {
         const data_user = await SingleTonUpdatePortal.PortalUpdates(this.props.nic);
         const wedding_list = await request_GET_WeddingList();
         const avatar_request = await check_avatar(this.props.nic);
+        const friends_req =  await friend_req_list(this.props.nic);
+        const friends_list = await get_friends_list(this.props.nic);
         const avatar_parse = await ParseResponseAvatar.parse_avatar_send(avatar_request);
         this.setState({
 
             zags: data_user[0],
+            friends_req_list:friends_req,
             zagsName: data_user[1],
             zagsRequest: data_user[2],
             zagsRequestName: data_user[3],
             balace: data_user[4],
             avatar_request:avatar_parse,
             wedding_list: wedding_list,
+            friends_list:friends_list,
             loaded: false,
 
 
@@ -182,7 +208,7 @@ export default class ChatPortal extends React.Component {
 
     start_line = async () => {
         await request_START_LINE(this.state.run_line_text);
-        await this.setState({isVisible: !this.state.isVisible})
+        await this.setState({isVisible: !this.state.isVisible});
         const {navigator} = this.props;
         navigator.pop()
 
@@ -245,6 +271,8 @@ export default class ChatPortal extends React.Component {
     };
 
 
+
+
     Accept_Zags_Req = async (zags_from) => {
 
 
@@ -281,7 +309,87 @@ export default class ChatPortal extends React.Component {
 
     };
 
+    friends_action = async (nic,id) => {
 
+
+        Alert.alert(
+
+            ""+nic,
+            "",// <- this part is optional, you can pass an empty string
+            [
+
+                {
+                    text: 'дружить',
+                    onPress: async () => {
+                        this.setState({loaded:true});
+                        await consent_friend(this.props.nic,!this.state.consent_friend,id);
+                        await this.Update_Portal();
+                        this.setState({loaded:false});
+                    }
+                },
+                {
+                    text: 'отклонить',
+                    onPress: async () => {
+                        this.setState({loaded:true});
+                        await consent_friend(this.props.nic,this.state.consent_friend,id);
+                        await this.Update_Portal();
+                        this.setState({loaded:false});
+
+                    },
+                    style: 'cancel',
+                },
+
+
+                {
+                    text: 'профиль', onPress: async () => {
+                       await this.Go_Profile(id,nic);
+                        this.setState({isVisibleList:!this.state.isVisibleList})
+                    },
+
+
+                }
+            ],
+            {cancelable: false},
+        );
+
+
+    };
+
+    friends_action_list = async (nic,id) => {
+
+
+        Alert.alert(
+
+            ""+nic,
+            "",// <- this part is optional, you can pass an empty string
+            [
+                {
+                    text: 'профиль', onPress: async () => {
+                        await this.Go_Profile(id,nic);
+                        this.setState({isVisibleFriend:!this.state.isVisibleFriend})
+                    },
+
+
+                },
+
+                {
+                    text: 'удалить',
+                    onPress: async () => {
+                        this.setState({loaded:true});
+                        await delete_friend(this.props.nic,id);
+                        await this.Update_Portal();
+                        this.setState({loaded:false});
+                    }
+                },
+
+
+
+            ],
+            {cancelable: false},
+        );
+
+
+    };
     render() {
 
         const {navigator} = this.props;
@@ -382,7 +490,23 @@ export default class ChatPortal extends React.Component {
                                 avatar_choice={this.avatar_choice}
 
                             />
+                            <ModalFriendsRequest
+                                friends_action={this.friends_action}
+                                isVisibleList={this.state.isVisibleList}
+                                users={this.state.friends_req_list}
+                                visible_friends_list={this.visible_friends_req_list}
 
+                            />
+                            <ModalFriendsList
+                                isVisibleFriend={this.state.isVisibleFriend}
+                                friends_action_list={this.friends_action_list}
+                                visible_friends_list={this.visible_friends_list}
+                                users ={this.state.friends_list}
+                            />
+                            <CardsFriends
+                                visible_friends_req_list={this.visible_friends_req_list}
+                                visible_friends_list={this.visible_friends_list}
+                            />
                             <Modal_running_line
                                 select_modal_run_line={this.select_modal_run_line}
                                 isVisible={this.state.isVisible}
